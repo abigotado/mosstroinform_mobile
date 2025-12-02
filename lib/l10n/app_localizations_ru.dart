@@ -10,4 +10,124 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appTitle => 'Стройконтроль Онлайн';
+
+  @override
+  String get projectsTitle => 'Объекты';
+
+  @override
+  String get projectsNotFound => 'Проекты не найдены';
+
+  @override
+  String get projectDetails => 'Детали проекта';
+
+  @override
+  String get projectNotFound => 'Проект не найден';
+
+  @override
+  String get sendConstructionRequest => 'Отправить запрос на строительство';
+
+  @override
+  String get constructionRequestSent =>
+      'Запрос на строительство успешно отправлен';
+
+  @override
+  String get errorLoadingProjects => 'Ошибка загрузки проектов';
+
+  @override
+  String get retry => 'Повторить';
+
+  @override
+  String get documentApprovalTitle => 'Согласование документов';
+
+  @override
+  String get noDocumentsToApprove => 'Нет документов для согласования';
+
+  @override
+  String get documentTitle => 'Документ';
+
+  @override
+  String get documentNotFound => 'Документ не найден';
+
+  @override
+  String get description => 'Описание';
+
+  @override
+  String get submitted => 'Отправлен';
+
+  @override
+  String get approved => 'Одобрен';
+
+  @override
+  String get rejectionReason => 'Причина отклонения';
+
+  @override
+  String get downloadDocument => 'Скачать документ';
+
+  @override
+  String get reject => 'Отклонить';
+
+  @override
+  String get approve => 'Одобрить';
+
+  @override
+  String get rejectDocumentTitle => 'Отклонить документ';
+
+  @override
+  String get rejectReasonHint => 'Укажите причину отклонения';
+
+  @override
+  String get cancel => 'Отмена';
+
+  @override
+  String get documentApproved => 'Документ успешно одобрен';
+
+  @override
+  String get documentRejected => 'Документ отклонён';
+
+  @override
+  String get error => 'Ошибка';
+
+  @override
+  String get errorLoadingDocuments => 'Ошибка загрузки документов';
+
+  @override
+  String get errorLoadingDocument => 'Ошибка загрузки документа';
+
+  @override
+  String get specifyRejectionReason => 'Укажите причину отклонения';
+
+  @override
+  String openFile(String url) {
+    return 'Открыть файл: $url';
+  }
+
+  @override
+  String get documentStatusPending => 'Ожидает';
+
+  @override
+  String get documentStatusUnderReview => 'На рассмотрении';
+
+  @override
+  String get documentStatusApproved => 'Одобрен';
+
+  @override
+  String get documentStatusRejected => 'Отклонён';
+
+  @override
+  String get constructionStages => 'Этапы строительства';
+
+  @override
+  String get area => 'Площадь';
+
+  @override
+  String get floors => 'Этажность';
+
+  @override
+  String get price => 'Стоимость';
+
+  @override
+  String get floor => 'этаж';
+
+  @override
+  String get floorsPlural => 'этажа';
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
@@ -24,17 +25,18 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final projectsAsync = ref.watch(projectsNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Объекты'),
+        title: Text(l10n.projectsTitle),
       ),
       body: projectsAsync.when(
         data: (state) {
           if (state.projects.isEmpty && !state.isLoading) {
-            return const Center(
-              child: Text('Проекты не найдены'),
+            return Center(
+              child: Text(l10n.projectsNotFound),
             );
           }
 
@@ -50,7 +52,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Ошибка: ${state.error!.message}',
+                    '${l10n.error}: ${state.error!.message}',
                     style: Theme.of(context).textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
@@ -59,7 +61,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                     onPressed: () {
                       ref.read(projectsNotifierProvider.notifier).loadProjects();
                     },
-                    child: const Text('Повторить'),
+                    child: Text(l10n.retry),
                   ),
                 ],
               ),
@@ -102,7 +104,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Ошибка: $error',
+                '${l10n.error}: $error',
                 style: Theme.of(context).textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
@@ -111,7 +113,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                 onPressed: () {
                   ref.read(projectsNotifierProvider.notifier).loadProjects();
                 },
-                child: const Text('Повторить'),
+                child: Text(l10n.retry),
               ),
             ],
           ),

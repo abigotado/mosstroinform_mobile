@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
@@ -27,15 +28,16 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final projectAsync = ref.watch(projectNotifierProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Детали проекта')),
+      appBar: AppBar(title: Text(l10n.projectDetails)),
       body: projectAsync.when(
         data: (state) {
           if (state.project == null) {
-            return const Center(child: Text('Проект не найден'));
+            return Center(child: Text(l10n.projectNotFound));
           }
 
           final project = state.project!;
@@ -100,7 +102,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
                       // Этапы строительства
                       Text(
-                        'Этапы строительства',
+                        l10n.constructionStages,
                         style: theme.textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
@@ -127,7 +129,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 const Icon(Icons.error_outline, size: 64, color: Colors.red),
                 const SizedBox(height: 16),
                 Text(
-                  'Ошибка: $error',
+                  '${l10n.error}: $error',
                   style: errorTheme.textTheme.bodyLarge,
                   textAlign: TextAlign.center,
                 ),
@@ -138,7 +140,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                         .read(projectNotifierProvider.notifier)
                         .loadProject(widget.projectId);
                   },
-                  child: const Text('Повторить'),
+                  child: Text(l10n.retry),
                 ),
               ],
             ),
@@ -162,11 +164,10 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             .requestConstruction(widget.projectId);
 
                         if (mounted) {
+                          final l10n = AppLocalizations.of(context)!;
                           messenger.showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Запрос на строительство отправлен',
-                              ),
+                            SnackBar(
+                              content: Text(l10n.constructionRequestSent),
                             ),
                           );
                         }
@@ -174,7 +175,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: const Text('Отправить запрос на строительство'),
+                child: Text(l10n.sendConstructionRequest),
               ),
             ),
           );
@@ -186,6 +187,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
   }
 
   Widget _buildCharacteristicsSection(BuildContext context, Project project) {
+    final l10n = AppLocalizations.of(context)!;
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -193,21 +195,21 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
           children: [
             _buildCharacteristicRow(
               context,
-              'Площадь',
+              l10n.area,
               '${project.area.toInt()} м²',
               Icons.square_foot,
             ),
             const Divider(),
             _buildCharacteristicRow(
               context,
-              'Этажность',
-              '${project.floors} этаж${project.floors > 1 ? 'а' : ''}',
+              l10n.floors,
+              '${project.floors} ${project.floors > 1 ? l10n.floorsPlural : l10n.floor}',
               Icons.layers,
             ),
             const Divider(),
             _buildCharacteristicRow(
               context,
-              'Стоимость',
+              l10n.price,
               '${_formatPrice(project.price)} ₽',
               Icons.attach_money,
             ),

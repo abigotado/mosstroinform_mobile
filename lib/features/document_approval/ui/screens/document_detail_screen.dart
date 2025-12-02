@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
 
@@ -48,18 +49,20 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           .approveDocument(documentId);
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Документ успешно одобрен'),
+          SnackBar(
+            content: Text(l10n.documentApproved),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('${l10n.error}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -76,9 +79,10 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
 
     final reason = _rejectionReasonController.text.trim();
     if (reason.isEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Укажите причину отклонения'),
+        SnackBar(
+          content: Text(l10n.specifyRejectionReason),
           backgroundColor: Colors.orange,
         ),
       );
@@ -93,19 +97,21 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           .rejectDocument(documentId, reason);
 
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         _rejectionReasonController.clear();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Документ отклонён'),
+          SnackBar(
+            content: Text(l10n.documentRejected),
             backgroundColor: Colors.orange,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка: $e'),
+            content: Text('${l10n.error}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -118,16 +124,17 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
   }
 
   void _showRejectDialog(String documentId) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Отклонить документ'),
+        title: Text(l10n.rejectDocumentTitle),
         content: TextField(
           controller: _rejectionReasonController,
-          decoration: const InputDecoration(
-            labelText: 'Причина отклонения',
-            hintText: 'Укажите причину отклонения документа',
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            labelText: l10n.rejectionReason,
+            hintText: l10n.rejectReasonHint,
+            border: const OutlineInputBorder(),
           ),
           maxLines: 3,
           autofocus: true,
@@ -138,14 +145,14 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
               Navigator.pop(context);
               _rejectionReasonController.clear();
             },
-            child: const Text('Отмена'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
               _handleReject(documentId);
             },
-            child: const Text('Отклонить'),
+            child: Text(l10n.reject),
           ),
         ],
       ),
@@ -154,18 +161,19 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final documentAsync = ref.watch(documentNotifierProvider(widget.documentId));
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Документ'),
+        title: Text(l10n.documentTitle),
       ),
       body: documentAsync.when(
         data: (document) {
           if (document == null) {
-            return const Center(child: Text('Документ не найден'));
+            return Center(child: Text(l10n.documentNotFound));
           }
 
           return SingleChildScrollView(
@@ -191,7 +199,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
 
                 // Описание
                 Text(
-                  'Описание',
+                  l10n.description,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                   ),
@@ -207,7 +215,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                 if (document.submittedAt != null) ...[
                   _InfoRow(
                     icon: Icons.access_time,
-                    label: 'Отправлен',
+                    label: l10n.submitted,
                     value: _formatDateTime(document.submittedAt!),
                   ),
                   const SizedBox(height: 8),
@@ -215,7 +223,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                 if (document.approvedAt != null) ...[
                   _InfoRow(
                     icon: Icons.check_circle,
-                    label: 'Одобрен',
+                    label: l10n.approved,
                     value: _formatDateTime(document.approvedAt!),
                   ),
                   const SizedBox(height: 8),
@@ -242,7 +250,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Причина отклонения',
+                                l10n.rejectionReason,
                                 style: theme.textTheme.labelLarge?.copyWith(
                                   color: colorScheme.onErrorContainer,
                                   fontWeight: FontWeight.w600,
@@ -269,14 +277,15 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                   OutlinedButton.icon(
                     onPressed: () {
                       // В реальном приложении здесь была бы открыта ссылка на файл
+                      final l10n = AppLocalizations.of(context)!;
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('Открыть файл: ${document.fileUrl}'),
+                          content: Text(l10n.openFile(document.fileUrl!)),
                         ),
                       );
                     },
                     icon: const Icon(Icons.file_download),
-                    label: const Text('Скачать документ'),
+                    label: Text(l10n.downloadDocument),
                   ),
                   const SizedBox(height: 24),
                 ],
@@ -292,7 +301,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                               ? null
                               : () => _showRejectDialog(document.id),
                           icon: const Icon(Icons.close),
-                          label: const Text('Отклонить'),
+                          label: Text(l10n.reject),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -310,7 +319,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                                   ),
                                 )
                               : const Icon(Icons.check),
-                          label: const Text('Одобрить'),
+                          label: Text(l10n.approve),
                         ),
                       ),
                     ],
@@ -328,7 +337,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                'Ошибка загрузки документа',
+                l10n.errorLoadingDocument,
                 style: theme.textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -344,7 +353,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                       .read(documentNotifierProvider(widget.documentId).notifier)
                       .loadDocument(widget.documentId);
                 },
-                child: const Text('Повторить'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -412,29 +421,30 @@ class _StatusChip extends StatelessWidget {
     String label;
     IconData icon;
 
+    final l10n = AppLocalizations.of(context)!;
     switch (status) {
       case DocumentStatus.pending:
         backgroundColor = colorScheme.surfaceContainerHighest;
         textColor = colorScheme.onSurface;
-        label = 'Ожидает';
+        label = l10n.documentStatusPending;
         icon = Icons.pending;
         break;
       case DocumentStatus.underReview:
         backgroundColor = colorScheme.primaryContainer;
         textColor = colorScheme.onPrimaryContainer;
-        label = 'На рассмотрении';
+        label = l10n.documentStatusUnderReview;
         icon = Icons.rate_review;
         break;
       case DocumentStatus.approved:
         backgroundColor = colorScheme.tertiaryContainer;
         textColor = colorScheme.onTertiaryContainer;
-        label = 'Одобрен';
+        label = l10n.documentStatusApproved;
         icon = Icons.check_circle;
         break;
       case DocumentStatus.rejected:
         backgroundColor = colorScheme.errorContainer;
         textColor = colorScheme.onErrorContainer;
-        label = 'Отклонён';
+        label = l10n.documentStatusRejected;
         icon = Icons.cancel;
         break;
     }

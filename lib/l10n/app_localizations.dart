@@ -99,6 +99,240 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Стройконтроль Онлайн'**
   String get appTitle;
+
+  /// Заголовок экрана списка проектов
+  ///
+  /// In ru, this message translates to:
+  /// **'Объекты'**
+  String get projectsTitle;
+
+  /// Сообщение когда проектов нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Проекты не найдены'**
+  String get projectsNotFound;
+
+  /// Заголовок экрана деталей проекта
+  ///
+  /// In ru, this message translates to:
+  /// **'Детали проекта'**
+  String get projectDetails;
+
+  /// Сообщение когда проект не найден
+  ///
+  /// In ru, this message translates to:
+  /// **'Проект не найден'**
+  String get projectNotFound;
+
+  /// Кнопка отправки запроса на строительство
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить запрос на строительство'**
+  String get sendConstructionRequest;
+
+  /// Сообщение об успешной отправке запроса
+  ///
+  /// In ru, this message translates to:
+  /// **'Запрос на строительство успешно отправлен'**
+  String get constructionRequestSent;
+
+  /// Заголовок ошибки загрузки проектов
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки проектов'**
+  String get errorLoadingProjects;
+
+  /// Кнопка повтора действия
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторить'**
+  String get retry;
+
+  /// Заголовок экрана согласования документов
+  ///
+  /// In ru, this message translates to:
+  /// **'Согласование документов'**
+  String get documentApprovalTitle;
+
+  /// Сообщение когда документов нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет документов для согласования'**
+  String get noDocumentsToApprove;
+
+  /// Заголовок экрана документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Документ'**
+  String get documentTitle;
+
+  /// Сообщение когда документ не найден
+  ///
+  /// In ru, this message translates to:
+  /// **'Документ не найден'**
+  String get documentNotFound;
+
+  /// Заголовок секции описания
+  ///
+  /// In ru, this message translates to:
+  /// **'Описание'**
+  String get description;
+
+  /// Метка даты отправки
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправлен'**
+  String get submitted;
+
+  /// Метка даты одобрения
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрен'**
+  String get approved;
+
+  /// Заголовок причины отклонения
+  ///
+  /// In ru, this message translates to:
+  /// **'Причина отклонения'**
+  String get rejectionReason;
+
+  /// Кнопка скачивания документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Скачать документ'**
+  String get downloadDocument;
+
+  /// Кнопка отклонения документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонить'**
+  String get reject;
+
+  /// Кнопка одобрения документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрить'**
+  String get approve;
+
+  /// Заголовок диалога отклонения документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонить документ'**
+  String get rejectDocumentTitle;
+
+  /// Подсказка для поля причины отклонения
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите причину отклонения'**
+  String get rejectReasonHint;
+
+  /// Кнопка отмены
+  ///
+  /// In ru, this message translates to:
+  /// **'Отмена'**
+  String get cancel;
+
+  /// Сообщение об успешном одобрении документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Документ успешно одобрен'**
+  String get documentApproved;
+
+  /// Сообщение об отклонении документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Документ отклонён'**
+  String get documentRejected;
+
+  /// Заголовок ошибки
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка'**
+  String get error;
+
+  /// Заголовок ошибки загрузки документов
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки документов'**
+  String get errorLoadingDocuments;
+
+  /// Заголовок ошибки загрузки документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки документа'**
+  String get errorLoadingDocument;
+
+  /// Сообщение о необходимости указать причину отклонения
+  ///
+  /// In ru, this message translates to:
+  /// **'Укажите причину отклонения'**
+  String get specifyRejectionReason;
+
+  /// Сообщение об открытии файла
+  ///
+  /// In ru, this message translates to:
+  /// **'Открыть файл: {url}'**
+  String openFile(String url);
+
+  /// Статус документа - ожидает
+  ///
+  /// In ru, this message translates to:
+  /// **'Ожидает'**
+  String get documentStatusPending;
+
+  /// Статус документа - на рассмотрении
+  ///
+  /// In ru, this message translates to:
+  /// **'На рассмотрении'**
+  String get documentStatusUnderReview;
+
+  /// Статус документа - одобрен
+  ///
+  /// In ru, this message translates to:
+  /// **'Одобрен'**
+  String get documentStatusApproved;
+
+  /// Статус документа - отклонён
+  ///
+  /// In ru, this message translates to:
+  /// **'Отклонён'**
+  String get documentStatusRejected;
+
+  /// Заголовок секции этапов строительства
+  ///
+  /// In ru, this message translates to:
+  /// **'Этапы строительства'**
+  String get constructionStages;
+
+  /// Метка площади
+  ///
+  /// In ru, this message translates to:
+  /// **'Площадь'**
+  String get area;
+
+  /// Метка этажности
+  ///
+  /// In ru, this message translates to:
+  /// **'Этажность'**
+  String get floors;
+
+  /// Метка стоимости
+  ///
+  /// In ru, this message translates to:
+  /// **'Стоимость'**
+  String get price;
+
+  /// Слово этаж
+  ///
+  /// In ru, this message translates to:
+  /// **'этаж'**
+  String get floor;
+
+  /// Слово этажа (множественное)
+  ///
+  /// In ru, this message translates to:
+  /// **'этажа'**
+  String get floorsPlural;
 }
 
 class _AppLocalizationsDelegate

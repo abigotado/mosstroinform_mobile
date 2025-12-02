@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
 import 'package:mosstroinform_mobile/features/document_approval/ui/widgets/document_card.dart';
 
@@ -8,8 +9,7 @@ class DocumentListScreen extends ConsumerStatefulWidget {
   const DocumentListScreen({super.key});
 
   @override
-  ConsumerState<DocumentListScreen> createState() =>
-      _DocumentListScreenState();
+  ConsumerState<DocumentListScreen> createState() => _DocumentListScreenState();
 }
 
 class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
@@ -24,18 +24,15 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final documentsAsync = ref.watch(documentsNotifierProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Согласование документов'),
-      ),
+      appBar: AppBar(title: Text(l10n.documentApprovalTitle)),
       body: documentsAsync.when(
         data: (documents) {
           if (documents.isEmpty) {
-            return const Center(
-              child: Text('Нет документов для согласования'),
-            );
+            return Center(child: Text(l10n.noDocumentsToApprove));
           }
 
           return RefreshIndicator(
@@ -74,7 +71,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                'Ошибка загрузки документов',
+                l10n.errorLoadingDocuments,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),
@@ -88,7 +85,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
                 onPressed: () {
                   ref.read(documentsNotifierProvider.notifier).loadDocuments();
                 },
-                child: const Text('Повторить'),
+                child: Text(l10n.retry),
               ),
             ],
           ),
@@ -97,4 +94,3 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
     );
   }
 }
-

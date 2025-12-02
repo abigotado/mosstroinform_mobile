@@ -3,6 +3,170 @@
   "appTitle": "Стройконтроль Онлайн",
   "@appTitle": {
     "description": "Название приложения"
+  },
+  
+  "projectsTitle": "Объекты",
+  "@projectsTitle": {
+    "description": "Заголовок экрана списка проектов"
+  },
+  "projectsNotFound": "Проекты не найдены",
+  "@projectsNotFound": {
+    "description": "Сообщение когда проектов нет"
+  },
+  "projectDetails": "Детали проекта",
+  "@projectDetails": {
+    "description": "Заголовок экрана деталей проекта"
+  },
+  "projectNotFound": "Проект не найден",
+  "@projectNotFound": {
+    "description": "Сообщение когда проект не найден"
+  },
+  "sendConstructionRequest": "Отправить запрос на строительство",
+  "@sendConstructionRequest": {
+    "description": "Кнопка отправки запроса на строительство"
+  },
+  "constructionRequestSent": "Запрос на строительство успешно отправлен",
+  "@constructionRequestSent": {
+    "description": "Сообщение об успешной отправке запроса"
+  },
+  "errorLoadingProjects": "Ошибка загрузки проектов",
+  "@errorLoadingProjects": {
+    "description": "Заголовок ошибки загрузки проектов"
+  },
+  "retry": "Повторить",
+  "@retry": {
+    "description": "Кнопка повтора действия"
+  },
+  
+  "documentApprovalTitle": "Согласование документов",
+  "@documentApprovalTitle": {
+    "description": "Заголовок экрана согласования документов"
+  },
+  "noDocumentsToApprove": "Нет документов для согласования",
+  "@noDocumentsToApprove": {
+    "description": "Сообщение когда документов нет"
+  },
+  "documentTitle": "Документ",
+  "@documentTitle": {
+    "description": "Заголовок экрана документа"
+  },
+  "documentNotFound": "Документ не найден",
+  "@documentNotFound": {
+    "description": "Сообщение когда документ не найден"
+  },
+  "description": "Описание",
+  "@description": {
+    "description": "Заголовок секции описания"
+  },
+  "submitted": "Отправлен",
+  "@submitted": {
+    "description": "Метка даты отправки"
+  },
+  "approved": "Одобрен",
+  "@approved": {
+    "description": "Метка даты одобрения"
+  },
+  "rejectionReason": "Причина отклонения",
+  "@rejectionReason": {
+    "description": "Заголовок причины отклонения"
+  },
+  "downloadDocument": "Скачать документ",
+  "@downloadDocument": {
+    "description": "Кнопка скачивания документа"
+  },
+  "reject": "Отклонить",
+  "@reject": {
+    "description": "Кнопка отклонения документа"
+  },
+  "approve": "Одобрить",
+  "@approve": {
+    "description": "Кнопка одобрения документа"
+  },
+  "rejectDocumentTitle": "Отклонить документ",
+  "@rejectDocumentTitle": {
+    "description": "Заголовок диалога отклонения документа"
+  },
+  "rejectReasonHint": "Укажите причину отклонения",
+  "@rejectReasonHint": {
+    "description": "Подсказка для поля причины отклонения"
+  },
+  "cancel": "Отмена",
+  "@cancel": {
+    "description": "Кнопка отмены"
+  },
+  "documentApproved": "Документ успешно одобрен",
+  "@documentApproved": {
+    "description": "Сообщение об успешном одобрении документа"
+  },
+  "documentRejected": "Документ отклонён",
+  "@documentRejected": {
+    "description": "Сообщение об отклонении документа"
+  },
+  "error": "Ошибка",
+  "@error": {
+    "description": "Заголовок ошибки"
+  },
+  "errorLoadingDocuments": "Ошибка загрузки документов",
+  "@errorLoadingDocuments": {
+    "description": "Заголовок ошибки загрузки документов"
+  },
+  "errorLoadingDocument": "Ошибка загрузки документа",
+  "@errorLoadingDocument": {
+    "description": "Заголовок ошибки загрузки документа"
+  },
+  "specifyRejectionReason": "Укажите причину отклонения",
+  "@specifyRejectionReason": {
+    "description": "Сообщение о необходимости указать причину отклонения"
+  },
+  "openFile": "Открыть файл: {url}",
+  "@openFile": {
+    "description": "Сообщение об открытии файла",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "documentStatusPending": "Ожидает",
+  "@documentStatusPending": {
+    "description": "Статус документа - ожидает"
+  },
+  "documentStatusUnderReview": "На рассмотрении",
+  "@documentStatusUnderReview": {
+    "description": "Статус документа - на рассмотрении"
+  },
+  "documentStatusApproved": "Одобрен",
+  "@documentStatusApproved": {
+    "description": "Статус документа - одобрен"
+  },
+  "documentStatusRejected": "Отклонён",
+  "@documentStatusRejected": {
+    "description": "Статус документа - отклонён"
+  },
+  
+  "constructionStages": "Этапы строительства",
+  "@constructionStages": {
+    "description": "Заголовок секции этапов строительства"
+  },
+  "area": "Площадь",
+  "@area": {
+    "description": "Метка площади"
+  },
+  "floors": "Этажность",
+  "@floors": {
+    "description": "Метка этажности"
+  },
+  "price": "Стоимость",
+  "@price": {
+    "description": "Метка стоимости"
+  },
+  "floor": "этаж",
+  "@floor": {
+    "description": "Слово этаж"
+  },
+  "floorsPlural": "этажа",
+  "@floorsPlural": {
+    "description": "Слово этажа (множественное)"
   }
 }
-

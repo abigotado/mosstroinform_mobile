@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 
 /// Виджет карточки документа
@@ -60,7 +61,7 @@ class DocumentCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      'Отправлен: ${_formatDate(document.submittedAt!)}',
+                      '${AppLocalizations.of(context)!.submitted}: ${_formatDate(document.submittedAt!)}',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -119,6 +120,7 @@ class _StatusChip extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    final l10n = AppLocalizations.of(context)!;
     Color backgroundColor;
     Color textColor;
     String label;
@@ -128,25 +130,25 @@ class _StatusChip extends StatelessWidget {
       case DocumentStatus.pending:
         backgroundColor = colorScheme.surfaceContainerHighest;
         textColor = colorScheme.onSurface;
-        label = 'Ожидает';
+        label = l10n.documentStatusPending;
         icon = Icons.pending;
         break;
       case DocumentStatus.underReview:
         backgroundColor = colorScheme.primaryContainer;
         textColor = colorScheme.onPrimaryContainer;
-        label = 'На рассмотрении';
+        label = l10n.documentStatusUnderReview;
         icon = Icons.rate_review;
         break;
       case DocumentStatus.approved:
         backgroundColor = colorScheme.tertiaryContainer;
         textColor = colorScheme.onTertiaryContainer;
-        label = 'Одобрен';
+        label = l10n.documentStatusApproved;
         icon = Icons.check_circle;
         break;
       case DocumentStatus.rejected:
         backgroundColor = colorScheme.errorContainer;
         textColor = colorScheme.onErrorContainer;
-        label = 'Отклонён';
+        label = l10n.documentStatusRejected;
         icon = Icons.cancel;
         break;
     }
