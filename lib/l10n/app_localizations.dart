@@ -333,6 +333,78 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'этажа'**
   String get floorsPlural;
+
+  /// Заголовок экрана этапа строительства
+  ///
+  /// In ru, this message translates to:
+  /// **'Этап строительства'**
+  String get constructionStage;
+
+  /// Заголовок списка камер
+  ///
+  /// In ru, this message translates to:
+  /// **'Камеры'**
+  String get cameras;
+
+  /// Заголовок экрана камеры
+  ///
+  /// In ru, this message translates to:
+  /// **'Камера'**
+  String get camera;
+
+  /// Сообщение когда камер нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет доступных камер'**
+  String get noCameras;
+
+  /// Сообщение о неактивной камере
+  ///
+  /// In ru, this message translates to:
+  /// **'Камера неактивна'**
+  String get cameraNotActive;
+
+  /// Заголовок ошибки загрузки стройки
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки информации о стройке'**
+  String get errorLoadingConstructionSite;
+
+  /// Заголовок ошибки загрузки камер
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки камер'**
+  String get errorLoadingCameras;
+
+  /// Метка прогресса строительства
+  ///
+  /// In ru, this message translates to:
+  /// **'Прогресс'**
+  String get progress;
+
+  /// Метка даты начала
+  ///
+  /// In ru, this message translates to:
+  /// **'Дата начала'**
+  String get startDate;
+
+  /// Метка ожидаемой даты завершения
+  ///
+  /// In ru, this message translates to:
+  /// **'Ожидаемое завершение'**
+  String get expectedCompletion;
+
+  /// Статус камеры - активна
+  ///
+  /// In ru, this message translates to:
+  /// **'Активна'**
+  String get active;
+
+  /// Статус камеры - неактивна
+  ///
+  /// In ru, this message translates to:
+  /// **'Неактивна'**
+  String get inactive;
 }
 
 class _AppLocalizationsDelegate

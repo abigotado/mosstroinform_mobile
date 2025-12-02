@@ -130,4 +130,41 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get floorsPlural => 'этажа';
+
+  @override
+  String get constructionStage => 'Этап строительства';
+
+  @override
+  String get cameras => 'Камеры';
+
+  @override
+  String get camera => 'Камера';
+
+  @override
+  String get noCameras => 'Нет доступных камер';
+
+  @override
+  String get cameraNotActive => 'Камера неактивна';
+
+  @override
+  String get errorLoadingConstructionSite =>
+      'Ошибка загрузки информации о стройке';
+
+  @override
+  String get errorLoadingCameras => 'Ошибка загрузки камер';
+
+  @override
+  String get progress => 'Прогресс';
+
+  @override
+  String get startDate => 'Дата начала';
+
+  @override
+  String get expectedCompletion => 'Ожидаемое завершение';
+
+  @override
+  String get active => 'Активна';
+
+  @override
+  String get inactive => 'Неактивна';
 }

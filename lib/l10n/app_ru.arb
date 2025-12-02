@@ -168,5 +168,54 @@
   "floorsPlural": "этажа",
   "@floorsPlural": {
     "description": "Слово этажа (множественное)"
+  },
+  
+  "constructionStage": "Этап строительства",
+  "@constructionStage": {
+    "description": "Заголовок экрана этапа строительства"
+  },
+  "cameras": "Камеры",
+  "@cameras": {
+    "description": "Заголовок списка камер"
+  },
+  "camera": "Камера",
+  "@camera": {
+    "description": "Заголовок экрана камеры"
+  },
+  "noCameras": "Нет доступных камер",
+  "@noCameras": {
+    "description": "Сообщение когда камер нет"
+  },
+  "cameraNotActive": "Камера неактивна",
+  "@cameraNotActive": {
+    "description": "Сообщение о неактивной камере"
+  },
+  "errorLoadingConstructionSite": "Ошибка загрузки информации о стройке",
+  "@errorLoadingConstructionSite": {
+    "description": "Заголовок ошибки загрузки стройки"
+  },
+  "errorLoadingCameras": "Ошибка загрузки камер",
+  "@errorLoadingCameras": {
+    "description": "Заголовок ошибки загрузки камер"
+  },
+  "progress": "Прогресс",
+  "@progress": {
+    "description": "Метка прогресса строительства"
+  },
+  "startDate": "Дата начала",
+  "@startDate": {
+    "description": "Метка даты начала"
+  },
+  "expectedCompletion": "Ожидаемое завершение",
+  "@expectedCompletion": {
+    "description": "Метка ожидаемой даты завершения"
+  },
+  "active": "Активна",
+  "@active": {
+    "description": "Статус камеры - активна"
+  },
+  "inactive": "Неактивна",
+  "@inactive": {
+    "description": "Статус камеры - неактивна"
   }
 }

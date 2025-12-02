@@ -49,12 +49,12 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
                 final document = documents[index];
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 12),
-                    child: DocumentCard(
-                      document: document,
-                      onTap: () {
-                        context.push('/documents/${document.id}');
-                      },
-                    ),
+                  child: DocumentCard(
+                    document: document,
+                    onTap: () {
+                      context.push('/documents/${document.id}');
+                    },
+                  ),
                 );
               },
             ),
