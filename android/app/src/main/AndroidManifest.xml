@@ -1,4 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Разрешение на доступ к интернету для загрузки потокового видео -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!-- Разрешение на доступ к сети для потокового видео -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
     <application
         android:label="mosstroinform_mobile"
         android:name="${applicationName}"

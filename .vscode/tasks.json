@@ -1,0 +1,149 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "flutter: pub get",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "pub",
+        "get"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: build_runner build",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "pub",
+        "run",
+        "build_runner",
+        "build",
+        "--delete-conflicting-outputs"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: build_runner watch",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "pub",
+        "run",
+        "build_runner",
+        "watch",
+        "--delete-conflicting-outputs"
+      ],
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "flutter: analyze",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "analyze"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: format",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "format",
+        "."
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: clean",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "clean"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: Android APK (dev)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "dev",
+        "--release"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: Android APK (staging)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "staging",
+        "--release"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: Android APK (prod)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "apk",
+        "--flavor",
+        "prod",
+        "--release"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: iOS (dev)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "ios",
+        "--flavor",
+        "dev",
+        "--release"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: iOS (staging)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "ios",
+        "--flavor",
+        "staging",
+        "--release"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "build: iOS (prod)",
+      "type": "shell",
+      "command": "flutter",
+      "args": [
+        "build",
+        "ios",
+        "--flavor",
+        "prod",
+        "--release"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
+

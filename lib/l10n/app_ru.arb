@@ -3,6 +3,412 @@
   "appTitle": "Стройконтроль Онлайн",
   "@appTitle": {
     "description": "Название приложения"
+  },
+  
+  "projectsTitle": "Объекты",
+  "@projectsTitle": {
+    "description": "Заголовок экрана списка проектов"
+  },
+  "projectsNotFound": "Проекты не найдены",
+  "@projectsNotFound": {
+    "description": "Сообщение когда проектов нет"
+  },
+  "projectDetails": "Детали проекта",
+  "@projectDetails": {
+    "description": "Заголовок экрана деталей проекта"
+  },
+  "projectNotFound": "Проект не найден",
+  "@projectNotFound": {
+    "description": "Сообщение когда проект не найден"
+  },
+  "sendConstructionRequest": "Отправить запрос на строительство",
+  "@sendConstructionRequest": {
+    "description": "Кнопка отправки запроса на строительство"
+  },
+  "constructionRequestSent": "Запрос на строительство успешно отправлен",
+  "@constructionRequestSent": {
+    "description": "Сообщение об успешной отправке запроса"
+  },
+  "errorLoadingProjects": "Ошибка загрузки проектов",
+  "@errorLoadingProjects": {
+    "description": "Заголовок ошибки загрузки проектов"
+  },
+  "retry": "Повторить",
+  "@retry": {
+    "description": "Кнопка повтора действия"
+  },
+  
+  "documentApprovalTitle": "Согласование документов",
+  "@documentApprovalTitle": {
+    "description": "Заголовок экрана согласования документов"
+  },
+  "noDocumentsToApprove": "Нет документов для согласования",
+  "@noDocumentsToApprove": {
+    "description": "Сообщение когда документов нет"
+  },
+  "documentTitle": "Документ",
+  "@documentTitle": {
+    "description": "Заголовок экрана документа"
+  },
+  "documentNotFound": "Документ не найден",
+  "@documentNotFound": {
+    "description": "Сообщение когда документ не найден"
+  },
+  "description": "Описание",
+  "@description": {
+    "description": "Заголовок секции описания"
+  },
+  "submitted": "Отправлен",
+  "@submitted": {
+    "description": "Метка даты отправки"
+  },
+  "approved": "Одобрен",
+  "@approved": {
+    "description": "Метка даты одобрения"
+  },
+  "rejectionReason": "Причина отклонения",
+  "@rejectionReason": {
+    "description": "Заголовок причины отклонения"
+  },
+  "downloadDocument": "Скачать документ",
+  "@downloadDocument": {
+    "description": "Кнопка скачивания документа"
+  },
+  "reject": "Отклонить",
+  "@reject": {
+    "description": "Кнопка отклонения документа"
+  },
+  "approve": "Одобрить",
+  "@approve": {
+    "description": "Кнопка одобрения документа"
+  },
+  "rejectDocumentTitle": "Отклонить документ",
+  "@rejectDocumentTitle": {
+    "description": "Заголовок диалога отклонения документа"
+  },
+  "rejectReasonHint": "Укажите причину отклонения",
+  "@rejectReasonHint": {
+    "description": "Подсказка для поля причины отклонения"
+  },
+  "cancel": "Отмена",
+  "@cancel": {
+    "description": "Кнопка отмены"
+  },
+  "documentApproved": "Документ успешно одобрен",
+  "@documentApproved": {
+    "description": "Сообщение об успешном одобрении документа"
+  },
+  "documentRejected": "Документ отклонён",
+  "@documentRejected": {
+    "description": "Сообщение об отклонении документа"
+  },
+  "error": "Ошибка",
+  "@error": {
+    "description": "Заголовок ошибки"
+  },
+  "errorLoadingDocuments": "Ошибка загрузки документов",
+  "@errorLoadingDocuments": {
+    "description": "Заголовок ошибки загрузки документов"
+  },
+  "errorLoadingDocument": "Ошибка загрузки документа",
+  "@errorLoadingDocument": {
+    "description": "Заголовок ошибки загрузки документа"
+  },
+  "specifyRejectionReason": "Укажите причину отклонения",
+  "@specifyRejectionReason": {
+    "description": "Сообщение о необходимости указать причину отклонения"
+  },
+  "openFile": "Открыть файл: {url}",
+  "@openFile": {
+    "description": "Сообщение об открытии файла",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  
+  "documentStatusPending": "Ожидает",
+  "@documentStatusPending": {
+    "description": "Статус документа - ожидает"
+  },
+  "documentStatusUnderReview": "На рассмотрении",
+  "@documentStatusUnderReview": {
+    "description": "Статус документа - на рассмотрении"
+  },
+  "documentStatusApproved": "Одобрен",
+  "@documentStatusApproved": {
+    "description": "Статус документа - одобрен"
+  },
+  "documentStatusRejected": "Отклонён",
+  "@documentStatusRejected": {
+    "description": "Статус документа - отклонён"
+  },
+  
+  "constructionStages": "Этапы строительства",
+  "@constructionStages": {
+    "description": "Заголовок секции этапов строительства"
+  },
+  "area": "Площадь",
+  "@area": {
+    "description": "Метка площади"
+  },
+  "floors": "Этажность",
+  "@floors": {
+    "description": "Метка этажности"
+  },
+  "price": "Стоимость",
+  "@price": {
+    "description": "Метка стоимости"
+  },
+  "floor": "этаж",
+  "@floor": {
+    "description": "Слово этаж"
+  },
+  "floorsPlural": "этажа",
+  "@floorsPlural": {
+    "description": "Слово этажа (множественное)"
+  },
+  
+  "constructionStage": "Этап строительства",
+  "@constructionStage": {
+    "description": "Заголовок экрана этапа строительства"
+  },
+  "cameras": "Камеры",
+  "@cameras": {
+    "description": "Заголовок списка камер"
+  },
+  "camera": "Камера",
+  "@camera": {
+    "description": "Заголовок экрана камеры"
+  },
+  "noCameras": "Нет доступных камер",
+  "@noCameras": {
+    "description": "Сообщение когда камер нет"
+  },
+  "cameraNotActive": "Камера неактивна",
+  "@cameraNotActive": {
+    "description": "Сообщение о неактивной камере"
+  },
+  "errorLoadingConstructionSite": "Ошибка загрузки информации о стройке",
+  "@errorLoadingConstructionSite": {
+    "description": "Заголовок ошибки загрузки стройки"
+  },
+  "errorLoadingCameras": "Ошибка загрузки камер",
+  "@errorLoadingCameras": {
+    "description": "Заголовок ошибки загрузки камер"
+  },
+  "progress": "Прогресс",
+  "@progress": {
+    "description": "Метка прогресса строительства"
+  },
+  "startDate": "Дата начала",
+  "@startDate": {
+    "description": "Метка даты начала"
+  },
+  "expectedCompletion": "Ожидаемое завершение",
+  "@expectedCompletion": {
+    "description": "Метка ожидаемой даты завершения"
+  },
+  "active": "Активна",
+  "@active": {
+    "description": "Статус камеры - активна"
+  },
+  "inactive": "Неактивна",
+  "@inactive": {
+    "description": "Статус камеры - неактивна"
+  },
+  
+  "constructionCompletion": "Завершение строительства",
+  "@constructionCompletion": {
+    "description": "Заголовок экрана завершения строительства"
+  },
+  "completionStatus": "Статус завершения",
+  "@completionStatus": {
+    "description": "Заголовок статуса завершения"
+  },
+  "finalDocuments": "Финальные документы",
+  "@finalDocuments": {
+    "description": "Заголовок списка финальных документов"
+  },
+  "noFinalDocuments": "Нет финальных документов",
+  "@noFinalDocuments": {
+    "description": "Сообщение когда финальных документов нет"
+  },
+  "finalDocument": "Финальный документ",
+  "@finalDocument": {
+    "description": "Заголовок экрана финального документа"
+  },
+  "finalDocumentNotFound": "Финальный документ не найден",
+  "@finalDocumentNotFound": {
+    "description": "Сообщение когда финальный документ не найден"
+  },
+  "signDocument": "Подписать документ",
+  "@signDocument": {
+    "description": "Кнопка подписания документа"
+  },
+  "documentSigned": "Документ успешно подписан",
+  "@documentSigned": {
+    "description": "Сообщение об успешном подписании документа"
+  },
+  "signed": "Подписан",
+  "@signed": {
+    "description": "Статус документа - подписан"
+  },
+  "signedAt": "Подписан",
+  "@signedAt": {
+    "description": "Метка даты подписания"
+  },
+  "allDocumentsSigned": "Все документы подписаны",
+  "@allDocumentsSigned": {
+    "description": "Сообщение что все документы подписаны"
+  },
+  "constructionCompleted": "Строительство завершено",
+  "@constructionCompleted": {
+    "description": "Сообщение о завершении строительства"
+  },
+  "errorLoadingCompletionStatus": "Ошибка загрузки статуса завершения",
+  "@errorLoadingCompletionStatus": {
+    "description": "Заголовок ошибки загрузки статуса"
+  },
+  "errorLoadingFinalDocuments": "Ошибка загрузки финальных документов",
+  "@errorLoadingFinalDocuments": {
+    "description": "Заголовок ошибки загрузки финальных документов"
+  },
+  "errorLoadingFinalDocument": "Ошибка загрузки финального документа",
+  "@errorLoadingFinalDocument": {
+    "description": "Заголовок ошибки загрузки финального документа"
+  },
+  "completionDate": "Дата завершения",
+  "@completionDate": {
+    "description": "Метка даты завершения строительства"
+  },
+  "signature": "Подпись",
+  "@signature": {
+    "description": "Метка подписи"
+  },
+  
+  "chats": "Чаты",
+  "@chats": {
+    "description": "Заголовок списка чатов"
+  },
+  "chat": "Чат",
+  "@chat": {
+    "description": "Заголовок экрана чата"
+  },
+  "noChats": "Нет чатов",
+  "@noChats": {
+    "description": "Сообщение когда чатов нет"
+  },
+  "noMessages": "Нет сообщений",
+  "@noMessages": {
+    "description": "Сообщение когда сообщений нет"
+  },
+  "typeMessage": "Введите сообщение...",
+  "@typeMessage": {
+    "description": "Подсказка для поля ввода сообщения"
+  },
+  "send": "Отправить",
+  "@send": {
+    "description": "Кнопка отправки сообщения"
+  },
+  "errorLoadingChats": "Ошибка загрузки чатов",
+  "@errorLoadingChats": {
+    "description": "Заголовок ошибки загрузки чатов"
+  },
+  "errorLoadingMessages": "Ошибка загрузки сообщений",
+  "@errorLoadingMessages": {
+    "description": "Заголовок ошибки загрузки сообщений"
+  },
+  "errorSendingMessage": "Ошибка отправки сообщения",
+  "@errorSendingMessage": {
+    "description": "Заголовок ошибки отправки сообщения"
+  },
+  "messageSent": "Сообщение отправлено",
+  "@messageSent": {
+    "description": "Сообщение об успешной отправке"
+  },
+  "unread": "Непрочитано",
+  "@unread": {
+    "description": "Метка непрочитанных сообщений"
+  },
+  
+  "yes": "Да",
+  "@yes": {
+    "description": "Слово да"
+  },
+  "no": "Нет",
+  "@no": {
+    "description": "Слово нет"
+  },
+  "documentStatus": "Статус документа",
+  "@documentStatus": {
+    "description": "Заголовок статуса документа"
+  },
+  "errorOpeningFile": "Ошибка открытия файла: {url}",
+  "@errorOpeningFile": {
+    "description": "Сообщение об ошибке открытия файла",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingSignature": "Ошибка загрузки подписи",
+  "@errorLoadingSignature": {
+    "description": "Сообщение об ошибке загрузки подписи"
+  },
+  
+  "loadingVideoStream": "Загрузка видеопотока...",
+  "@loadingVideoStream": {
+    "description": "Сообщение при загрузке видеопотока"
+  },
+  "errorLoadingVideoStream": "Ошибка загрузки видеопотока",
+  "@errorLoadingVideoStream": {
+    "description": "Сообщение об ошибке загрузки видеопотока"
+  },
+  "toConstruction": "К стройке",
+  "@toConstruction": {
+    "description": "Кнопка перехода к стройке"
+  },
+  "toDocuments": "К документам",
+  "@toDocuments": {
+    "description": "Кнопка перехода к документам"
+  },
+  "completionTooltip": "Завершение строительства",
+  "@completionTooltip": {
+    "description": "Подсказка для кнопки завершения строительства"
+  },
+  "chatTooltip": "Чат со специалистом",
+  "@chatTooltip": {
+    "description": "Подсказка для кнопки чата"
+  },
+  "completed": "Завершён",
+  "@completed": {
+    "description": "Статус этапа - завершён"
+  },
+  "inProgress": "В процессе",
+  "@inProgress": {
+    "description": "Статус этапа - в процессе"
+  },
+  "waiting": "Ожидает",
+  "@waiting": {
+    "description": "Статус этапа - ожидает"
+  },
+  "floor": "этаж",
+  "@floor": {
+    "description": "Слово этаж (единственное число)"
+  },
+  "floors": "этажа",
+  "@floors": {
+    "description": "Слово этажа (множественное число)"
+  },
+  "constructionStagesLabel": "Этапы строительства:",
+  "@constructionStagesLabel": {
+    "description": "Заголовок этапов строительства"
+  },
+  "buffering": "Буферизация...",
+  "@buffering": {
+    "description": "Сообщение о буферизации видеопотока"
   }
 }
-

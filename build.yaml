@@ -1,0 +1,33 @@
+targets:
+  $default:
+    builders:
+      # Freezed для генерации immutable классов
+      freezed:
+        enabled: true
+        options:
+          # Генерировать union types
+          union_value: true
+          # Генерировать copyWith методы
+          copy_with: true
+          # Генерировать toString, ==, hashCode
+          equal: true
+          # Генерировать fromJson и toJson
+          make_collections_unmodifiable: true
+
+      # JSON Serializable для сериализации
+      json_serializable:
+        enabled: true
+        options:
+          # Использовать explicit_to_json для вложенных объектов
+          explicit_to_json: true
+          # Включать проверку на null
+          include_if_null: false
+
+      # Retrofit для генерации API клиентов
+      retrofit_generator:
+        enabled: true
+
+      # Riverpod Generator для генерации провайдеров
+      riverpod_generator:
+        enabled: true
+
