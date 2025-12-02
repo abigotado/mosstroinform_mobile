@@ -48,7 +48,7 @@ flutter --version
 
 - Android Studio или Android SDK
 - Android SDK Platform 33 или выше
-- Java Development Kit (JDK) 17 или выше
+- Java Development Kit (JDK) 21 или выше (требуется для Flutter 3.24.0)
 
 ### Debug сборка (для тестирования)
 
