@@ -12,7 +12,7 @@ part 'document_repository_provider.g.dart';
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
 @riverpod
-DocumentRepository documentRepository(DocumentRepositoryRef ref) {
+DocumentRepository documentRepository(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   if (config.useMocks) {
     return MockDocumentRepository(ref);

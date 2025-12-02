@@ -8,7 +8,7 @@ part 'final_document_data_source_provider.g.dart';
 /// Провайдер для Retrofit источника данных финальных документов
 /// Находится в data слое, так как зависит от реализации (Retrofit)
 @riverpod
-FinalDocumentRemoteDataSource finalDocumentRemoteDataSource(FinalDocumentRemoteDataSourceRef ref) {
+FinalDocumentRemoteDataSource finalDocumentRemoteDataSource(Ref ref) {
   final dio = ref.watch(dioProvider);
   final config = ref.watch(appConfigSimpleProvider);
   return FinalDocumentRemoteDataSource(dio, baseUrl: config.baseUrl);

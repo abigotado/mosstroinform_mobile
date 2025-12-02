@@ -8,7 +8,7 @@ part 'project_data_source_provider.g.dart';
 /// Провайдер для Retrofit источника данных проектов
 /// Находится в data слое, так как зависит от реализации (Retrofit)
 @riverpod
-ProjectRemoteDataSource projectRemoteDataSource(ProjectRemoteDataSourceRef ref) {
+ProjectRemoteDataSource projectRemoteDataSource(Ref ref) {
   final dio = ref.watch(dioProvider);
   final config = ref.watch(appConfigSimpleProvider);
   return ProjectRemoteDataSource(dio, baseUrl: config.baseUrl);

@@ -6,7 +6,7 @@ part of 'chat_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatRepositoryHash() => r'375fa5356e7b48dbcef19387cea7239500273952';
+String _$chatRepositoryHash() => r'2f597f41d06933de45602c5843db838d2bfd0ded';
 
 /// Провайдер для репозитория чатов
 /// Возвращает интерфейс, а не имплементацию

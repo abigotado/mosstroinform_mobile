@@ -7,7 +7,7 @@ part of 'project_data_source_provider.dart';
 // **************************************************************************
 
 String _$projectRemoteDataSourceHash() =>
-    r'78722dd6cb3b8e787d0d32f9a1f99b681ffd4b6d';
+    r'056d656ef79356718720a730be7fe527dcc2bc1a';
 
 /// Провайдер для Retrofit источника данных проектов
 /// Находится в data слое, так как зависит от реализации (Retrofit)

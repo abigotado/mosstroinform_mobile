@@ -40,7 +40,7 @@ class _ChatRemoteDataSource implements ChatRemoteDataSource {
           .map((dynamic i) => ChatModel.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -67,7 +67,7 @@ class _ChatRemoteDataSource implements ChatRemoteDataSource {
     try {
       _value = ChatModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -96,7 +96,7 @@ class _ChatRemoteDataSource implements ChatRemoteDataSource {
           .map((dynamic i) => MessageModel.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -127,7 +127,7 @@ class _ChatRemoteDataSource implements ChatRemoteDataSource {
     try {
       _value = MessageModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

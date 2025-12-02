@@ -7,7 +7,7 @@ part of 'construction_site_repository_provider.dart';
 // **************************************************************************
 
 String _$constructionSiteRepositoryHash() =>
-    r'4d47185cd9515f4da245cb93671c58ed5ddfad91';
+    r'a3af079124b31a74c827ebfb54531e40787a9411';
 
 /// Провайдер для репозитория строительной площадки
 /// Возвращает интерфейс, а не имплементацию

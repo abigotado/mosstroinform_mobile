@@ -8,7 +8,7 @@ part 'construction_site_data_source_provider.g.dart';
 /// Провайдер для Retrofit источника данных строительной площадки
 /// Находится в data слое, так как зависит от реализации (Retrofit)
 @riverpod
-ConstructionSiteRemoteDataSource constructionSiteRemoteDataSource(ConstructionSiteRemoteDataSourceRef ref) {
+ConstructionSiteRemoteDataSource constructionSiteRemoteDataSource(Ref ref) {
   final dio = ref.watch(dioProvider);
   final config = ref.watch(appConfigSimpleProvider);
   return ConstructionSiteRemoteDataSource(dio, baseUrl: config.baseUrl);

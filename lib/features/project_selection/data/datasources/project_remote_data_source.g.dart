@@ -40,7 +40,7 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
           .map((dynamic i) => ProjectModel.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -67,7 +67,7 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
     try {
       _value = ProjectModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

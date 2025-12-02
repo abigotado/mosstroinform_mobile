@@ -13,7 +13,7 @@ part 'construction_site_repository_provider.g.dart';
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
 @riverpod
-ConstructionSiteRepository constructionSiteRepository(ConstructionSiteRepositoryRef ref) {
+ConstructionSiteRepository constructionSiteRepository(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   debugPrint('=== constructionSiteRepositoryProvider ===');
   debugPrint('useMocks: ${config.useMocks}');

@@ -7,7 +7,7 @@ part of 'document_data_source_provider.dart';
 // **************************************************************************
 
 String _$documentRemoteDataSourceHash() =>
-    r'7181679262d1ec8cbda72d6414176d15d27d55e0';
+    r'31a829f4b464597fb2751295b70215576027f31f';
 
 /// Провайдер для Retrofit источника данных документов
 /// Находится в data слое, так как зависит от реализации (Retrofit)

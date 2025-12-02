@@ -7,7 +7,7 @@ part of 'construction_site_data_source_provider.dart';
 // **************************************************************************
 
 String _$constructionSiteRemoteDataSourceHash() =>
-    r'61a0cfd3eb1078e92c5e7e8781443af0b6cc4096';
+    r'8ca3cb82f90d7e2cdc449e63c5f3a7032b60f385';
 
 /// Провайдер для Retrofit источника данных строительной площадки
 /// Находится в data слое, так как зависит от реализации (Retrofit)

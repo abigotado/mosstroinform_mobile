@@ -45,7 +45,7 @@ class _ConstructionSiteRemoteDataSource
     try {
       _value = ConstructionSiteModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -74,7 +74,7 @@ class _ConstructionSiteRemoteDataSource
           .map((dynamic i) => CameraModel.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;
@@ -101,7 +101,7 @@ class _ConstructionSiteRemoteDataSource
     try {
       _value = CameraModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
+      errorLogger?.logError(e, s, _options);
       rethrow;
     }
     return _value;

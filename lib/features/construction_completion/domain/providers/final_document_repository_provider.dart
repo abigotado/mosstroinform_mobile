@@ -12,7 +12,7 @@ part 'final_document_repository_provider.g.dart';
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
 @riverpod
-FinalDocumentRepository finalDocumentRepository(FinalDocumentRepositoryRef ref) {
+FinalDocumentRepository finalDocumentRepository(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   if (config.useMocks) {
     return MockFinalDocumentRepository();

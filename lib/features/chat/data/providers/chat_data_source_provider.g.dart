@@ -7,7 +7,7 @@ part of 'chat_data_source_provider.dart';
 // **************************************************************************
 
 String _$chatRemoteDataSourceHash() =>
-    r'eb8965a26ddc8f2da8c6c4e5c973bd113acca664';
+    r'6c9c4a9d3955dedd0b17a6a44a7e48b1a6e0ddf5';
 
 /// Провайдер для Retrofit источника данных чатов
 /// Находится в data слое, так как зависит от реализации (Retrofit)

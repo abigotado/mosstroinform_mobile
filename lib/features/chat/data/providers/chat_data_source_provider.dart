@@ -8,7 +8,7 @@ part 'chat_data_source_provider.g.dart';
 /// Провайдер для Retrofit источника данных чатов
 /// Находится в data слое, так как зависит от реализации (Retrofit)
 @riverpod
-ChatRemoteDataSource chatRemoteDataSource(ChatRemoteDataSourceRef ref) {
+ChatRemoteDataSource chatRemoteDataSource(Ref ref) {
   final dio = ref.watch(dioProvider);
   final config = ref.watch(appConfigSimpleProvider);
   return ChatRemoteDataSource(dio, baseUrl: config.baseUrl);
