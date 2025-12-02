@@ -1,0 +1,123 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
+import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
+
+/// Экран списка проектов
+class ProjectListScreen extends ConsumerStatefulWidget {
+  const ProjectListScreen({super.key});
+
+  @override
+  ConsumerState<ProjectListScreen> createState() => _ProjectListScreenState();
+}
+
+class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Загружаем проекты при инициализации
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(projectsNotifierProvider.notifier).loadProjects();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final projectsAsync = ref.watch(projectsNotifierProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Объекты'),
+      ),
+      body: projectsAsync.when(
+        data: (state) {
+          if (state.projects.isEmpty && !state.isLoading) {
+            return const Center(
+              child: Text('Проекты не найдены'),
+            );
+          }
+
+          if (state.error != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 64,
+                    color: Colors.red,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Ошибка: ${state.error!.message}',
+                    style: Theme.of(context).textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref.read(projectsNotifierProvider.notifier).loadProjects();
+                    },
+                    child: const Text('Повторить'),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              await ref.read(projectsNotifierProvider.notifier).loadProjects();
+            },
+            child: state.isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: state.projects.length,
+                    itemBuilder: (context, index) {
+                      final project = state.projects[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: ProjectCard(
+                          project: project,
+                          onTap: () {
+                            context.push('/projects/${project.id}');
+                          },
+                        ),
+                      );
+                    },
+                  ),
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Colors.red,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Ошибка: $error',
+                style: Theme.of(context).textTheme.bodyLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  ref.read(projectsNotifierProvider.notifier).loadProjects();
+                },
+                child: const Text('Повторить'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+

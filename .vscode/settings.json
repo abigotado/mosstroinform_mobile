@@ -1,0 +1,27 @@
+{
+  "dart.flutterSdkPath": null,
+  "dart.lineLength": 80,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "Dart-Code.dart-code",
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.selectionHighlight": false,
+    "editor.suggest.snippetsPreventQuickSuggestions": false,
+    "editor.suggestSelection": "first",
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off"
+  },
+  "files.exclude": {
+    "**/.dart_tool": true,
+    "**/.flutter-plugins": true,
+    "**/.flutter-plugins-dependencies": true,
+    "**/.packages": true,
+    "**/.pub-cache": true,
+    "**/.pub": true,
+    "**/build": true
+  },
+  "files.associations": {
+    "*.arb": "json"
+  }
+}
+
