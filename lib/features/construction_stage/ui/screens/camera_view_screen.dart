@@ -42,9 +42,15 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           debugPrint('Ошибка видео: ${value.errorDescription}');
         }
         debugPrint('position: ${value.position}');
+        debugPrint('duration: ${value.duration}');
         debugPrint('buffered: ${value.buffered}');
         debugPrint('size: ${value.size}');
         debugPrint('aspectRatio: ${value.aspectRatio}');
+        
+        // Определяем тип потока
+        final isLiveStream = value.duration == Duration.zero || 
+                            value.duration.inHours > 1000; // Live потоки обычно имеют очень большую или нулевую длительность
+        debugPrint('Тип потока: ${isLiveStream ? "LIVE (реальное время)" : "VOD (потоковое видео)"}');
 
         // Обновляем состояние при изменении
         if (mounted && value.isInitialized && !_isInitialized) {
@@ -154,8 +160,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           : _isInitialized &&
                 _controller != null &&
                 _controller!.value.isInitialized
-              ? _VideoPlayerWidget(controller: _controller!)
-              : const _VideoLoadingWidget(),
+          ? _VideoPlayerWidget(controller: _controller!)
+          : const _VideoLoadingWidget(),
     );
   }
 }
@@ -165,9 +171,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
 class _VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
 
-  const _VideoPlayerWidget({
-    required this.controller,
-  });
+  const _VideoPlayerWidget({required this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -190,7 +194,10 @@ class _VideoPlayerWidget extends StatelessWidget {
               top: 16,
               left: 16,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.circular(16),
@@ -223,7 +230,10 @@ class _VideoPlayerWidget extends StatelessWidget {
               Positioned(
                 bottom: 16,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black54,
                     borderRadius: BorderRadius.circular(8),
@@ -236,7 +246,9 @@ class _VideoPlayerWidget extends StatelessWidget {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
