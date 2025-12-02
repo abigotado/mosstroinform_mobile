@@ -27,14 +27,14 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     super.initState();
     // Загружаем проект при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(projectNotifierProvider.notifier).loadProject(widget.projectId);
+      ref.read(projectProvider.notifier).loadProject(widget.projectId);
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final projectAsync = ref.watch(projectNotifierProvider);
+    final projectAsync = ref.watch(projectProvider);
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -57,7 +57,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
               );
 
               // Проверяем, все ли документы одобрены
-              final allDocuments = ref.watch(documentsNotifierProvider);
+              final allDocuments = ref.watch(documentsProvider);
               final allApproved = allDocuments.maybeWhen(
                 data: (docs) =>
                     docs.isNotEmpty &&
@@ -223,7 +223,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 ElevatedButton(
                   onPressed: () {
                     ref
-                        .read(projectNotifierProvider.notifier)
+                        .read(projectProvider.notifier)
                         .loadProject(widget.projectId);
                   },
                   child: Text(l10n.retry),
@@ -267,7 +267,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
                         try {
                           await ref
-                              .read(projectNotifierProvider.notifier)
+                              .read(projectProvider.notifier)
                               .requestConstruction(widget.projectId);
                           AppLogger.info(
                             'Запрос на строительство отправлен успешно',

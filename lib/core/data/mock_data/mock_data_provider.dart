@@ -5,4 +5,3 @@ import 'package:mosstroinform_mobile/core/constants/app_constants.dart';
 final mockDataProvider = Provider<bool>((ref) {
   return AppConstants.useMocks;
 });
-

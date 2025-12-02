@@ -30,12 +30,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          DocumentCard(
-            document: document,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(DocumentCard(document: document, onTap: () {})),
       );
 
       expect(find.text('Тестовый документ'), findsOneWidget);
@@ -51,12 +46,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          DocumentCard(
-            document: document,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(DocumentCard(document: document, onTap: () {})),
       );
 
       expect(find.text('Описание тестового документа'), findsOneWidget);
@@ -75,10 +65,7 @@ void main() {
 
       await tester.pumpWidget(
         createTestWidget(
-          DocumentCard(
-            document: document,
-            onTap: () => tapped = true,
-          ),
+          DocumentCard(document: document, onTap: () => tapped = true),
         ),
       );
 
@@ -98,12 +85,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          DocumentCard(
-            document: document,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(DocumentCard(document: document, onTap: () {})),
       );
 
       // Проверяем, что статус отображается (может быть через чип или другой виджет)
@@ -111,7 +93,9 @@ void main() {
       expect(find.text('Тестовый документ'), findsOneWidget);
     });
 
-    testWidgets('отображает дату отправки, если она есть', (WidgetTester tester) async {
+    testWidgets('отображает дату отправки, если она есть', (
+      WidgetTester tester,
+    ) async {
       final document = Document(
         id: '1',
         projectId: 'project1',
@@ -122,12 +106,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          DocumentCard(
-            document: document,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(DocumentCard(document: document, onTap: () {})),
       );
 
       // Проверяем, что дата отображается (формат может быть локализован)
@@ -135,4 +114,3 @@ void main() {
     });
   });
 }
-

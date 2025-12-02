@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     mockRepository = MockChatRepository();
     container = ProviderContainer(
-      overrides: [
-        chatRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [chatRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -28,7 +26,7 @@ void main() {
 
   group('ChatsNotifier', () {
     test('build возвращает начальное состояние с пустым списком', () async {
-      final state = await container.read(chatsNotifierProvider.future);
+      final state = await container.read(chatsProvider.future);
 
       expect(state.chats, isEmpty);
       expect(state.isLoading, false);
@@ -55,10 +53,10 @@ void main() {
 
       when(() => mockRepository.getChats()).thenAnswer((_) async => chats);
 
-      final notifier = container.read(chatsNotifierProvider.notifier);
+      final notifier = container.read(chatsProvider.notifier);
       await notifier.loadChats();
 
-      final state = await container.read(chatsNotifierProvider.future);
+      final state = await container.read(chatsProvider.future);
 
       expect(state.chats, equals(chats));
       expect(state.isLoading, false);
@@ -70,17 +68,23 @@ void main() {
       final failure = NetworkFailure('Ошибка сети');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.getChats()).thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.getChats(),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(chatsNotifierProvider.notifier);
-      
+      final notifier = container.read(chatsProvider.notifier);
+
       // Вызываем метод - он установит AsyncValue.error
       await notifier.loadChats();
 
       // Проверяем состояние - AsyncValue.error устанавливается синхронно внутри catch
-      final state = container.read(chatsNotifierProvider);
+      final state = container.read(chatsProvider);
 
-      expect(state.hasError, true, reason: 'State should have error after Failure');
+      expect(
+        state.hasError,
+        true,
+        reason: 'State should have error after Failure',
+      );
       expect(state.error, isA<NetworkFailure>());
       verify(() => mockRepository.getChats()).called(1);
     });
@@ -90,7 +94,7 @@ void main() {
     const chatId = 'chat1';
 
     test('build возвращает начальное состояние с пустым списком', () async {
-      final state = await container.read(messagesNotifierProvider(chatId).future);
+      final state = await container.read(messagesProvider(chatId).future);
 
       expect(state.messages, isEmpty);
       expect(state.isLoading, false);
@@ -118,12 +122,14 @@ void main() {
         ),
       ];
 
-      when(() => mockRepository.getMessages(chatId)).thenAnswer((_) async => messages);
+      when(
+        () => mockRepository.getMessages(chatId),
+      ).thenAnswer((_) async => messages);
 
-      final notifier = container.read(messagesNotifierProvider(chatId).notifier);
+      final notifier = container.read(messagesProvider(chatId).notifier);
       await notifier.loadMessages();
 
-      final state = await container.read(messagesNotifierProvider(chatId).future);
+      final state = await container.read(messagesProvider(chatId).future);
 
       expect(state.messages, equals(messages));
       expect(state.isLoading, false);
@@ -153,26 +159,30 @@ void main() {
       );
 
       // Устанавливаем начальное состояние
-      when(() => mockRepository.getMessages(chatId))
-          .thenAnswer((_) async => existingMessages);
-      final notifier = container.read(messagesNotifierProvider(chatId).notifier);
+      when(
+        () => mockRepository.getMessages(chatId),
+      ).thenAnswer((_) async => existingMessages);
+      final notifier = container.read(messagesProvider(chatId).notifier);
       await notifier.loadMessages();
 
-      when(() => mockRepository.sendMessage(chatId, 'Новое сообщение'))
-          .thenAnswer((_) async => newMessage);
+      when(
+        () => mockRepository.sendMessage(chatId, 'Новое сообщение'),
+      ).thenAnswer((_) async => newMessage);
 
       await notifier.sendMessage('Новое сообщение');
 
-      final state = await container.read(messagesNotifierProvider(chatId).future);
+      final state = await container.read(messagesProvider(chatId).future);
 
       expect(state.messages.length, 2);
       expect(state.messages.last, equals(newMessage));
       expect(state.isSending, false);
-      verify(() => mockRepository.sendMessage(chatId, 'Новое сообщение')).called(1);
+      verify(
+        () => mockRepository.sendMessage(chatId, 'Новое сообщение'),
+      ).called(1);
     });
 
     test('sendMessage игнорирует пустые сообщения', () async {
-      final notifier = container.read(messagesNotifierProvider(chatId).notifier);
+      final notifier = container.read(messagesProvider(chatId).notifier);
 
       await notifier.sendMessage('');
       await notifier.sendMessage('   ');
@@ -181,10 +191,14 @@ void main() {
     });
 
     test('markAsRead успешно отмечает сообщения как прочитанные', () async {
-      when(() => mockRepository.markMessagesAsRead(chatId)).thenAnswer((_) async {});
-      when(() => mockRepository.getMessages(chatId)).thenAnswer((_) async => []);
+      when(
+        () => mockRepository.markMessagesAsRead(chatId),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockRepository.getMessages(chatId),
+      ).thenAnswer((_) async => []);
 
-      final notifier = container.read(messagesNotifierProvider(chatId).notifier);
+      final notifier = container.read(messagesProvider(chatId).notifier);
       await notifier.markAsRead();
 
       verify(() => mockRepository.markMessagesAsRead(chatId)).called(1);
@@ -192,4 +206,3 @@ void main() {
     });
   });
 }
-

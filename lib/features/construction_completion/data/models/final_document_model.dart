@@ -2,37 +2,24 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 
 part 'final_document_model.freezed.dart';
+part 'final_document_model.g.dart';
 
 /// Модель финального документа для работы с API
 @freezed
-class FinalDocumentModel with _$FinalDocumentModel {
+abstract class FinalDocumentModel with _$FinalDocumentModel {
   const factory FinalDocumentModel({
     required String id,
     required String title,
     required String description,
     String? fileUrl,
-    @Default('pending') String statusString,
+    @JsonKey(name: 'status') @Default('pending') String statusString,
     DateTime? submittedAt,
     DateTime? signedAt,
     String? signatureUrl,
   }) = _FinalDocumentModel;
 
-  factory FinalDocumentModel.fromJson(Map<String, dynamic> json) {
-    return FinalDocumentModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      fileUrl: json['fileUrl'] as String?,
-      statusString: json['status'] as String? ?? 'pending',
-      submittedAt: json['submittedAt'] == null
-          ? null
-          : DateTime.parse(json['submittedAt'] as String),
-      signedAt: json['signedAt'] == null
-          ? null
-          : DateTime.parse(json['signedAt'] as String),
-      signatureUrl: json['signatureUrl'] as String?,
-    );
-  }
+  factory FinalDocumentModel.fromJson(Map<String, dynamic> json) =>
+      _$FinalDocumentModelFromJson(json);
 }
 
 /// Модель статуса завершения строительства для работы с API
@@ -51,7 +38,9 @@ class ConstructionCompletionStatusModel {
     required this.documents,
   });
 
-  factory ConstructionCompletionStatusModel.fromJson(Map<String, dynamic> json) {
+  factory ConstructionCompletionStatusModel.fromJson(
+    Map<String, dynamic> json,
+  ) {
     return ConstructionCompletionStatusModel(
       projectId: json['projectId'] as String,
       isCompleted: json['isCompleted'] as bool,
@@ -59,8 +48,11 @@ class ConstructionCompletionStatusModel {
           ? null
           : DateTime.parse(json['completionDate'] as String),
       progress: (json['progress'] as num).toDouble(),
-      documents: (json['documents'] as List<dynamic>?)
-              ?.map((e) => FinalDocumentModel.fromJson(e as Map<String, dynamic>))
+      documents:
+          (json['documents'] as List<dynamic>?)
+              ?.map(
+                (e) => FinalDocumentModel.fromJson(e as Map<String, dynamic>),
+              )
               .toList() ??
           [],
     );
@@ -97,7 +89,8 @@ extension FinalDocumentModelExtension on FinalDocumentModel {
 }
 
 /// Расширение для конвертации модели статуса в сущность
-extension ConstructionCompletionStatusModelExtension on ConstructionCompletionStatusModel {
+extension ConstructionCompletionStatusModelExtension
+    on ConstructionCompletionStatusModel {
   ConstructionCompletionStatus toEntity() {
     final allSigned = documents.every((doc) => doc.statusString == 'signed');
     return ConstructionCompletionStatus(
@@ -124,4 +117,3 @@ extension FinalDocumentExtension on FinalDocument {
     }
   }
 }
-

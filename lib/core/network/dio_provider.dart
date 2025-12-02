@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart' show Ref;
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mosstroinform_mobile/core/constants/app_constants.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dio_provider.g.dart';
 
@@ -21,4 +20,3 @@ Dio dio(Ref ref) {
     ),
   );
 }
-

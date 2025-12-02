@@ -17,4 +17,3 @@ abstract class ChatRepository {
   /// Отметить сообщения как прочитанные
   Future<void> markMessagesAsRead(String chatId);
 }
-

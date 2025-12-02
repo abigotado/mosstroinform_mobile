@@ -11,4 +11,3 @@ class GetDocumentById {
     return await repository.getDocumentById(id);
   }
 }
-

@@ -1,8 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_provider.dart';
 import 'package:mosstroinform_mobile/core/network/dio_provider.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/data/datasources/final_document_remote_data_source.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'final_document_data_source_provider.g.dart';
 
@@ -14,4 +13,3 @@ FinalDocumentRemoteDataSource finalDocumentRemoteDataSource(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   return FinalDocumentRemoteDataSource(dio, baseUrl: config.baseUrl);
 }
-

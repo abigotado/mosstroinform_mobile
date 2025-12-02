@@ -2,39 +2,25 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 
 part 'document_model.freezed.dart';
+part 'document_model.g.dart';
 
 /// Модель документа для работы с API
 @freezed
-class DocumentModel with _$DocumentModel {
+abstract class DocumentModel with _$DocumentModel {
   const factory DocumentModel({
     required String id,
     required String projectId,
     required String title,
     required String description,
     String? fileUrl,
-    @Default('pending') String statusString,
+    @JsonKey(name: 'status') @Default('pending') String statusString,
     DateTime? submittedAt,
     DateTime? approvedAt,
     String? rejectionReason,
   }) = _DocumentModel;
 
-  factory DocumentModel.fromJson(Map<String, dynamic> json) {
-    return DocumentModel(
-      id: json['id'] as String,
-      projectId: json['projectId'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      fileUrl: json['fileUrl'] as String?,
-      statusString: json['status'] as String? ?? 'pending',
-      submittedAt: json['submittedAt'] == null
-          ? null
-          : DateTime.parse(json['submittedAt'] as String),
-      approvedAt: json['approvedAt'] == null
-          ? null
-          : DateTime.parse(json['approvedAt'] as String),
-      rejectionReason: json['rejectionReason'] as String?,
-    );
-  }
+  factory DocumentModel.fromJson(Map<String, dynamic> json) =>
+      _$DocumentModelFromJson(json);
 }
 
 /// Расширение для конвертации модели в сущность
@@ -85,4 +71,3 @@ extension DocumentExtension on Document {
     }
   }
 }
-

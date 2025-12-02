@@ -11,4 +11,3 @@ class GetDocuments {
     return await repository.getDocuments();
   }
 }
-

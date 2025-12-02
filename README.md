@@ -193,18 +193,16 @@ flutter run -d <device_id>
 
 ### Режимы запуска (Flavors)
 
-Проект поддерживает разные окружения через flavors:
+Проект поддерживает два окружения через flavors:
 
-- **dev** (по умолчанию) - режим разработки с моками
-- **staging** - staging окружение
-- **prod** - production окружение
+- **mock** (по умолчанию) - режим с моками для разработки и тестирования
+- **prod** - production окружение с реальными данными
 
 Запуск с указанием flavor:
 
 ```bash
-flutter run --flavor dev
-flutter run --flavor staging
-flutter run --flavor prod
+flutter run --dart-define=FLAVOR=mock  # С моками (по умолчанию)
+flutter run --dart-define=FLAVOR=prod   # Production
 ```
 
 Подробнее о flavors см. [FLAVORS_GUIDE.md](./FLAVORS_GUIDE.md)
@@ -589,7 +587,7 @@ lib/
 
 ### Использование моков
 
-По умолчанию приложение запускается с включенными моками (flavor `dev`). Моки:
+По умолчанию приложение запускается с включенными моками (flavor `mock`). Моки:
 - Имитируют работу реального API
 - Хранят состояние в памяти (сбрасывается при перезапуске)
 - Позволяют тестировать весь функционал без бэкенда

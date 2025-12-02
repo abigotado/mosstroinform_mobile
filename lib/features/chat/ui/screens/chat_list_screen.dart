@@ -19,14 +19,14 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(chatsNotifierProvider.notifier).loadChats();
+      ref.read(chatsProvider.notifier).loadChats();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final chatsAsync = ref.watch(chatsNotifierProvider);
+    final chatsAsync = ref.watch(chatsProvider);
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.chats)),
@@ -54,7 +54,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(chatsNotifierProvider.notifier).loadChats();
+              await ref.read(chatsProvider.notifier).loadChats();
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -103,7 +103,7 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(chatsNotifierProvider.notifier).loadChats();
+                  ref.read(chatsProvider.notifier).loadChats();
                 },
                 child: Text(l10n.retry),
               ),
@@ -114,4 +114,3 @@ class _ChatListScreenState extends ConsumerState<ChatListScreen> {
     );
   }
 }
-

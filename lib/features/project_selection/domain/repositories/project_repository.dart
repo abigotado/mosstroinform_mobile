@@ -11,4 +11,3 @@ abstract class ProjectRepository {
   /// Отправить запрос на строительство проекта
   Future<void> requestConstruction(String projectId);
 }
-

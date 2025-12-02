@@ -19,8 +19,9 @@ void main() {
     // Arrange
     const documentId = '1';
     const reason = 'Причина отклонения';
-    when(() => mockRepository.rejectDocument(documentId, reason))
-        .thenAnswer((_) async {});
+    when(
+      () => mockRepository.rejectDocument(documentId, reason),
+    ).thenAnswer((_) async {});
 
     // Act
     await useCase.call(documentId, reason);
@@ -34,8 +35,9 @@ void main() {
     const documentId = '1';
     const reason = 'Причина отклонения';
     final failure = ServerFailure('Ошибка сервера');
-    when(() => mockRepository.rejectDocument(documentId, reason))
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.rejectDocument(documentId, reason),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
     expect(
@@ -45,4 +47,3 @@ void main() {
     verify(() => mockRepository.rejectDocument(documentId, reason)).called(1);
   });
 }
-

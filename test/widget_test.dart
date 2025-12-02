@@ -8,18 +8,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
 import 'package:mosstroinform_mobile/main.dart';
 
 void main() {
   testWidgets('App starts correctly', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    final config = AppConfigSimple.dev();
+    final config = AppConfigSimple.mock();
     await tester.pumpWidget(
-      ProviderScope(
-        child: MosstroinformApp(config: config),
-      ),
+      ProviderScope(child: MosstroinformApp(config: config)),
     );
 
     // Wait for the app to initialize

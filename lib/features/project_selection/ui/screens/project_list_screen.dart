@@ -20,14 +20,14 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     super.initState();
     // Загружаем проекты при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(projectsNotifierProvider.notifier).loadProjects();
+      ref.read(projectsProvider.notifier).loadProjects();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final projectsAsync = ref.watch(projectsNotifierProvider);
+    final projectsAsync = ref.watch(projectsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -36,7 +36,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
         actions: [
           Builder(
             builder: (context) {
-              final projectsAsync = ref.watch(projectsNotifierProvider);
+              final projectsAsync = ref.watch(projectsProvider);
               return projectsAsync.maybeWhen(
                 data: (state) {
                   final firstProject = state.projects.isNotEmpty
@@ -79,9 +79,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
 
           // Если список пустой после загрузки (с ошибкой) - показываем сообщение
           if (state.projects.isEmpty && !state.isLoading) {
-            return Center(
-              child: Text(l10n.projectsNotFound),
-            );
+            return Center(child: Text(l10n.projectsNotFound));
           }
 
           if (state.error != null) {
@@ -89,11 +87,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
                   Text(
                     '${l10n.error}: ${state.error!.message}',
@@ -103,7 +97,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      ref.read(projectsNotifierProvider.notifier).loadProjects();
+                      ref.read(projectsProvider.notifier).loadProjects();
                     },
                     child: Text(l10n.retry),
                   ),
@@ -114,7 +108,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await ref.read(projectsNotifierProvider.notifier).loadProjects();
+              await ref.read(projectsProvider.notifier).loadProjects();
             },
             child: state.isLoading
                 ? ListView.builder(
@@ -159,11 +153,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
               Text(
                 '${l10n.error}: $error',
@@ -173,7 +163,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(projectsNotifierProvider.notifier).loadProjects();
+                  ref.read(projectsProvider.notifier).loadProjects();
                 },
                 child: Text(l10n.retry),
               ),
@@ -184,4 +174,3 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     );
   }
 }
-

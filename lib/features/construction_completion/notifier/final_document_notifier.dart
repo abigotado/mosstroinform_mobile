@@ -111,11 +111,7 @@ class FinalDocumentState {
   final bool isLoading;
   final Failure? error;
 
-  const FinalDocumentState({
-    this.document,
-    this.isLoading = false,
-    this.error,
-  });
+  const FinalDocumentState({this.document, this.isLoading = false, this.error});
 
   FinalDocumentState copyWith({
     FinalDocument? document,
@@ -134,7 +130,9 @@ class FinalDocumentState {
 @riverpod
 class FinalDocumentNotifier extends _$FinalDocumentNotifier {
   @override
-  Future<FinalDocumentState> build((String projectId, String documentId) params) async {
+  Future<FinalDocumentState> build(
+    (String projectId, String documentId) params,
+  ) async {
     return const FinalDocumentState();
   }
 
@@ -171,4 +169,3 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
     }
   }
 }
-

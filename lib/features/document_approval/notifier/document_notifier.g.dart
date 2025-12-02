@@ -6,191 +6,155 @@ part of 'document_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Notifier для управления состоянием списка документов
+
+@ProviderFor(DocumentsNotifier)
+const documentsProvider = DocumentsNotifierProvider._();
+
+/// Notifier для управления состоянием списка документов
+final class DocumentsNotifierProvider
+    extends $AsyncNotifierProvider<DocumentsNotifier, List<Document>> {
+  /// Notifier для управления состоянием списка документов
+  const DocumentsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'documentsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$documentsNotifierHash();
+
+  @$internal
+  @override
+  DocumentsNotifier create() => DocumentsNotifier();
+}
+
 String _$documentsNotifierHash() => r'7246db5cae980a3f2cd0f54b678473a1079add4b';
 
 /// Notifier для управления состоянием списка документов
-///
-/// Copied from [DocumentsNotifier].
-@ProviderFor(DocumentsNotifier)
-final documentsNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<
-      DocumentsNotifier,
-      List<Document>
-    >.internal(
-      DocumentsNotifier.new,
-      name: r'documentsNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$documentsNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
 
-typedef _$DocumentsNotifier = AutoDisposeAsyncNotifier<List<Document>>;
-String _$documentNotifierHash() => r'395ca2c330aa9bbd73dcaf8ee66c7dfa53c6fb96';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
+abstract class _$DocumentsNotifier extends $AsyncNotifier<List<Document>> {
+  FutureOr<List<Document>> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<List<Document>>, List<Document>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<List<Document>>, List<Document>>,
+              AsyncValue<List<Document>>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
   }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$DocumentNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<Document?> {
-  late final String documentId;
-
-  FutureOr<Document?> build(String documentId);
 }
 
 /// Notifier для управления состоянием отдельного документа
-///
-/// Copied from [DocumentNotifier].
+
 @ProviderFor(DocumentNotifier)
-const documentNotifierProvider = DocumentNotifierFamily();
+const documentProvider = DocumentNotifierFamily._();
 
 /// Notifier для управления состоянием отдельного документа
-///
-/// Copied from [DocumentNotifier].
-class DocumentNotifierFamily extends Family<AsyncValue<Document?>> {
+final class DocumentNotifierProvider
+    extends $AsyncNotifierProvider<DocumentNotifier, Document?> {
   /// Notifier для управления состоянием отдельного документа
-  ///
-  /// Copied from [DocumentNotifier].
-  const DocumentNotifierFamily();
+  const DocumentNotifierProvider._({
+    required DocumentNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'documentProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Notifier для управления состоянием отдельного документа
-  ///
-  /// Copied from [DocumentNotifier].
-  DocumentNotifierProvider call(String documentId) {
-    return DocumentNotifierProvider(documentId);
+  @override
+  String debugGetCreateSourceHash() => _$documentNotifierHash();
+
+  @override
+  String toString() {
+    return r'documentProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  DocumentNotifierProvider getProviderOverride(
-    covariant DocumentNotifierProvider provider,
-  ) {
-    return call(provider.documentId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'documentNotifierProvider';
-}
-
-/// Notifier для управления состоянием отдельного документа
-///
-/// Copied from [DocumentNotifier].
-class DocumentNotifierProvider
-    extends AutoDisposeAsyncNotifierProviderImpl<DocumentNotifier, Document?> {
-  /// Notifier для управления состоянием отдельного документа
-  ///
-  /// Copied from [DocumentNotifier].
-  DocumentNotifierProvider(String documentId)
-    : this._internal(
-        () => DocumentNotifier()..documentId = documentId,
-        from: documentNotifierProvider,
-        name: r'documentNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$documentNotifierHash,
-        dependencies: DocumentNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            DocumentNotifierFamily._allTransitiveDependencies,
-        documentId: documentId,
-      );
-
-  DocumentNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.documentId,
-  }) : super.internal();
-
-  final String documentId;
-
-  @override
-  FutureOr<Document?> runNotifierBuild(covariant DocumentNotifier notifier) {
-    return notifier.build(documentId);
-  }
-
-  @override
-  Override overrideWith(DocumentNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: DocumentNotifierProvider._internal(
-        () => create()..documentId = documentId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        documentId: documentId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<DocumentNotifier, Document?>
-  createElement() {
-    return _DocumentNotifierProviderElement(this);
-  }
+  DocumentNotifier create() => DocumentNotifier();
 
   @override
   bool operator ==(Object other) {
-    return other is DocumentNotifierProvider && other.documentId == documentId;
+    return other is DocumentNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, documentId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin DocumentNotifierRef on AutoDisposeAsyncNotifierProviderRef<Document?> {
-  /// The parameter `documentId` of this provider.
-  String get documentId;
-}
+String _$documentNotifierHash() => r'395ca2c330aa9bbd73dcaf8ee66c7dfa53c6fb96';
 
-class _DocumentNotifierProviderElement
-    extends AutoDisposeAsyncNotifierProviderElement<DocumentNotifier, Document?>
-    with DocumentNotifierRef {
-  _DocumentNotifierProviderElement(super.provider);
+/// Notifier для управления состоянием отдельного документа
+
+final class DocumentNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          DocumentNotifier,
+          AsyncValue<Document?>,
+          Document?,
+          FutureOr<Document?>,
+          String
+        > {
+  const DocumentNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'documentProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Notifier для управления состоянием отдельного документа
+
+  DocumentNotifierProvider call(String documentId) =>
+      DocumentNotifierProvider._(argument: documentId, from: this);
 
   @override
-  String get documentId => (origin as DocumentNotifierProvider).documentId;
+  String toString() => r'documentProvider';
 }
 
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+/// Notifier для управления состоянием отдельного документа
+
+abstract class _$DocumentNotifier extends $AsyncNotifier<Document?> {
+  late final _$args = ref.$arg as String;
+  String get documentId => _$args;
+
+  FutureOr<Document?> build(String documentId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<Document?>, Document?>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<Document?>, Document?>,
+              AsyncValue<Document?>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

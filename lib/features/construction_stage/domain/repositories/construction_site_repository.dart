@@ -11,4 +11,3 @@ abstract class ConstructionSiteRepository {
   /// Получить информацию о конкретной камере
   Future<Camera> getCameraById(String siteId, String cameraId);
 }
-

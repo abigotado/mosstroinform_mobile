@@ -8,10 +8,7 @@ import 'package:mosstroinform_mobile/features/chat/notifier/chat_notifier.dart';
 class ChatDetailScreen extends ConsumerStatefulWidget {
   final String chatId;
 
-  const ChatDetailScreen({
-    super.key,
-    required this.chatId,
-  });
+  const ChatDetailScreen({super.key, required this.chatId});
 
   @override
   ConsumerState<ChatDetailScreen> createState() => _ChatDetailScreenState();
@@ -25,8 +22,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(messagesNotifierProvider(widget.chatId).notifier).loadMessages();
-      ref.read(messagesNotifierProvider(widget.chatId).notifier).markAsRead();
+      ref.read(messagesProvider(widget.chatId).notifier).loadMessages();
+      ref.read(messagesProvider(widget.chatId).notifier).markAsRead();
     });
   }
 
@@ -42,9 +39,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
     if (text.isEmpty) return;
 
     _messageController.clear();
-    await ref
-        .read(messagesNotifierProvider(widget.chatId).notifier)
-        .sendMessage(text);
+    await ref.read(messagesProvider(widget.chatId).notifier).sendMessage(text);
 
     // Прокрутить вниз после отправки
     if (_scrollController.hasClients) {
@@ -59,7 +54,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final messagesAsync = ref.watch(messagesNotifierProvider(widget.chatId));
+    final messagesAsync = ref.watch(messagesProvider(widget.chatId));
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -99,7 +94,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                    const Icon(
+                      Icons.error_outline,
+                      size: 48,
+                      color: Colors.red,
+                    ),
                     const SizedBox(height: 16),
                     Text(
                       l10n.errorLoadingMessages,
@@ -115,7 +114,7 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                     ElevatedButton(
                       onPressed: () {
                         ref
-                            .read(messagesNotifierProvider(widget.chatId).notifier)
+                            .read(messagesProvider(widget.chatId).notifier)
                             .loadMessages();
                       },
                       child: Text(l10n.retry),
@@ -169,12 +168,11 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
                             ? const SizedBox(
                                 width: 24,
                                 height: 24,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
                               )
-                            : Icon(
-                                Icons.send,
-                                color: colorScheme.primary,
-                              ),
+                            : Icon(Icons.send, color: colorScheme.primary),
                         style: IconButton.styleFrom(
                           backgroundColor: colorScheme.primaryContainer,
                           padding: const EdgeInsets.all(12),

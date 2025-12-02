@@ -42,8 +42,10 @@ class FinalDocumentRepositoryImpl implements FinalDocumentRepository {
     String documentId,
   ) async {
     try {
-      final model =
-          await remoteDataSource.getFinalDocumentById(projectId, documentId);
+      final model = await remoteDataSource.getFinalDocumentById(
+        projectId,
+        documentId,
+      );
       return model.toEntity();
     } on Failure {
       rethrow;
@@ -78,4 +80,3 @@ class FinalDocumentRepositoryImpl implements FinalDocumentRepository {
     }
   }
 }
-

@@ -10,4 +10,3 @@ class RejectDocument {
     return await repository.rejectDocument(documentId, reason);
   }
 }
-

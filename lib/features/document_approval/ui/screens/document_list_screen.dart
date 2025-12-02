@@ -21,14 +21,14 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
     super.initState();
     // Загружаем документы при открытии экрана
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(documentsNotifierProvider.notifier).loadDocuments();
+      ref.read(documentsProvider.notifier).loadDocuments();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final documentsAsync = ref.watch(documentsNotifierProvider);
+    final documentsAsync = ref.watch(documentsProvider);
 
     // Проверяем, все ли документы одобрены для показа кнопки перехода к строительству
     final allApproved = documentsAsync.maybeWhen(
@@ -80,9 +80,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
 
           return RefreshIndicator(
             onRefresh: () async {
-              await ref
-                  .read(documentsNotifierProvider.notifier)
-                  .loadDocuments();
+              await ref.read(documentsProvider.notifier).loadDocuments();
             },
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -131,7 +129,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(documentsNotifierProvider.notifier).loadDocuments();
+                  ref.read(documentsProvider.notifier).loadDocuments();
                 },
                 child: Text(l10n.retry),
               ),
