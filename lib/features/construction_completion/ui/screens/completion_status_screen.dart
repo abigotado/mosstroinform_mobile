@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/notifier/final_document_notifier.dart';
