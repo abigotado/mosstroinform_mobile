@@ -223,7 +223,27 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
             ),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              // Shimmer для статуса
+              Container(
+                height: 200,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              const SizedBox(height: 24),
+              // Shimmer для документов
+              ...List.generate(3, (index) => const Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                    child: FinalDocumentCardShimmer(),
+                  )),
+            ],
+          ),
+        ),
         error: (error, stackTrace) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
