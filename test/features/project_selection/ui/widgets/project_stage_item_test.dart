@@ -14,17 +14,15 @@ void main() {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ru', ''),
-      ],
+      supportedLocales: const [Locale('ru', '')],
       locale: const Locale('ru'),
-      home: Scaffold(
-        body: ProjectStageItem(stage: stage),
-      ),
+      home: Scaffold(body: ProjectStageItem(stage: stage)),
     );
   }
 
-  testWidgets('отображает этап со статусом completed', (WidgetTester tester) async {
+  testWidgets('отображает этап со статусом completed', (
+    WidgetTester tester,
+  ) async {
     // Arrange
     const stage = ConstructionStage(
       id: '1',
@@ -41,7 +39,9 @@ void main() {
     expect(find.byIcon(Icons.check_circle), findsOneWidget);
   });
 
-  testWidgets('отображает этап со статусом inProgress', (WidgetTester tester) async {
+  testWidgets('отображает этап со статусом inProgress', (
+    WidgetTester tester,
+  ) async {
     // Arrange
     const stage = ConstructionStage(
       id: '1',
@@ -58,7 +58,9 @@ void main() {
     expect(find.byIcon(Icons.radio_button_checked), findsOneWidget);
   });
 
-  testWidgets('отображает этап со статусом pending', (WidgetTester tester) async {
+  testWidgets('отображает этап со статусом pending', (
+    WidgetTester tester,
+  ) async {
     // Arrange
     const stage = ConstructionStage(
       id: '1',
@@ -75,4 +77,3 @@ void main() {
     expect(find.byIcon(Icons.radio_button_unchecked), findsOneWidget);
   });
 }
-

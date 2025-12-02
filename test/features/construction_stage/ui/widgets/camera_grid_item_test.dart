@@ -6,10 +6,7 @@ import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/came
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 void main() {
-  Widget createWidget({
-    required Camera camera,
-    VoidCallback? onTap,
-  }) {
+  Widget createWidget({required Camera camera, VoidCallback? onTap}) {
     return MaterialApp(
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -17,18 +14,13 @@ void main() {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ru', ''),
-      ],
+      supportedLocales: const [Locale('ru', '')],
       locale: const Locale('ru'),
       home: Scaffold(
         body: SizedBox(
           width: 200,
           height: 300,
-          child: CameraGridItem(
-            camera: camera,
-            onTap: onTap ?? () {},
-          ),
+          child: CameraGridItem(camera: camera, onTap: onTap ?? () {}),
         ),
       ),
     );
@@ -75,7 +67,9 @@ void main() {
     expect(find.text('Описание камеры'), findsOneWidget);
   });
 
-  testWidgets('вызывает onTap при нажатии на активную камеру', (WidgetTester tester) async {
+  testWidgets('вызывает onTap при нажатии на активную камеру', (
+    WidgetTester tester,
+  ) async {
     // Arrange
     var tapped = false;
     final camera = Camera(
@@ -105,7 +99,9 @@ void main() {
     expect(tapped, isTrue);
   });
 
-  testWidgets('не вызывает onTap при нажатии на неактивную камеру', (WidgetTester tester) async {
+  testWidgets('не вызывает onTap при нажатии на неактивную камеру', (
+    WidgetTester tester,
+  ) async {
     // Arrange
     var tapped = false;
     final camera = Camera(
@@ -136,4 +132,3 @@ void main() {
     expect(tapped, isFalse);
   });
 }
-

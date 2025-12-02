@@ -17,11 +17,7 @@ void main() {
       supportedLocales: const [Locale('ru', 'RU')],
       home: Scaffold(
         body: SingleChildScrollView(
-          child: SizedBox(
-            width: 400,
-            height: 800,
-            child: child,
-          ),
+          child: SizedBox(width: 400, height: 800, child: child),
         ),
       ),
     );
@@ -41,12 +37,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          ProjectCard(
-            project: project,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
       expect(find.text('Тестовый проект'), findsOneWidget);
@@ -65,12 +56,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          ProjectCard(
-            project: project,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
       expect(find.text('Тестовый адрес'), findsOneWidget);
@@ -92,10 +78,7 @@ void main() {
 
       await tester.pumpWidget(
         createTestWidget(
-          ProjectCard(
-            project: project,
-            onTap: () => tapped = true,
-          ),
+          ProjectCard(project: project, onTap: () => tapped = true),
         ),
       );
 
@@ -118,12 +101,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          ProjectCard(
-            project: project,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
       // Проверяем, что информация о этажах отображается
@@ -154,12 +132,7 @@ void main() {
       );
 
       await tester.pumpWidget(
-        createTestWidget(
-          ProjectCard(
-            project: project,
-            onTap: () {},
-          ),
-        ),
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
       // Проверяем, что информация о этапах отображается
@@ -167,4 +140,3 @@ void main() {
     });
   });
 }
-

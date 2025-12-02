@@ -6,30 +6,67 @@ part of 'construction_site_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$constructionSiteRepositoryHash() =>
-    r'a3af079124b31a74c827ebfb54531e40787a9411';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Провайдер для репозитория строительной площадки
+/// Возвращает интерфейс, а не имплементацию
+/// Использует моковый репозиторий если включены моки, иначе реальный
+/// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+
+@ProviderFor(constructionSiteRepository)
+const constructionSiteRepositoryProvider =
+    ConstructionSiteRepositoryProvider._();
 
 /// Провайдер для репозитория строительной площадки
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
-///
-/// Copied from [constructionSiteRepository].
-@ProviderFor(constructionSiteRepository)
-final constructionSiteRepositoryProvider =
-    AutoDisposeProvider<ConstructionSiteRepository>.internal(
-      constructionSiteRepository,
-      name: r'constructionSiteRepositoryProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$constructionSiteRepositoryHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ConstructionSiteRepositoryRef =
-    AutoDisposeProviderRef<ConstructionSiteRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ConstructionSiteRepositoryProvider
+    extends
+        $FunctionalProvider<
+          ConstructionSiteRepository,
+          ConstructionSiteRepository,
+          ConstructionSiteRepository
+        >
+    with $Provider<ConstructionSiteRepository> {
+  /// Провайдер для репозитория строительной площадки
+  /// Возвращает интерфейс, а не имплементацию
+  /// Использует моковый репозиторий если включены моки, иначе реальный
+  /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+  const ConstructionSiteRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'constructionSiteRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$constructionSiteRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ConstructionSiteRepository> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  ConstructionSiteRepository create(Ref ref) {
+    return constructionSiteRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ConstructionSiteRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ConstructionSiteRepository>(value),
+    );
+  }
+}
+
+String _$constructionSiteRepositoryHash() =>
+    r'a3af079124b31a74c827ebfb54531e40787a9411';

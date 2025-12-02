@@ -6,193 +6,155 @@ part of 'chat_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Notifier для управления состоянием списка чатов
+
+@ProviderFor(ChatsNotifier)
+const chatsProvider = ChatsNotifierProvider._();
+
+/// Notifier для управления состоянием списка чатов
+final class ChatsNotifierProvider
+    extends $AsyncNotifierProvider<ChatsNotifier, ChatsState> {
+  /// Notifier для управления состоянием списка чатов
+  const ChatsNotifierProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'chatsProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$chatsNotifierHash();
+
+  @$internal
+  @override
+  ChatsNotifier create() => ChatsNotifier();
+}
+
 String _$chatsNotifierHash() => r'802b79b0c20aa52f31b4223ba0f30313cdb7758b';
 
 /// Notifier для управления состоянием списка чатов
-///
-/// Copied from [ChatsNotifier].
-@ProviderFor(ChatsNotifier)
-final chatsNotifierProvider =
-    AutoDisposeAsyncNotifierProvider<ChatsNotifier, ChatsState>.internal(
-      ChatsNotifier.new,
-      name: r'chatsNotifierProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$chatsNotifierHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
 
-typedef _$ChatsNotifier = AutoDisposeAsyncNotifier<ChatsState>;
-String _$messagesNotifierHash() => r'5f1c5e7e51409b1969fe7c17f1b5077b0ed0266a';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
+abstract class _$ChatsNotifier extends $AsyncNotifier<ChatsState> {
+  FutureOr<ChatsState> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref = this.ref as $Ref<AsyncValue<ChatsState>, ChatsState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<ChatsState>, ChatsState>,
+              AsyncValue<ChatsState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
   }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$MessagesNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<MessagesState> {
-  late final String chatId;
-
-  FutureOr<MessagesState> build(String chatId);
 }
 
 /// Notifier для управления состоянием сообщений чата
-///
-/// Copied from [MessagesNotifier].
+
 @ProviderFor(MessagesNotifier)
-const messagesNotifierProvider = MessagesNotifierFamily();
+const messagesProvider = MessagesNotifierFamily._();
 
 /// Notifier для управления состоянием сообщений чата
-///
-/// Copied from [MessagesNotifier].
-class MessagesNotifierFamily extends Family<AsyncValue<MessagesState>> {
+final class MessagesNotifierProvider
+    extends $AsyncNotifierProvider<MessagesNotifier, MessagesState> {
   /// Notifier для управления состоянием сообщений чата
-  ///
-  /// Copied from [MessagesNotifier].
-  const MessagesNotifierFamily();
+  const MessagesNotifierProvider._({
+    required MessagesNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'messagesProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
-  /// Notifier для управления состоянием сообщений чата
-  ///
-  /// Copied from [MessagesNotifier].
-  MessagesNotifierProvider call(String chatId) {
-    return MessagesNotifierProvider(chatId);
+  @override
+  String debugGetCreateSourceHash() => _$messagesNotifierHash();
+
+  @override
+  String toString() {
+    return r'messagesProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  MessagesNotifierProvider getProviderOverride(
-    covariant MessagesNotifierProvider provider,
-  ) {
-    return call(provider.chatId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'messagesNotifierProvider';
-}
-
-/// Notifier для управления состоянием сообщений чата
-///
-/// Copied from [MessagesNotifier].
-class MessagesNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<MessagesNotifier, MessagesState> {
-  /// Notifier для управления состоянием сообщений чата
-  ///
-  /// Copied from [MessagesNotifier].
-  MessagesNotifierProvider(String chatId)
-    : this._internal(
-        () => MessagesNotifier()..chatId = chatId,
-        from: messagesNotifierProvider,
-        name: r'messagesNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$messagesNotifierHash,
-        dependencies: MessagesNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            MessagesNotifierFamily._allTransitiveDependencies,
-        chatId: chatId,
-      );
-
-  MessagesNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.chatId,
-  }) : super.internal();
-
-  final String chatId;
-
-  @override
-  FutureOr<MessagesState> runNotifierBuild(
-    covariant MessagesNotifier notifier,
-  ) {
-    return notifier.build(chatId);
-  }
-
-  @override
-  Override overrideWith(MessagesNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: MessagesNotifierProvider._internal(
-        () => create()..chatId = chatId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        chatId: chatId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<MessagesNotifier, MessagesState>
-  createElement() {
-    return _MessagesNotifierProviderElement(this);
-  }
+  MessagesNotifier create() => MessagesNotifier();
 
   @override
   bool operator ==(Object other) {
-    return other is MessagesNotifierProvider && other.chatId == chatId;
+    return other is MessagesNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, chatId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin MessagesNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<MessagesState> {
-  /// The parameter `chatId` of this provider.
-  String get chatId;
-}
+String _$messagesNotifierHash() => r'5f1c5e7e51409b1969fe7c17f1b5077b0ed0266a';
 
-class _MessagesNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<MessagesNotifier, MessagesState>
-    with MessagesNotifierRef {
-  _MessagesNotifierProviderElement(super.provider);
+/// Notifier для управления состоянием сообщений чата
+
+final class MessagesNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          MessagesNotifier,
+          AsyncValue<MessagesState>,
+          MessagesState,
+          FutureOr<MessagesState>,
+          String
+        > {
+  const MessagesNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'messagesProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Notifier для управления состоянием сообщений чата
+
+  MessagesNotifierProvider call(String chatId) =>
+      MessagesNotifierProvider._(argument: chatId, from: this);
 
   @override
-  String get chatId => (origin as MessagesNotifierProvider).chatId;
+  String toString() => r'messagesProvider';
 }
 
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+/// Notifier для управления состоянием сообщений чата
+
+abstract class _$MessagesNotifier extends $AsyncNotifier<MessagesState> {
+  late final _$args = ref.$arg as String;
+  String get chatId => _$args;
+
+  FutureOr<MessagesState> build(String chatId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<MessagesState>, MessagesState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<MessagesState>, MessagesState>,
+              AsyncValue<MessagesState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}

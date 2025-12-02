@@ -6,8 +6,8 @@ part of 'project_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$ProjectModelImpl _$$ProjectModelImplFromJson(Map<String, dynamic> json) =>
-    _$ProjectModelImpl(
+_ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) =>
+    _ProjectModel(
       id: json['id'] as String,
       name: json['name'] as String,
       address: json['address'] as String,
@@ -23,7 +23,7 @@ _$ProjectModelImpl _$$ProjectModelImplFromJson(Map<String, dynamic> json) =>
           .toList(),
     );
 
-Map<String, dynamic> _$$ProjectModelImplToJson(_$ProjectModelImpl instance) =>
+Map<String, dynamic> _$ProjectModelToJson(_ProjectModel instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -32,20 +32,20 @@ Map<String, dynamic> _$$ProjectModelImplToJson(_$ProjectModelImpl instance) =>
       'area': instance.area,
       'floors': instance.floors,
       'price': instance.price,
-      if (instance.imageUrl case final value?) 'imageUrl': value,
+      'imageUrl': ?instance.imageUrl,
       'stages': instance.stages.map((e) => e.toJson()).toList(),
     };
 
-_$ConstructionStageModelImpl _$$ConstructionStageModelImplFromJson(
+_ConstructionStageModel _$ConstructionStageModelFromJson(
   Map<String, dynamic> json,
-) => _$ConstructionStageModelImpl(
+) => _ConstructionStageModel(
   id: json['id'] as String,
   name: json['name'] as String,
   status: json['status'] as String,
 );
 
-Map<String, dynamic> _$$ConstructionStageModelImplToJson(
-  _$ConstructionStageModelImpl instance,
+Map<String, dynamic> _$ConstructionStageModelToJson(
+  _ConstructionStageModel instance,
 ) => <String, dynamic>{
   'id': instance.id,
   'name': instance.name,

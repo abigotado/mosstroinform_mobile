@@ -27,11 +27,13 @@ class Document {
 enum DocumentStatus {
   /// Документ ожидает просмотра
   pending,
+
   /// Документ на согласовании
   underReview,
+
   /// Документ одобрен
   approved,
+
   /// Документ отклонён
   rejected,
 }
-

@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     mockRepository = MockProjectRepository();
     container = ProviderContainer(
-      overrides: [
-        projectRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [projectRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -28,7 +26,7 @@ void main() {
 
   group('ProjectsNotifier', () {
     test('build возвращает начальное состояние с пустым списком', () async {
-      final state = await container.read(projectsNotifierProvider.future);
+      final state = await container.read(projectsProvider.future);
 
       expect(state.projects, isEmpty);
       expect(state.isLoading, false);
@@ -59,12 +57,14 @@ void main() {
         ),
       ];
 
-      when(() => mockRepository.getProjects()).thenAnswer((_) async => projects);
+      when(
+        () => mockRepository.getProjects(),
+      ).thenAnswer((_) async => projects);
 
-      final notifier = container.read(projectsNotifierProvider.notifier);
+      final notifier = container.read(projectsProvider.notifier);
       await notifier.loadProjects();
 
-      final state = await container.read(projectsNotifierProvider.future);
+      final state = await container.read(projectsProvider.future);
 
       expect(state.projects, equals(projects));
       expect(state.isLoading, false);
@@ -76,14 +76,16 @@ void main() {
       final failure = NetworkFailure('Ошибка сети');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.getProjects()).thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.getProjects(),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(projectsNotifierProvider.notifier);
+      final notifier = container.read(projectsProvider.notifier);
       await notifier.loadProjects();
 
       // ProjectsNotifier обрабатывает ошибки через AsyncValue.data с ошибкой в состоянии
       // Состояние обновляется синхронно внутри метода
-      final asyncValue = container.read(projectsNotifierProvider);
+      final asyncValue = container.read(projectsProvider);
       expect(asyncValue.hasValue, true);
       final state = asyncValue.value!;
       expect(state.projects, isEmpty);
@@ -95,15 +97,16 @@ void main() {
 
     test('loadProjects обрабатывает неизвестные ошибки', () async {
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.getProjects())
-          .thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
+      when(
+        () => mockRepository.getProjects(),
+      ).thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
 
-      final notifier = container.read(projectsNotifierProvider.notifier);
+      final notifier = container.read(projectsProvider.notifier);
       await notifier.loadProjects();
 
       // ProjectsNotifier обрабатывает ошибки через AsyncValue.data с ошибкой в состоянии
       // Состояние обновляется синхронно внутри метода
-      final asyncValue = container.read(projectsNotifierProvider);
+      final asyncValue = container.read(projectsProvider);
       expect(asyncValue.hasValue, true);
       final state = asyncValue.value!;
       expect(state.projects, isEmpty);
@@ -117,7 +120,7 @@ void main() {
 
   group('ProjectNotifier', () {
     test('build возвращает начальное состояние', () async {
-      final state = await container.read(projectNotifierProvider.future);
+      final state = await container.read(projectProvider.future);
 
       expect(state.project, isNull);
       expect(state.isLoading, false);
@@ -136,12 +139,14 @@ void main() {
         stages: [],
       );
 
-      when(() => mockRepository.getProjectById('1')).thenAnswer((_) async => project);
+      when(
+        () => mockRepository.getProjectById('1'),
+      ).thenAnswer((_) async => project);
 
-      final notifier = container.read(projectNotifierProvider.notifier);
+      final notifier = container.read(projectProvider.notifier);
       await notifier.loadProject('1');
 
-      final state = await container.read(projectNotifierProvider.future);
+      final state = await container.read(projectProvider.future);
 
       expect(state.project, equals(project));
       expect(state.isLoading, false);
@@ -153,14 +158,16 @@ void main() {
       final failure = ServerFailure('Ошибка сервера');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.getProjectById('1')).thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.getProjectById('1'),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(projectNotifierProvider.notifier);
+      final notifier = container.read(projectProvider.notifier);
       await notifier.loadProject('1');
 
       // ProjectNotifier обрабатывает ошибки через AsyncValue.data с ошибкой в состоянии
       // Состояние обновляется синхронно внутри метода
-      final asyncValue = container.read(projectNotifierProvider);
+      final asyncValue = container.read(projectProvider);
       expect(asyncValue.hasValue, true);
       final state = asyncValue.value!;
       expect(state.project, isNull);
@@ -188,10 +195,14 @@ void main() {
         ],
       );
 
-      when(() => mockRepository.requestConstruction('1')).thenAnswer((_) async {});
-      when(() => mockRepository.getProjectById('1')).thenAnswer((_) async => project);
+      when(
+        () => mockRepository.requestConstruction('1'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockRepository.getProjectById('1'),
+      ).thenAnswer((_) async => project);
 
-      final notifier = container.read(projectNotifierProvider.notifier);
+      final notifier = container.read(projectProvider.notifier);
       await notifier.requestConstruction('1');
 
       verify(() => mockRepository.requestConstruction('1')).called(1);
@@ -202,15 +213,16 @@ void main() {
       final failure = NetworkFailure('Ошибка сети');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.requestConstruction('1'))
-          .thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.requestConstruction('1'),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(projectNotifierProvider.notifier);
+      final notifier = container.read(projectProvider.notifier);
       await notifier.requestConstruction('1');
 
       // ProjectNotifier обрабатывает ошибки через AsyncValue.data с ошибкой в состоянии
       // Состояние обновляется синхронно внутри метода
-      final asyncValue = container.read(projectNotifierProvider);
+      final asyncValue = container.read(projectProvider);
       expect(asyncValue.hasValue, true);
       final state = asyncValue.value!;
       expect(state.error, isNotNull);
@@ -220,4 +232,3 @@ void main() {
     });
   });
 }
-

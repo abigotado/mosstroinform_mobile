@@ -1,4 +1,5 @@
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -40,18 +41,30 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
+    AppLogger.info('ProjectsNotifier.loadProjects: начинаем загрузку');
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(projectRepositoryProvider);
+      AppLogger.info(
+        'ProjectsNotifier.loadProjects: репозиторий получен, тип: ${repository.runtimeType}',
+      );
       final projects = await repository.getProjects();
+      AppLogger.info(
+        'ProjectsNotifier.loadProjects: получено ${projects.length} проектов',
+      );
       state = AsyncValue.data(
         ProjectsState(projects: projects, isLoading: false),
       );
     } on Failure catch (e) {
+      AppLogger.error('ProjectsNotifier.loadProjects: ошибка Failure: $e');
       state = AsyncValue.data(
         ProjectsState(projects: [], isLoading: false, error: e),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'ProjectsNotifier.loadProjects: неизвестная ошибка: $e',
+        stackTrace,
+      );
       state = AsyncValue.data(
         ProjectsState(
           projects: [],

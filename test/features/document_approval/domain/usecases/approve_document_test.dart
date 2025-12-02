@@ -18,8 +18,9 @@ void main() {
   test('call успешно одобряет документ', () async {
     // Arrange
     const documentId = '1';
-    when(() => mockRepository.approveDocument(documentId))
-        .thenAnswer((_) async {});
+    when(
+      () => mockRepository.approveDocument(documentId),
+    ).thenAnswer((_) async {});
 
     // Act
     await useCase.call(documentId);
@@ -32,15 +33,12 @@ void main() {
     // Arrange
     const documentId = '1';
     final failure = ServerFailure('Ошибка сервера');
-    when(() => mockRepository.approveDocument(documentId))
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.approveDocument(documentId),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(documentId),
-      throwsA(isA<ServerFailure>()),
-    );
+    expect(() => useCase.call(documentId), throwsA(isA<ServerFailure>()));
     verify(() => mockRepository.approveDocument(documentId)).called(1);
   });
 }
-

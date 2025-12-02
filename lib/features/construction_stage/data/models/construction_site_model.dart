@@ -6,43 +6,25 @@ part 'construction_site_model.g.dart';
 
 /// Модель строительной площадки для работы с API
 @freezed
-class ConstructionSiteModel with _$ConstructionSiteModel {
+abstract class ConstructionSiteModel with _$ConstructionSiteModel {
   const factory ConstructionSiteModel({
     required String id,
     required String projectId,
     required String projectName,
     required String address,
-    @Default([]) List<CameraModel> camerasList,
+    @JsonKey(name: 'cameras') @Default([]) List<CameraModel> camerasList,
     DateTime? startDate,
     DateTime? expectedCompletionDate,
     required double progress,
   }) = _ConstructionSiteModel;
 
-  factory ConstructionSiteModel.fromJson(Map<String, dynamic> json) {
-    return ConstructionSiteModel(
-      id: json['id'] as String,
-      projectId: json['projectId'] as String,
-      projectName: json['projectName'] as String,
-      address: json['address'] as String,
-      camerasList: (json['cameras'] as List<dynamic>?)
-              ?.map((e) => CameraModel.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      startDate: json['startDate'] == null
-          ? null
-          : DateTime.parse(json['startDate'] as String),
-      expectedCompletionDate: json['expectedCompletionDate'] == null
-          ? null
-          : DateTime.parse(json['expectedCompletionDate'] as String),
-      progress: (json['progress'] as num).toDouble(),
-    );
-  }
-
+  factory ConstructionSiteModel.fromJson(Map<String, dynamic> json) =>
+      _$ConstructionSiteModelFromJson(json);
 }
 
 /// Модель камеры для работы с API
 @freezed
-class CameraModel with _$CameraModel {
+abstract class CameraModel with _$CameraModel {
   const factory CameraModel({
     required String id,
     required String name,
@@ -85,4 +67,3 @@ extension CameraModelExtension on CameraModel {
     );
   }
 }
-

@@ -7,11 +7,7 @@ class ProjectCard extends StatelessWidget {
   final Project project;
   final VoidCallback onTap;
 
-  const ProjectCard({
-    super.key,
-    required this.project,
-    required this.onTap,
-  });
+  const ProjectCard({super.key, required this.project, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,7 @@ class ProjectCard extends StatelessWidget {
                         child: CircularProgressIndicator(
                           value: loadingProgress.expectedTotalBytes != null
                               ? loadingProgress.cumulativeBytesLoaded /
-                                  loadingProgress.expectedTotalBytes!
+                                    loadingProgress.expectedTotalBytes!
                               : null,
                           strokeWidth: 2,
                         ),
@@ -54,10 +50,7 @@ class ProjectCard extends StatelessWidget {
                     return Container(
                       color: colorScheme.surfaceContainerHighest,
                       child: const Center(
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 48,
-                        ),
+                        child: Icon(Icons.image_not_supported, size: 48),
                       ),
                     );
                   },
@@ -68,12 +61,7 @@ class ProjectCard extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: Container(
                   color: colorScheme.surfaceContainerHighest,
-                  child: const Center(
-                    child: Icon(
-                      Icons.home,
-                      size: 48,
-                    ),
-                  ),
+                  child: const Center(child: Icon(Icons.home, size: 48)),
                 ),
               ),
 
@@ -84,10 +72,7 @@ class ProjectCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Название и адрес
-                  Text(
-                    project.name,
-                    style: theme.textTheme.titleLarge,
-                  ),
+                  Text(project.name, style: theme.textTheme.titleLarge),
                   const SizedBox(height: 4),
                   Text(
                     project.address,
@@ -116,7 +101,8 @@ class ProjectCard extends StatelessWidget {
                       const SizedBox(width: 8),
                       _InfoChip(
                         icon: Icons.layers,
-                        text: '${project.floors} ${project.floors > 1 ? l10n.floors : l10n.floor}',
+                        text:
+                            '${project.floors} ${project.floors > 1 ? l10n.floors : l10n.floor}',
                       ),
                       const Spacer(),
                       Text(
@@ -163,10 +149,7 @@ class _InfoChip extends StatelessWidget {
   final IconData icon;
   final String text;
 
-  const _InfoChip({
-    required this.icon,
-    required this.text,
-  });
+  const _InfoChip({required this.icon, required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -176,10 +159,7 @@ class _InfoChip extends StatelessWidget {
       children: [
         Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: theme.textTheme.bodySmall,
-        ),
+        Text(text, style: theme.textTheme.bodySmall),
       ],
     );
   }
@@ -193,8 +173,12 @@ class _StagesIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completedCount = stages.where((s) => s.status == StageStatus.completed).length;
-    final inProgressCount = stages.where((s) => s.status == StageStatus.inProgress).length;
+    final completedCount = stages
+        .where((s) => s.status == StageStatus.completed)
+        .length;
+    final inProgressCount = stages
+        .where((s) => s.status == StageStatus.inProgress)
+        .length;
     final totalCount = stages.length;
 
     return Column(
@@ -224,7 +208,9 @@ class _StagesIndicator extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               Text(
-                stages.firstWhere((s) => s.status == StageStatus.inProgress).name,
+                stages
+                    .firstWhere((s) => s.status == StageStatus.inProgress)
+                    .name,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
             ],
@@ -233,4 +219,3 @@ class _StagesIndicator extends StatelessWidget {
     );
   }
 }
-

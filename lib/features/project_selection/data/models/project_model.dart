@@ -7,7 +7,7 @@ part 'project_model.g.dart';
 
 /// Модель проекта для слоя данных
 @freezed
-class ProjectModel with _$ProjectModel {
+abstract class ProjectModel with _$ProjectModel {
   const factory ProjectModel({
     required String id,
     required String name,
@@ -26,7 +26,7 @@ class ProjectModel with _$ProjectModel {
 
 /// Модель этапа строительства
 @freezed
-class ConstructionStageModel with _$ConstructionStageModel {
+abstract class ConstructionStageModel with _$ConstructionStageModel {
   const factory ConstructionStageModel({
     required String id,
     required String name,
@@ -57,11 +57,7 @@ extension ProjectModelX on ProjectModel {
 /// Расширение для конвертации модели этапа в сущность
 extension ConstructionStageModelX on ConstructionStageModel {
   ConstructionStage toEntity() {
-    return ConstructionStage(
-      id: id,
-      name: name,
-      status: _parseStatus(status),
-    );
+    return ConstructionStage(id: id, name: name, status: _parseStatus(status));
   }
 
   StageStatus _parseStatus(String status) {
@@ -76,4 +72,3 @@ extension ConstructionStageModelX on ConstructionStageModel {
     }
   }
 }
-

@@ -7,11 +7,7 @@ class CameraGridItem extends StatelessWidget {
   final Camera camera;
   final VoidCallback onTap;
 
-  const CameraGridItem({
-    super.key,
-    required this.camera,
-    required this.onTap,
-  });
+  const CameraGridItem({super.key, required this.camera, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -61,9 +57,7 @@ class CameraGridItem extends StatelessWidget {
                         vertical: 4,
                       ),
                       decoration: BoxDecoration(
-                        color: camera.isActive
-                            ? Colors.green
-                            : Colors.grey,
+                        color: camera.isActive ? Colors.green : Colors.grey,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Row(
@@ -140,4 +134,3 @@ class CameraGridItem extends StatelessWidget {
     );
   }
 }
-

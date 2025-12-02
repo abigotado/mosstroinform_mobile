@@ -29,7 +29,7 @@ class _ConstructionSiteScreenState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AppLogger.debug('ConstructionSiteScreen: загружаем площадку');
       ref
-          .read(constructionSiteNotifierProvider(widget.projectId).notifier)
+          .read(constructionSiteProvider(widget.projectId).notifier)
           .loadConstructionSite();
     });
   }
@@ -37,9 +37,7 @@ class _ConstructionSiteScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final siteAsync = ref.watch(
-      constructionSiteNotifierProvider(widget.projectId),
-    );
+    final siteAsync = ref.watch(constructionSiteProvider(widget.projectId));
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -240,11 +238,7 @@ class _ConstructionSiteScreenState
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(
-                        constructionSiteNotifierProvider(
-                          widget.projectId,
-                        ).notifier,
-                      )
+                      .read(constructionSiteProvider(widget.projectId).notifier)
                       .loadConstructionSite();
                 },
                 child: Text(l10n.retry),

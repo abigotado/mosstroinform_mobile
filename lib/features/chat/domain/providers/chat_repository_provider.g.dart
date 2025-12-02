@@ -6,27 +6,59 @@ part of 'chat_repository_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$chatRepositoryHash() => r'2f597f41d06933de45602c5843db838d2bfd0ded';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
+/// Провайдер для репозитория чатов
+/// Возвращает интерфейс, а не имплементацию
+/// Использует моковый репозиторий если включены моки, иначе реальный
+/// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+
+@ProviderFor(chatRepository)
+const chatRepositoryProvider = ChatRepositoryProvider._();
 
 /// Провайдер для репозитория чатов
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
-///
-/// Copied from [chatRepository].
-@ProviderFor(chatRepository)
-final chatRepositoryProvider = AutoDisposeProvider<ChatRepository>.internal(
-  chatRepository,
-  name: r'chatRepositoryProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$chatRepositoryHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ChatRepositoryRef = AutoDisposeProviderRef<ChatRepository>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class ChatRepositoryProvider
+    extends $FunctionalProvider<ChatRepository, ChatRepository, ChatRepository>
+    with $Provider<ChatRepository> {
+  /// Провайдер для репозитория чатов
+  /// Возвращает интерфейс, а не имплементацию
+  /// Использует моковый репозиторий если включены моки, иначе реальный
+  /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+  const ChatRepositoryProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'chatRepositoryProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$chatRepositoryHash();
+
+  @$internal
+  @override
+  $ProviderElement<ChatRepository> $createElement($ProviderPointer pointer) =>
+      $ProviderElement(pointer);
+
+  @override
+  ChatRepository create(Ref ref) {
+    return chatRepository(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(ChatRepository value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<ChatRepository>(value),
+    );
+  }
+}
+
+String _$chatRepositoryHash() => r'2f597f41d06933de45602c5843db838d2bfd0ded';

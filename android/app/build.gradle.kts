@@ -32,17 +32,13 @@ android {
 
     flavorDimensions += "environment"
     productFlavors {
-        create("dev") {
+        create("mock") {
             dimension = "environment"
-            applicationIdSuffix = ".dev"
-            versionNameSuffix = "-dev"
-            resValue("string", "app_name", "Стройконтроль Dev")
-        }
-        create("staging") {
-            dimension = "environment"
-            applicationIdSuffix = ".staging"
-            versionNameSuffix = "-staging"
-            resValue("string", "app_name", "Стройконтроль Staging")
+            applicationIdSuffix = ".mock"
+            versionNameSuffix = "-mock"
+            resValue("string", "app_name", "Стройконтроль Mock")
+            // Flutter автоматически передает flavor name в dart-define при использовании --flavor
+            // Значение доступно через String.fromEnvironment('FLUTTER_BUILD_MODE') или через flavor name
         }
         create("prod") {
             dimension = "environment"

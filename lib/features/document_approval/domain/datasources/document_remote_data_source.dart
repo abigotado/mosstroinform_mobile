@@ -14,4 +14,3 @@ abstract class IDocumentRemoteDataSource {
   /// Отклонить документ
   Future<void> rejectDocument(String documentId, Map<String, dynamic> body);
 }
-

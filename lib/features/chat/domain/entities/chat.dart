@@ -39,4 +39,3 @@ class Message {
     required this.isRead,
   });
 }
-

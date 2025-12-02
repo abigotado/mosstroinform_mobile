@@ -7,11 +7,7 @@ class ChatCard extends StatelessWidget {
   final Chat chat;
   final VoidCallback onTap;
 
-  const ChatCard({
-    super.key,
-    required this.chat,
-    required this.onTap,
-  });
+  const ChatCard({super.key, required this.chat, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -124,4 +120,3 @@ class ChatCard extends StatelessWidget {
     }
   }
 }
-

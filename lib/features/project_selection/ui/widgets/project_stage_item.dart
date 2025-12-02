@@ -6,10 +6,7 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 class ProjectStageItem extends StatelessWidget {
   final ConstructionStage stage;
 
-  const ProjectStageItem({
-    super.key,
-    required this.stage,
-  });
+  const ProjectStageItem({super.key, required this.stage});
 
   @override
   Widget build(BuildContext context) {
@@ -47,16 +44,9 @@ class ProjectStageItem extends StatelessWidget {
             color: statusColor.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            statusIcon,
-            color: statusColor,
-            size: 24,
-          ),
+          child: Icon(statusIcon, color: statusColor, size: 24),
         ),
-        title: Text(
-          stage.name,
-          style: theme.textTheme.bodyLarge,
-        ),
+        title: Text(stage.name, style: theme.textTheme.bodyLarge),
         trailing: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
@@ -75,4 +65,3 @@ class ProjectStageItem extends StatelessWidget {
     );
   }
 }
-
