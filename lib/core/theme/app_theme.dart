@@ -103,7 +103,7 @@ class AppTheme {
     elevation: 0,
   );
 
-  static const CardTheme _cardTheme = CardTheme(
+  static const CardThemeData _cardTheme = CardThemeData(
     elevation: 2,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
