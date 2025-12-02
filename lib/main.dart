@@ -6,6 +6,8 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 import 'core/config/app_config_simple.dart';
 import 'core/theme/app_theme.dart';
+import 'features/chat/ui/screens/chat_detail_screen.dart';
+import 'features/chat/ui/screens/chat_list_screen.dart';
 import 'features/construction_completion/ui/screens/completion_status_screen.dart';
 import 'features/construction_completion/ui/screens/final_document_detail_screen.dart';
 import 'features/construction_stage/ui/screens/construction_site_screen.dart';
@@ -82,6 +84,17 @@ final _router = GoRouter(
           projectId: projectId,
           documentId: documentId,
         );
+      },
+    ),
+    GoRoute(
+      path: '/chats',
+      builder: (context, state) => const ChatListScreen(),
+    ),
+    GoRoute(
+      path: '/chats/:chatId',
+      builder: (context, state) {
+        final chatId = state.pathParameters['chatId']!;
+        return ChatDetailScreen(chatId: chatId);
       },
     ),
   ],

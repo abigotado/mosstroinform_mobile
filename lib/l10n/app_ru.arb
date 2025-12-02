@@ -286,5 +286,50 @@
   "signature": "Подпись",
   "@signature": {
     "description": "Метка подписи"
+  },
+  
+  "chats": "Чаты",
+  "@chats": {
+    "description": "Заголовок списка чатов"
+  },
+  "chat": "Чат",
+  "@chat": {
+    "description": "Заголовок экрана чата"
+  },
+  "noChats": "Нет чатов",
+  "@noChats": {
+    "description": "Сообщение когда чатов нет"
+  },
+  "noMessages": "Нет сообщений",
+  "@noMessages": {
+    "description": "Сообщение когда сообщений нет"
+  },
+  "typeMessage": "Введите сообщение...",
+  "@typeMessage": {
+    "description": "Подсказка для поля ввода сообщения"
+  },
+  "send": "Отправить",
+  "@send": {
+    "description": "Кнопка отправки сообщения"
+  },
+  "errorLoadingChats": "Ошибка загрузки чатов",
+  "@errorLoadingChats": {
+    "description": "Заголовок ошибки загрузки чатов"
+  },
+  "errorLoadingMessages": "Ошибка загрузки сообщений",
+  "@errorLoadingMessages": {
+    "description": "Заголовок ошибки загрузки сообщений"
+  },
+  "errorSendingMessage": "Ошибка отправки сообщения",
+  "@errorSendingMessage": {
+    "description": "Заголовок ошибки отправки сообщения"
+  },
+  "messageSent": "Сообщение отправлено",
+  "@messageSent": {
+    "description": "Сообщение об успешной отправке"
+  },
+  "unread": "Непрочитано",
+  "@unread": {
+    "description": "Метка непрочитанных сообщений"
   }
 }
