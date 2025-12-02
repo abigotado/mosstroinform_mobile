@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 /// @nodoc
 mixin _$DocumentModel {
   String get id => throw _privateConstructorUsedError;
+  String get projectId => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String? get fileUrl => throw _privateConstructorUsedError;
@@ -42,6 +43,7 @@ abstract class $DocumentModelCopyWith<$Res> {
   @useResult
   $Res call({
     String id,
+    String projectId,
     String title,
     String description,
     String? fileUrl,
@@ -68,6 +70,7 @@ class _$DocumentModelCopyWithImpl<$Res, $Val extends DocumentModel>
   @override
   $Res call({
     Object? id = null,
+    Object? projectId = null,
     Object? title = null,
     Object? description = null,
     Object? fileUrl = freezed,
@@ -81,6 +84,10 @@ class _$DocumentModelCopyWithImpl<$Res, $Val extends DocumentModel>
             id: null == id
                 ? _value.id
                 : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            projectId: null == projectId
+                ? _value.projectId
+                : projectId // ignore: cast_nullable_to_non_nullable
                       as String,
             title: null == title
                 ? _value.title
@@ -127,6 +134,7 @@ abstract class _$$DocumentModelImplCopyWith<$Res>
   @useResult
   $Res call({
     String id,
+    String projectId,
     String title,
     String description,
     String? fileUrl,
@@ -152,6 +160,7 @@ class __$$DocumentModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? projectId = null,
     Object? title = null,
     Object? description = null,
     Object? fileUrl = freezed,
@@ -165,6 +174,10 @@ class __$$DocumentModelImplCopyWithImpl<$Res>
         id: null == id
             ? _value.id
             : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        projectId: null == projectId
+            ? _value.projectId
+            : projectId // ignore: cast_nullable_to_non_nullable
                   as String,
         title: null == title
             ? _value.title
@@ -204,6 +217,7 @@ class __$$DocumentModelImplCopyWithImpl<$Res>
 class _$DocumentModelImpl implements _DocumentModel {
   const _$DocumentModelImpl({
     required this.id,
+    required this.projectId,
     required this.title,
     required this.description,
     this.fileUrl,
@@ -215,6 +229,8 @@ class _$DocumentModelImpl implements _DocumentModel {
 
   @override
   final String id;
+  @override
+  final String projectId;
   @override
   final String title;
   @override
@@ -233,7 +249,7 @@ class _$DocumentModelImpl implements _DocumentModel {
 
   @override
   String toString() {
-    return 'DocumentModel(id: $id, title: $title, description: $description, fileUrl: $fileUrl, statusString: $statusString, submittedAt: $submittedAt, approvedAt: $approvedAt, rejectionReason: $rejectionReason)';
+    return 'DocumentModel(id: $id, projectId: $projectId, title: $title, description: $description, fileUrl: $fileUrl, statusString: $statusString, submittedAt: $submittedAt, approvedAt: $approvedAt, rejectionReason: $rejectionReason)';
   }
 
   @override
@@ -242,6 +258,8 @@ class _$DocumentModelImpl implements _DocumentModel {
         (other.runtimeType == runtimeType &&
             other is _$DocumentModelImpl &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.projectId, projectId) ||
+                other.projectId == projectId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.description, description) ||
                 other.description == description) &&
@@ -260,6 +278,7 @@ class _$DocumentModelImpl implements _DocumentModel {
   int get hashCode => Object.hash(
     runtimeType,
     id,
+    projectId,
     title,
     description,
     fileUrl,
@@ -281,6 +300,7 @@ class _$DocumentModelImpl implements _DocumentModel {
 abstract class _DocumentModel implements DocumentModel {
   const factory _DocumentModel({
     required final String id,
+    required final String projectId,
     required final String title,
     required final String description,
     final String? fileUrl,
@@ -292,6 +312,8 @@ abstract class _DocumentModel implements DocumentModel {
 
   @override
   String get id;
+  @override
+  String get projectId;
   @override
   String get title;
   @override

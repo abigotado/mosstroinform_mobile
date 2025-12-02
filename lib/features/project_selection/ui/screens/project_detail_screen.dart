@@ -64,7 +64,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             child: CircularProgressIndicator(
                               value: loadingProgress.expectedTotalBytes != null
                                   ? loadingProgress.cumulativeBytesLoaded /
-                                      loadingProgress.expectedTotalBytes!
+                                        loadingProgress.expectedTotalBytes!
                                   : null,
                             ),
                           ),
@@ -177,16 +177,20 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 onPressed: state.isLoading
                     ? null
                     : () async {
-                        debugPrint('=== Нажата кнопка "Отправить запрос на строительство" ===');
+                        debugPrint(
+                          '=== Нажата кнопка "Отправить запрос на строительство" ===',
+                        );
                         debugPrint('projectId: ${widget.projectId}');
                         final l10n = AppLocalizations.of(context)!;
                         final messenger = ScaffoldMessenger.of(context);
-                        
+
                         try {
                           await ref
                               .read(projectNotifierProvider.notifier)
                               .requestConstruction(widget.projectId);
-                          debugPrint('Запрос на строительство отправлен успешно');
+                          debugPrint(
+                            'Запрос на строительство отправлен успешно',
+                          );
 
                           if (mounted) {
                             messenger.showSnackBar(

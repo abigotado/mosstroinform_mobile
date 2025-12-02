@@ -33,11 +33,28 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
         title: Text(l10n.projectsTitle),
         // Кнопка для быстрого перехода к экрану камер (для тестирования)
         actions: [
-          IconButton(
-            icon: const Icon(Icons.videocam),
-            tooltip: 'Перейти к камерам (тест)',
-            onPressed: () {
-              context.push('/construction/1');
+          Builder(
+            builder: (context) {
+              final projectsAsync = ref.watch(projectsNotifierProvider);
+              return projectsAsync.maybeWhen(
+                data: (state) {
+                  final firstProject = state.projects.isNotEmpty
+                      ? state.projects.first
+                      : null;
+                  return IconButton(
+                    icon: const Icon(Icons.videocam),
+                    tooltip: firstProject != null
+                        ? 'Перейти к камерам: ${firstProject.name}'
+                        : 'Перейти к камерам',
+                    onPressed: firstProject != null
+                        ? () {
+                            context.push('/construction/${firstProject.id}');
+                          }
+                        : null,
+                  );
+                },
+                orElse: () => const SizedBox.shrink(),
+              );
             },
           ),
         ],

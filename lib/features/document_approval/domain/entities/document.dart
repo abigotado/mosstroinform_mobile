@@ -1,6 +1,7 @@
 /// Сущность документа в доменном слое
 class Document {
   final String id;
+  final String projectId; // ID проекта, к которому относится документ
   final String title;
   final String description;
   final String? fileUrl;
@@ -11,6 +12,7 @@ class Document {
 
   const Document({
     required this.id,
+    required this.projectId,
     required this.title,
     required this.description,
     this.fileUrl,

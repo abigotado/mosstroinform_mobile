@@ -73,7 +73,10 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
     debugPrint('siteId: $siteId');
     await Future.delayed(const Duration(milliseconds: 500));
 
-    final site = await getConstructionSiteByProjectId('1');
+    // Получаем projectId из siteId (siteId обычно совпадает с projectId в моках)
+    // Или можно извлечь projectId из siteId, если они связаны
+    // Для моков используем siteId напрямую, так как в моках siteId = projectId
+    final site = await getConstructionSiteByProjectId(siteId);
     return site.cameras;
   }
 

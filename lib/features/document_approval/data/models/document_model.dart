@@ -8,6 +8,7 @@ part 'document_model.freezed.dart';
 class DocumentModel with _$DocumentModel {
   const factory DocumentModel({
     required String id,
+    required String projectId,
     required String title,
     required String description,
     String? fileUrl,
@@ -20,6 +21,7 @@ class DocumentModel with _$DocumentModel {
   factory DocumentModel.fromJson(Map<String, dynamic> json) {
     return DocumentModel(
       id: json['id'] as String,
+      projectId: json['projectId'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
       fileUrl: json['fileUrl'] as String?,
@@ -40,6 +42,7 @@ extension DocumentModelExtension on DocumentModel {
   Document toEntity() {
     return Document(
       id: id,
+      projectId: projectId,
       title: title,
       description: description,
       fileUrl: fileUrl,

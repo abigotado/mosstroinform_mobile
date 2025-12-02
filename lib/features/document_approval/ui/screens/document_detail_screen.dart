@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Экран детального просмотра документа
 class DocumentDetailScreen extends ConsumerStatefulWidget {
   final String documentId;
 
-  const DocumentDetailScreen({
-    super.key,
-    required this.documentId,
-  });
+  const DocumentDetailScreen({super.key, required this.documentId});
 
   @override
   ConsumerState<DocumentDetailScreen> createState() =>
@@ -59,36 +56,45 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
         final messenger = ScaffoldMessenger.of(context);
-        
+
         // Перезагружаем список документов для проверки статуса
         await ref.read(documentsNotifierProvider.notifier).loadDocuments();
-        
+
         if (!mounted) return;
-        
+
         // Проверяем, все ли документы одобрены
         final allDocuments = ref.read(documentsNotifierProvider);
         final allApproved = allDocuments.maybeWhen(
-          data: (docs) => docs.isNotEmpty && 
+          data: (docs) =>
+              docs.isNotEmpty &&
               docs.every((doc) => doc.status == DocumentStatus.approved),
           orElse: () => false,
+        );
+
+        // Получаем projectId из текущего документа
+        final currentDocument = ref.read(
+          documentNotifierProvider(documentId),
+        );
+        final projectId = currentDocument.maybeWhen(
+          data: (doc) => doc?.projectId,
+          orElse: () => null,
         );
 
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.documentApproved),
             backgroundColor: Colors.green,
-            action: allApproved
+            action: allApproved && projectId != null
                 ? SnackBarAction(
                     label: l10n.toConstruction,
                     textColor: Colors.white,
                     onPressed: () {
-                      // Переходим к стройке первого проекта (для демо)
-                      context.push('/construction/1');
+                      context.push('/construction/$projectId');
                     },
                   )
                 : null,
-            duration: allApproved 
-                ? const Duration(seconds: 5) 
+            duration: allApproved
+                ? const Duration(seconds: 5)
                 : const Duration(seconds: 2),
           ),
         );
@@ -198,14 +204,14 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final documentAsync = ref.watch(documentNotifierProvider(widget.documentId));
+    final documentAsync = ref.watch(
+      documentNotifierProvider(widget.documentId),
+    );
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.documentTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.documentTitle)),
       body: documentAsync.when(
         data: (document) {
           if (document == null) {
@@ -241,10 +247,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  document.description,
-                  style: theme.textTheme.bodyLarge,
-                ),
+                Text(document.description, style: theme.textTheme.bodyLarge),
                 const SizedBox(height: 24),
 
                 // Информация о датах
@@ -386,7 +389,9 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(documentNotifierProvider(widget.documentId).notifier)
+                      .read(
+                        documentNotifierProvider(widget.documentId).notifier,
+                      )
                       .loadDocument(widget.documentId);
                 },
                 child: Text(l10n.retry),
@@ -508,4 +513,3 @@ class _StatusChip extends StatelessWidget {
     );
   }
 }
-

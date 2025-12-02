@@ -21,6 +21,7 @@ class MockDocumentsState extends _$MockDocumentsState {
     final mockData = [
       {
         'id': '1',
+        'projectId': '1',
         'title': 'Проектная документация',
         'description': 'Полный комплект проектной документации для строительства',
         'fileUrl': 'https://example.com/docs/project-docs.pdf',
@@ -31,6 +32,7 @@ class MockDocumentsState extends _$MockDocumentsState {
       },
       {
         'id': '2',
+        'projectId': '1',
         'title': 'Разрешение на строительство',
         'description': 'Официальное разрешение на начало строительных работ',
         'fileUrl': 'https://example.com/docs/building-permit.pdf',
@@ -41,6 +43,7 @@ class MockDocumentsState extends _$MockDocumentsState {
       },
       {
         'id': '3',
+        'projectId': '1',
         'title': 'Договор подряда',
         'description': 'Договор на выполнение строительных работ',
         'fileUrl': 'https://example.com/docs/contract.pdf',
@@ -51,6 +54,7 @@ class MockDocumentsState extends _$MockDocumentsState {
       },
       {
         'id': '4',
+        'projectId': '1',
         'title': 'Смета на материалы',
         'description': 'Детальная смета расходов на строительные материалы',
         'fileUrl': 'https://example.com/docs/estimate.pdf',

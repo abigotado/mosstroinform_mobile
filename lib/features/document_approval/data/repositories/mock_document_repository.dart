@@ -50,6 +50,7 @@ class MockDocumentRepository implements DocumentRepository {
     // Создаем обновленный документ со статусом approved
     final updatedDocument = Document(
       id: document.id,
+      projectId: document.projectId,
       title: document.title,
       description: document.description,
       fileUrl: document.fileUrl,
@@ -76,6 +77,7 @@ class MockDocumentRepository implements DocumentRepository {
     // Создаем обновленный документ со статусом rejected
     final updatedDocument = Document(
       id: document.id,
+      projectId: document.projectId,
       title: document.title,
       description: document.description,
       fileUrl: document.fileUrl,
