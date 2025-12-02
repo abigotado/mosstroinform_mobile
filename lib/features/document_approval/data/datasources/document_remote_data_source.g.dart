@@ -40,7 +40,7 @@ class _DocumentRemoteDataSource implements DocumentRemoteDataSource {
           .map((dynamic i) => DocumentModel.fromJson(i as Map<String, dynamic>))
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+        errorLogger?.logError(e, s, _options, _options);
       rethrow;
     }
     return _value;
@@ -67,7 +67,7 @@ class _DocumentRemoteDataSource implements DocumentRemoteDataSource {
     try {
       _value = DocumentModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+        errorLogger?.logError(e, s, _options, _options);
       rethrow;
     }
     return _value;
