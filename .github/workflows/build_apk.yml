@@ -3,10 +3,10 @@ name: Build APK
 on:
     push:
         branches:
-            - master
+            - main
     pull_request:
         branches:
-            - master
+            - main
 
 jobs:
     test:
@@ -85,7 +85,7 @@ jobs:
         name: Create Release
         runs-on: ubuntu-latest
         needs: build
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
         steps:
             - name: Checkout repository
@@ -103,7 +103,7 @@ jobs:
                   tag_name: v${{ github.run_number }}
                   name: Release v${{ github.run_number }}
                   body: |
-                      Автоматическая сборка APK из ветки master
+                      Автоматическая сборка APK из ветки main
                       - Commit: ${{ github.sha }}
                       - Автор: ${{ github.actor }}
                   draft: false
