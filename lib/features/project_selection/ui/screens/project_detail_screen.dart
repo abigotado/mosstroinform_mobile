@@ -54,7 +54,25 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                     child: Image.network(
                       project.imageUrl!,
                       fit: BoxFit.cover,
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Container(
+                          color: theme.colorScheme.surfaceContainerHighest,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded /
+                                      loadingProgress.expectedTotalBytes!
+                                  : null,
+                            ),
+                          ),
+                        );
+                      },
                       errorBuilder: (context, error, stackTrace) {
+                        debugPrint('Ошибка загрузки изображения: $error');
+                        debugPrint('URL: ${project.imageUrl}');
                         return Container(
                           color: theme.colorScheme.surfaceContainerHighest,
                           child: const Center(

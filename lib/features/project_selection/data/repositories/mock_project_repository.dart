@@ -20,7 +20,8 @@ class MockProjectRepository implements ProjectRepository {
         'area': 150.0,
         'floors': 2,
         'price': 8500000,
-        'imageUrl': 'https://via.placeholder.com/400x300?text=Проект+1',
+        'imageUrl':
+            'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop',
         'stages': [
           {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
           {'id': '2', 'name': 'Фундамент', 'status': 'in_progress'},
@@ -36,7 +37,8 @@ class MockProjectRepository implements ProjectRepository {
         'area': 80.0,
         'floors': 1,
         'price': 4200000,
-        'imageUrl': 'https://via.placeholder.com/400x300?text=Проект+2',
+        'imageUrl':
+            'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop',
         'stages': [
           {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
           {'id': '2', 'name': 'Фундамент', 'status': 'completed'},
@@ -52,7 +54,8 @@ class MockProjectRepository implements ProjectRepository {
         'area': 180.0,
         'floors': 2,
         'price': 12000000,
-        'imageUrl': 'https://via.placeholder.com/400x300?text=Проект+3',
+        'imageUrl':
+            'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop',
         'stages': [
           {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
           {'id': '2', 'name': 'Фундамент', 'status': 'completed'},
