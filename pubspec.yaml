@@ -19,8 +19,8 @@ dependencies:
 
   # Networking
   dio: ^5.7.0
-  retrofit: ^4.4.1
-  retrofit_generator: ^9.1.7
+  retrofit: ^4.9.1
+  retrofit_generator: ^9.7.0
 
   # Code Generation
   freezed_annotation: ^2.4.4

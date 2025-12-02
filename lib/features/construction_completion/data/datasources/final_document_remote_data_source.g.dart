@@ -40,7 +40,7 @@ class _FinalDocumentRemoteDataSource implements FinalDocumentRemoteDataSource {
     try {
       _value = ConstructionCompletionStatusModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, _result);
       rethrow;
     }
     return _value;
@@ -72,7 +72,7 @@ class _FinalDocumentRemoteDataSource implements FinalDocumentRemoteDataSource {
           )
           .toList();
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, _result);
       rethrow;
     }
     return _value;
@@ -102,7 +102,7 @@ class _FinalDocumentRemoteDataSource implements FinalDocumentRemoteDataSource {
     try {
       _value = FinalDocumentModel.fromJson(_result.data!);
     } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options);
+      errorLogger?.logError(e, s, _options, _result);
       rethrow;
     }
     return _value;
