@@ -68,19 +68,15 @@ lib/
 **Компоненты:**
 - **Models** - модели данных (DTO), используют Freezed для генерации кода
 - **Repositories (реализация)** - реализация интерфейсов из domain layer
-- **Data Sources** - источники данных (Retrofit интерфейсы)
+- **Data Sources** - источники данных (Retrofit интерфейсы):
+  - RemoteDataSource - работа с API через Retrofit
+  - LocalDataSource - работа с локальным хранилищем
 - **Providers (data source)** - провайдеры для Retrofit data sources, находятся в data слое
 
 **Принципы:**
 - Зависит от domain layer (реализует интерфейсы)
 - Может использовать Flutter и внешние библиотеки (Dio, Retrofit)
 - Провайдеры data source находятся в data слое, так как зависят от реализации (Retrofit)
-- **DataSources** - источники данных:
-  - RemoteDataSource - работа с API через Retrofit
-  - LocalDataSource - работа с локальным хранилищем
-
-**Принципы:**
-- Зависит только от domain layer
 - Использует Dio для сетевых запросов
 - Использует Retrofit для декларативного описания API
 

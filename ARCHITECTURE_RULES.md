@@ -204,26 +204,36 @@ final repository = ProjectRepositoryImpl(/* ... */); // ❌ Должен исп�
 
 ## Примеры правильной архитектуры
 
-### ✅ Провайдер возвращает интерфейс
+### ✅ Провайдер репозитория возвращает интерфейс и находится в domain/providers/
 ```dart
+// lib/features/project_selection/domain/providers/project_repository_provider.dart
 @riverpod
 ProjectRepository projectRepository(ProjectRepositoryRef ref) {
-  final remoteDataSource = ref.watch(projectRemoteDataSourceImplProvider);
+  final config = ref.watch(appConfigSimpleProvider);
+  if (config.useMocks) {
+    return MockProjectRepository();
+  }
+  final remoteDataSource = ref.watch(projectRemoteDataSourceProvider);
   return ProjectRepositoryImpl(remoteDataSource: remoteDataSource);
 }
 ```
 
-### ✅ Провайдеры данных в data/providers/
+### ✅ Провайдеры data source в data/providers/
 ```dart
-// lib/features/project_selection/data/providers/project_data_providers.dart
+// lib/features/project_selection/data/providers/project_data_source_provider.dart
 @riverpod
-Dio dio(DioRef ref) {
-  // ...
+ProjectRemoteDataSource projectRemoteDataSource(ProjectRemoteDataSourceRef ref) {
+  final dio = ref.watch(dioProvider);
+  final config = ref.watch(appConfigSimpleProvider);
+  return ProjectRemoteDataSource(dio, baseUrl: config.baseUrl);
 }
 ```
 
-### ✅ Notifier использует провайдер с интерфейсом
+### ✅ Notifier использует провайдер репозитория из domain слоя
 ```dart
-final repository = ref.read(projectRepositoryProvider); // ✅ Использует интерфейс
+// lib/features/project_selection/notifier/project_notifier.dart
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
+
+final repository = ref.read(projectRepositoryProvider); // ✅ Использует интерфейс из domain слоя
 ```
 
