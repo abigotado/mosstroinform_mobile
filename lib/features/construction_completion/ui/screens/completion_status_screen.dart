@@ -223,27 +223,34 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
             ),
           );
         },
-        loading: () => SingleChildScrollView(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            children: [
-              // Shimmer для статуса
-              Container(
-                height: 200,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                  borderRadius: BorderRadius.circular(12),
-                ),
+        loading: () {
+          final theme = Theme.of(context);
+          return Shimmer.fromColors(
+            baseColor: theme.colorScheme.surfaceContainerHighest,
+            highlightColor: theme.colorScheme.surface,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  // Shimmer для статуса
+                  Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  // Shimmer для документов
+                  ...List.generate(3, (index) => const Padding(
+                        padding: EdgeInsets.only(bottom: 12),
+                        child: FinalDocumentCardShimmer(),
+                      )),
+                ],
               ),
-              const SizedBox(height: 24),
-              // Shimmer для документов
-              ...List.generate(3, (index) => const Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                    child: FinalDocumentCardShimmer(),
-                  )),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
         error: (error, stackTrace) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
