@@ -32,6 +32,9 @@ dependencies:
   # Navigation
   go_router: ^14.6.2
 
+  # Video Player
+  video_player: ^2.9.2
+
   # UI
   cupertino_icons: ^1.0.8
 

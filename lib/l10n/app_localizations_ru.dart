@@ -254,4 +254,21 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get unread => 'Непрочитано';
+
+  @override
+  String get yes => 'Да';
+
+  @override
+  String get no => 'Нет';
+
+  @override
+  String get documentStatus => 'Статус документа';
+
+  @override
+  String errorOpeningFile(String url) {
+    return 'Ошибка открытия файла: $url';
+  }
+
+  @override
+  String get errorLoadingSignature => 'Ошибка загрузки подписи';
 }

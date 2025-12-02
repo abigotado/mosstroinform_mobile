@@ -573,6 +573,36 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Непрочитано'**
   String get unread;
+
+  /// Слово да
+  ///
+  /// In ru, this message translates to:
+  /// **'Да'**
+  String get yes;
+
+  /// Слово нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет'**
+  String get no;
+
+  /// Заголовок статуса документа
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус документа'**
+  String get documentStatus;
+
+  /// Сообщение об ошибке открытия файла
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка открытия файла: {url}'**
+  String errorOpeningFile(String url);
+
+  /// Сообщение об ошибке загрузки подписи
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки подписи'**
+  String get errorLoadingSignature;
 }
 
 class _AppLocalizationsDelegate

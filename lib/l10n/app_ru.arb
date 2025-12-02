@@ -331,5 +331,31 @@
   "unread": "Непрочитано",
   "@unread": {
     "description": "Метка непрочитанных сообщений"
+  },
+  
+  "yes": "Да",
+  "@yes": {
+    "description": "Слово да"
+  },
+  "no": "Нет",
+  "@no": {
+    "description": "Слово нет"
+  },
+  "documentStatus": "Статус документа",
+  "@documentStatus": {
+    "description": "Заголовок статуса документа"
+  },
+  "errorOpeningFile": "Ошибка открытия файла: {url}",
+  "@errorOpeningFile": {
+    "description": "Сообщение об ошибке открытия файла",
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "errorLoadingSignature": "Ошибка загрузки подписи",
+  "@errorLoadingSignature": {
+    "description": "Сообщение об ошибке загрузки подписи"
   }
 }

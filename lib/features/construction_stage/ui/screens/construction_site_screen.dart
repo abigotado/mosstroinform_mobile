@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/notifier/construction_site_notifier.dart';
+import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/camera_view_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/camera_grid_item.dart';
 
 /// Экран строительной площадки с камерами
@@ -38,7 +40,27 @@ class _ConstructionSiteScreenState
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.constructionStage)),
+      appBar: AppBar(
+        title: Text(l10n.constructionSiteTitle),
+        actions: [
+          // Кнопка перехода к завершению строительства
+          IconButton(
+            icon: const Icon(Icons.check_circle_outline),
+            tooltip: 'Завершение строительства',
+            onPressed: () {
+              context.push('/completion/${widget.projectId}');
+            },
+          ),
+          // Кнопка перехода к чату
+          IconButton(
+            icon: const Icon(Icons.chat_bubble_outline),
+            tooltip: 'Чат со специалистом',
+            onPressed: () {
+              context.push('/chats');
+            },
+          ),
+        ],
+      ),
       body: siteAsync.when(
         data: (state) {
           if (state.site == null) {
@@ -174,7 +196,13 @@ class _ConstructionSiteScreenState
                       return CameraGridItem(
                         camera: camera,
                         onTap: () {
-                          // TODO: Навигация к экрану просмотра камеры
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => CameraViewScreen(
+                                camera: camera,
+                              ),
+                            ),
+                          );
                         },
                       );
                     },
