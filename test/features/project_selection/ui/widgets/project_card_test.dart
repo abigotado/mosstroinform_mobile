@@ -40,13 +40,11 @@ void main() {
         stages: [],
       );
 
-      bool tapped = false;
-
       await tester.pumpWidget(
         createTestWidget(
           ProjectCard(
             project: project,
-            onTap: () => tapped = true,
+            onTap: () {},
           ),
         ),
       );
