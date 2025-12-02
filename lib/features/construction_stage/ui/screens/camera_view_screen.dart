@@ -36,6 +36,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     }
 
     try {
+      // VideoPlayerController.networkUrl поддерживает потоковое видео:
+      // - HLS потоки (.m3u8) - стандарт для потокового видео (поддерживается из коробки)
+      // - DASH потоки
+      // - Обычные видеофайлы через HTTP
+      // Примечание: Для RTSP потоков может потребоваться дополнительный пакет
+      // (например, flutter_vlc_player или media_kit)
       _controller = VideoPlayerController.networkUrl(
         Uri.parse(widget.camera.streamUrl),
       );
@@ -46,8 +52,9 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         setState(() {
           _isInitialized = true;
         });
+        // Для потокового видео не нужен looping, так как поток непрерывный
         _controller!.play();
-        _controller!.setLooping(true);
+        // setLooping не нужен для live streams
       }
     } catch (e) {
       if (mounted) {
@@ -89,13 +96,14 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           alignment: Alignment.center,
           children: [
             VideoPlayer(_controller!),
+            // Для потокового видео прогресс-бар показывает буферизацию
             Positioned(
               bottom: 16,
               left: 16,
               right: 16,
               child: VideoProgressIndicator(
                 _controller!,
-                allowScrubbing: true,
+                allowScrubbing: false, // Для live streams скроллинг не имеет смысла
                 colors: VideoProgressColors(
                   playedColor: theme.colorScheme.primary,
                   bufferedColor: theme.colorScheme.primaryContainer,

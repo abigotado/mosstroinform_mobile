@@ -21,7 +21,8 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
           'id': 'cam1',
           'name': 'Камера 1 - Главный вход',
           'description': 'Обзор главного входа и фасада',
-          'streamUrl': 'https://example.com/stream1',
+          // Пример URL для HLS потока (стандарт для потокового видео)
+          'streamUrl': 'https://example.com/streams/camera1.m3u8',
           'isActive': true,
           'thumbnailUrl': 'https://via.placeholder.com/320x240?text=Камера+1',
         },
@@ -29,7 +30,8 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
           'id': 'cam2',
           'name': 'Камера 2 - Стройплощадка',
           'description': 'Обзор строительной площадки',
-          'streamUrl': 'https://example.com/stream2',
+          // Пример URL для HLS потока
+          'streamUrl': 'https://example.com/streams/camera2.m3u8',
           'isActive': true,
           'thumbnailUrl': 'https://via.placeholder.com/320x240?text=Камера+2',
         },
@@ -37,7 +39,8 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
           'id': 'cam3',
           'name': 'Камера 3 - Задний двор',
           'description': 'Обзор заднего двора',
-          'streamUrl': 'https://example.com/stream3',
+          // Пример URL для HLS потока
+          'streamUrl': 'https://example.com/streams/camera3.m3u8',
           'isActive': false,
           'thumbnailUrl': 'https://via.placeholder.com/320x240?text=Камера+3',
         },
