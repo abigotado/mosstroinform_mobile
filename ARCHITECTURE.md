@@ -160,6 +160,142 @@ lib/
 - **Navigation:** GoRouter
 - **Localization:** flutter_localizations
 - **Theming:** ThemeData (подготовлено для мультитематизации)
+- **Testing:** flutter_test, mocktail
+
+## Тестирование
+
+Проект имеет полное тестовое покрытие ключевых компонентов. Структура тестов повторяет структуру основного кода.
+
+### Структура тестов
+
+```
+test/
+├── features/
+│   ├── project_selection/
+│   │   ├── notifier/              # Тесты для notifiers
+│   │   ├── data/repositories/     # Тесты для mock repositories
+│   │   ├── domain/usecases/       # Тесты для use cases
+│   │   └── ui/widgets/            # Widget тесты
+│   ├── document_approval/
+│   │   ├── notifier/
+│   │   ├── data/repositories/
+│   │   ├── domain/usecases/
+│   │   └── ui/widgets/
+│   ├── chat/
+│   │   └── notifier/
+│   └── construction_stage/
+│       ├── notifier/
+│       └── ui/widgets/
+└── widget_test.dart               # Базовый тест приложения
+```
+
+### Типы тестов
+
+#### 1. Unit тесты для Notifiers
+
+Тестируют логику управления состоянием через Riverpod. Используют `ProviderContainer` для изоляции тестов и моки репозиториев через `mocktail`.
+
+**Пример структуры:**
+```dart
+void main() {
+  late ProviderContainer container;
+  late MockRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockRepository();
+    container = ProviderContainer(
+      overrides: [
+        repositoryProvider.overrideWithValue(mockRepository),
+      ],
+    );
+  });
+
+  test('loadData успешно загружает данные', () async {
+    when(() => mockRepository.getData())
+        .thenAnswer((_) async => data);
+    
+    final notifier = container.read(notifierProvider.notifier);
+    await notifier.loadData();
+    
+    final state = container.read(notifierProvider);
+    expect(state.value?.data, equals(data));
+  });
+}
+```
+
+#### 2. Unit тесты для Repositories
+
+Тестируют mock реализации репозиториев, проверяя корректность работы с состоянием через Riverpod провайдеры.
+
+**Особенности:**
+- Используют `ProviderContainer` для доступа к `Ref`
+- Тестируют интерактивное состояние (изменения сохраняются в памяти)
+- Проверяют бизнес-логику репозиториев
+
+#### 3. Unit тесты для Use Cases
+
+Тестируют бизнес-логику в use cases. Используют моки репозиториев для изоляции.
+
+**Пример:**
+```dart
+test('call возвращает данные', () async {
+  when(() => mockRepository.getData())
+      .thenAnswer((_) async => data);
+  
+  final result = await useCase.call();
+  expect(result, equals(data));
+});
+```
+
+#### 4. Widget тесты
+
+Тестируют UI компоненты, проверяя корректность отображения и взаимодействия.
+
+**Пример:**
+```dart
+testWidgets('отображает данные корректно', (tester) async {
+  await tester.pumpWidget(
+    MaterialApp(
+      home: Scaffold(
+        body: MyWidget(data: testData),
+      ),
+    ),
+  );
+  
+  expect(find.text('Expected Text'), findsOneWidget);
+});
+```
+
+### Принципы тестирования
+
+1. **Изоляция** - каждый тест независим и не влияет на другие
+2. **Моки** - используются для изоляции зависимостей
+3. **Покрытие** - тестируются все ключевые компоненты
+4. **Читаемость** - тесты легко читать и понимать
+5. **ARRANGE-ACT-ASSERT** - четкая структура тестов
+
+### Запуск тестов
+
+```bash
+# Все тесты
+flutter test
+
+# Конкретный файл
+flutter test test/features/project_selection/notifier/project_notifier_test.dart
+
+# С покрытием
+flutter test --coverage
+```
+
+### Текущее покрытие
+
+- ✅ **Notifiers:** 8 файлов тестов (все основные notifiers)
+- ✅ **Mock Repositories:** 2 файла тестов
+- ✅ **Use Cases:** 7 файлов тестов (все use cases)
+- ✅ **Widgets:** 4 файла тестов (ключевые UI компоненты)
+- ✅ **Базовый тест:** 1 файл
+
+**Всего: 18 файлов тестов, 76 тестов**
 
 ## Пример структуры фичи
 

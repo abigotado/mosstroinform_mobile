@@ -240,16 +240,250 @@ flutter build ios --release
 
 ## 🧪 Тестирование
 
+Проект имеет полное тестовое покрытие ключевых компонентов приложения. Всего **76 тестов**, покрывающих notifiers, repositories, use cases и UI виджеты.
+
+### Структура тестов
+
+Тесты организованы по той же структуре, что и основной код:
+
+```
+test/
+├── features/
+│   ├── project_selection/
+│   │   ├── notifier/              # Тесты для notifiers
+│   │   ├── data/repositories/     # Тесты для mock repositories
+│   │   ├── domain/usecases/       # Тесты для use cases
+│   │   └── ui/widgets/            # Widget тесты
+│   ├── document_approval/
+│   │   ├── notifier/
+│   │   ├── data/repositories/
+│   │   ├── domain/usecases/
+│   │   └── ui/widgets/
+│   ├── chat/
+│   │   └── notifier/
+│   └── construction_stage/
+│       ├── notifier/
+│       └── ui/widgets/
+└── widget_test.dart               # Базовый тест приложения
+```
+
+### Типы тестов
+
+#### 1. Unit тесты для Notifiers
+
+Тестируют логику управления состоянием через Riverpod:
+
+- `ProjectsNotifier` - управление списком проектов
+- `ProjectNotifier` - управление отдельным проектом
+- `DocumentsNotifier` - управление списком документов
+- `DocumentNotifier` - управление отдельным документом
+- `ChatsNotifier` - управление списком чатов
+- `MessagesNotifier` - управление сообщениями в чате
+- `ConstructionSiteNotifier` - управление стройплощадкой
+- `CamerasNotifier` - управление камерами
+
+**Пример:**
+```dart
+test('loadProjects успешно загружает проекты', () async {
+  when(() => mockRepository.getProjects())
+      .thenAnswer((_) async => projects);
+  
+  final notifier = container.read(projectsNotifierProvider.notifier);
+  await notifier.loadProjects();
+  
+  final state = container.read(projectsNotifierProvider);
+  expect(state.value?.projects, equals(projects));
+});
+```
+
+#### 2. Unit тесты для Repositories
+
+Тестируют mock реализации репозиториев:
+
+- `MockProjectRepository` - тесты для работы с проектами
+- `MockDocumentRepository` - тесты для работы с документами
+
+**Пример:**
+```dart
+test('getProjects возвращает список проектов из состояния', () async {
+  final projects = await repository.getProjects();
+  expect(projects, isNotEmpty);
+  expect(projects.first, isA<Project>());
+});
+```
+
+#### 3. Unit тесты для Use Cases
+
+Тестируют бизнес-логику в use cases:
+
+- `GetProjects`, `GetProjectById`, `RequestConstruction`
+- `GetDocuments`, `GetDocumentById`, `ApproveDocument`, `RejectDocument`
+
+**Пример:**
+```dart
+test('call возвращает список проектов', () async {
+  when(() => mockRepository.getProjects())
+      .thenAnswer((_) async => projects);
+  
+  final result = await useCase.call();
+  expect(result, equals(projects));
+});
+```
+
+#### 4. Widget тесты
+
+Тестируют UI компоненты:
+
+- `ProjectCard` - карточка проекта
+- `DocumentCard` - карточка документа
+- `ProjectStageItem` - элемент этапа строительства
+- `CameraGridItem` - элемент камеры в сетке
+
+**Пример:**
+```dart
+testWidgets('отображает проект с корректными данными', (tester) async {
+  await tester.pumpWidget(createWidget(project));
+  
+  expect(find.text('Проект 1'), findsOneWidget);
+  expect(find.text('Описание 1'), findsOneWidget);
+});
+```
+
 ### Запуск тестов
+
+#### Запуск всех тестов
 
 ```bash
 flutter test
 ```
 
-### Запуск конкретного теста
+#### Запуск конкретного файла тестов
 
 ```bash
-flutter test test/widget_test.dart
+flutter test test/features/project_selection/notifier/project_notifier_test.dart
+```
+
+#### Запуск тестов с покрытием
+
+```bash
+flutter test --coverage
+```
+
+Покрытие будет в `coverage/lcov.info`. Для просмотра используйте инструменты вроде `lcov` или `genhtml`.
+
+#### Запуск тестов в watch режиме
+
+```bash
+flutter test --watch
+```
+
+Тесты будут автоматически перезапускаться при изменении файлов.
+
+### Используемые библиотеки для тестирования
+
+- **flutter_test** - базовый фреймворк для тестирования Flutter приложений
+- **mocktail** - библиотека для создания моков (альтернатива mockito)
+- **flutter_riverpod** - для тестирования Riverpod провайдеров
+
+### Покрытие тестами
+
+**Текущее покрытие:**
+- ✅ Notifiers: 8 файлов тестов
+- ✅ Mock Repositories: 2 файла тестов
+- ✅ Use Cases: 7 файлов тестов
+- ✅ Widgets: 4 файла тестов
+- ✅ Базовый тест приложения: 1 файл
+
+**Всего: 18 файлов тестов, 76 тестов**
+
+### Написание новых тестов
+
+При добавлении новой функциональности рекомендуется:
+
+1. **Для notifiers:** Создать тесты в `test/features/[feature]/notifier/`
+2. **Для repositories:** Создать тесты в `test/features/[feature]/data/repositories/`
+3. **Для use cases:** Создать тесты в `test/features/[feature]/domain/usecases/`
+4. **Для widgets:** Создать тесты в `test/features/[feature]/ui/widgets/`
+
+**Шаблон теста для notifier:**
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mocktail/mocktail.dart';
+
+class MockRepository extends Mock implements SomeRepository {}
+
+void main() {
+  late ProviderContainer container;
+  late MockRepository mockRepository;
+
+  setUp(() {
+    mockRepository = MockRepository();
+    container = ProviderContainer(
+      overrides: [
+        someRepositoryProvider.overrideWithValue(mockRepository),
+      ],
+    );
+  });
+
+  tearDown(() {
+    container.dispose();
+  });
+
+  test('test description', () async {
+    // Arrange
+    // Act
+    // Assert
+  });
+}
+```
+
+**Шаблон теста для widget:**
+
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+Widget createWidget(SomeData data) {
+  return MaterialApp(
+    home: Scaffold(
+      body: SomeWidget(data: data),
+    ),
+  );
+}
+
+void main() {
+  testWidgets('widget description', (WidgetTester tester) async {
+    // Arrange
+    final data = SomeData();
+    
+    // Act
+    await tester.pumpWidget(createWidget(data));
+    await tester.pumpAndSettle();
+    
+    // Assert
+    expect(find.text('Expected Text'), findsOneWidget);
+  });
+}
+```
+
+### CI/CD
+
+Рекомендуется настроить автоматический запуск тестов при каждом коммите:
+
+```yaml
+# Пример для GitHub Actions
+name: Tests
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: subosito/flutter-action@v2
+      - run: flutter pub get
+      - run: flutter test
 ```
 
 ## 📚 Технологический стек
