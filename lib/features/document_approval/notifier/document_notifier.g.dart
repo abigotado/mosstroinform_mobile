@@ -6,7 +6,7 @@ part of 'document_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$documentsNotifierHash() => r'6d4b9990b0ada9f764845575d27ab4dd43d54e01';
+String _$documentsNotifierHash() => r'7246db5cae980a3f2cd0f54b678473a1079add4b';
 
 /// Notifier для управления состоянием списка документов
 ///
@@ -27,7 +27,7 @@ final documentsNotifierProvider =
     );
 
 typedef _$DocumentsNotifier = AutoDisposeAsyncNotifier<List<Document>>;
-String _$documentNotifierHash() => r'587fe26bbce3951d923d2a8b44e5ee3353d1c428';
+String _$documentNotifierHash() => r'395ca2c330aa9bbd73dcaf8ee66c7dfa53c6fb96';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -15,24 +15,16 @@ final _privateConstructorUsedError = UnsupportedError(
   'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
 );
 
-DocumentModel _$DocumentModelFromJson(Map<String, dynamic> json) {
-  return _DocumentModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$DocumentModel {
   String get id => throw _privateConstructorUsedError;
   String get title => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
   String? get fileUrl => throw _privateConstructorUsedError;
-  @JsonKey(name: 'status', defaultValue: 'pending')
   String get statusString => throw _privateConstructorUsedError;
   DateTime? get submittedAt => throw _privateConstructorUsedError;
   DateTime? get approvedAt => throw _privateConstructorUsedError;
   String? get rejectionReason => throw _privateConstructorUsedError;
-
-  /// Serializes this DocumentModel to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of DocumentModel
   /// with the given fields replaced by the non-null parameter values.
@@ -53,7 +45,7 @@ abstract class $DocumentModelCopyWith<$Res> {
     String title,
     String description,
     String? fileUrl,
-    @JsonKey(name: 'status', defaultValue: 'pending') String statusString,
+    String statusString,
     DateTime? submittedAt,
     DateTime? approvedAt,
     String? rejectionReason,
@@ -138,7 +130,7 @@ abstract class _$$DocumentModelImplCopyWith<$Res>
     String title,
     String description,
     String? fileUrl,
-    @JsonKey(name: 'status', defaultValue: 'pending') String statusString,
+    String statusString,
     DateTime? submittedAt,
     DateTime? approvedAt,
     String? rejectionReason,
@@ -208,22 +200,18 @@ class __$$DocumentModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$DocumentModelImpl implements _DocumentModel {
   const _$DocumentModelImpl({
     required this.id,
     required this.title,
     required this.description,
     this.fileUrl,
-    @JsonKey(name: 'status', defaultValue: 'pending')
     this.statusString = 'pending',
     this.submittedAt,
     this.approvedAt,
     this.rejectionReason,
   });
-
-  factory _$DocumentModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DocumentModelImplFromJson(json);
 
   @override
   final String id;
@@ -234,7 +222,7 @@ class _$DocumentModelImpl implements _DocumentModel {
   @override
   final String? fileUrl;
   @override
-  @JsonKey(name: 'status', defaultValue: 'pending')
+  @JsonKey()
   final String statusString;
   @override
   final DateTime? submittedAt;
@@ -268,7 +256,6 @@ class _$DocumentModelImpl implements _DocumentModel {
                 other.rejectionReason == rejectionReason));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
     runtimeType,
@@ -289,11 +276,6 @@ class _$DocumentModelImpl implements _DocumentModel {
   @pragma('vm:prefer-inline')
   _$$DocumentModelImplCopyWith<_$DocumentModelImpl> get copyWith =>
       __$$DocumentModelImplCopyWithImpl<_$DocumentModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$DocumentModelImplToJson(this);
-  }
 }
 
 abstract class _DocumentModel implements DocumentModel {
@@ -302,14 +284,11 @@ abstract class _DocumentModel implements DocumentModel {
     required final String title,
     required final String description,
     final String? fileUrl,
-    @JsonKey(name: 'status', defaultValue: 'pending') final String statusString,
+    final String statusString,
     final DateTime? submittedAt,
     final DateTime? approvedAt,
     final String? rejectionReason,
   }) = _$DocumentModelImpl;
-
-  factory _DocumentModel.fromJson(Map<String, dynamic> json) =
-      _$DocumentModelImpl.fromJson;
 
   @override
   String get id;
@@ -320,7 +299,6 @@ abstract class _DocumentModel implements DocumentModel {
   @override
   String? get fileUrl;
   @override
-  @JsonKey(name: 'status', defaultValue: 'pending')
   String get statusString;
   @override
   DateTime? get submittedAt;

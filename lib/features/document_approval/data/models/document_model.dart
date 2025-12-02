@@ -2,7 +2,6 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 
 part 'document_model.freezed.dart';
-part 'document_model.g.dart';
 
 /// Модель документа для работы с API
 @freezed
