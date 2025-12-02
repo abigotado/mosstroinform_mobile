@@ -62,15 +62,6 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
 
         if (!mounted) return;
 
-        // Проверяем, все ли документы одобрены
-        final allDocuments = ref.read(documentsNotifierProvider);
-        final allApproved = allDocuments.maybeWhen(
-          data: (docs) =>
-              docs.isNotEmpty &&
-              docs.every((doc) => doc.status == DocumentStatus.approved),
-          orElse: () => false,
-        );
-
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.documentApproved),
@@ -78,11 +69,8 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
             duration: const Duration(seconds: 2),
           ),
         );
-        
-        // Обновляем UI для показа кнопки перехода к стройке
-        if (mounted) {
-          setState(() {});
-        }
+
+        // UI обновится автоматически через watch(documentsNotifierProvider)
       }
     } catch (e) {
       if (mounted) {
@@ -203,9 +191,11 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           docs.every((doc) => doc.status == DocumentStatus.approved),
       orElse: () => false,
     );
-    
+
     // Получаем projectId из текущего документа
-    final currentDocument = ref.read(documentNotifierProvider(widget.documentId));
+    final currentDocument = ref.read(
+      documentNotifierProvider(widget.documentId),
+    );
     final projectId = currentDocument.maybeWhen(
       data: (doc) => doc?.projectId,
       orElse: () => null,

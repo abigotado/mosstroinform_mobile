@@ -18,6 +18,8 @@ class ProjectDetailScreen extends ConsumerStatefulWidget {
 }
 
 class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
+  bool _requestSent = false; // Флаг отправки запроса на строительство
+
   @override
   void initState() {
     super.initState();
@@ -34,7 +36,22 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     final theme = Theme.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.projectDetails)),
+      appBar: AppBar(
+        title: Text(l10n.projectDetails),
+        actions: [
+          // Кнопка перехода к документам (показывается после отправки запроса)
+          if (_requestSent)
+            IconButton(
+              icon: const Icon(Icons.description),
+              tooltip: l10n.toDocuments,
+              onPressed: () {
+                if (mounted) {
+                  context.push('/documents');
+                }
+              },
+            ),
+        ],
+      ),
       body: projectAsync.when(
         data: (state) {
           if (state.project == null) {
@@ -199,8 +216,10 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                 duration: const Duration(seconds: 2),
                               ),
                             );
-                            // Обновляем UI для показа кнопки перехода к документам
-                            setState(() {});
+                            // Устанавливаем флаг отправки запроса для показа кнопки
+                            setState(() {
+                              _requestSent = true;
+                            });
                           }
                         } catch (e) {
                           debugPrint('Ошибка при отправке запроса: $e');
