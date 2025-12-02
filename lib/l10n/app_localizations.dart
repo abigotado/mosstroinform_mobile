@@ -507,6 +507,72 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Подпись'**
   String get signature;
+
+  /// Заголовок списка чатов
+  ///
+  /// In ru, this message translates to:
+  /// **'Чаты'**
+  String get chats;
+
+  /// Заголовок экрана чата
+  ///
+  /// In ru, this message translates to:
+  /// **'Чат'**
+  String get chat;
+
+  /// Сообщение когда чатов нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет чатов'**
+  String get noChats;
+
+  /// Сообщение когда сообщений нет
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет сообщений'**
+  String get noMessages;
+
+  /// Подсказка для поля ввода сообщения
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите сообщение...'**
+  String get typeMessage;
+
+  /// Кнопка отправки сообщения
+  ///
+  /// In ru, this message translates to:
+  /// **'Отправить'**
+  String get send;
+
+  /// Заголовок ошибки загрузки чатов
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки чатов'**
+  String get errorLoadingChats;
+
+  /// Заголовок ошибки загрузки сообщений
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка загрузки сообщений'**
+  String get errorLoadingMessages;
+
+  /// Заголовок ошибки отправки сообщения
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка отправки сообщения'**
+  String get errorSendingMessage;
+
+  /// Сообщение об успешной отправке
+  ///
+  /// In ru, this message translates to:
+  /// **'Сообщение отправлено'**
+  String get messageSent;
+
+  /// Метка непрочитанных сообщений
+  ///
+  /// In ru, this message translates to:
+  /// **'Непрочитано'**
+  String get unread;
 }
 
 class _AppLocalizationsDelegate

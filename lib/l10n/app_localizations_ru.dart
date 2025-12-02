@@ -221,4 +221,37 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get signature => 'Подпись';
+
+  @override
+  String get chats => 'Чаты';
+
+  @override
+  String get chat => 'Чат';
+
+  @override
+  String get noChats => 'Нет чатов';
+
+  @override
+  String get noMessages => 'Нет сообщений';
+
+  @override
+  String get typeMessage => 'Введите сообщение...';
+
+  @override
+  String get send => 'Отправить';
+
+  @override
+  String get errorLoadingChats => 'Ошибка загрузки чатов';
+
+  @override
+  String get errorLoadingMessages => 'Ошибка загрузки сообщений';
+
+  @override
+  String get errorSendingMessage => 'Ошибка отправки сообщения';
+
+  @override
+  String get messageSent => 'Сообщение отправлено';
+
+  @override
+  String get unread => 'Непрочитано';
 }
