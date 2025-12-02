@@ -1,5 +1,5 @@
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
-import 'package:mosstroinform_mobile/features/chat/data/providers/chat_data_providers.dart';
+import 'package:mosstroinform_mobile/features/chat/domain/providers/chat_repository_provider.dart';
 import 'package:mosstroinform_mobile/features/chat/domain/entities/chat.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

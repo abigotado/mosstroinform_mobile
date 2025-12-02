@@ -1,38 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'project_data_providers.dart';
+part of 'project_repository_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$projectRemoteDataSourceHash() =>
-    r'9822588e52787fc4cd6ebfe59bdb92da2d5d56f1';
-
-/// Провайдер для Retrofit источника данных
-///
-/// Copied from [projectRemoteDataSource].
-@ProviderFor(projectRemoteDataSource)
-final projectRemoteDataSourceProvider =
-    AutoDisposeProvider<ProjectRemoteDataSource>.internal(
-      projectRemoteDataSource,
-      name: r'projectRemoteDataSourceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$projectRemoteDataSourceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ProjectRemoteDataSourceRef =
-    AutoDisposeProviderRef<ProjectRemoteDataSource>;
-String _$projectRepositoryHash() => r'b6b382ac0ba9faac7b58f9d78f0a0925d17feeeb';
+String _$projectRepositoryHash() => r'522f47d9d7a3fc0514b17d7b6f608c51244562f1';
 
 /// Провайдер для репозитория проектов
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
+/// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
 ///
 /// Copied from [projectRepository].
 @ProviderFor(projectRepository)

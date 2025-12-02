@@ -1,6 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
-import 'package:mosstroinform_mobile/features/document_approval/data/providers/document_data_providers.dart';
+import 'package:mosstroinform_mobile/features/document_approval/domain/providers/document_repository_provider.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 
 part 'document_notifier.g.dart';

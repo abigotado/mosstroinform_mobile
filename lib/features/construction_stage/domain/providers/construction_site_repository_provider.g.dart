@@ -1,39 +1,18 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'construction_site_data_providers.dart';
+part of 'construction_site_repository_provider.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$constructionSiteRemoteDataSourceHash() =>
-    r'601f46f6f04fc5cc69bd3d5918dda13b795324e7';
-
-/// Провайдер для Retrofit источника данных строительной площадки
-///
-/// Copied from [constructionSiteRemoteDataSource].
-@ProviderFor(constructionSiteRemoteDataSource)
-final constructionSiteRemoteDataSourceProvider =
-    AutoDisposeProvider<ConstructionSiteRemoteDataSource>.internal(
-      constructionSiteRemoteDataSource,
-      name: r'constructionSiteRemoteDataSourceProvider',
-      debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-          ? null
-          : _$constructionSiteRemoteDataSourceHash,
-      dependencies: null,
-      allTransitiveDependencies: null,
-    );
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef ConstructionSiteRemoteDataSourceRef =
-    AutoDisposeProviderRef<ConstructionSiteRemoteDataSource>;
 String _$constructionSiteRepositoryHash() =>
-    r'be74b35a5f25c24940630ab24e82c19c14726036';
+    r'62c103f561c2435cd01cafc04521328248fdcf55';
 
 /// Провайдер для репозитория строительной площадки
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
+/// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
 ///
 /// Copied from [constructionSiteRepository].
 @ProviderFor(constructionSiteRepository)

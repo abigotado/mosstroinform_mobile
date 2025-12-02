@@ -1,5 +1,5 @@
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
-import 'package:mosstroinform_mobile/features/construction_completion/data/providers/final_document_data_providers.dart';
+import 'package:mosstroinform_mobile/features/construction_completion/domain/providers/final_document_repository_provider.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
