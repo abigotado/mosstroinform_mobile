@@ -27,8 +27,9 @@ void main() {
       status: DocumentStatus.pending,
     );
 
-    when(() => mockRepository.getDocumentById(documentId))
-        .thenAnswer((_) async => document);
+    when(
+      () => mockRepository.getDocumentById(documentId),
+    ).thenAnswer((_) async => document);
 
     // Act
     final result = await useCase.call(documentId);
@@ -43,15 +44,12 @@ void main() {
     // Arrange
     const documentId = '1';
     final failure = ServerFailure('Ошибка сервера');
-    when(() => mockRepository.getDocumentById(documentId))
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.getDocumentById(documentId),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(documentId),
-      throwsA(isA<ServerFailure>()),
-    );
+    expect(() => useCase.call(documentId), throwsA(isA<ServerFailure>()));
     verify(() => mockRepository.getDocumentById(documentId)).called(1);
   });
 }
-

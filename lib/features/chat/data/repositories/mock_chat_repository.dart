@@ -154,4 +154,3 @@ class MockChatRepository implements ChatRepository {
     }
   }
 }
-

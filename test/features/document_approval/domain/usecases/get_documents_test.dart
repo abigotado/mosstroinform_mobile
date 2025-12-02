@@ -35,8 +35,9 @@ void main() {
       ),
     ];
 
-    when(() => mockRepository.getDocuments())
-        .thenAnswer((_) async => documents);
+    when(
+      () => mockRepository.getDocuments(),
+    ).thenAnswer((_) async => documents);
 
     // Act
     final result = await useCase.call();
@@ -50,15 +51,12 @@ void main() {
   test('call пробрасывает исключения из репозитория', () async {
     // Arrange
     final failure = NetworkFailure('Ошибка сети');
-    when(() => mockRepository.getDocuments())
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.getDocuments(),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(),
-      throwsA(isA<NetworkFailure>()),
-    );
+    expect(() => useCase.call(), throwsA(isA<NetworkFailure>()));
     verify(() => mockRepository.getDocuments()).called(1);
   });
 }
-

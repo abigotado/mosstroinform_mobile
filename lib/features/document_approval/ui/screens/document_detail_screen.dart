@@ -26,7 +26,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(documentNotifierProvider(widget.documentId).notifier)
+          .read(documentProvider(widget.documentId).notifier)
           .loadDocument(widget.documentId);
     });
   }
@@ -50,7 +50,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
     try {
       debugPrint('Вызываем approveDocument');
       await ref
-          .read(documentNotifierProvider(documentId).notifier)
+          .read(documentProvider(documentId).notifier)
           .approveDocument(documentId);
       debugPrint('approveDocument выполнен успешно');
 
@@ -59,7 +59,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
         final messenger = ScaffoldMessenger.of(context);
 
         // Перезагружаем список документов для проверки статуса
-        await ref.read(documentsNotifierProvider.notifier).loadDocuments();
+        await ref.read(documentsProvider.notifier).loadDocuments();
 
         if (!mounted) return;
 
@@ -71,7 +71,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           ),
         );
 
-        // UI обновится автоматически через watch(documentsNotifierProvider)
+        // UI обновится автоматически через watch(documentsProvider)
       }
     } catch (e) {
       if (mounted) {
@@ -109,7 +109,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
 
     try {
       await ref
-          .read(documentNotifierProvider(documentId).notifier)
+          .read(documentProvider(documentId).notifier)
           .rejectDocument(documentId, reason);
 
       if (mounted) {
@@ -178,14 +178,12 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final documentAsync = ref.watch(
-      documentNotifierProvider(widget.documentId),
-    );
+    final documentAsync = ref.watch(documentProvider(widget.documentId));
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     // Проверяем, все ли документы одобрены для показа кнопки перехода
-    final allDocuments = ref.watch(documentsNotifierProvider);
+    final allDocuments = ref.watch(documentsProvider);
     final allApproved = allDocuments.maybeWhen(
       data: (docs) =>
           docs.isNotEmpty &&
@@ -194,9 +192,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
     );
 
     // Получаем projectId из текущего документа
-    final currentDocument = ref.read(
-      documentNotifierProvider(widget.documentId),
-    );
+    final currentDocument = ref.read(documentProvider(widget.documentId));
     final projectId = currentDocument.maybeWhen(
       data: (doc) => doc?.projectId,
       orElse: () => null,
@@ -400,9 +396,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(
-                        documentNotifierProvider(widget.documentId).notifier,
-                      )
+                      .read(documentProvider(widget.documentId).notifier)
                       .loadDocument(widget.documentId);
                 },
                 child: Text(l10n.retry),

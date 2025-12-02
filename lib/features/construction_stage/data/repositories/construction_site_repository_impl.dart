@@ -15,8 +15,9 @@ class ConstructionSiteRepositoryImpl implements ConstructionSiteRepository {
     String projectId,
   ) async {
     try {
-      final model =
-          await remoteDataSource.getConstructionSiteByProjectId(projectId);
+      final model = await remoteDataSource.getConstructionSiteByProjectId(
+        projectId,
+      );
       return model.toEntity();
     } on Failure {
       rethrow;
@@ -49,4 +50,3 @@ class ConstructionSiteRepositoryImpl implements ConstructionSiteRepository {
     }
   }
 }
-

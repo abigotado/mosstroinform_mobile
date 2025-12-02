@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/data/providers/project_data_source_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/data/repositories/mock_project_repository.dart';

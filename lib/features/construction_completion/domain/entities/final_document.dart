@@ -25,8 +25,10 @@ class FinalDocument {
 enum FinalDocumentStatus {
   /// Документ ожидает подписания
   pending,
+
   /// Документ подписан
   signed,
+
   /// Документ отклонён
   rejected,
 }
@@ -49,4 +51,3 @@ class ConstructionCompletionStatus {
     required this.allDocumentsSigned,
   });
 }
-

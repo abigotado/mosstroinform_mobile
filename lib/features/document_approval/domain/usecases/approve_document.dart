@@ -10,4 +10,3 @@ class ApproveDocument {
     return await repository.approveDocument(documentId);
   }
 }
-

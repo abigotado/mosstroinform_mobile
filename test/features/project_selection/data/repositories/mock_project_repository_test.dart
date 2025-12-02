@@ -40,68 +40,84 @@ void main() {
       expect(project.name, equals(firstProject.name));
     });
 
-    test('getProjectById выбрасывает UnknownFailure для несуществующего ID', () async {
-      expect(
-        () => repository.getProjectById('non-existent-id'),
-        throwsA(isA<UnknownFailure>()),
-      );
-    });
-
-    test('requestConstruction обновляет статус первого этапа на inProgress', () async {
-      // Находим проект с этапами
-      final projects = await repository.getProjects();
-      
-      // Ищем проект с этапами в статусе pending
-      Project? projectWithPendingStages;
-      try {
-        projectWithPendingStages = projects.firstWhere(
-          (p) => p.stages.isNotEmpty &&
-              p.stages.every((s) => s.status == StageStatus.pending),
+    test(
+      'getProjectById выбрасывает UnknownFailure для несуществующего ID',
+      () async {
+        expect(
+          () => repository.getProjectById('non-existent-id'),
+          throwsA(isA<UnknownFailure>()),
         );
-      } catch (e) {
-        // Если нет проектов с pending этапами, пропускаем тест
-        return;
-      }
+      },
+    );
 
-      await repository.requestConstruction(projectWithPendingStages.id);
+    test(
+      'requestConstruction обновляет статус первого этапа на inProgress',
+      () async {
+        // Находим проект с этапами
+        final projects = await repository.getProjects();
 
-      final updatedProject =
-          await repository.getProjectById(projectWithPendingStages.id);
+        // Ищем проект с этапами в статусе pending
+        Project? projectWithPendingStages;
+        try {
+          projectWithPendingStages = projects.firstWhere(
+            (p) =>
+                p.stages.isNotEmpty &&
+                p.stages.every((s) => s.status == StageStatus.pending),
+          );
+        } catch (e) {
+          // Если нет проектов с pending этапами, пропускаем тест
+          return;
+        }
 
-      expect(updatedProject.stages.first.status, equals(StageStatus.inProgress));
-    });
+        await repository.requestConstruction(projectWithPendingStages.id);
 
-    test('requestConstruction не изменяет проект, если этапы уже не в pending', () async {
-      // Находим проект с этапами в статусе pending
-      final projects = await repository.getProjects();
-      
-      Project? projectWithPendingStages;
-      try {
-        projectWithPendingStages = projects.firstWhere(
-          (p) => p.stages.isNotEmpty &&
-              p.stages.every((s) => s.status == StageStatus.pending),
+        final updatedProject = await repository.getProjectById(
+          projectWithPendingStages.id,
         );
-      } catch (e) {
-        // Если нет проектов с pending этапами, пропускаем тест
-        return;
-      }
 
-      // Сначала отправляем запрос
-      await repository.requestConstruction(projectWithPendingStages.id);
-      final projectAfterFirstRequest =
-          await repository.getProjectById(projectWithPendingStages.id);
+        expect(
+          updatedProject.stages.first.status,
+          equals(StageStatus.inProgress),
+        );
+      },
+    );
 
-      // Пытаемся отправить запрос повторно
-      await repository.requestConstruction(projectWithPendingStages.id);
-      final projectAfterSecondRequest =
-          await repository.getProjectById(projectWithPendingStages.id);
+    test(
+      'requestConstruction не изменяет проект, если этапы уже не в pending',
+      () async {
+        // Находим проект с этапами в статусе pending
+        final projects = await repository.getProjects();
 
-      // Статус не должен измениться (оба раза должен быть inProgress)
-      expect(
-        projectAfterSecondRequest.stages.first.status,
-        equals(projectAfterFirstRequest.stages.first.status),
-      );
-    });
+        Project? projectWithPendingStages;
+        try {
+          projectWithPendingStages = projects.firstWhere(
+            (p) =>
+                p.stages.isNotEmpty &&
+                p.stages.every((s) => s.status == StageStatus.pending),
+          );
+        } catch (e) {
+          // Если нет проектов с pending этапами, пропускаем тест
+          return;
+        }
+
+        // Сначала отправляем запрос
+        await repository.requestConstruction(projectWithPendingStages.id);
+        final projectAfterFirstRequest = await repository.getProjectById(
+          projectWithPendingStages.id,
+        );
+
+        // Пытаемся отправить запрос повторно
+        await repository.requestConstruction(projectWithPendingStages.id);
+        final projectAfterSecondRequest = await repository.getProjectById(
+          projectWithPendingStages.id,
+        );
+
+        // Статус не должен измениться (оба раза должен быть inProgress)
+        expect(
+          projectAfterSecondRequest.stages.first.status,
+          equals(projectAfterFirstRequest.stages.first.status),
+        );
+      },
+    );
   });
 }
-

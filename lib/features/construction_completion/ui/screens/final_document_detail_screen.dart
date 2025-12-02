@@ -30,10 +30,12 @@ class _FinalDocumentDetailScreenState
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(finalDocumentNotifierProvider((
-            widget.projectId,
-            widget.documentId,
-          )).notifier)
+          .read(
+            finalDocumentProvider((
+              widget.projectId,
+              widget.documentId,
+            )).notifier,
+          )
           .loadFinalDocument();
     });
   }
@@ -45,10 +47,12 @@ class _FinalDocumentDetailScreenState
 
     try {
       await ref
-          .read(finalDocumentNotifierProvider((
-            widget.projectId,
-            widget.documentId,
-          )).notifier)
+          .read(
+            finalDocumentProvider((
+              widget.projectId,
+              widget.documentId,
+            )).notifier,
+          )
           .signFinalDocument();
 
       if (mounted) {
@@ -80,17 +84,14 @@ class _FinalDocumentDetailScreenState
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final documentAsync = ref.watch(finalDocumentNotifierProvider((
-      widget.projectId,
-      widget.documentId,
-    )));
+    final documentAsync = ref.watch(
+      finalDocumentProvider((widget.projectId, widget.documentId)),
+    );
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.finalDocument),
-      ),
+      appBar: AppBar(title: Text(l10n.finalDocument)),
       body: documentAsync.when(
         data: (state) {
           // Если документ не загружен и нет ошибки - это начальное состояние, показываем шиммер
@@ -134,10 +135,7 @@ class _FinalDocumentDetailScreenState
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  document.description,
-                  style: theme.textTheme.bodyLarge,
-                ),
+                Text(document.description, style: theme.textTheme.bodyLarge),
                 const SizedBox(height: 24),
 
                 // Информация о датах
@@ -228,9 +226,7 @@ class _FinalDocumentDetailScreenState
                           ? const SizedBox(
                               width: 16,
                               height: 16,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                              ),
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             )
                           : const Icon(Icons.edit),
                       label: Text(l10n.signDocument),
@@ -262,10 +258,12 @@ class _FinalDocumentDetailScreenState
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(finalDocumentNotifierProvider((
-                        widget.projectId,
-                        widget.documentId,
-                      )).notifier)
+                      .read(
+                        finalDocumentProvider((
+                          widget.projectId,
+                          widget.documentId,
+                        )).notifier,
+                      )
                       .loadFinalDocument();
                 },
                 child: Text(l10n.retry),
@@ -381,4 +379,3 @@ class _StatusChip extends StatelessWidget {
     );
   }
 }
-

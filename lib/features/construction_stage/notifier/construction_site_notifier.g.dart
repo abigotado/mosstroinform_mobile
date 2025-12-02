@@ -6,334 +6,216 @@ part of 'construction_site_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$constructionSiteNotifierHash() =>
-    r'f0d839a7154635dacd608f39f660197f47a0f459';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$ConstructionSiteNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<ConstructionSiteState> {
-  late final String projectId;
-
-  FutureOr<ConstructionSiteState> build(String projectId);
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Notifier для управления состоянием строительной площадки
-///
-/// Copied from [ConstructionSiteNotifier].
+
 @ProviderFor(ConstructionSiteNotifier)
-const constructionSiteNotifierProvider = ConstructionSiteNotifierFamily();
+const constructionSiteProvider = ConstructionSiteNotifierFamily._();
 
 /// Notifier для управления состоянием строительной площадки
-///
-/// Copied from [ConstructionSiteNotifier].
-class ConstructionSiteNotifierFamily
-    extends Family<AsyncValue<ConstructionSiteState>> {
-  /// Notifier для управления состоянием строительной площадки
-  ///
-  /// Copied from [ConstructionSiteNotifier].
-  const ConstructionSiteNotifierFamily();
-
-  /// Notifier для управления состоянием строительной площадки
-  ///
-  /// Copied from [ConstructionSiteNotifier].
-  ConstructionSiteNotifierProvider call(String projectId) {
-    return ConstructionSiteNotifierProvider(projectId);
-  }
-
-  @override
-  ConstructionSiteNotifierProvider getProviderOverride(
-    covariant ConstructionSiteNotifierProvider provider,
-  ) {
-    return call(provider.projectId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'constructionSiteNotifierProvider';
-}
-
-/// Notifier для управления состоянием строительной площадки
-///
-/// Copied from [ConstructionSiteNotifier].
-class ConstructionSiteNotifierProvider
+final class ConstructionSiteNotifierProvider
     extends
-        AutoDisposeAsyncNotifierProviderImpl<
+        $AsyncNotifierProvider<
           ConstructionSiteNotifier,
           ConstructionSiteState
         > {
   /// Notifier для управления состоянием строительной площадки
-  ///
-  /// Copied from [ConstructionSiteNotifier].
-  ConstructionSiteNotifierProvider(String projectId)
-    : this._internal(
-        () => ConstructionSiteNotifier()..projectId = projectId,
-        from: constructionSiteNotifierProvider,
-        name: r'constructionSiteNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$constructionSiteNotifierHash,
-        dependencies: ConstructionSiteNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            ConstructionSiteNotifierFamily._allTransitiveDependencies,
-        projectId: projectId,
-      );
-
-  ConstructionSiteNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectId,
-  }) : super.internal();
-
-  final String projectId;
+  const ConstructionSiteNotifierProvider._({
+    required ConstructionSiteNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'constructionSiteProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  FutureOr<ConstructionSiteState> runNotifierBuild(
-    covariant ConstructionSiteNotifier notifier,
-  ) {
-    return notifier.build(projectId);
-  }
+  String debugGetCreateSourceHash() => _$constructionSiteNotifierHash();
 
   @override
-  Override overrideWith(ConstructionSiteNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: ConstructionSiteNotifierProvider._internal(
-        () => create()..projectId = projectId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectId: projectId,
-      ),
-    );
+  String toString() {
+    return r'constructionSiteProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AutoDisposeAsyncNotifierProviderElement<
-    ConstructionSiteNotifier,
-    ConstructionSiteState
-  >
-  createElement() {
-    return _ConstructionSiteNotifierProviderElement(this);
-  }
+  ConstructionSiteNotifier create() => ConstructionSiteNotifier();
 
   @override
   bool operator ==(Object other) {
     return other is ConstructionSiteNotifierProvider &&
-        other.projectId == projectId;
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin ConstructionSiteNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<ConstructionSiteState> {
-  /// The parameter `projectId` of this provider.
-  String get projectId;
-}
+String _$constructionSiteNotifierHash() =>
+    r'f0d839a7154635dacd608f39f660197f47a0f459';
 
-class _ConstructionSiteNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
+/// Notifier для управления состоянием строительной площадки
+
+final class ConstructionSiteNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
           ConstructionSiteNotifier,
-          ConstructionSiteState
-        >
-    with ConstructionSiteNotifierRef {
-  _ConstructionSiteNotifierProviderElement(super.provider);
+          AsyncValue<ConstructionSiteState>,
+          ConstructionSiteState,
+          FutureOr<ConstructionSiteState>,
+          String
+        > {
+  const ConstructionSiteNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'constructionSiteProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Notifier для управления состоянием строительной площадки
+
+  ConstructionSiteNotifierProvider call(String projectId) =>
+      ConstructionSiteNotifierProvider._(argument: projectId, from: this);
 
   @override
-  String get projectId =>
-      (origin as ConstructionSiteNotifierProvider).projectId;
+  String toString() => r'constructionSiteProvider';
+}
+
+/// Notifier для управления состоянием строительной площадки
+
+abstract class _$ConstructionSiteNotifier
+    extends $AsyncNotifier<ConstructionSiteState> {
+  late final _$args = ref.$arg as String;
+  String get projectId => _$args;
+
+  FutureOr<ConstructionSiteState> build(String projectId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<ConstructionSiteState>, ConstructionSiteState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<ConstructionSiteState>,
+                ConstructionSiteState
+              >,
+              AsyncValue<ConstructionSiteState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+/// Notifier для управления состоянием списка камер
+
+@ProviderFor(CamerasNotifier)
+const camerasProvider = CamerasNotifierFamily._();
+
+/// Notifier для управления состоянием списка камер
+final class CamerasNotifierProvider
+    extends $AsyncNotifierProvider<CamerasNotifier, CamerasState> {
+  /// Notifier для управления состоянием списка камер
+  const CamerasNotifierProvider._({
+    required CamerasNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'camerasProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$camerasNotifierHash();
+
+  @override
+  String toString() {
+    return r'camerasProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  CamerasNotifier create() => CamerasNotifier();
+
+  @override
+  bool operator ==(Object other) {
+    return other is CamerasNotifierProvider && other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$camerasNotifierHash() => r'e61fabf5684bc23fd4baae91b19a9fb25ebc3c56';
 
-abstract class _$CamerasNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<CamerasState> {
-  late final String siteId;
-
-  FutureOr<CamerasState> build(String siteId);
-}
-
 /// Notifier для управления состоянием списка камер
-///
-/// Copied from [CamerasNotifier].
-@ProviderFor(CamerasNotifier)
-const camerasNotifierProvider = CamerasNotifierFamily();
 
-/// Notifier для управления состоянием списка камер
-///
-/// Copied from [CamerasNotifier].
-class CamerasNotifierFamily extends Family<AsyncValue<CamerasState>> {
-  /// Notifier для управления состоянием списка камер
-  ///
-  /// Copied from [CamerasNotifier].
-  const CamerasNotifierFamily();
-
-  /// Notifier для управления состоянием списка камер
-  ///
-  /// Copied from [CamerasNotifier].
-  CamerasNotifierProvider call(String siteId) {
-    return CamerasNotifierProvider(siteId);
-  }
-
-  @override
-  CamerasNotifierProvider getProviderOverride(
-    covariant CamerasNotifierProvider provider,
-  ) {
-    return call(provider.siteId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'camerasNotifierProvider';
-}
-
-/// Notifier для управления состоянием списка камер
-///
-/// Copied from [CamerasNotifier].
-class CamerasNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<CamerasNotifier, CamerasState> {
-  /// Notifier для управления состоянием списка камер
-  ///
-  /// Copied from [CamerasNotifier].
-  CamerasNotifierProvider(String siteId)
-    : this._internal(
-        () => CamerasNotifier()..siteId = siteId,
-        from: camerasNotifierProvider,
-        name: r'camerasNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$camerasNotifierHash,
-        dependencies: CamerasNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            CamerasNotifierFamily._allTransitiveDependencies,
-        siteId: siteId,
+final class CamerasNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
+          CamerasNotifier,
+          AsyncValue<CamerasState>,
+          CamerasState,
+          FutureOr<CamerasState>,
+          String
+        > {
+  const CamerasNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'camerasProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
       );
 
-  CamerasNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.siteId,
-  }) : super.internal();
+  /// Notifier для управления состоянием списка камер
 
-  final String siteId;
+  CamerasNotifierProvider call(String siteId) =>
+      CamerasNotifierProvider._(argument: siteId, from: this);
 
   @override
-  FutureOr<CamerasState> runNotifierBuild(covariant CamerasNotifier notifier) {
-    return notifier.build(siteId);
-  }
-
-  @override
-  Override overrideWith(CamerasNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: CamerasNotifierProvider._internal(
-        () => create()..siteId = siteId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        siteId: siteId,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<CamerasNotifier, CamerasState>
-  createElement() {
-    return _CamerasNotifierProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is CamerasNotifierProvider && other.siteId == siteId;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, siteId.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
+  String toString() => r'camerasProvider';
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin CamerasNotifierRef on AutoDisposeAsyncNotifierProviderRef<CamerasState> {
-  /// The parameter `siteId` of this provider.
-  String get siteId;
-}
+/// Notifier для управления состоянием списка камер
 
-class _CamerasNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<CamerasNotifier, CamerasState>
-    with CamerasNotifierRef {
-  _CamerasNotifierProviderElement(super.provider);
+abstract class _$CamerasNotifier extends $AsyncNotifier<CamerasState> {
+  late final _$args = ref.$arg as String;
+  String get siteId => _$args;
 
+  FutureOr<CamerasState> build(String siteId);
+  @$mustCallSuper
   @override
-  String get siteId => (origin as CamerasNotifierProvider).siteId;
+  void runBuild() {
+    final created = build(_$args);
+    final ref = this.ref as $Ref<AsyncValue<CamerasState>, CamerasState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<CamerasState>, CamerasState>,
+              AsyncValue<CamerasState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

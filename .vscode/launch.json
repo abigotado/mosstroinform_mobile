@@ -2,42 +2,22 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Dev (с моками)",
+      "name": "Mock (с моками)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=dev"
+        "--flavor=mock"
       ],
       "flutterMode": "debug"
     },
     {
-      "name": "Dev (Release)",
+      "name": "Mock (Release)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=dev"
-      ],
-      "flutterMode": "release"
-    },
-    {
-      "name": "Staging",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "args": [
-        "--dart-define=FLAVOR=staging"
-      ],
-      "flutterMode": "debug"
-    },
-    {
-      "name": "Staging (Release)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "args": [
-        "--dart-define=FLAVOR=staging"
+        "--flavor=mock"
       ],
       "flutterMode": "release"
     },
@@ -47,7 +27,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=prod"
+        "--flavor=prod"
       ],
       "flutterMode": "debug"
     },
@@ -57,59 +37,27 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=prod"
+        "--flavor=prod"
       ],
       "flutterMode": "release"
     },
     {
-      "name": "Dev (Android)",
+      "name": "Mock (Android)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=dev",
-        "--flavor=dev",
-        "-t",
-        "lib/main.dart"
+        "--flavor=mock"
       ],
       "flutterMode": "debug"
     },
     {
-      "name": "Dev (iOS)",
+      "name": "Mock (iOS)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=dev",
-        "--flavor=dev",
-        "-t",
-        "lib/main.dart"
-      ],
-      "flutterMode": "debug"
-    },
-    {
-      "name": "Staging (Android)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "args": [
-        "--dart-define=FLAVOR=staging",
-        "--flavor=staging",
-        "-t",
-        "lib/main.dart"
-      ],
-      "flutterMode": "debug"
-    },
-    {
-      "name": "Staging (iOS)",
-      "request": "launch",
-      "type": "dart",
-      "program": "lib/main.dart",
-      "args": [
-        "--dart-define=FLAVOR=staging",
-        "--flavor=staging",
-        "-t",
-        "lib/main.dart"
+        "--flavor=mock"
       ],
       "flutterMode": "debug"
     },
@@ -119,10 +67,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=prod",
-        "--flavor=prod",
-        "-t",
-        "lib/main.dart"
+        "--flavor=prod"
       ],
       "flutterMode": "debug"
     },
@@ -132,10 +77,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=prod",
-        "--flavor=prod",
-        "-t",
-        "lib/main.dart"
+        "--flavor=prod"
       ],
       "flutterMode": "debug"
     }

@@ -11,17 +11,9 @@ class ChatsState {
   final bool isLoading;
   final Failure? error;
 
-  const ChatsState({
-    required this.chats,
-    this.isLoading = false,
-    this.error,
-  });
+  const ChatsState({required this.chats, this.isLoading = false, this.error});
 
-  ChatsState copyWith({
-    List<Chat>? chats,
-    bool? isLoading,
-    Failure? error,
-  }) {
+  ChatsState copyWith({List<Chat>? chats, bool? isLoading, Failure? error}) {
     return ChatsState(
       chats: chats ?? this.chats,
       isLoading: isLoading ?? this.isLoading,
@@ -44,9 +36,7 @@ class ChatsNotifier extends _$ChatsNotifier {
     try {
       final repository = ref.read(chatRepositoryProvider);
       final chats = await repository.getChats();
-      state = AsyncValue.data(
-        ChatsState(chats: chats, isLoading: false),
-      );
+      state = AsyncValue.data(ChatsState(chats: chats, isLoading: false));
     } on Failure catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } catch (e, s) {
@@ -120,7 +110,7 @@ class MessagesNotifier extends _$MessagesNotifier {
     try {
       final repository = ref.read(chatRepositoryProvider);
       final newMessage = await repository.sendMessage(chatId, text.trim());
-      
+
       final updatedMessages = [...currentState.messages, newMessage];
       state = AsyncValue.data(
         MessagesState(

@@ -30,4 +30,3 @@ abstract class ConstructionSiteRemoteDataSource
     @Path('cameraId') String cameraId,
   );
 }
-

@@ -56,4 +56,3 @@ class DocumentRepositoryImpl implements DocumentRepository {
     }
   }
 }
-

@@ -39,4 +39,3 @@ class Camera {
     this.thumbnailUrl,
   });
 }
-

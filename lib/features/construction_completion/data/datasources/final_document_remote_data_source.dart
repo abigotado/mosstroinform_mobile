@@ -47,4 +47,3 @@ abstract class FinalDocumentRemoteDataSource
     @Field('reason') String reason,
   );
 }
-

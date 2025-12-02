@@ -18,7 +18,8 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
     FinalDocument(
       id: 'final2',
       title: 'Гарантийное обязательство',
-      description: 'Документ о гарантийных обязательствах на выполненные работы',
+      description:
+          'Документ о гарантийных обязательствах на выполненные работы',
       fileUrl: 'https://example.com/warranty.pdf',
       status: FinalDocumentStatus.pending,
       submittedAt: null,
@@ -43,7 +44,9 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
   ) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
-    final allSigned = _mockDocuments.every((doc) => doc.status == FinalDocumentStatus.signed);
+    final allSigned = _mockDocuments.every(
+      (doc) => doc.status == FinalDocumentStatus.signed,
+    );
 
     return ConstructionCompletionStatus(
       projectId: projectId,
@@ -105,4 +108,3 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
     return;
   }
 }
-

@@ -9,12 +9,18 @@ abstract class FinalDocumentRepository {
   Future<List<FinalDocument>> getFinalDocuments(String projectId);
 
   /// Получить финальный документ по ID
-  Future<FinalDocument> getFinalDocumentById(String projectId, String documentId);
+  Future<FinalDocument> getFinalDocumentById(
+    String projectId,
+    String documentId,
+  );
 
   /// Подписать финальный документ
   Future<void> signFinalDocument(String projectId, String documentId);
 
   /// Отклонить финальный документ
-  Future<void> rejectFinalDocument(String projectId, String documentId, String reason);
+  Future<void> rejectFinalDocument(
+    String projectId,
+    String documentId,
+    String reason,
+  );
 }
-

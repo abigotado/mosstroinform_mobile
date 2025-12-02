@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 /// Упрощённая конфигурация приложения для разных окружений
 /// Используется когда envied не настроен или для быстрого старта
@@ -15,27 +15,7 @@ class AppConfigSimple {
     required this.environmentName,
   });
 
-  /// Конфигурация для разработки (dev flavor)
-  factory AppConfigSimple.dev() {
-    return const AppConfigSimple(
-      baseUrl: 'https://api-dev.example.com',
-      useMocks: true,
-      requestTimeout: 30,
-      environmentName: 'Development',
-    );
-  }
-
-  /// Конфигурация для staging окружения
-  factory AppConfigSimple.staging() {
-    return const AppConfigSimple(
-      baseUrl: 'https://api-staging.example.com',
-      useMocks: false,
-      requestTimeout: 30,
-      environmentName: 'Staging',
-    );
-  }
-
-  /// Конфигурация для production окружения
+  /// Конфигурация для production окружения (реальные данные)
   factory AppConfigSimple.prod() {
     return const AppConfigSimple(
       baseUrl: 'https://api.example.com',
@@ -45,29 +25,34 @@ class AppConfigSimple {
     );
   }
 
+  /// Конфигурация для mock окружения (моки)
+  factory AppConfigSimple.mock() {
+    return const AppConfigSimple(
+      baseUrl: 'https://api-mock.example.com',
+      useMocks: true,
+      requestTimeout: 30,
+      environmentName: 'Mock',
+    );
+  }
+
   /// Получить конфигурацию для текущего flavor
   factory AppConfigSimple.fromFlavor(String flavor) {
     switch (flavor) {
-      case 'dev':
-        return AppConfigSimple.dev();
-      case 'staging':
-        return AppConfigSimple.staging();
       case 'prod':
         return AppConfigSimple.prod();
+      case 'mock':
+        return AppConfigSimple.mock();
       default:
-        return AppConfigSimple.dev();
+        return AppConfigSimple.mock();
     }
   }
 
-  /// Получить flavor из константы компиляции
+  /// Получить flavor из глобальной переменной appFlavor
+  /// Flutter автоматически передает flavor name при использовании --flavor
+  /// Использует appFlavor из package:flutter/services.dart
   static String getFlavor() {
-    // В production сборке kDebugMode будет false
-    if (kDebugMode) {
-      // Можно использовать String.fromEnvironment для передачи flavor
-      const flavor = String.fromEnvironment('FLAVOR', defaultValue: 'dev');
-      return flavor;
-    }
-    return 'prod';
+    // Flutter автоматически передает flavor name через appFlavor при использовании --flavor
+    // appFlavor доступен глобально из package:flutter/services.dart
+    return appFlavor ?? 'mock';
   }
 }
-

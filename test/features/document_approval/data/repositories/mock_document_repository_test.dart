@@ -40,12 +40,15 @@ void main() {
       expect(document.title, equals(firstDocument.title));
     });
 
-    test('getDocumentById выбрасывает UnknownFailure для несуществующего ID', () async {
-      expect(
-        () => repository.getDocumentById('non-existent-id'),
-        throwsA(isA<UnknownFailure>()),
-      );
-    });
+    test(
+      'getDocumentById выбрасывает UnknownFailure для несуществующего ID',
+      () async {
+        expect(
+          () => repository.getDocumentById('non-existent-id'),
+          throwsA(isA<UnknownFailure>()),
+        );
+      },
+    );
 
     test('approveDocument обновляет статус документа на approved', () async {
       final documents = await repository.getDocuments();
@@ -55,8 +58,9 @@ void main() {
 
       await repository.approveDocument(documentToApprove.id);
 
-      final updatedDocument =
-          await repository.getDocumentById(documentToApprove.id);
+      final updatedDocument = await repository.getDocumentById(
+        documentToApprove.id,
+      );
 
       expect(updatedDocument.status, equals(DocumentStatus.approved));
       expect(updatedDocument.approvedAt, isNotNull);
@@ -72,8 +76,9 @@ void main() {
 
       await repository.rejectDocument(documentToReject.id, reason);
 
-      final updatedDocument =
-          await repository.getDocumentById(documentToReject.id);
+      final updatedDocument = await repository.getDocumentById(
+        documentToReject.id,
+      );
 
       expect(updatedDocument.status, equals(DocumentStatus.rejected));
       expect(updatedDocument.rejectionReason, equals(reason));
@@ -81,4 +86,3 @@ void main() {
     });
   });
 }
-

@@ -43,8 +43,7 @@ void main() {
       ),
     ];
 
-    when(() => mockRepository.getProjects())
-        .thenAnswer((_) async => projects);
+    when(() => mockRepository.getProjects()).thenAnswer((_) async => projects);
 
     // Act
     final result = await useCase.call();
@@ -58,28 +57,23 @@ void main() {
   test('call обрабатывает Failure и выбрасывает UnknownFailure', () async {
     // Arrange
     final failure = NetworkFailure('Ошибка сети');
-    when(() => mockRepository.getProjects())
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.getProjects(),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.getProjects()).called(1);
   });
 
   test('call обрабатывает неизвестные исключения', () async {
     // Arrange
-    when(() => mockRepository.getProjects())
-        .thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
+    when(
+      () => mockRepository.getProjects(),
+    ).thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
 
     // Act & Assert
-    expect(
-      () => useCase.call(),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.getProjects()).called(1);
   });
 }
-

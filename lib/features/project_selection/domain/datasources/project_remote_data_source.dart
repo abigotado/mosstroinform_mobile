@@ -12,4 +12,3 @@ abstract class IProjectRemoteDataSource {
   /// Отправить запрос на строительство проекта
   Future<void> requestConstruction(String projectId);
 }
-

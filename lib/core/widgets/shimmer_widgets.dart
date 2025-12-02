@@ -162,9 +162,7 @@ class ProjectDetailShimmer extends StatelessWidget {
             // Изображение
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Container(
-                color: Colors.white,
-              ),
+              child: Container(color: Colors.white),
             ),
             // Информация
             Padding(
@@ -230,16 +228,19 @@ class ProjectDetailShimmer extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ...List.generate(4, (index) => Padding(
-                        padding: const EdgeInsets.only(bottom: 12),
-                        child: Container(
-                          height: 60,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                  ...List.generate(
+                    4,
+                    (index) => Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: Container(
+                        height: 60,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(8),
                         ),
-                      )),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -432,10 +433,7 @@ class ChatCardShimmer extends StatelessWidget {
       highlightColor: theme.colorScheme.surface,
       child: Card(
         child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 24,
-          ),
+          leading: CircleAvatar(backgroundColor: Colors.white, radius: 24),
           title: Container(
             height: 16,
             width: 150,
@@ -557,14 +555,16 @@ class CompletionStatusShimmer extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             // Shimmer для документов
-            ...List.generate(3, (index) => const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: FinalDocumentCardShimmer(),
-                )),
+            ...List.generate(
+              3,
+              (index) => const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: FinalDocumentCardShimmer(),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 }
-

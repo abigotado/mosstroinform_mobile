@@ -18,8 +18,9 @@ void main() {
   test('call успешно отправляет запрос на строительство', () async {
     // Arrange
     const projectId = '1';
-    when(() => mockRepository.requestConstruction(projectId))
-        .thenAnswer((_) async {});
+    when(
+      () => mockRepository.requestConstruction(projectId),
+    ).thenAnswer((_) async {});
 
     // Act
     await useCase.call(projectId);
@@ -32,29 +33,24 @@ void main() {
     // Arrange
     const projectId = '1';
     final failure = NetworkFailure('Ошибка сети');
-    when(() => mockRepository.requestConstruction(projectId))
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.requestConstruction(projectId),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(projectId),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(projectId), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.requestConstruction(projectId)).called(1);
   });
 
   test('call обрабатывает неизвестные исключения', () async {
     // Arrange
     const projectId = '1';
-    when(() => mockRepository.requestConstruction(projectId))
-        .thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
+    when(
+      () => mockRepository.requestConstruction(projectId),
+    ).thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
 
     // Act & Assert
-    expect(
-      () => useCase.call(projectId),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(projectId), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.requestConstruction(projectId)).called(1);
   });
 }
-

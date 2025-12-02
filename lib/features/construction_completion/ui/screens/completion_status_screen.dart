@@ -11,23 +11,21 @@ import 'package:mosstroinform_mobile/features/construction_completion/ui/widgets
 class CompletionStatusScreen extends ConsumerStatefulWidget {
   final String projectId;
 
-  const CompletionStatusScreen({
-    super.key,
-    required this.projectId,
-  });
+  const CompletionStatusScreen({super.key, required this.projectId});
 
   @override
   ConsumerState<CompletionStatusScreen> createState() =>
       _CompletionStatusScreenState();
 }
 
-class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen> {
+class _CompletionStatusScreenState
+    extends ConsumerState<CompletionStatusScreen> {
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref
-          .read(completionStatusNotifierProvider(widget.projectId).notifier)
+          .read(completionStatusProvider(widget.projectId).notifier)
           .loadCompletionStatus();
     });
   }
@@ -35,8 +33,7 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final statusAsync =
-        ref.watch(completionStatusNotifierProvider(widget.projectId));
+    final statusAsync = ref.watch(completionStatusProvider(widget.projectId));
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -88,12 +85,15 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
                                   status.isCompleted
                                       ? l10n.constructionCompleted
                                       : l10n.completionStatus,
-                                  style: theme.textTheme.headlineSmall?.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: status.isCompleted
-                                        ? theme.colorScheme.onTertiaryContainer
-                                        : theme.colorScheme.onSurface,
-                                  ),
+                                  style: theme.textTheme.headlineSmall
+                                      ?.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        color: status.isCompleted
+                                            ? theme
+                                                  .colorScheme
+                                                  .onTertiaryContainer
+                                            : theme.colorScheme.onSurface,
+                                      ),
                                 ),
                               ),
                             ],
@@ -165,10 +165,13 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
                                   Expanded(
                                     child: Text(
                                       l10n.allDocumentsSigned,
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: theme.colorScheme.onPrimaryContainer,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
+                                            color: theme
+                                                .colorScheme
+                                                .onPrimaryContainer,
+                                            fontWeight: FontWeight.w600,
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -249,10 +252,13 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
                   ),
                   const SizedBox(height: 24),
                   // Shimmer для документов
-                  ...List.generate(3, (index) => const Padding(
-                        padding: EdgeInsets.only(bottom: 12),
-                        child: FinalDocumentCardShimmer(),
-                      )),
+                  ...List.generate(
+                    3,
+                    (index) => const Padding(
+                      padding: EdgeInsets.only(bottom: 12),
+                      child: FinalDocumentCardShimmer(),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -278,8 +284,7 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(completionStatusNotifierProvider(widget.projectId)
-                          .notifier)
+                      .read(completionStatusProvider(widget.projectId).notifier)
                       .loadCompletionStatus();
                 },
                 child: Text(l10n.retry),
@@ -295,4 +300,3 @@ class _CompletionStatusScreenState extends ConsumerState<CompletionStatusScreen>
     return '${date.day}.${date.month}.${date.year}';
   }
 }
-

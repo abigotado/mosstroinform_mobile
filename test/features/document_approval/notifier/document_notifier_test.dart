@@ -16,9 +16,7 @@ void main() {
   setUp(() {
     mockRepository = MockDocumentRepository();
     container = ProviderContainer(
-      overrides: [
-        documentRepositoryProvider.overrideWithValue(mockRepository),
-      ],
+      overrides: [documentRepositoryProvider.overrideWithValue(mockRepository)],
     );
   });
 
@@ -28,7 +26,7 @@ void main() {
 
   group('DocumentsNotifier', () {
     test('build возвращает начальное состояние с пустым списком', () async {
-      final state = await container.read(documentsNotifierProvider.future);
+      final state = await container.read(documentsProvider.future);
 
       expect(state, isEmpty);
     });
@@ -51,12 +49,14 @@ void main() {
         ),
       ];
 
-      when(() => mockRepository.getDocuments()).thenAnswer((_) async => documents);
+      when(
+        () => mockRepository.getDocuments(),
+      ).thenAnswer((_) async => documents);
 
-      final notifier = container.read(documentsNotifierProvider.notifier);
+      final notifier = container.read(documentsProvider.notifier);
       await notifier.loadDocuments();
 
-      final state = await container.read(documentsNotifierProvider.future);
+      final state = await container.read(documentsProvider.future);
 
       expect(state, equals(documents));
       verify(() => mockRepository.getDocuments()).called(1);
@@ -66,17 +66,23 @@ void main() {
       final failure = NetworkFailure('Ошибка сети');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.getDocuments()).thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.getDocuments(),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(documentsNotifierProvider.notifier);
-      
+      final notifier = container.read(documentsProvider.notifier);
+
       // Вызываем метод - он установит AsyncValue.error
       await notifier.loadDocuments();
 
       // Проверяем состояние - AsyncValue.error устанавливается синхронно внутри catch
-      final state = container.read(documentsNotifierProvider);
+      final state = container.read(documentsProvider);
 
-      expect(state.hasError, true, reason: 'State should have error after Failure');
+      expect(
+        state.hasError,
+        true,
+        reason: 'State should have error after Failure',
+      );
       expect(state.error, isA<NetworkFailure>());
       verify(() => mockRepository.getDocuments()).called(1);
     });
@@ -84,7 +90,7 @@ void main() {
 
   group('DocumentNotifier', () {
     test('build возвращает начальное состояние null', () async {
-      final state = await container.read(documentNotifierProvider('1').future);
+      final state = await container.read(documentProvider('1').future);
 
       expect(state, isNull);
     });
@@ -98,12 +104,14 @@ void main() {
         status: DocumentStatus.pending,
       );
 
-      when(() => mockRepository.getDocumentById('1')).thenAnswer((_) async => document);
+      when(
+        () => mockRepository.getDocumentById('1'),
+      ).thenAnswer((_) async => document);
 
-      final notifier = container.read(documentNotifierProvider('1').notifier);
+      final notifier = container.read(documentProvider('1').notifier);
       await notifier.loadDocument('1');
 
-      final state = await container.read(documentNotifierProvider('1').future);
+      final state = await container.read(documentProvider('1').future);
 
       expect(state, equals(document));
       verify(() => mockRepository.getDocumentById('1')).called(1);
@@ -119,9 +127,11 @@ void main() {
       );
 
       when(() => mockRepository.approveDocument('1')).thenAnswer((_) async {});
-      when(() => mockRepository.getDocumentById('1')).thenAnswer((_) async => document);
+      when(
+        () => mockRepository.getDocumentById('1'),
+      ).thenAnswer((_) async => document);
 
-      final notifier = container.read(documentNotifierProvider('1').notifier);
+      final notifier = container.read(documentProvider('1').notifier);
       await notifier.approveDocument('1');
 
       verify(() => mockRepository.approveDocument('1')).called(1);
@@ -138,14 +148,19 @@ void main() {
         rejectionReason: 'Причина отклонения',
       );
 
-      when(() => mockRepository.rejectDocument('1', 'Причина отклонения'))
-          .thenAnswer((_) async {});
-      when(() => mockRepository.getDocumentById('1')).thenAnswer((_) async => document);
+      when(
+        () => mockRepository.rejectDocument('1', 'Причина отклонения'),
+      ).thenAnswer((_) async {});
+      when(
+        () => mockRepository.getDocumentById('1'),
+      ).thenAnswer((_) async => document);
 
-      final notifier = container.read(documentNotifierProvider('1').notifier);
+      final notifier = container.read(documentProvider('1').notifier);
       await notifier.rejectDocument('1', 'Причина отклонения');
 
-      verify(() => mockRepository.rejectDocument('1', 'Причина отклонения')).called(1);
+      verify(
+        () => mockRepository.rejectDocument('1', 'Причина отклонения'),
+      ).called(1);
       verify(() => mockRepository.getDocumentById('1')).called(1);
     });
 
@@ -153,22 +168,26 @@ void main() {
       final failure = ServerFailure('Ошибка сервера');
 
       // Для асинхронных методов нужно использовать thenAnswer с throw
-      when(() => mockRepository.approveDocument('1'))
-          .thenAnswer((_) async => throw failure);
+      when(
+        () => mockRepository.approveDocument('1'),
+      ).thenAnswer((_) async => throw failure);
 
-      final notifier = container.read(documentNotifierProvider('1').notifier);
-      
+      final notifier = container.read(documentProvider('1').notifier);
+
       // Вызываем метод - он установит AsyncValue.error
       await notifier.approveDocument('1');
 
       // Проверяем состояние - AsyncValue.error устанавливается синхронно внутри catch
-      final state = container.read(documentNotifierProvider('1'));
+      final state = container.read(documentProvider('1'));
 
-      expect(state.hasError, true, reason: 'State should have error after Failure');
+      expect(
+        state.hasError,
+        true,
+        reason: 'State should have error after Failure',
+      );
       expect(state.error, isA<ServerFailure>());
       verify(() => mockRepository.approveDocument('1')).called(1);
       verifyNever(() => mockRepository.getDocumentById(any()));
     });
   });
 }
-

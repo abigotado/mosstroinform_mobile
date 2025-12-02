@@ -31,8 +31,9 @@ void main() {
       stages: [],
     );
 
-    when(() => mockRepository.getProjectById(projectId))
-        .thenAnswer((_) async => project);
+    when(
+      () => mockRepository.getProjectById(projectId),
+    ).thenAnswer((_) async => project);
 
     // Act
     final result = await useCase.call(projectId);
@@ -47,29 +48,24 @@ void main() {
     // Arrange
     const projectId = '1';
     final failure = ServerFailure('Ошибка сервера');
-    when(() => mockRepository.getProjectById(projectId))
-        .thenAnswer((_) async => throw failure);
+    when(
+      () => mockRepository.getProjectById(projectId),
+    ).thenAnswer((_) async => throw failure);
 
     // Act & Assert
-    expect(
-      () => useCase.call(projectId),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(projectId), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.getProjectById(projectId)).called(1);
   });
 
   test('call обрабатывает неизвестные исключения', () async {
     // Arrange
     const projectId = '1';
-    when(() => mockRepository.getProjectById(projectId))
-        .thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
+    when(
+      () => mockRepository.getProjectById(projectId),
+    ).thenAnswer((_) async => throw Exception('Неизвестная ошибка'));
 
     // Act & Assert
-    expect(
-      () => useCase.call(projectId),
-      throwsA(isA<UnknownFailure>()),
-    );
+    expect(() => useCase.call(projectId), throwsA(isA<UnknownFailure>()));
     verify(() => mockRepository.getProjectById(projectId)).called(1);
   });
 }
-

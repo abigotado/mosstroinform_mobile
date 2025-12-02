@@ -6,510 +6,324 @@ part of 'final_document_notifier.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$completionStatusNotifierHash() =>
-    r'0ac96695d52bbf4dcb1fc80b53d06870984edfe4';
-
-/// Copied from Dart SDK
-class _SystemHash {
-  _SystemHash._();
-
-  static int combine(int hash, int value) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + value);
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x0007ffff & hash) << 10));
-    return hash ^ (hash >> 6);
-  }
-
-  static int finish(int hash) {
-    // ignore: parameter_assignments
-    hash = 0x1fffffff & (hash + ((0x03ffffff & hash) << 3));
-    // ignore: parameter_assignments
-    hash = hash ^ (hash >> 11);
-    return 0x1fffffff & (hash + ((0x00003fff & hash) << 15));
-  }
-}
-
-abstract class _$CompletionStatusNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<CompletionStatusState> {
-  late final String projectId;
-
-  FutureOr<CompletionStatusState> build(String projectId);
-}
-
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 /// Notifier для управления состоянием завершения строительства
-///
-/// Copied from [CompletionStatusNotifier].
+
 @ProviderFor(CompletionStatusNotifier)
-const completionStatusNotifierProvider = CompletionStatusNotifierFamily();
+const completionStatusProvider = CompletionStatusNotifierFamily._();
 
 /// Notifier для управления состоянием завершения строительства
-///
-/// Copied from [CompletionStatusNotifier].
-class CompletionStatusNotifierFamily
-    extends Family<AsyncValue<CompletionStatusState>> {
-  /// Notifier для управления состоянием завершения строительства
-  ///
-  /// Copied from [CompletionStatusNotifier].
-  const CompletionStatusNotifierFamily();
-
-  /// Notifier для управления состоянием завершения строительства
-  ///
-  /// Copied from [CompletionStatusNotifier].
-  CompletionStatusNotifierProvider call(String projectId) {
-    return CompletionStatusNotifierProvider(projectId);
-  }
-
-  @override
-  CompletionStatusNotifierProvider getProviderOverride(
-    covariant CompletionStatusNotifierProvider provider,
-  ) {
-    return call(provider.projectId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'completionStatusNotifierProvider';
-}
-
-/// Notifier для управления состоянием завершения строительства
-///
-/// Copied from [CompletionStatusNotifier].
-class CompletionStatusNotifierProvider
+final class CompletionStatusNotifierProvider
     extends
-        AutoDisposeAsyncNotifierProviderImpl<
+        $AsyncNotifierProvider<
           CompletionStatusNotifier,
           CompletionStatusState
         > {
   /// Notifier для управления состоянием завершения строительства
-  ///
-  /// Copied from [CompletionStatusNotifier].
-  CompletionStatusNotifierProvider(String projectId)
-    : this._internal(
-        () => CompletionStatusNotifier()..projectId = projectId,
-        from: completionStatusNotifierProvider,
-        name: r'completionStatusNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$completionStatusNotifierHash,
-        dependencies: CompletionStatusNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            CompletionStatusNotifierFamily._allTransitiveDependencies,
-        projectId: projectId,
-      );
-
-  CompletionStatusNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectId,
-  }) : super.internal();
-
-  final String projectId;
+  const CompletionStatusNotifierProvider._({
+    required CompletionStatusNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'completionStatusProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  FutureOr<CompletionStatusState> runNotifierBuild(
-    covariant CompletionStatusNotifier notifier,
-  ) {
-    return notifier.build(projectId);
-  }
+  String debugGetCreateSourceHash() => _$completionStatusNotifierHash();
 
   @override
-  Override overrideWith(CompletionStatusNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: CompletionStatusNotifierProvider._internal(
-        () => create()..projectId = projectId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectId: projectId,
-      ),
-    );
+  String toString() {
+    return r'completionStatusProvider'
+        ''
+        '($argument)';
   }
 
+  @$internal
   @override
-  AutoDisposeAsyncNotifierProviderElement<
-    CompletionStatusNotifier,
-    CompletionStatusState
-  >
-  createElement() {
-    return _CompletionStatusNotifierProviderElement(this);
-  }
+  CompletionStatusNotifier create() => CompletionStatusNotifier();
 
   @override
   bool operator ==(Object other) {
     return other is CompletionStatusNotifierProvider &&
-        other.projectId == projectId;
+        other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin CompletionStatusNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<CompletionStatusState> {
-  /// The parameter `projectId` of this provider.
-  String get projectId;
-}
+String _$completionStatusNotifierHash() =>
+    r'0ac96695d52bbf4dcb1fc80b53d06870984edfe4';
 
-class _CompletionStatusNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
+/// Notifier для управления состоянием завершения строительства
+
+final class CompletionStatusNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
           CompletionStatusNotifier,
-          CompletionStatusState
-        >
-    with CompletionStatusNotifierRef {
-  _CompletionStatusNotifierProviderElement(super.provider);
+          AsyncValue<CompletionStatusState>,
+          CompletionStatusState,
+          FutureOr<CompletionStatusState>,
+          String
+        > {
+  const CompletionStatusNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'completionStatusProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
+      );
+
+  /// Notifier для управления состоянием завершения строительства
+
+  CompletionStatusNotifierProvider call(String projectId) =>
+      CompletionStatusNotifierProvider._(argument: projectId, from: this);
 
   @override
-  String get projectId =>
-      (origin as CompletionStatusNotifierProvider).projectId;
+  String toString() => r'completionStatusProvider';
+}
+
+/// Notifier для управления состоянием завершения строительства
+
+abstract class _$CompletionStatusNotifier
+    extends $AsyncNotifier<CompletionStatusState> {
+  late final _$args = ref.$arg as String;
+  String get projectId => _$args;
+
+  FutureOr<CompletionStatusState> build(String projectId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref =
+        this.ref
+            as $Ref<AsyncValue<CompletionStatusState>, CompletionStatusState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<
+                AsyncValue<CompletionStatusState>,
+                CompletionStatusState
+              >,
+              AsyncValue<CompletionStatusState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+/// Notifier для управления состоянием списка финальных документов
+
+@ProviderFor(FinalDocumentsNotifier)
+const finalDocumentsProvider = FinalDocumentsNotifierFamily._();
+
+/// Notifier для управления состоянием списка финальных документов
+final class FinalDocumentsNotifierProvider
+    extends
+        $AsyncNotifierProvider<FinalDocumentsNotifier, FinalDocumentsState> {
+  /// Notifier для управления состоянием списка финальных документов
+  const FinalDocumentsNotifierProvider._({
+    required FinalDocumentsNotifierFamily super.from,
+    required String super.argument,
+  }) : super(
+         retry: null,
+         name: r'finalDocumentsProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
+
+  @override
+  String debugGetCreateSourceHash() => _$finalDocumentsNotifierHash();
+
+  @override
+  String toString() {
+    return r'finalDocumentsProvider'
+        ''
+        '($argument)';
+  }
+
+  @$internal
+  @override
+  FinalDocumentsNotifier create() => FinalDocumentsNotifier();
+
+  @override
+  bool operator ==(Object other) {
+    return other is FinalDocumentsNotifierProvider &&
+        other.argument == argument;
+  }
+
+  @override
+  int get hashCode {
+    return argument.hashCode;
+  }
 }
 
 String _$finalDocumentsNotifierHash() =>
     r'3ba3323b00ad63156b6a76f405ad6bb25f7ec244';
 
-abstract class _$FinalDocumentsNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<FinalDocumentsState> {
-  late final String projectId;
-
-  FutureOr<FinalDocumentsState> build(String projectId);
-}
-
 /// Notifier для управления состоянием списка финальных документов
-///
-/// Copied from [FinalDocumentsNotifier].
-@ProviderFor(FinalDocumentsNotifier)
-const finalDocumentsNotifierProvider = FinalDocumentsNotifierFamily();
 
-/// Notifier для управления состоянием списка финальных документов
-///
-/// Copied from [FinalDocumentsNotifier].
-class FinalDocumentsNotifierFamily
-    extends Family<AsyncValue<FinalDocumentsState>> {
-  /// Notifier для управления состоянием списка финальных документов
-  ///
-  /// Copied from [FinalDocumentsNotifier].
-  const FinalDocumentsNotifierFamily();
-
-  /// Notifier для управления состоянием списка финальных документов
-  ///
-  /// Copied from [FinalDocumentsNotifier].
-  FinalDocumentsNotifierProvider call(String projectId) {
-    return FinalDocumentsNotifierProvider(projectId);
-  }
-
-  @override
-  FinalDocumentsNotifierProvider getProviderOverride(
-    covariant FinalDocumentsNotifierProvider provider,
-  ) {
-    return call(provider.projectId);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'finalDocumentsNotifierProvider';
-}
-
-/// Notifier для управления состоянием списка финальных документов
-///
-/// Copied from [FinalDocumentsNotifier].
-class FinalDocumentsNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<
+final class FinalDocumentsNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
           FinalDocumentsNotifier,
-          FinalDocumentsState
+          AsyncValue<FinalDocumentsState>,
+          FinalDocumentsState,
+          FutureOr<FinalDocumentsState>,
+          String
         > {
-  /// Notifier для управления состоянием списка финальных документов
-  ///
-  /// Copied from [FinalDocumentsNotifier].
-  FinalDocumentsNotifierProvider(String projectId)
-    : this._internal(
-        () => FinalDocumentsNotifier()..projectId = projectId,
-        from: finalDocumentsNotifierProvider,
-        name: r'finalDocumentsNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$finalDocumentsNotifierHash,
-        dependencies: FinalDocumentsNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            FinalDocumentsNotifierFamily._allTransitiveDependencies,
-        projectId: projectId,
+  const FinalDocumentsNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'finalDocumentsProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
       );
 
-  FinalDocumentsNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.projectId,
-  }) : super.internal();
+  /// Notifier для управления состоянием списка финальных документов
 
-  final String projectId;
+  FinalDocumentsNotifierProvider call(String projectId) =>
+      FinalDocumentsNotifierProvider._(argument: projectId, from: this);
 
   @override
-  FutureOr<FinalDocumentsState> runNotifierBuild(
-    covariant FinalDocumentsNotifier notifier,
-  ) {
-    return notifier.build(projectId);
+  String toString() => r'finalDocumentsProvider';
+}
+
+/// Notifier для управления состоянием списка финальных документов
+
+abstract class _$FinalDocumentsNotifier
+    extends $AsyncNotifier<FinalDocumentsState> {
+  late final _$args = ref.$arg as String;
+  String get projectId => _$args;
+
+  FutureOr<FinalDocumentsState> build(String projectId);
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build(_$args);
+    final ref =
+        this.ref as $Ref<AsyncValue<FinalDocumentsState>, FinalDocumentsState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<FinalDocumentsState>, FinalDocumentsState>,
+              AsyncValue<FinalDocumentsState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
   }
+}
+
+/// Notifier для управления состоянием отдельного финального документа
+
+@ProviderFor(FinalDocumentNotifier)
+const finalDocumentProvider = FinalDocumentNotifierFamily._();
+
+/// Notifier для управления состоянием отдельного финального документа
+final class FinalDocumentNotifierProvider
+    extends $AsyncNotifierProvider<FinalDocumentNotifier, FinalDocumentState> {
+  /// Notifier для управления состоянием отдельного финального документа
+  const FinalDocumentNotifierProvider._({
+    required FinalDocumentNotifierFamily super.from,
+    required (String, String) super.argument,
+  }) : super(
+         retry: null,
+         name: r'finalDocumentProvider',
+         isAutoDispose: true,
+         dependencies: null,
+         $allTransitiveDependencies: null,
+       );
 
   @override
-  Override overrideWith(FinalDocumentsNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: FinalDocumentsNotifierProvider._internal(
-        () => create()..projectId = projectId,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        projectId: projectId,
-      ),
-    );
-  }
+  String debugGetCreateSourceHash() => _$finalDocumentNotifierHash();
 
   @override
-  AutoDisposeAsyncNotifierProviderElement<
-    FinalDocumentsNotifier,
-    FinalDocumentsState
-  >
-  createElement() {
-    return _FinalDocumentsNotifierProviderElement(this);
+  String toString() {
+    return r'finalDocumentProvider'
+        ''
+        '($argument)';
   }
+
+  @$internal
+  @override
+  FinalDocumentNotifier create() => FinalDocumentNotifier();
 
   @override
   bool operator ==(Object other) {
-    return other is FinalDocumentsNotifierProvider &&
-        other.projectId == projectId;
+    return other is FinalDocumentNotifierProvider && other.argument == argument;
   }
 
   @override
   int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, projectId.hashCode);
-
-    return _SystemHash.finish(hash);
+    return argument.hashCode;
   }
-}
-
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FinalDocumentsNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<FinalDocumentsState> {
-  /// The parameter `projectId` of this provider.
-  String get projectId;
-}
-
-class _FinalDocumentsNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
-          FinalDocumentsNotifier,
-          FinalDocumentsState
-        >
-    with FinalDocumentsNotifierRef {
-  _FinalDocumentsNotifierProviderElement(super.provider);
-
-  @override
-  String get projectId => (origin as FinalDocumentsNotifierProvider).projectId;
 }
 
 String _$finalDocumentNotifierHash() =>
     r'3426098d603db1567fe5e52c2c04ef24f4e199ac';
 
-abstract class _$FinalDocumentNotifier
-    extends BuildlessAutoDisposeAsyncNotifier<FinalDocumentState> {
-  late final (String, String) params;
-
-  FutureOr<FinalDocumentState> build((String, String) params);
-}
-
 /// Notifier для управления состоянием отдельного финального документа
-///
-/// Copied from [FinalDocumentNotifier].
-@ProviderFor(FinalDocumentNotifier)
-const finalDocumentNotifierProvider = FinalDocumentNotifierFamily();
 
-/// Notifier для управления состоянием отдельного финального документа
-///
-/// Copied from [FinalDocumentNotifier].
-class FinalDocumentNotifierFamily
-    extends Family<AsyncValue<FinalDocumentState>> {
-  /// Notifier для управления состоянием отдельного финального документа
-  ///
-  /// Copied from [FinalDocumentNotifier].
-  const FinalDocumentNotifierFamily();
-
-  /// Notifier для управления состоянием отдельного финального документа
-  ///
-  /// Copied from [FinalDocumentNotifier].
-  FinalDocumentNotifierProvider call((String, String) params) {
-    return FinalDocumentNotifierProvider(params);
-  }
-
-  @override
-  FinalDocumentNotifierProvider getProviderOverride(
-    covariant FinalDocumentNotifierProvider provider,
-  ) {
-    return call(provider.params);
-  }
-
-  static const Iterable<ProviderOrFamily>? _dependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
-
-  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
-
-  @override
-  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
-      _allTransitiveDependencies;
-
-  @override
-  String? get name => r'finalDocumentNotifierProvider';
-}
-
-/// Notifier для управления состоянием отдельного финального документа
-///
-/// Copied from [FinalDocumentNotifier].
-class FinalDocumentNotifierProvider
-    extends
-        AutoDisposeAsyncNotifierProviderImpl<
+final class FinalDocumentNotifierFamily extends $Family
+    with
+        $ClassFamilyOverride<
           FinalDocumentNotifier,
-          FinalDocumentState
+          AsyncValue<FinalDocumentState>,
+          FinalDocumentState,
+          FutureOr<FinalDocumentState>,
+          (String, String)
         > {
-  /// Notifier для управления состоянием отдельного финального документа
-  ///
-  /// Copied from [FinalDocumentNotifier].
-  FinalDocumentNotifierProvider((String, String) params)
-    : this._internal(
-        () => FinalDocumentNotifier()..params = params,
-        from: finalDocumentNotifierProvider,
-        name: r'finalDocumentNotifierProvider',
-        debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-            ? null
-            : _$finalDocumentNotifierHash,
-        dependencies: FinalDocumentNotifierFamily._dependencies,
-        allTransitiveDependencies:
-            FinalDocumentNotifierFamily._allTransitiveDependencies,
-        params: params,
+  const FinalDocumentNotifierFamily._()
+    : super(
+        retry: null,
+        name: r'finalDocumentProvider',
+        dependencies: null,
+        $allTransitiveDependencies: null,
+        isAutoDispose: true,
       );
 
-  FinalDocumentNotifierProvider._internal(
-    super._createNotifier, {
-    required super.name,
-    required super.dependencies,
-    required super.allTransitiveDependencies,
-    required super.debugGetCreateSourceHash,
-    required super.from,
-    required this.params,
-  }) : super.internal();
+  /// Notifier для управления состоянием отдельного финального документа
 
-  final (String, String) params;
+  FinalDocumentNotifierProvider call((String, String) params) =>
+      FinalDocumentNotifierProvider._(argument: params, from: this);
 
   @override
-  FutureOr<FinalDocumentState> runNotifierBuild(
-    covariant FinalDocumentNotifier notifier,
-  ) {
-    return notifier.build(params);
-  }
-
-  @override
-  Override overrideWith(FinalDocumentNotifier Function() create) {
-    return ProviderOverride(
-      origin: this,
-      override: FinalDocumentNotifierProvider._internal(
-        () => create()..params = params,
-        from: from,
-        name: null,
-        dependencies: null,
-        allTransitiveDependencies: null,
-        debugGetCreateSourceHash: null,
-        params: params,
-      ),
-    );
-  }
-
-  @override
-  AutoDisposeAsyncNotifierProviderElement<
-    FinalDocumentNotifier,
-    FinalDocumentState
-  >
-  createElement() {
-    return _FinalDocumentNotifierProviderElement(this);
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return other is FinalDocumentNotifierProvider && other.params == params;
-  }
-
-  @override
-  int get hashCode {
-    var hash = _SystemHash.combine(0, runtimeType.hashCode);
-    hash = _SystemHash.combine(hash, params.hashCode);
-
-    return _SystemHash.finish(hash);
-  }
+  String toString() => r'finalDocumentProvider';
 }
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-mixin FinalDocumentNotifierRef
-    on AutoDisposeAsyncNotifierProviderRef<FinalDocumentState> {
-  /// The parameter `params` of this provider.
-  (String, String) get params;
-}
+/// Notifier для управления состоянием отдельного финального документа
 
-class _FinalDocumentNotifierProviderElement
-    extends
-        AutoDisposeAsyncNotifierProviderElement<
-          FinalDocumentNotifier,
-          FinalDocumentState
-        >
-    with FinalDocumentNotifierRef {
-  _FinalDocumentNotifierProviderElement(super.provider);
+abstract class _$FinalDocumentNotifier
+    extends $AsyncNotifier<FinalDocumentState> {
+  late final _$args = ref.$arg as (String, String);
+  (String, String) get params => _$args;
 
+  FutureOr<FinalDocumentState> build((String, String) params);
+  @$mustCallSuper
   @override
-  (String, String) get params =>
-      (origin as FinalDocumentNotifierProvider).params;
+  void runBuild() {
+    final created = build(_$args);
+    final ref =
+        this.ref as $Ref<AsyncValue<FinalDocumentState>, FinalDocumentState>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<AsyncValue<FinalDocumentState>, FinalDocumentState>,
+              AsyncValue<FinalDocumentState>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
 }
-
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package

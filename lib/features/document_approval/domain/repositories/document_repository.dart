@@ -14,4 +14,3 @@ abstract class DocumentRepository {
   /// Отклонить документ
   Future<void> rejectDocument(String documentId, String reason);
 }
-

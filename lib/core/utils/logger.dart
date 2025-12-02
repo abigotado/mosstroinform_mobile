@@ -41,11 +41,7 @@ class AppLogger {
   }
 
   /// Логирование ошибок
-  static void error(
-    String message, [
-    Object? error,
-    StackTrace? stackTrace,
-  ]) {
+  static void error(String message, [Object? error, StackTrace? stackTrace]) {
     if (kDebugMode) {
       final buffer = StringBuffer('$_tag [ERROR] $message');
       if (error != null) {
@@ -59,4 +55,3 @@ class AppLogger {
     // В production здесь можно добавить отправку логов на сервер
   }
 }
-

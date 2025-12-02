@@ -18,32 +18,25 @@ import 'features/project_selection/ui/screens/project_detail_screen.dart';
 import 'features/project_selection/ui/screens/project_list_screen.dart';
 
 void main() {
-  // Получаем flavor из константы компиляции или используем dev по умолчанию
+  // Получаем flavor из константы компиляции или используем mock по умолчанию
   final flavor = AppConfigSimple.getFlavor();
-  
+
   // Инициализируем конфигурацию
   final config = AppConfigSimple.fromFlavor(flavor);
-  
+
   // В production можно логировать текущее окружение
   AppLogger.info('Запуск приложения с flavor: $flavor');
   AppLogger.info('Окружение: ${config.environmentName}');
   AppLogger.info('Использование моков: ${config.useMocks}');
   AppLogger.info('Base URL: ${config.baseUrl}');
 
-  runApp(
-    ProviderScope(
-      child: MosstroinformApp(config: config),
-    ),
-  );
+  runApp(ProviderScope(child: MosstroinformApp(config: config)));
 }
 
 /// Роутер приложения
 final _router = GoRouter(
   routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => const ProjectListScreen(),
-    ),
+    GoRoute(path: '/', builder: (context, state) => const ProjectListScreen()),
     GoRoute(
       path: '/projects/:id',
       builder: (context, state) {
@@ -104,10 +97,7 @@ final _router = GoRouter(
 class MosstroinformApp extends StatelessWidget {
   final AppConfigSimple config;
 
-  const MosstroinformApp({
-    super.key,
-    required this.config,
-  });
+  const MosstroinformApp({super.key, required this.config});
 
   @override
   Widget build(BuildContext context) {
@@ -123,9 +113,7 @@ class MosstroinformApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [
-        Locale('ru', ''),
-          ],
+      supportedLocales: const [Locale('ru', '')],
       routerConfig: _router,
     );
   }

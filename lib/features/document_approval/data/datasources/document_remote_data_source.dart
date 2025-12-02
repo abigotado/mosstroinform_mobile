@@ -31,4 +31,3 @@ abstract class DocumentRemoteDataSource implements IDocumentRemoteDataSource {
     @Body() Map<String, dynamic> body,
   );
 }
-
