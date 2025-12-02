@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
+import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Виджет карточки проекта
 class ProjectCard extends StatelessWidget {
@@ -14,6 +15,7 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
