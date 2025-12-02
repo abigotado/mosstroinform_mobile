@@ -71,31 +71,18 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
           orElse: () => false,
         );
 
-        // Получаем projectId из текущего документа
-        final currentDocument = ref.read(documentNotifierProvider(documentId));
-        final projectId = currentDocument.maybeWhen(
-          data: (doc) => doc?.projectId,
-          orElse: () => null,
-        );
-
         messenger.showSnackBar(
           SnackBar(
             content: Text(l10n.documentApproved),
             backgroundColor: Colors.green,
-            action: allApproved && projectId != null
-                ? SnackBarAction(
-                    label: l10n.toConstruction,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      context.push('/construction/$projectId');
-                    },
-                  )
-                : null,
-            duration: allApproved
-                ? const Duration(seconds: 5)
-                : const Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           ),
         );
+        
+        // Обновляем UI для показа кнопки перехода к стройке
+        if (mounted) {
+          setState(() {});
+        }
       }
     } catch (e) {
       if (mounted) {
@@ -208,8 +195,39 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
+    // Проверяем, все ли документы одобрены для показа кнопки перехода
+    final allDocuments = ref.watch(documentsNotifierProvider);
+    final allApproved = allDocuments.maybeWhen(
+      data: (docs) =>
+          docs.isNotEmpty &&
+          docs.every((doc) => doc.status == DocumentStatus.approved),
+      orElse: () => false,
+    );
+    
+    // Получаем projectId из текущего документа
+    final currentDocument = ref.read(documentNotifierProvider(widget.documentId));
+    final projectId = currentDocument.maybeWhen(
+      data: (doc) => doc?.projectId,
+      orElse: () => null,
+    );
+
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.documentTitle)),
+      appBar: AppBar(
+        title: Text(l10n.documentTitle),
+        actions: [
+          // Кнопка перехода к стройке (показывается когда все документы одобрены)
+          if (allApproved && projectId != null)
+            IconButton(
+              icon: const Icon(Icons.construction),
+              tooltip: l10n.toConstruction,
+              onPressed: () {
+                if (mounted) {
+                  context.push('/construction/$projectId');
+                }
+              },
+            ),
+        ],
+      ),
       body: documentAsync.when(
         data: (document) {
           if (document == null) {

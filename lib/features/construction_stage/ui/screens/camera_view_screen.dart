@@ -46,11 +46,15 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         debugPrint('buffered: ${value.buffered}');
         debugPrint('size: ${value.size}');
         debugPrint('aspectRatio: ${value.aspectRatio}');
-        
+
         // Определяем тип потока
-        final isLiveStream = value.duration == Duration.zero || 
-                            value.duration.inHours > 1000; // Live потоки обычно имеют очень большую или нулевую длительность
-        debugPrint('Тип потока: ${isLiveStream ? "LIVE (реальное время)" : "VOD (потоковое видео)"}');
+        final isLiveStream =
+            value.duration == Duration.zero ||
+            value.duration.inHours >
+                1000; // Live потоки обычно имеют очень большую или нулевую длительность
+        debugPrint(
+          'Тип потока: ${isLiveStream ? "LIVE (реальное время)" : "VOD (потоковое видео)"}',
+        );
 
         // Обновляем состояние при изменении
         if (mounted && value.isInitialized && !_isInitialized) {

@@ -196,15 +196,11 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             messenger.showSnackBar(
                               SnackBar(
                                 content: Text(l10n.constructionRequestSent),
-                                action: SnackBarAction(
-                                  label: l10n.toDocuments,
-                                  onPressed: () {
-                                    debugPrint('Переход к документам');
-                                    context.push('/documents');
-                                  },
-                                ),
+                                duration: const Duration(seconds: 2),
                               ),
                             );
+                            // Обновляем UI для показа кнопки перехода к документам
+                            setState(() {});
                           }
                         } catch (e) {
                           debugPrint('Ошибка при отправке запроса: $e');
