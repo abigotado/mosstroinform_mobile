@@ -31,6 +31,16 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.projectsTitle),
+        // Кнопка для быстрого перехода к экрану камер (для тестирования)
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.videocam),
+            tooltip: 'Перейти к камерам (тест)',
+            onPressed: () {
+              context.push('/construction/1');
+            },
+          ),
+        ],
       ),
       body: projectsAsync.when(
         data: (state) {
