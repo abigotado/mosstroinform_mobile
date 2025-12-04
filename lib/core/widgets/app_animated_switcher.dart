@@ -48,4 +48,3 @@ class AppSliverAnimatedSwitcher extends AppAnimatedSwitcherWidget {
     return SliverAnimatedSwitcher(duration: duration, child: child);
   }
 }
-
