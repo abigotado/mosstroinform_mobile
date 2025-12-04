@@ -27,6 +27,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get sendConstructionRequest => 'Отправить запрос на строительство';
 
   @override
+  String get requestConstruction => 'Запрос строительства';
+
+  @override
   String get constructionRequestSent =>
       'Запрос на строительство успешно отправлен';
 

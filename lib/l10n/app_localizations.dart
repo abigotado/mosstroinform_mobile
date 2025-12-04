@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Отправить запрос на строительство'**
   String get sendConstructionRequest;
 
+  /// Короткий текст кнопки запроса строительства
+  ///
+  /// In ru, this message translates to:
+  /// **'Запрос строительства'**
+  String get requestConstruction;
+
   /// Сообщение об успешной отправке запроса
   ///
   /// In ru, this message translates to:

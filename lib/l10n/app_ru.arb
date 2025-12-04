@@ -25,6 +25,10 @@
   "@sendConstructionRequest": {
     "description": "Кнопка отправки запроса на строительство"
   },
+  "requestConstruction": "Запрос строительства",
+  "@requestConstruction": {
+    "description": "Короткий текст кнопки запроса строительства"
+  },
   "constructionRequestSent": "Запрос на строительство успешно отправлен",
   "@constructionRequestSent": {
     "description": "Сообщение об успешной отправке запроса"

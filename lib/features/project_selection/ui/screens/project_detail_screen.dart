@@ -57,12 +57,14 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
           ),
         ],
       ),
-      body: projectAsync.when(
-        data: (state) {
-          // Если проект не загружен и нет ошибки - это начальное состояние, показываем шиммер
-          if (state.project == null && state.error == null) {
-            return const ProjectDetailShimmer();
-          }
+      body: AppAnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: projectAsync.when(
+          data: (state) {
+            // Если проект не загружен и нет ошибки - это начальное состояние, показываем шиммер
+            if (state.project == null && state.error == null) {
+              return const ProjectDetailShimmer(key: ValueKey('shimmer'));
+            }
 
           // Если проект не найден и есть ошибка - показываем ошибку
           if (state.project == null) {
@@ -221,10 +223,14 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                     key: const ValueKey('button'),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: ElevatedButton(
-                        onPressed: isRequesting
-                            ? null
-                            : () async {
+                      child: SizedBox(
+                        width: double.infinity,
+                        child: Tooltip(
+                          message: l10n.sendConstructionRequest,
+                          child: ElevatedButton(
+                            onPressed: isRequesting
+                                ? null
+                                : () async {
                                 AppLogger.debug(
                                   'Нажата кнопка "Отправить запрос на строительство"',
                                 );

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
@@ -130,43 +131,54 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
         data: (state) {
           // Если список пустой и загружается - показываем шиммер
           if (state.projects.isEmpty && state.isLoading) {
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: 3, // Фиксированное количество для шиммеров
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: ProjectCardShimmer(),
-                );
-              },
+            return AppAnimatedSwitcher(
+              child: ListView.builder(
+                key: const ValueKey('shimmer'),
+                padding: const EdgeInsets.all(16),
+                itemCount: 3, // Фиксированное количество для шиммеров
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 16),
+                    child: ProjectCardShimmer(),
+                  );
+                },
+              ),
             );
           }
 
           // Если список пустой после загрузки (с ошибкой) - показываем сообщение
           if (state.projects.isEmpty && !state.isLoading) {
-            return Center(child: Text(l10n.projectsNotFound));
+            return AppAnimatedSwitcher(
+              child: Center(
+                key: const ValueKey('empty'),
+                child: Text(l10n.projectsNotFound),
+              ),
+            );
           }
 
           if (state.error != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(
-                    '${l10n.error}: ${state.error!.message}',
-                    style: theme.textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(projectsProvider.notifier).loadProjects();
-                    },
-                    child: Text(l10n.retry),
-                  ),
-                ],
+            return AppAnimatedSwitcher(
+              child: Center(
+                key: const ValueKey('error'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                    const SizedBox(height: 16),
+                    Text(
+                      '${l10n.error}: ${state.error!.message}',
+                      style: theme.textTheme.bodyLarge,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () {
+                        ref.read(projectsProvider.notifier).loadProjects();
+                      },
+                      child: Text(l10n.retry),
+                    ),
+                  ],
+                ),
               ),
             );
           }
@@ -175,60 +187,66 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           final filteredProjects = _filterProjects(state.projects);
           final hasMore = paginatedProjects.length < filteredProjects.length;
 
-          return RefreshIndicator(
-            onRefresh: () async {
-              setState(() {
-                _currentPage = 0;
-              });
-              await ref.read(projectsProvider.notifier).loadProjects();
-            },
-            child: state.isLoading && paginatedProjects.isEmpty
-                ? ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: 3, // Фиксированное количество для шиммеров
-                    itemBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.only(bottom: 16),
-                        child: ProjectCardShimmer(),
-                      );
-                    },
-                  )
-                : paginatedProjects.isEmpty
-                    ? Center(child: Text(l10n.projectsNotFound))
-                    : ListView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.all(16),
-                        itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
-                        itemBuilder: (context, index) {
-                          if (index == paginatedProjects.length) {
-                            return const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Center(child: CircularProgressIndicator()),
+          return AppAnimatedSwitcher(
+            child: RefreshIndicator(
+              key: ValueKey('list-${paginatedProjects.length}'),
+              onRefresh: () async {
+                setState(() {
+                  _currentPage = 0;
+                });
+                await ref.read(projectsProvider.notifier).loadProjects();
+              },
+              child: state.isLoading && paginatedProjects.isEmpty
+                  ? ListView.builder(
+                      padding: const EdgeInsets.all(16),
+                      itemCount: 3, // Фиксированное количество для шиммеров
+                      itemBuilder: (context, index) {
+                        return const Padding(
+                          padding: EdgeInsets.only(bottom: 16),
+                          child: ProjectCardShimmer(),
+                        );
+                      },
+                    )
+                  : paginatedProjects.isEmpty
+                      ? Center(child: Text(l10n.projectsNotFound))
+                      : ListView.builder(
+                          controller: _scrollController,
+                          padding: const EdgeInsets.all(16),
+                          itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == paginatedProjects.length) {
+                              return const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(child: CircularProgressIndicator()),
+                              );
+                            }
+                            final project = paginatedProjects[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: ProjectCard(
+                                project: project,
+                                onTap: () {
+                                  context.push('/projects/${project.id}');
+                                },
+                              ),
                             );
-                          }
-                          final project = paginatedProjects[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: ProjectCard(
-                              project: project,
-                              onTap: () {
-                                context.push('/projects/${project.id}');
-                              },
-                            ),
-                          );
-                        },
-                      ),
+                          },
+                        ),
+            ),
           );
         },
-        loading: () => ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: 3, // Фиксированное количество для шиммеров
-          itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: ProjectCardShimmer(),
-            );
-          },
+        loading: () => AppAnimatedSwitcher(
+          child: ListView.builder(
+            key: const ValueKey('loading'),
+            padding: const EdgeInsets.all(16),
+            itemCount: 3, // Фиксированное количество для шиммеров
+            itemBuilder: (context, index) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 16),
+                child: ProjectCardShimmer(),
+              );
+            },
+          ),
         ),
         error: (error, stack) => Center(
           child: Column(
