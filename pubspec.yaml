@@ -39,6 +39,9 @@ dependencies:
   cupertino_icons: ^1.0.8
   shimmer: ^3.0.0
 
+  # Secure Storage
+  flutter_secure_storage: ^9.2.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

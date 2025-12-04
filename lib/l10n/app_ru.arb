@@ -410,5 +410,87 @@
   "buffering": "Буферизация...",
   "@buffering": {
     "description": "Сообщение о буферизации видеопотока"
+  },
+  
+  "loginTitle": "Вход в систему",
+  "@loginTitle": {
+    "description": "Заголовок экрана входа"
+  },
+  "emailLabel": "Email",
+  "@emailLabel": {
+    "description": "Метка поля email"
+  },
+  "passwordLabel": "Пароль",
+  "@passwordLabel": {
+    "description": "Метка поля пароля"
+  },
+  "loginButton": "Войти",
+  "@loginButton": {
+    "description": "Кнопка входа"
+  },
+  "noAccount": "Нет аккаунта? Зарегистрироваться",
+  "@noAccount": {
+    "description": "Ссылка на регистрацию"
+  },
+  "registerTitle": "Регистрация",
+  "@registerTitle": {
+    "description": "Заголовок экрана регистрации"
+  },
+  "nameLabel": "Имя",
+  "@nameLabel": {
+    "description": "Метка поля имени"
+  },
+  "phoneLabel": "Телефон (необязательно)",
+  "@phoneLabel": {
+    "description": "Метка поля телефона"
+  },
+  "confirmPasswordLabel": "Подтвердите пароль",
+  "@confirmPasswordLabel": {
+    "description": "Метка поля подтверждения пароля"
+  },
+  "registerButton": "Зарегистрироваться",
+  "@registerButton": {
+    "description": "Кнопка регистрации"
+  },
+  "hasAccount": "Уже есть аккаунт? Войти",
+  "@hasAccount": {
+    "description": "Ссылка на вход"
+  },
+  "enterEmail": "Введите email",
+  "@enterEmail": {
+    "description": "Сообщение валидации - введите email"
+  },
+  "enterValidEmail": "Введите корректный email",
+  "@enterValidEmail": {
+    "description": "Сообщение валидации - корректный email"
+  },
+  "enterPassword": "Введите пароль",
+  "@enterPassword": {
+    "description": "Сообщение валидации - введите пароль"
+  },
+  "passwordMinLength": "Пароль должен содержать минимум 6 символов",
+  "@passwordMinLength": {
+    "description": "Сообщение валидации - минимальная длина пароля"
+  },
+  "enterName": "Введите имя",
+  "@enterName": {
+    "description": "Сообщение валидации - введите имя"
+  },
+  "confirmPassword": "Подтвердите пароль",
+  "@confirmPassword": {
+    "description": "Сообщение валидации - подтвердите пароль"
+  },
+  "passwordsDoNotMatch": "Пароли не совпадают",
+  "@passwordsDoNotMatch": {
+    "description": "Сообщение валидации - пароли не совпадают"
+  },
+  "errorOccurred": "Произошла ошибка: {error}",
+  "@errorOccurred": {
+    "description": "Сообщение об ошибке",
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
   }
 }

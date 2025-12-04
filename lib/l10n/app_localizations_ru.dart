@@ -304,4 +304,63 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get buffering => 'Буферизация...';
+
+  @override
+  String get loginTitle => 'Вход в систему';
+
+  @override
+  String get emailLabel => 'Email';
+
+  @override
+  String get passwordLabel => 'Пароль';
+
+  @override
+  String get loginButton => 'Войти';
+
+  @override
+  String get noAccount => 'Нет аккаунта? Зарегистрироваться';
+
+  @override
+  String get registerTitle => 'Регистрация';
+
+  @override
+  String get nameLabel => 'Имя';
+
+  @override
+  String get phoneLabel => 'Телефон (необязательно)';
+
+  @override
+  String get confirmPasswordLabel => 'Подтвердите пароль';
+
+  @override
+  String get registerButton => 'Зарегистрироваться';
+
+  @override
+  String get hasAccount => 'Уже есть аккаунт? Войти';
+
+  @override
+  String get enterEmail => 'Введите email';
+
+  @override
+  String get enterValidEmail => 'Введите корректный email';
+
+  @override
+  String get enterPassword => 'Введите пароль';
+
+  @override
+  String get passwordMinLength => 'Пароль должен содержать минимум 6 символов';
+
+  @override
+  String get enterName => 'Введите имя';
+
+  @override
+  String get confirmPassword => 'Подтвердите пароль';
+
+  @override
+  String get passwordsDoNotMatch => 'Пароли не совпадают';
+
+  @override
+  String errorOccurred(String error) {
+    return 'Произошла ошибка: $error';
+  }
 }

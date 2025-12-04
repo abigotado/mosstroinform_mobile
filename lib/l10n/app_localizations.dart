@@ -669,6 +669,120 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Буферизация...'**
   String get buffering;
+
+  /// Заголовок экрана входа
+  ///
+  /// In ru, this message translates to:
+  /// **'Вход в систему'**
+  String get loginTitle;
+
+  /// Метка поля email
+  ///
+  /// In ru, this message translates to:
+  /// **'Email'**
+  String get emailLabel;
+
+  /// Метка поля пароля
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль'**
+  String get passwordLabel;
+
+  /// Кнопка входа
+  ///
+  /// In ru, this message translates to:
+  /// **'Войти'**
+  String get loginButton;
+
+  /// Ссылка на регистрацию
+  ///
+  /// In ru, this message translates to:
+  /// **'Нет аккаунта? Зарегистрироваться'**
+  String get noAccount;
+
+  /// Заголовок экрана регистрации
+  ///
+  /// In ru, this message translates to:
+  /// **'Регистрация'**
+  String get registerTitle;
+
+  /// Метка поля имени
+  ///
+  /// In ru, this message translates to:
+  /// **'Имя'**
+  String get nameLabel;
+
+  /// Метка поля телефона
+  ///
+  /// In ru, this message translates to:
+  /// **'Телефон (необязательно)'**
+  String get phoneLabel;
+
+  /// Метка поля подтверждения пароля
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердите пароль'**
+  String get confirmPasswordLabel;
+
+  /// Кнопка регистрации
+  ///
+  /// In ru, this message translates to:
+  /// **'Зарегистрироваться'**
+  String get registerButton;
+
+  /// Ссылка на вход
+  ///
+  /// In ru, this message translates to:
+  /// **'Уже есть аккаунт? Войти'**
+  String get hasAccount;
+
+  /// Сообщение валидации - введите email
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите email'**
+  String get enterEmail;
+
+  /// Сообщение валидации - корректный email
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите корректный email'**
+  String get enterValidEmail;
+
+  /// Сообщение валидации - введите пароль
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите пароль'**
+  String get enterPassword;
+
+  /// Сообщение валидации - минимальная длина пароля
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароль должен содержать минимум 6 символов'**
+  String get passwordMinLength;
+
+  /// Сообщение валидации - введите имя
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите имя'**
+  String get enterName;
+
+  /// Сообщение валидации - подтвердите пароль
+  ///
+  /// In ru, this message translates to:
+  /// **'Подтвердите пароль'**
+  String get confirmPassword;
+
+  /// Сообщение валидации - пароли не совпадают
+  ///
+  /// In ru, this message translates to:
+  /// **'Пароли не совпадают'**
+  String get passwordsDoNotMatch;
+
+  /// Сообщение об ошибке
+  ///
+  /// In ru, this message translates to:
+  /// **'Произошла ошибка: {error}'**
+  String errorOccurred(String error);
 }
 
 class _AppLocalizationsDelegate

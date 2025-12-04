@@ -1,0 +1,183 @@
+import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/features/auth/domain/entities/user.dart';
+import 'package:mosstroinform_mobile/features/auth/domain/providers/auth_repository_provider.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'auth_notifier.g.dart';
+
+/// Состояние авторизации
+class AuthState {
+  final User? user;
+  final bool isAuthenticated;
+  final bool isLoading;
+  final Failure? error;
+
+  const AuthState({
+    this.user,
+    this.isAuthenticated = false,
+    this.isLoading = false,
+    this.error,
+  });
+
+  AuthState copyWith({
+    User? user,
+    bool? isAuthenticated,
+    bool? isLoading,
+    Failure? error,
+  }) {
+    return AuthState(
+      user: user ?? this.user,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
+    );
+  }
+}
+
+/// Notifier для управления состоянием авторизации
+@riverpod
+class AuthNotifier extends _$AuthNotifier {
+  @override
+  Future<AuthState> build() async {
+    // Проверяем авторизацию при инициализации
+    final repository = ref.read(authRepositoryProvider);
+    final isAuthenticated = await repository.isAuthenticated();
+    
+    if (isAuthenticated) {
+      try {
+        final user = await repository.getCurrentUser();
+        return AuthState(
+          user: user,
+          isAuthenticated: true,
+        );
+      } catch (e) {
+        AppLogger.error('Ошибка при получении пользователя: $e');
+        return const AuthState(isAuthenticated: false);
+      }
+    }
+    
+    return const AuthState(isAuthenticated: false);
+  }
+
+  /// Вход в систему
+  Future<void> login(String email, String password) async {
+    state = const AsyncValue.loading();
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      await repository.login(email, password);
+      
+      // Получаем данные пользователя
+      final user = await repository.getCurrentUser();
+      
+      state = AsyncValue.data(
+        AuthState(user: user, isAuthenticated: true),
+      );
+      
+      AppLogger.info('Пользователь успешно авторизован: ${user.email}');
+    } on Failure catch (e) {
+      AppLogger.error('Ошибка авторизации: ${e.message}');
+      state = AsyncValue.data(
+        AuthState(isAuthenticated: false, error: e),
+      );
+      rethrow;
+    } catch (e, stackTrace) {
+      AppLogger.error('Неизвестная ошибка при авторизации: $e', stackTrace);
+      state = AsyncValue.data(
+        AuthState(
+          isAuthenticated: false,
+          error: UnknownFailure('Неизвестная ошибка: $e'),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  /// Регистрация нового пользователя
+  Future<void> register({
+    required String email,
+    required String password,
+    required String name,
+    String? phone,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      await repository.register(
+        email: email,
+        password: password,
+        name: name,
+        phone: phone,
+      );
+      
+      // Получаем данные пользователя
+      final user = await repository.getCurrentUser();
+      
+      state = AsyncValue.data(
+        AuthState(user: user, isAuthenticated: true),
+      );
+      
+      AppLogger.info('Пользователь успешно зарегистрирован: ${user.email}');
+    } on Failure catch (e) {
+      AppLogger.error('Ошибка регистрации: ${e.message}');
+      state = AsyncValue.data(
+        AuthState(isAuthenticated: false, error: e),
+      );
+      rethrow;
+    } catch (e, stackTrace) {
+      AppLogger.error('Неизвестная ошибка при регистрации: $e', stackTrace);
+      state = AsyncValue.data(
+        AuthState(
+          isAuthenticated: false,
+          error: UnknownFailure('Неизвестная ошибка: $e'),
+        ),
+      );
+      rethrow;
+    }
+  }
+
+  /// Выход из системы
+  Future<void> logout() async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      await repository.logout();
+      
+      state = const AsyncValue.data(
+        AuthState(isAuthenticated: false),
+      );
+      
+      AppLogger.info('Пользователь вышел из системы');
+    } catch (e) {
+      AppLogger.error('Ошибка при выходе: $e');
+      // Даже при ошибке сбрасываем состояние
+      state = const AsyncValue.data(
+        AuthState(isAuthenticated: false),
+      );
+    }
+  }
+
+  /// Проверить авторизацию
+  Future<void> checkAuth() async {
+    try {
+      final repository = ref.read(authRepositoryProvider);
+      final isAuthenticated = await repository.isAuthenticated();
+      
+      if (isAuthenticated) {
+        final user = await repository.getCurrentUser();
+        state = AsyncValue.data(
+          AuthState(user: user, isAuthenticated: true),
+        );
+      } else {
+        state = const AsyncValue.data(
+          AuthState(isAuthenticated: false),
+        );
+      }
+    } catch (e) {
+      AppLogger.error('Ошибка при проверке авторизации: $e');
+      state = const AsyncValue.data(
+        AuthState(isAuthenticated: false),
+      );
+    }
+  }
+}
+
