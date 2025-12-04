@@ -146,10 +146,6 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
     }
     
     final currentState = state.value!;
-    if (currentState == null) {
-      AppLogger.warning('PaginatedProjectsNotifier.loadNextPage: состояние null');
-      return;
-    }
 
     AppLogger.info(
       'PaginatedProjectsNotifier.loadNextPage: загрузка страницы ${currentState.currentPage + 1}',
