@@ -51,17 +51,6 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
               if (projectState == null) return const SizedBox.shrink();
 
               // TODO: Проверять через ConstructionObjectRepository, существует ли объект для этого проекта
-              final hasRequestBeenSent = false;
-
-              // Проверяем, все ли документы одобрены
-              final allDocuments = ref.watch(documentsProvider);
-              final allApproved = allDocuments.maybeWhen(
-                data: (docs) =>
-                    docs.isNotEmpty &&
-                    docs.every((doc) => doc.status == DocumentStatus.approved),
-                orElse: () => false,
-              );
-
               // TODO: Показывать кнопки навигации к объекту строительства
               return const SizedBox.shrink();
             },
