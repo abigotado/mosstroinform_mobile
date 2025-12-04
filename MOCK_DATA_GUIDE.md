@@ -17,13 +17,14 @@
 
 ### Переключение между моками и реальным API
 
-Моки включаются автоматически при использовании flavor `dev`:
+Моки включаются автоматически при использовании flavor `mock`:
 
-- **dev** flavor → `useMocks: true` (используются моки)
-- **staging** flavor → `useMocks: false` (используется реальный API)
+- **mock** flavor → `useMocks: true` (используются моки)
 - **prod** flavor → `useMocks: false` (используется реальный API)
 
 Конфигурация находится в `lib/core/config/app_config_simple.dart`.
+
+> **Примечание:** Ранее использовались flavors `dev` и `staging`, но они были упрощены до `mock` и `prod` для упрощения конфигурации.
 
 ## Структура моковых данных
 
