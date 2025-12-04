@@ -36,7 +36,7 @@ final class ProjectsNotifierProvider
   ProjectsNotifier create() => ProjectsNotifier();
 }
 
-String _$projectsNotifierHash() => r'1b26ae17e56a594e9ce8d16fd7f18143c6a22ffd';
+String _$projectsNotifierHash() => r'092622d8a7b6bcf10807e148a1ab4f5becacc904';
 
 /// Notifier для управления состоянием списка проектов
 
@@ -87,7 +87,7 @@ final class ProjectNotifierProvider
   ProjectNotifier create() => ProjectNotifier();
 }
 
-String _$projectNotifierHash() => r'9394f15df82f363dcaf515544637b1a149b5e18c';
+String _$projectNotifierHash() => r'd11779041979d42b461327dad24b24dece7dc149';
 
 /// Notifier для управления состоянием конкретного проекта
 

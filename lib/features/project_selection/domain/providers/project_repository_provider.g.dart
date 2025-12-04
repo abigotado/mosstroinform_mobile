@@ -12,6 +12,7 @@ part of 'project_repository_provider.dart';
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 @ProviderFor(projectRepository)
 const projectRepositoryProvider = ProjectRepositoryProvider._();
@@ -20,6 +21,7 @@ const projectRepositoryProvider = ProjectRepositoryProvider._();
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 final class ProjectRepositoryProvider
     extends
@@ -33,13 +35,14 @@ final class ProjectRepositoryProvider
   /// Возвращает интерфейс, а не имплементацию
   /// Использует моковый репозиторий если включены моки, иначе реальный
   /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+  /// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
   const ProjectRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'projectRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -67,4 +70,4 @@ final class ProjectRepositoryProvider
   }
 }
 
-String _$projectRepositoryHash() => r'493fb8205714bdbfae3f054f43207a03a99a04c6';
+String _$projectRepositoryHash() => r'0833323bee02f8361e2b7e66fd7d3d8c9c73b7bf';
