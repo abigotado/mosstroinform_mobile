@@ -45,8 +45,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
       if (mounted) {
+        // Проверяем состояние авторизации перед редиректом
+        final authState = ref.read(authProvider);
+        AppLogger.info(
+          'LoginScreen._handleLogin: перед редиректом, '
+          'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
+        );
+        
         // После успешного входа перенаправляем на главную страницу
+        // Роутер автоматически перенаправит благодаря redirect логике
+        AppLogger.info('LoginScreen._handleLogin: вызов context.go("/")');
         context.go('/');
+        AppLogger.info('LoginScreen._handleLogin: context.go("/") завершен');
       }
     } on Failure catch (e) {
       if (mounted) {

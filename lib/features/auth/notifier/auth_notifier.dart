@@ -74,10 +74,14 @@ class AuthNotifier extends _$AuthNotifier {
       final repository = ref.read(authRepositoryProvider);
       AppLogger.info('AuthNotifier.login: вызов repository.login');
       await repository.login(email, password);
-      AppLogger.info('AuthNotifier.login: repository.login завершен, ref.mounted=${ref.mounted}');
+      AppLogger.info(
+        'AuthNotifier.login: repository.login завершен, ref.mounted=${ref.mounted}',
+      );
 
       if (!ref.mounted) {
-        AppLogger.warning('AuthNotifier.login: провайдер disposed после login, выход');
+        AppLogger.warning(
+          'AuthNotifier.login: провайдер disposed после login, выход',
+        );
         return;
       }
 

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 import 'core/config/app_config_simple.dart';
@@ -37,24 +38,44 @@ void main() {
 }
 
 /// Провайдер роутера с защитой роутов
+/// Использует ref.watch для отслеживания изменений авторизации
 final routerProvider = Provider<GoRouter>((ref) {
+  // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
+  final authState = ref.watch(authProvider);
+  
+  AppLogger.info(
+    'RouterProvider.build: создание роутера, '
+    'authState.isLoading=${authState.isLoading}, '
+    'authState.hasValue=${authState.hasValue}, '
+    'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
+  );
+  
   return GoRouter(
     redirect: (context, state) {
-      final authState = ref.read(authProvider);
+      // Используем текущее значение из замыкания
       final isAuthenticated = authState.value?.isAuthenticated ?? false;
       final isLoginRoute = state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
+      
+      AppLogger.info(
+        'Router.redirect: matchedLocation=${state.matchedLocation}, '
+        'isAuthenticated=$isAuthenticated, isLoginRoute=$isLoginRoute, '
+        'authState.hasValue=${authState.hasValue}',
+      );
 
       // Если пользователь не авторизован и пытается попасть на защищённый роут
       if (!isAuthenticated && !isLoginRoute) {
+        AppLogger.info('Router.redirect: не авторизован, редирект на /login');
         return '/login';
       }
 
       // Если пользователь авторизован и пытается попасть на страницу входа
       if (isAuthenticated && isLoginRoute) {
+        AppLogger.info('Router.redirect: авторизован на странице входа, редирект на /');
         return '/';
       }
 
+      AppLogger.info('Router.redirect: разрешена навигация на ${state.matchedLocation}');
       return null; // Разрешаем навигацию
     },
     routes: [
