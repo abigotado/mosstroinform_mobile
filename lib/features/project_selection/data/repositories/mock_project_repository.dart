@@ -17,15 +17,23 @@ class MockProjectRepository implements ProjectRepository {
 
   @override
   Future<List<Project>> getProjects() async {
+    // Получаем список запрошенных проектов ДО await, чтобы избежать disposed ошибок
+    if (!ref.mounted) {
+      AppLogger.warning('MockProjectRepository.getProjects: ref disposed, возвращаем пустой список');
+      return [];
+    }
+    final requestedProjects = ref.read(requestedProjectsStateProvider);
+    
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Получаем список запрошенных проектов
-    final requestedProjects = ref.read(requestedProjectsStateProvider);
+    // Проверяем, что ref все еще mounted после await
+    if (!ref.mounted) {
+      AppLogger.warning('MockProjectRepository.getProjects: ref disposed после await, возвращаем пустой список');
+      return [];
+    }
     
     // Всегда используем данные напрямую из мок-данных
-    // Не используем провайдер здесь, так как он может быть disposed к моменту асинхронного вызова
-    // Используем данные из ProjectsMockData
     final mockData = ProjectsMockData.projects;
 
     // Создаем проекты напрямую из мок-данных
@@ -41,7 +49,7 @@ class MockProjectRepository implements ProjectRepository {
       'MockProjectRepository.getProjects: создано ${allProjects.length} проектов, '
       'запрошено ${requestedProjects.length}, доступно ${availableProjects.length}',
     );
-    return Future.value(availableProjects);
+    return availableProjects;
   }
 
   @override
@@ -49,7 +57,16 @@ class MockProjectRepository implements ProjectRepository {
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 300));
 
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed');
+    }
+
     final projects = await getProjects();
+    
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed после загрузки проектов');
+    }
+    
     try {
       final project = projects.firstWhere((p) => p.id == id);
       return project;
@@ -60,6 +77,12 @@ class MockProjectRepository implements ProjectRepository {
 
   @override
   Future<void> requestConstruction(String projectId) async {
+    // Проверяем mounted ДО await
+    if (!ref.mounted) {
+      AppLogger.warning('MockProjectRepository.requestConstruction: ref disposed, пропускаем запрос');
+      return;
+    }
+    
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -69,6 +92,8 @@ class MockProjectRepository implements ProjectRepository {
       AppLogger.info(
         'MockProjectRepository.requestConstruction: проект $projectId добавлен в запрошенные',
       );
+    } else {
+      AppLogger.warning('MockProjectRepository.requestConstruction: ref disposed после await, пропускаем добавление');
     }
     
     // TODO: Реализовать создание объекта строительства через ConstructionObjectRepository

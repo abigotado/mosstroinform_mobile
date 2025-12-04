@@ -41,14 +41,24 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
+    if (!ref.mounted) return;
+    
     AppLogger.info('ProjectsNotifier.loadProjects: начинаем загрузку');
     state = const AsyncValue.loading();
+    
     try {
       final repository = ref.read(projectRepositoryProvider);
       AppLogger.info(
         'ProjectsNotifier.loadProjects: репозиторий получен, тип: ${repository.runtimeType}',
       );
+      
       final projects = await repository.getProjects();
+      
+      if (!ref.mounted) {
+        AppLogger.warning('ProjectsNotifier.loadProjects: провайдер disposed после загрузки проектов');
+        return;
+      }
+      
       AppLogger.info(
         'ProjectsNotifier.loadProjects: получено ${projects.length} проектов',
       );
@@ -56,11 +66,13 @@ class ProjectsNotifier extends _$ProjectsNotifier {
         ProjectsState(projects: projects, isLoading: false),
       );
     } on Failure catch (e) {
+      if (!ref.mounted) return;
       AppLogger.error('ProjectsNotifier.loadProjects: ошибка Failure: $e');
       state = AsyncValue.data(
         ProjectsState(projects: [], isLoading: false, error: e),
       );
     } catch (e, stackTrace) {
+      if (!ref.mounted) return;
       AppLogger.error(
         'ProjectsNotifier.loadProjects: неизвестная ошибка: $e',
         stackTrace,
@@ -103,14 +115,21 @@ class ProjectNotifier extends _$ProjectNotifier {
 
   /// Загрузить проект по ID
   Future<void> loadProject(String id) async {
+    if (!ref.mounted) return;
+    
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(projectRepositoryProvider);
       final project = await repository.getProjectById(id);
+      
+      if (!ref.mounted) return;
+      
       state = AsyncValue.data(ProjectState(project: project, isLoading: false));
     } on Failure catch (e) {
+      if (!ref.mounted) return;
       state = AsyncValue.data(ProjectState(isLoading: false, error: e));
     } catch (e) {
+      if (!ref.mounted) return;
       state = AsyncValue.data(
         ProjectState(
           isLoading: false,
@@ -122,16 +141,23 @@ class ProjectNotifier extends _$ProjectNotifier {
 
   /// Отправить запрос на строительство
   Future<void> requestConstruction(String projectId) async {
+    if (!ref.mounted) return;
+    
     try {
       final repository = ref.read(projectRepositoryProvider);
       await repository.requestConstruction(projectId);
+      
+      if (!ref.mounted) return;
+      
       // Перезагружаем проект после отправки запроса
       await loadProject(projectId);
     } on Failure catch (e) {
+      if (!ref.mounted) return;
       state = AsyncValue.data(
         ProjectState(project: state.value?.project, isLoading: false, error: e),
       );
     } catch (e) {
+      if (!ref.mounted) return;
       state = AsyncValue.data(
         ProjectState(
           project: state.value?.project,
