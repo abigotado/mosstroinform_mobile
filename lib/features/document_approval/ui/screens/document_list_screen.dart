@@ -144,6 +144,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
           ),
         ),
       ),
+      ),
     );
   }
 }
