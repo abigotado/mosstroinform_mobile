@@ -10,7 +10,9 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Экран списка документов
 class DocumentListScreen extends ConsumerStatefulWidget {
-  const DocumentListScreen({super.key});
+  final String? projectId;
+
+  const DocumentListScreen({super.key, this.projectId});
 
   @override
   ConsumerState<DocumentListScreen> createState() => _DocumentListScreenState();
@@ -22,7 +24,11 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
     super.initState();
     // Загружаем документы при открытии экрана
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(documentsProvider.notifier).loadDocuments();
+      if (widget.projectId != null) {
+        ref.read(documentsProvider.notifier).loadDocumentsForProject(widget.projectId!);
+      } else {
+        ref.read(documentsProvider.notifier).loadDocuments();
+      }
     });
   }
 
@@ -85,7 +91,11 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
             return RefreshIndicator(
               key: ValueKey('list-${documents.length}'),
               onRefresh: () async {
-                await ref.read(documentsProvider.notifier).loadDocuments();
+                if (widget.projectId != null) {
+                  await ref.read(documentsProvider.notifier).loadDocumentsForProject(widget.projectId!);
+                } else {
+                  await ref.read(documentsProvider.notifier).loadDocuments();
+                }
               },
               child: ListView.builder(
                 padding: const EdgeInsets.all(16),
@@ -136,7 +146,11 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref.read(documentsProvider.notifier).loadDocuments();
+                  if (widget.projectId != null) {
+                    ref.read(documentsProvider.notifier).loadDocumentsForProject(widget.projectId!);
+                  } else {
+                    ref.read(documentsProvider.notifier).loadDocuments();
+                  }
                 },
                 child: Text(l10n.retry),
               ),

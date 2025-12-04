@@ -5,6 +5,9 @@ abstract class DocumentRepository {
   /// Получить список всех документов
   Future<List<Document>> getDocuments();
 
+  /// Получить документы для проекта
+  Future<List<Document>> getDocumentsByProjectId(String projectId);
+
   /// Получить документ по ID
   Future<Document> getDocumentById(String id);
 

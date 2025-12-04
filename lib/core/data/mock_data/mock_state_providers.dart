@@ -1,6 +1,7 @@
 import 'package:mosstroinform_mobile/features/document_approval/data/models/document_model.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/project_selection/data/models/project_model.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -86,6 +87,77 @@ class MockDocumentsState extends _$MockDocumentsState {
       for (final doc in state)
         if (doc.id == document.id) document else doc,
     ];
+  }
+
+  /// Создать документы для проекта
+  /// Вызывается после запроса проекта
+  void createDocumentsForProject(String projectId) {
+    // Проверяем, не существуют ли уже документы для этого проекта
+    if (state.any((doc) => doc.projectId == projectId)) {
+      return;
+    }
+
+    // Создаем стандартный набор документов для проекта
+    final newDocuments = [
+      Document(
+        id: 'doc_${projectId}_1',
+        projectId: projectId,
+        title: 'Проектная документация',
+        description: 'Полный комплект проектной документации для строительства',
+        fileUrl: 'https://example.com/docs/project-docs-$projectId.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: null,
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+      Document(
+        id: 'doc_${projectId}_2',
+        projectId: projectId,
+        title: 'Разрешение на строительство',
+        description: 'Официальное разрешение на начало строительных работ',
+        fileUrl: 'https://example.com/docs/building-permit-$projectId.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: null,
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+      Document(
+        id: 'doc_${projectId}_3',
+        projectId: projectId,
+        title: 'Договор подряда',
+        description: 'Договор на выполнение строительных работ',
+        fileUrl: 'https://example.com/docs/contract-$projectId.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: null,
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+      Document(
+        id: 'doc_${projectId}_4',
+        projectId: projectId,
+        title: 'Смета на материалы',
+        description: 'Детальная смета расходов на строительные материалы',
+        fileUrl: 'https://example.com/docs/estimate-$projectId.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: null,
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+    ];
+
+    state = [...state, ...newDocuments];
+  }
+
+  /// Получить документы для проекта
+  List<Document> getDocumentsForProject(String projectId) {
+    return state.where((doc) => doc.projectId == projectId).toList();
+  }
+
+  /// Проверить, все ли документы проекта одобрены
+  bool areAllDocumentsApproved(String projectId) {
+    final projectDocuments = getDocumentsForProject(projectId);
+    if (projectDocuments.isEmpty) return false;
+    return projectDocuments.every((doc) => doc.status == DocumentStatus.approved);
   }
 
   /// Сбросить к дефолту
@@ -175,5 +247,39 @@ class MockProjectsState extends _$MockProjectsState {
   /// Сбросить к дефолту
   void reset() {
     state = _getDefaultProjects();
+  }
+}
+
+/// Провайдер состояния моковых объектов строительства
+/// Состояние хранится в памяти и сбрасывается при перезапуске приложения
+@Riverpod(keepAlive: true)
+class MockConstructionObjectsState extends _$MockConstructionObjectsState {
+  @override
+  List<ConstructionObject> build() {
+    // Начальное состояние - пустой список объектов
+    return [];
+  }
+
+  /// Добавить объект
+  void addObject(ConstructionObject object) {
+    state = [...state, object];
+  }
+
+  /// Обновить объект
+  void updateObject(ConstructionObject object) {
+    state = [
+      for (final obj in state)
+        if (obj.id == object.id) object else obj,
+    ];
+  }
+
+  /// Удалить объект
+  void removeObject(String objectId) {
+    state = state.where((obj) => obj.id != objectId).toList();
+  }
+
+  /// Сбросить к дефолту
+  void reset() {
+    state = [];
   }
 }

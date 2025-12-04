@@ -181,26 +181,31 @@ void main() {
     });
 
     test('requestConstruction успешно отправляет запрос', () async {
-      final project = Project(
-        id: '1',
-        name: 'Проект 1',
-        address: 'Адрес 1',
-        description: 'Описание 1',
-        area: 100.0,
-        floors: 2,
-        bedrooms: 3,
-        bathrooms: 2,
-        price: 1000000,
-      );
+      final projects = [
+        Project(
+          id: '1',
+          name: 'Проект 1',
+          address: 'Адрес 1',
+          description: 'Описание 1',
+          area: 100.0,
+          floors: 2,
+          bedrooms: 3,
+          bathrooms: 2,
+          price: 1000000,
+        ),
+      ];
 
       when(
         () => mockRepository.requestConstruction('1'),
       ).thenAnswer((_) async {});
+      
+      when(() => mockRepository.getProjects()).thenAnswer((_) async => projects);
 
       final notifier = container.read(projectProvider.notifier);
       await notifier.requestConstruction('1');
 
       verify(() => mockRepository.requestConstruction('1')).called(1);
+      verify(() => mockRepository.getProjects()).called(1);
     });
 
     test('requestConstruction обрабатывает Failure', () async {

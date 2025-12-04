@@ -15,16 +15,61 @@ class MockDocumentRepository implements DocumentRepository {
 
   @override
   Future<List<Document>> getDocuments() async {
+    // Проверяем mounted ДО await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed');
+    }
+
+    // Получаем текущее состояние из провайдера ДО await
+    final state = ref.read(mockDocumentsStateProvider);
+
+    // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Получаем текущее состояние из провайдера
-    final state = ref.read(mockDocumentsStateProvider);
+    // Проверяем mounted после await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed после await');
+    }
+
     return state;
   }
 
   @override
-  Future<Document> getDocumentById(String id) async {
+  Future<List<Document>> getDocumentsByProjectId(String projectId) async {
+    // Проверяем mounted ДО await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed');
+    }
+
+    // Получаем документы для проекта из состояния ДО await
+    final allDocuments = ref.read(mockDocumentsStateProvider);
+
+    // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 300));
+
+    // Проверяем mounted после await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed после await');
+    }
+
+    // Фильтруем документы по projectId
+    return allDocuments.where((doc) => doc.projectId == projectId).toList();
+  }
+
+  @override
+  Future<Document> getDocumentById(String id) async {
+    // Проверяем mounted ДО await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed');
+    }
+
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // Проверяем mounted после await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed после await');
+    }
 
     final documents = await getDocuments();
     try {
@@ -72,11 +117,22 @@ class MockDocumentRepository implements DocumentRepository {
 
   @override
   Future<void> rejectDocument(String documentId, String reason) async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    // Проверяем mounted ДО await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed');
+    }
 
-    // Получаем текущий документ
+    // Получаем текущий документ ДО await
     final documents = ref.read(mockDocumentsStateProvider);
     final document = documents.firstWhere((d) => d.id == documentId);
+
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Проверяем mounted после await
+    if (!ref.mounted) {
+      throw UnknownFailure('Провайдер disposed после await');
+    }
 
     // Создаем обновленный документ со статусом rejected
     final updatedDocument = Document(

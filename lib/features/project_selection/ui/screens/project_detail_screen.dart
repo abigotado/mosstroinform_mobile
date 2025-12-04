@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
@@ -228,15 +229,32 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
           return AppAnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: isRequested
-                ? const SizedBox.shrink(key: ValueKey('hidden'))
-                : SafeArea(
-                    key: const ValueKey('button'),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SizedBox(
-                        width: double.infinity,
-                        child: Tooltip(
+            child: SafeArea(
+              key: ValueKey(isRequested ? 'toDocuments' : 'request'),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: isRequested
+                      ? Tooltip(
+                          message: l10n.toDocuments,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              context.push(
+                                '/documents?projectId=${widget.projectId}',
+                              );
+                            },
+                            style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                            ),
+                            icon: const Icon(Icons.description),
+                            label: Text(
+                              l10n.toDocuments,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        )
+                      : Tooltip(
                           message: l10n.sendConstructionRequest,
                           child: ElevatedButton(
                             onPressed: isRequesting
@@ -315,9 +333,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
+                ),
+              ),
+            ),
           );
         },
         loading: () => const SizedBox.shrink(),

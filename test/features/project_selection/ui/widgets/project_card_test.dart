@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
@@ -7,17 +8,19 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 void main() {
   Widget createTestWidget(Widget child) {
-    return MaterialApp(
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const [Locale('ru', 'RU')],
-      home: Scaffold(
-        body: SingleChildScrollView(
-          child: SizedBox(width: 400, height: 800, child: child),
+    return ProviderScope(
+      child: MaterialApp(
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [Locale('ru', 'RU')],
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: SizedBox(width: 400, height: 800, child: child),
+          ),
         ),
       ),
     );

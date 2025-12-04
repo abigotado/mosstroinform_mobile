@@ -123,7 +123,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get area => 'Площадь';
 
   @override
-  String get floors => 'этажа';
+  String get floors => 'Этажность';
 
   @override
   String get price => 'Стоимость';
@@ -396,4 +396,10 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get noMyObjects => 'У вас пока нет объектов';
+
+  @override
+  String get constructionProgress => 'Прогресс строительства';
+
+  @override
+  String get stagesCompleted => 'этапов завершено';
 }

@@ -23,6 +23,19 @@ class DocumentRepositoryImpl implements DocumentRepository {
   }
 
   @override
+  Future<List<Document>> getDocumentsByProjectId(String projectId) async {
+    try {
+      // Фильтруем документы по projectId
+      final allDocuments = await getDocuments();
+      return allDocuments.where((doc) => doc.projectId == projectId).toList();
+    } on Failure {
+      rethrow;
+    } catch (e) {
+      throw UnknownFailure('Ошибка при получении документов проекта: $e');
+    }
+  }
+
+  @override
   Future<Document> getDocumentById(String id) async {
     try {
       final model = await remoteDataSource.getDocumentById(id);

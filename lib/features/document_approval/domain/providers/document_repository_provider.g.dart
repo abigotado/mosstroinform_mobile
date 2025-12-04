@@ -12,6 +12,7 @@ part of 'document_repository_provider.dart';
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 @ProviderFor(documentRepository)
 const documentRepositoryProvider = DocumentRepositoryProvider._();
@@ -20,6 +21,7 @@ const documentRepositoryProvider = DocumentRepositoryProvider._();
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 final class DocumentRepositoryProvider
     extends
@@ -33,13 +35,14 @@ final class DocumentRepositoryProvider
   /// Возвращает интерфейс, а не имплементацию
   /// Использует моковый репозиторий если включены моки, иначе реальный
   /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+  /// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
   const DocumentRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'documentRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -68,4 +71,4 @@ final class DocumentRepositoryProvider
 }
 
 String _$documentRepositoryHash() =>
-    r'3010158a437e4cbc470c8ee0d9538983843b8d46';
+    r'5704502d20a26bc5d6350ed236294f8981380f7e';

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/data/mock_data/mock_state_providers.dart';
 import 'package:mosstroinform_mobile/core/data/mock_data/projects_mock_data.dart';
 import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
@@ -86,11 +87,16 @@ class MockProjectRepository implements ProjectRepository {
       AppLogger.info(
         'MockProjectRepository.requestConstruction: проект $projectId добавлен в запрошенные',
       );
+
+      // Создаем документы для проекта
+      ref.read(mockDocumentsStateProvider.notifier).createDocumentsForProject(projectId);
+      AppLogger.info(
+        'MockProjectRepository.requestConstruction: созданы документы для проекта $projectId',
+      );
     } else {
       AppLogger.warning('MockProjectRepository.requestConstruction: ref disposed после await, пропускаем добавление');
     }
     
-    // TODO: Реализовать создание объекта строительства через ConstructionObjectRepository
-    // При запросе проекта должен создаваться объект с начальными этапами
+    // Объект строительства будет создан после подписания всех документов
   }
 }

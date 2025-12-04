@@ -48,7 +48,7 @@ final class MockDocumentsStateProvider
 }
 
 String _$mockDocumentsStateHash() =>
-    r'4628894770df3e6b777a57b38922cfb932479559';
+    r'5a3491e599471bf9d1cb6e56c4cde27a64994b1e';
 
 /// Провайдер состояния моковых документов
 /// Состояние хранится в памяти и сбрасывается при перезапуске приложения
@@ -128,6 +128,77 @@ abstract class _$MockProjectsState extends $Notifier<List<Project>> {
             as $ClassProviderElement<
               AnyNotifier<List<Project>, List<Project>>,
               List<Project>,
+              Object?,
+              Object?
+            >;
+    element.handleValue(ref, created);
+  }
+}
+
+/// Провайдер состояния моковых объектов строительства
+/// Состояние хранится в памяти и сбрасывается при перезапуске приложения
+
+@ProviderFor(MockConstructionObjectsState)
+const mockConstructionObjectsStateProvider =
+    MockConstructionObjectsStateProvider._();
+
+/// Провайдер состояния моковых объектов строительства
+/// Состояние хранится в памяти и сбрасывается при перезапуске приложения
+final class MockConstructionObjectsStateProvider
+    extends
+        $NotifierProvider<
+          MockConstructionObjectsState,
+          List<ConstructionObject>
+        > {
+  /// Провайдер состояния моковых объектов строительства
+  /// Состояние хранится в памяти и сбрасывается при перезапуске приложения
+  const MockConstructionObjectsStateProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'mockConstructionObjectsStateProvider',
+        isAutoDispose: false,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$mockConstructionObjectsStateHash();
+
+  @$internal
+  @override
+  MockConstructionObjectsState create() => MockConstructionObjectsState();
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(List<ConstructionObject> value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<List<ConstructionObject>>(value),
+    );
+  }
+}
+
+String _$mockConstructionObjectsStateHash() =>
+    r'fce4dc1ce5614c15b1b7e4fb24afa8ce373dde73';
+
+/// Провайдер состояния моковых объектов строительства
+/// Состояние хранится в памяти и сбрасывается при перезапуске приложения
+
+abstract class _$MockConstructionObjectsState
+    extends $Notifier<List<ConstructionObject>> {
+  List<ConstructionObject> build();
+  @$mustCallSuper
+  @override
+  void runBuild() {
+    final created = build();
+    final ref =
+        this.ref as $Ref<List<ConstructionObject>, List<ConstructionObject>>;
+    final element =
+        ref.element
+            as $ClassProviderElement<
+              AnyNotifier<List<ConstructionObject>, List<ConstructionObject>>,
+              List<ConstructionObject>,
               Object?,
               Object?
             >;
