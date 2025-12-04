@@ -18,9 +18,7 @@
     "**/.packages": true,
     "**/.pub-cache": true,
     "**/.pub": true,
-    "**/build": true,
-    "ARCHITECTURE_RULES.md": true,
-    "EVALUATION_CHECK.md": true
+    "**/build": true
   },
   "files.associations": {
     "*.arb": "json"

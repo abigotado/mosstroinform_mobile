@@ -51,5 +51,4 @@ app.*.map.json
 .env*.local
 
 # Working documentation (internal use only)
-ARCHITECTURE_RULES.md
-EVALUATION_CHECK.md
+xtemp/
