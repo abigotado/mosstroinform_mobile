@@ -140,7 +140,7 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
       return;
     }
 
-    if (!state.hasValue) {
+    if (!state.hasValue || state.value == null) {
       AppLogger.warning('PaginatedProjectsNotifier.loadNextPage: состояние null');
       return;
     }

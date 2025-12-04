@@ -43,6 +43,7 @@ mixin PaginatedNotifierMixin<T, S extends PaginatedState<T>> {
   bool canLoadNextPage() {
     if (!state.hasValue) return false;
     final currentState = state.value;
+    if (currentState == null) return false;
     return currentState.hasMore && !currentState.isLoadingMore;
   }
 
@@ -52,6 +53,9 @@ mixin PaginatedNotifierMixin<T, S extends PaginatedState<T>> {
       return {'page': 0, 'limit': 10};
     }
     final currentState = state.value;
+    if (currentState == null) {
+      return {'page': 0, 'limit': 10};
+    }
     return {
       'page': currentState.currentPage,
       'limit': currentState.itemsPerPage,
