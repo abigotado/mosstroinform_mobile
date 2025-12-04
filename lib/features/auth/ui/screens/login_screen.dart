@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -33,12 +34,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     }
 
     setState(() => _isLoading = true);
+    AppLogger.info('LoginScreen._handleLogin: начало, email=${_emailController.text.trim()}');
 
     try {
+      AppLogger.info('LoginScreen._handleLogin: вызов authProvider.notifier.login');
       await ref.read(authProvider.notifier).login(
             _emailController.text.trim(),
             _passwordController.text,
           );
+      AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
       if (mounted) {
         // После успешного входа перенаправляем на главную страницу

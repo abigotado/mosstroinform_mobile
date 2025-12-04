@@ -36,57 +36,63 @@ class AuthState {
 }
 
 /// Notifier для управления состоянием авторизации
-@riverpod
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние авторизации должно сохраняться
+@Riverpod(keepAlive: true)
 class AuthNotifier extends _$AuthNotifier {
   @override
   Future<AuthState> build() async {
     // Проверяем авторизацию при инициализации
     final repository = ref.read(authRepositoryProvider);
     final isAuthenticated = await repository.isAuthenticated();
-    
+
     if (isAuthenticated) {
       try {
         final user = await repository.getCurrentUser();
-        return AuthState(
-          user: user,
-          isAuthenticated: true,
-        );
+        return AuthState(user: user, isAuthenticated: true);
       } catch (e) {
         AppLogger.error('Ошибка при получении пользователя: $e');
         return const AuthState(isAuthenticated: false);
       }
     }
-    
+
     return const AuthState(isAuthenticated: false);
   }
 
   /// Вход в систему
   Future<void> login(String email, String password) async {
-    if (!ref.mounted) return;
+    AppLogger.info('AuthNotifier.login: начало, ref.mounted=${ref.mounted}');
+    if (!ref.mounted) {
+      AppLogger.warning('AuthNotifier.login: провайдер не mounted, выход');
+      return;
+    }
     state = const AsyncValue.loading();
-    
+    AppLogger.info('AuthNotifier.login: состояние установлено в loading');
+
     try {
+      AppLogger.info('AuthNotifier.login: получение репозитория');
       final repository = ref.read(authRepositoryProvider);
+      AppLogger.info('AuthNotifier.login: вызов repository.login');
       await repository.login(email, password);
-      
-      if (!ref.mounted) return;
-      
+      AppLogger.info('AuthNotifier.login: repository.login завершен, ref.mounted=${ref.mounted}');
+
+      if (!ref.mounted) {
+        AppLogger.warning('AuthNotifier.login: провайдер disposed после login, выход');
+        return;
+      }
+
       // Получаем данные пользователя
       final user = await repository.getCurrentUser();
-      
+
       if (!ref.mounted) return;
-      
-      state = AsyncValue.data(
-        AuthState(user: user, isAuthenticated: true),
-      );
-      
+
+      state = AsyncValue.data(AuthState(user: user, isAuthenticated: true));
+
       AppLogger.info('Пользователь успешно авторизован: ${user.email}');
     } on Failure catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка авторизации: ${e.message}');
-      state = AsyncValue.data(
-        AuthState(isAuthenticated: false, error: e),
-      );
+      state = AsyncValue.data(AuthState(isAuthenticated: false, error: e));
       rethrow;
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
@@ -110,7 +116,7 @@ class AuthNotifier extends _$AuthNotifier {
   }) async {
     if (!ref.mounted) return;
     state = const AsyncValue.loading();
-    
+
     try {
       final repository = ref.read(authRepositoryProvider);
       await repository.register(
@@ -119,25 +125,21 @@ class AuthNotifier extends _$AuthNotifier {
         name: name,
         phone: phone,
       );
-      
+
       if (!ref.mounted) return;
-      
+
       // Получаем данные пользователя
       final user = await repository.getCurrentUser();
-      
+
       if (!ref.mounted) return;
-      
-      state = AsyncValue.data(
-        AuthState(user: user, isAuthenticated: true),
-      );
-      
+
+      state = AsyncValue.data(AuthState(user: user, isAuthenticated: true));
+
       AppLogger.info('Пользователь успешно зарегистрирован: ${user.email}');
     } on Failure catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка регистрации: ${e.message}');
-      state = AsyncValue.data(
-        AuthState(isAuthenticated: false, error: e),
-      );
+      state = AsyncValue.data(AuthState(isAuthenticated: false, error: e));
       rethrow;
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
@@ -155,58 +157,47 @@ class AuthNotifier extends _$AuthNotifier {
   /// Выход из системы
   Future<void> logout() async {
     if (!ref.mounted) return;
-    
+
     try {
       final repository = ref.read(authRepositoryProvider);
       await repository.logout();
-      
+
       if (!ref.mounted) return;
-      
-      state = const AsyncValue.data(
-        AuthState(isAuthenticated: false),
-      );
-      
+
+      state = const AsyncValue.data(AuthState(isAuthenticated: false));
+
       AppLogger.info('Пользователь вышел из системы');
     } catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка при выходе: $e');
       // Даже при ошибке сбрасываем состояние
-      state = const AsyncValue.data(
-        AuthState(isAuthenticated: false),
-      );
+      state = const AsyncValue.data(AuthState(isAuthenticated: false));
     }
   }
 
   /// Проверить авторизацию
   Future<void> checkAuth() async {
     if (!ref.mounted) return;
-    
+
     try {
       final repository = ref.read(authRepositoryProvider);
       final isAuthenticated = await repository.isAuthenticated();
-      
+
       if (!ref.mounted) return;
-      
+
       if (isAuthenticated) {
         final user = await repository.getCurrentUser();
-        
+
         if (!ref.mounted) return;
-        
-        state = AsyncValue.data(
-          AuthState(user: user, isAuthenticated: true),
-        );
+
+        state = AsyncValue.data(AuthState(user: user, isAuthenticated: true));
       } else {
-        state = const AsyncValue.data(
-          AuthState(isAuthenticated: false),
-        );
+        state = const AsyncValue.data(AuthState(isAuthenticated: false));
       }
     } catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка при проверке авторизации: $e');
-      state = const AsyncValue.data(
-        AuthState(isAuthenticated: false),
-      );
+      state = const AsyncValue.data(AuthState(isAuthenticated: false));
     }
   }
 }
-

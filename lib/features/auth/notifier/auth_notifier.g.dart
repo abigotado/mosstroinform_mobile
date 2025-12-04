@@ -9,21 +9,27 @@ part of 'auth_notifier.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Notifier для управления состоянием авторизации
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние авторизации должно сохраняться
 
 @ProviderFor(AuthNotifier)
 const authProvider = AuthNotifierProvider._();
 
 /// Notifier для управления состоянием авторизации
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние авторизации должно сохраняться
 final class AuthNotifierProvider
     extends $AsyncNotifierProvider<AuthNotifier, AuthState> {
   /// Notifier для управления состоянием авторизации
+  /// keepAlive: true - провайдер не должен быть disposed автоматически,
+  /// так как состояние авторизации должно сохраняться
   const AuthNotifierProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'authProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -36,9 +42,11 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'd47bdc8491a9a0192575e2de93743378fa223b22';
+String _$authNotifierHash() => r'ba4a863eb38f9f05fc6a4e625f76756c3edf9242';
 
 /// Notifier для управления состоянием авторизации
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние авторизации должно сохраняться
 
 abstract class _$AuthNotifier extends $AsyncNotifier<AuthState> {
   FutureOr<AuthState> build();
