@@ -128,16 +128,19 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
       ),
       body: projectsAsync.when(
         data: (state) {
-          // Если список пустой и нет ошибки - это начальное состояние, показываем шиммер
-          if (state.projects.isEmpty && state.error == null) {
-            return ListView.builder(
+          // Если список пустой и загружается - показываем шиммер
+          if (state.projects.isEmpty && state.isLoading) {
+            return GridView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: 3,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: state.projects.length, // Используем реальное количество
               itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: ProjectCardShimmer(),
-                );
+                return const ProjectCardShimmer();
               },
             );
           }
@@ -191,7 +194,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                       mainAxisSpacing: 16,
                       childAspectRatio: 0.75,
                     ),
-                    itemCount: 6,
+                    itemCount: paginatedProjects.length, // Используем реальное количество
                     itemBuilder: (context, index) {
                       return const ProjectCardShimmer();
                     },
@@ -223,14 +226,17 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                       ),
           );
         },
-        loading: () => ListView.builder(
+        loading: () => GridView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: 3,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75,
+          ),
+          itemCount: 0, // При первой загрузке нотифаер вернёт пустой список
           itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: ProjectCardShimmer(),
-            );
+            return const ProjectCardShimmer();
           },
         ),
         error: (error, stack) => Center(

@@ -48,14 +48,17 @@ class _RequestedProjectsScreenState
           final requestedProjects = _getRequestedProjects(state.projects);
 
           if (state.isLoading && requestedProjects.isEmpty) {
-            return ListView.builder(
+            return GridView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: 3,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.75,
+              ),
+              itemCount: requestedProjects.length, // Используем реальное количество
               itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 16),
-                  child: ProjectCardShimmer(),
-                );
+                return const ProjectCardShimmer();
               },
             );
           }
@@ -127,14 +130,17 @@ class _RequestedProjectsScreenState
             ),
           );
         },
-        loading: () => ListView.builder(
+        loading: () => GridView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: 3,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            crossAxisSpacing: 16,
+            mainAxisSpacing: 16,
+            childAspectRatio: 0.75,
+          ),
+          itemCount: 0, // При первой загрузке нотифаер вернёт пустой список
           itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(bottom: 16),
-              child: ProjectCardShimmer(),
-            );
+            return const ProjectCardShimmer();
           },
         ),
         error: (error, stack) => Center(
