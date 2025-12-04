@@ -7,7 +7,7 @@ import 'package:mosstroinform_mobile/features/document_approval/domain/entities/
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
-import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
+// import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Экран детального просмотра проекта
@@ -51,10 +51,8 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
               if (projectState == null) return const SizedBox.shrink();
 
-              // Проверяем, был ли уже отправлен запрос на строительство
-              final hasRequestBeenSent = projectState.stages.any(
-                (stage) => stage.status != StageStatus.pending,
-              );
+              // TODO: Проверять через ConstructionObjectRepository, существует ли объект для этого проекта
+              final hasRequestBeenSent = false;
 
               // Проверяем, все ли документы одобрены
               final allDocuments = ref.watch(documentsProvider);
@@ -65,33 +63,8 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 orElse: () => false,
               );
 
-              return Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Кнопка перехода к строительству (показывается если запрос отправлен и все документы одобрены)
-                  if (hasRequestBeenSent && allApproved)
-                    IconButton(
-                      icon: const Icon(Icons.construction),
-                      tooltip: l10n.toConstruction,
-                      onPressed: () {
-                        if (mounted) {
-                          context.push('/construction/${widget.projectId}');
-                        }
-                      },
-                    ),
-                  // Кнопка перехода к документам (показывается после отправки запроса)
-                  if (hasRequestBeenSent)
-                    IconButton(
-                      icon: const Icon(Icons.description),
-                      tooltip: l10n.toDocuments,
-                      onPressed: () {
-                        if (mounted) {
-                          context.push('/documents');
-                        }
-                      },
-                    ),
-                ],
-              );
+              // TODO: Показывать кнопки навигации к объекту строительства
+              return const SizedBox.shrink();
             },
           ),
         ],
@@ -192,12 +165,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                         style: theme.textTheme.titleLarge,
                       ),
                       const SizedBox(height: 16),
-                      ...project.stages.map(
-                        (stage) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: ProjectStageItem(stage: stage),
-                        ),
-                      ),
+                      // TODO: Показывать этапы из объекта строительства через ConstructionObjectRepository
+                      // Проекты не содержат этапов
+                      const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -237,19 +207,13 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
         data: (state) {
           if (state.project == null) return const SizedBox.shrink();
 
-          final project = state.project!;
-
-          // Проверяем, был ли уже отправлен запрос на строительство
-          // Если хотя бы один этап имеет статус inProgress или completed,
-          // значит запрос уже был отправлен
-          final hasRequestBeenSent = project.stages.any(
-            (stage) => stage.status != StageStatus.pending,
-          );
+          // TODO: Проверять через ConstructionObjectRepository, существует ли объект для этого проекта
+          // final hasRequestBeenSent = false;
 
           // Не показываем кнопку, если запрос уже был отправлен
-          if (hasRequestBeenSent) {
-            return const SizedBox.shrink();
-          }
+          // if (hasRequestBeenSent) {
+          //   return const SizedBox.shrink();
+          // }
 
           return SafeArea(
             child: Padding(

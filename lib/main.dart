@@ -51,8 +51,30 @@ final routerProvider = Provider<GoRouter>((ref) {
     'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
   );
   
+  // Определяем начальный роут на основе состояния авторизации
+  String initialLocation = '/';
+  if (authState.hasValue) {
+    final isAuthenticated = authState.value?.isAuthenticated ?? false;
+    initialLocation = isAuthenticated ? '/' : '/login';
+  } else if (authState.isLoading) {
+    // Пока загружается, показываем главную (будет редирект если не авторизован)
+    initialLocation = '/';
+  } else {
+    // Если ошибка или не авторизован, показываем логин
+    initialLocation = '/login';
+  }
+  
+  AppLogger.info('RouterProvider.build: initialLocation=$initialLocation');
+  
   return GoRouter(
+    initialLocation: initialLocation,
     redirect: (context, state) {
+      // Если авторизация еще загружается, не делаем редирект
+      if (authState.isLoading) {
+        AppLogger.info('Router.redirect: авторизация загружается, ожидание...');
+        return null;
+      }
+      
       // Используем текущее значение из замыкания
       final isAuthenticated = authState.value?.isAuthenticated ?? false;
       final isLoginRoute = state.matchedLocation == '/login' ||

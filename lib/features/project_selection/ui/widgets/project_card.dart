@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
-import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
-/// Виджет карточки проекта
+/// Виджет карточки проекта (компактная версия для GridView)
 class ProjectCard extends StatelessWidget {
   final Project project;
   final VoidCallback onTap;
@@ -11,7 +10,6 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
@@ -50,7 +48,7 @@ class ProjectCard extends StatelessWidget {
                     return Container(
                       color: colorScheme.surfaceContainerHighest,
                       child: const Center(
-                        child: Icon(Icons.image_not_supported, size: 48),
+                        child: Icon(Icons.image_not_supported, size: 32),
                       ),
                     );
                   },
@@ -61,70 +59,78 @@ class ProjectCard extends StatelessWidget {
                 aspectRatio: 16 / 9,
                 child: Container(
                   color: colorScheme.surfaceContainerHighest,
-                  child: const Center(child: Icon(Icons.home, size: 48)),
+                  child: const Center(child: Icon(Icons.home, size: 32)),
                 ),
               ),
 
             // Информация о проекте
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Название и адрес
-                  Text(project.name, style: theme.textTheme.titleLarge),
+                  // Название
+                  Text(
+                    project.name,
+                    style: theme.textTheme.titleMedium,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                   const SizedBox(height: 4),
+                  
+                  // Адрес
                   Text(
                     project.address,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 8),
 
                   // Описание
                   Text(
                     project.description,
-                    style: theme.textTheme.bodyMedium,
+                    style: theme.textTheme.bodySmall,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
 
-                  // Характеристики
-                  Row(
+                  // Параметры
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 4,
                     children: [
                       _InfoChip(
                         icon: Icons.square_foot,
                         text: '${project.area.toInt()} м²',
                       ),
-                      const SizedBox(width: 8),
                       _InfoChip(
                         icon: Icons.layers,
-                        text:
-                            '${project.floors} ${project.floors > 1 ? l10n.floors : l10n.floor}',
+                        text: '${project.floors} ${_getFloorsText(project.floors)}',
                       ),
-                      const Spacer(),
-                      Text(
-                        '${_formatPrice(project.price)} ₽',
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      _InfoChip(
+                        icon: Icons.bed,
+                        text: '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
+                      ),
+                      _InfoChip(
+                        icon: Icons.bathtub,
+                        text: '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
                       ),
                     ],
                   ),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 8),
 
-                  // Этапы строительства
-                  if (project.stages.isNotEmpty) ...[
-                    Text(
-                      l10n.constructionStagesLabel,
-                      style: theme.textTheme.labelMedium,
+                  // Цена
+                  Text(
+                    _formatPrice(project.price),
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      color: colorScheme.primary,
+                      fontWeight: FontWeight.bold,
                     ),
-                    const SizedBox(height: 8),
-                    _StagesIndicator(stages: project.stages),
-                  ],
+                  ),
                 ],
               ),
             ),
@@ -136,11 +142,29 @@ class ProjectCard extends StatelessWidget {
 
   String _formatPrice(int price) {
     if (price >= 1000000) {
-      return '${(price / 1000000).toStringAsFixed(1)} млн';
+      return '${(price / 1000000).toStringAsFixed(1)} млн ₽';
     } else if (price >= 1000) {
-      return '${(price / 1000).toStringAsFixed(0)} тыс';
+      return '${(price / 1000).toStringAsFixed(0)} тыс ₽';
     }
-    return price.toString();
+    return '$price ₽';
+  }
+
+  String _getFloorsText(int floors) {
+    if (floors == 1) return 'этаж';
+    if (floors >= 2 && floors <= 4) return 'этажа';
+    return 'этажей';
+  }
+
+  String _getBedroomsText(int bedrooms) {
+    if (bedrooms == 1) return 'спальня';
+    if (bedrooms >= 2 && bedrooms <= 4) return 'спальни';
+    return 'спален';
+  }
+
+  String _getBathroomsText(int bathrooms) {
+    if (bathrooms == 1) return 'ванная';
+    if (bathrooms >= 2 && bathrooms <= 4) return 'ванные';
+    return 'ванных';
   }
 }
 
@@ -157,64 +181,14 @@ class _InfoChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 16, color: theme.colorScheme.onSurfaceVariant),
+        Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 4),
-        Text(text, style: theme.textTheme.bodySmall),
-      ],
-    );
-  }
-}
-
-/// Виджет индикатора этапов строительства
-class _StagesIndicator extends StatelessWidget {
-  final List<ConstructionStage> stages;
-
-  const _StagesIndicator({required this.stages});
-
-  @override
-  Widget build(BuildContext context) {
-    final completedCount = stages
-        .where((s) => s.status == StageStatus.completed)
-        .length;
-    final inProgressCount = stages
-        .where((s) => s.status == StageStatus.inProgress)
-        .length;
-    final totalCount = stages.length;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Прогресс бар
-        ClipRRect(
-          borderRadius: BorderRadius.circular(4),
-          child: LinearProgressIndicator(
-            value: completedCount / totalCount,
-            minHeight: 8,
-            backgroundColor: Colors.grey[300],
+        Text(
+          text,
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontSize: 11,
           ),
         ),
-        const SizedBox(height: 8),
-        // Текущий этап
-        if (inProgressCount > 0)
-          Row(
-            children: [
-              Container(
-                width: 8,
-                height: 8,
-                decoration: const BoxDecoration(
-                  color: Colors.green,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                stages
-                    .firstWhere((s) => s.status == StageStatus.inProgress)
-                    .name,
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-            ],
-          ),
       ],
     );
   }

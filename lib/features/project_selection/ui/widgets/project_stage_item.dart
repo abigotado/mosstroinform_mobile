@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Виджет элемента этапа строительства

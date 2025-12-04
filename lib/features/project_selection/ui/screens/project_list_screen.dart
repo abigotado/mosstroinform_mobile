@@ -183,38 +183,41 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               await ref.read(projectsProvider.notifier).loadProjects();
             },
             child: state.isLoading && paginatedProjects.isEmpty
-                ? ListView.builder(
+                ? GridView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: 3,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemCount: 6,
                     itemBuilder: (context, index) {
-                      return const Padding(
-                        padding: EdgeInsets.only(bottom: 16),
-                        child: ProjectCardShimmer(),
-                      );
+                      return const ProjectCardShimmer();
                     },
                   )
                 : paginatedProjects.isEmpty
                     ? Center(child: Text(l10n.projectsNotFound))
-                    : ListView.builder(
+                    : GridView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.all(16),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.75,
+                        ),
                         itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == paginatedProjects.length) {
-                            return const Padding(
-                              padding: EdgeInsets.all(16.0),
-                              child: Center(child: CircularProgressIndicator()),
-                            );
+                            return const Center(child: CircularProgressIndicator());
                           }
                           final project = paginatedProjects[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: ProjectCard(
-                              project: project,
-                              onTap: () {
-                                context.push('/projects/${project.id}');
-                              },
-                            ),
+                          return ProjectCard(
+                            project: project,
+                            onTap: () {
+                              context.push('/projects/${project.id}');
+                            },
                           );
                         },
                       ),

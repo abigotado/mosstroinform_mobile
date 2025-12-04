@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/mock_state_providers.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/project_selection/data/models/project_model.dart';
@@ -29,15 +28,12 @@ class MockProjectRepository implements ProjectRepository {
         'description': 'Двухэтажный дом площадью 150 кв.м с гаражом',
         'area': 150.0,
         'floors': 2,
+        'bedrooms': 3,
+        'bathrooms': 2,
         'price': 8500000,
         'imageUrl':
             'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=800&h=600&fit=crop',
-        'stages': [
-          {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
-          {'id': '2', 'name': 'Фундамент', 'status': 'in_progress'},
-          {'id': '3', 'name': 'Возведение стен', 'status': 'pending'},
-          {'id': '4', 'name': 'Кровля', 'status': 'pending'},
-        ],
+        'stages': [],
       },
       {
         'id': '2',
@@ -46,15 +42,12 @@ class MockProjectRepository implements ProjectRepository {
         'description': 'Одноэтажный дачный дом площадью 80 кв.м',
         'area': 80.0,
         'floors': 1,
+        'bedrooms': 2,
+        'bathrooms': 1,
         'price': 4200000,
         'imageUrl':
             'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&h=600&fit=crop',
-        'stages': [
-          {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
-          {'id': '2', 'name': 'Фундамент', 'status': 'completed'},
-          {'id': '3', 'name': 'Возведение стен', 'status': 'in_progress'},
-          {'id': '4', 'name': 'Кровля', 'status': 'pending'},
-        ],
+        'stages': [],
       },
       {
         'id': '3',
@@ -63,15 +56,12 @@ class MockProjectRepository implements ProjectRepository {
         'description': 'Дом с мансардой площадью 180 кв.м',
         'area': 180.0,
         'floors': 2,
+        'bedrooms': 4,
+        'bathrooms': 3,
         'price': 12000000,
         'imageUrl':
             'https://images.unsplash.com/photo-1600607687644-c7171b42498b?w=800&h=600&fit=crop',
-        'stages': [
-          {'id': '1', 'name': 'Подготовительные работы', 'status': 'completed'},
-          {'id': '2', 'name': 'Фундамент', 'status': 'completed'},
-          {'id': '3', 'name': 'Возведение стен', 'status': 'completed'},
-          {'id': '4', 'name': 'Кровля', 'status': 'in_progress'},
-        ],
+        'stages': [],
       },
     ];
 
@@ -103,57 +93,10 @@ class MockProjectRepository implements ProjectRepository {
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Обновляем состояние проекта: переводим первый этап в статус inProgress
-    final projects = await getProjects();
-    final projectIndex = projects.indexWhere((p) => p.id == projectId);
-
-    if (projectIndex != -1) {
-      final project = projects[projectIndex];
-
-      // Проверяем, что еще не был отправлен запрос (все этапы в pending)
-      final allPending = project.stages.every(
-        (stage) => stage.status == StageStatus.pending,
-      );
-
-      if (allPending && project.stages.isNotEmpty) {
-        // Обновляем первый этап на inProgress
-        final updatedStages = [
-          ConstructionStage(
-            id: project.stages.first.id,
-            name: project.stages.first.name,
-            status: StageStatus.inProgress,
-          ),
-          ...project.stages.skip(1),
-        ];
-
-        final updatedProject = Project(
-          id: project.id,
-          name: project.name,
-          address: project.address,
-          description: project.description,
-          area: project.area,
-          floors: project.floors,
-          price: project.price,
-          imageUrl: project.imageUrl,
-          stages: updatedStages,
-        );
-
-        // Обновляем состояние через провайдер (если он еще не disposed)
-        try {
-          if (ref.mounted) {
-            ref
-                .read(mockProjectsStateProvider.notifier)
-                .updateProject(updatedProject);
-            AppLogger.info(
-              'MockProjectRepository.requestConstruction: проект обновлен через провайдер',
-            );
-          }
-        } catch (e) {
-          AppLogger.info(
-            'MockProjectRepository.requestConstruction: не удалось обновить через провайдер: $e',
-          );
-        }
-      }
-    }
+    // TODO: Реализовать создание объекта строительства через ConstructionObjectRepository
+    // При запросе проекта должен создаваться объект с начальными этапами
+    AppLogger.info(
+      'MockProjectRepository.requestConstruction: запрос на строительство проекта $projectId',
+    );
   }
 }

@@ -26,11 +26,9 @@ class _MyObjectsScreenState extends ConsumerState<MyObjectsScreen> {
   }
 
   List<Project> _getMyObjects(List<Project> projects) {
-    return projects.where((project) {
-      // Объект считается завершенным, если все этапы имеют статус completed
-      return project.stages.isNotEmpty &&
-          project.stages.every((stage) => stage.status == StageStatus.completed);
-    }).toList();
+    // TODO: Реализовать получение завершенных объектов через ConstructionObjectRepository
+    // Пока возвращаем пустой список, так как проекты не имеют этапов
+    return [];
   }
 
   @override

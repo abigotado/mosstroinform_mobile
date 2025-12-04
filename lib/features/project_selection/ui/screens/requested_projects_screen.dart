@@ -28,12 +28,9 @@ class _RequestedProjectsScreenState
   }
 
   List<Project> _getRequestedProjects(List<Project> projects) {
-    return projects.where((project) {
-      // Проект считается запрошенным, если хотя бы один этап имеет статус inProgress или completed
-      return project.stages.any(
-        (stage) => stage.status != StageStatus.pending,
-      );
-    }).toList();
+    // TODO: Реализовать получение запрошенных объектов через ConstructionObjectRepository
+    // Пока возвращаем пустой список, так как проекты не имеют этапов
+    return [];
   }
 
   @override

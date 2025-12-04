@@ -1,4 +1,5 @@
 /// Сущность проекта в доменном слое
+/// Проект - это каталог вариантов домов для выбора, без этапов строительства
 class Project {
   final String id;
   final String name;
@@ -6,9 +7,10 @@ class Project {
   final String description;
   final double area;
   final int floors;
+  final int bedrooms;
+  final int bathrooms;
   final int price;
   final String? imageUrl;
-  final List<ConstructionStage> stages;
 
   const Project({
     required this.id,
@@ -17,24 +19,9 @@ class Project {
     required this.description,
     required this.area,
     required this.floors,
+    required this.bedrooms,
+    required this.bathrooms,
     required this.price,
     this.imageUrl,
-    required this.stages,
   });
 }
-
-/// Этап строительства
-class ConstructionStage {
-  final String id;
-  final String name;
-  final StageStatus status;
-
-  const ConstructionStage({
-    required this.id,
-    required this.name,
-    required this.status,
-  });
-}
-
-/// Статус этапа строительства
-enum StageStatus { pending, inProgress, completed }
