@@ -11,7 +11,7 @@ part 'auth_repository_provider.g.dart';
 /// Провайдер репозитория авторизации
 /// Возвращает mock или реальную реализацию в зависимости от конфигурации
 @riverpod
-AuthRepository authRepository(AuthRepositoryRef ref) {
+AuthRepository authRepository(Ref ref) {
   final secureStorage = ref.watch(secureStorageProvider);
   
   if (AppConstants.useMocks) {

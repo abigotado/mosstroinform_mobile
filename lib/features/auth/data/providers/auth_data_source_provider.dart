@@ -10,7 +10,7 @@ part 'auth_data_source_provider.g.dart';
 
 /// Провайдер для Dio клиента с авторизацией
 @riverpod
-Dio authDio(AuthDioRef ref) {
+Dio authDio(Ref ref) {
   final baseDio = ref.watch(dioProvider);
   final secureStorage = ref.watch(secureStorageProvider);
   
@@ -23,7 +23,7 @@ Dio authDio(AuthDioRef ref) {
 
 /// Провайдер для удалённого источника данных авторизации
 @riverpod
-AuthRemoteDataSource authRemoteDataSource(AuthRemoteDataSourceRef ref) {
+AuthRemoteDataSource authRemoteDataSource(Ref ref) {
   final dio = ref.watch(authDioProvider);
   return AuthRemoteDataSource(dio, baseUrl: AppConstants.baseUrl);
 }
