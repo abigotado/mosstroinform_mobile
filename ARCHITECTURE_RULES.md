@@ -156,6 +156,165 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 - Ошибки типов
 - Ошибки линтера
 
+## Правила UI и стилизации
+
+### 1. Локализация текстов
+
+**Все тексты должны храниться в локализации.**
+
+**❌ НЕПРАВИЛЬНО:**
+```dart
+Text('Вход в систему')
+Text('Email')
+ElevatedButton(onPressed: () {}, child: Text('Войти'))
+```
+
+**✅ ПРАВИЛЬНО:**
+```dart
+final l10n = AppLocalizations.of(context)!;
+Text(l10n.loginTitle)
+Text(l10n.emailLabel)
+ElevatedButton(onPressed: () {}, child: Text(l10n.loginButton))
+```
+
+**Правила:**
+- Все строки, видимые пользователю, должны быть в `l10n/app_ru.arb`
+- Использовать `AppLocalizations.of(context)!` для получения локализованных строк
+- Даже короткие тексты (кнопки, заголовки, подсказки) должны быть локализованы
+- Исключение: только технические сообщения для разработчиков (логи, debug)
+
+### 2. Виджет-функции не используются
+
+**Используются только классы виджетов.**
+
+**❌ НЕПРАВИЛЬНО:**
+```dart
+Widget buildButton(String text) {
+  return ElevatedButton(
+    onPressed: () {},
+    child: Text(text),
+  );
+}
+
+Widget build(BuildContext context) {
+  return Column(
+    children: [
+      buildButton('Войти'),
+    ],
+  );
+}
+```
+
+**✅ ПРАВИЛЬНО:**
+```dart
+class LoginButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  
+  const LoginButton({super.key, required this.onPressed});
+  
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return ElevatedButton(
+      onPressed: onPressed,
+      child: Text(l10n.loginButton),
+    );
+  }
+}
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        LoginButton(onPressed: () {}),
+      ],
+    );
+  }
+}
+```
+
+**Правила:**
+- Все виджеты должны быть классами, наследующими `StatelessWidget` или `StatefulWidget`
+- Не использовать функции, возвращающие `Widget`
+- Для переиспользуемых компонентов создавать отдельные классы виджетов
+- Исключение: только встроенные виджеты Flutter (например, `Padding`, `SizedBox`)
+
+### 3. Стили хранятся в теме
+
+**Все стили (цвета, шрифты, размеры) должны браться из темы.**
+
+**❌ НЕПРАВИЛЬНО:**
+```dart
+Text(
+  'Заголовок',
+  style: TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.bold,
+    color: Colors.blue,
+  ),
+)
+
+Container(
+  color: Colors.grey[200],
+  child: Text('Текст'),
+)
+```
+
+**✅ ПРАВИЛЬНО:**
+```dart
+final theme = Theme.of(context);
+
+Text(
+  l10n.title,
+  style: theme.textTheme.headlineMedium,
+)
+
+Container(
+  color: theme.colorScheme.surfaceContainerHighest,
+  child: Text(
+    l10n.text,
+    style: theme.textTheme.bodyLarge,
+  ),
+)
+```
+
+**Правила:**
+- Использовать `Theme.of(context)` для получения темы
+- Цвета брать из `theme.colorScheme.*` (например, `primary`, `onSurface`, `surfaceContainerHighest`)
+- Шрифты и размеры брать из `theme.textTheme.*` (например, `headlineMedium`, `bodyLarge`, `titleSmall`)
+- Не использовать хардкод цветов (`Colors.blue`, `Colors.grey[200]`)
+- Не использовать хардкод размеров шрифтов (`fontSize: 24`)
+- Исключение: только системные цвета Flutter для специфических случаев (например, `Colors.transparent`)
+
+**Доступные стили из темы:**
+
+**Цвета:**
+- `theme.colorScheme.primary` - основной цвет
+- `theme.colorScheme.onPrimary` - цвет текста на основном фоне
+- `theme.colorScheme.surface` - цвет поверхности
+- `theme.colorScheme.onSurface` - цвет текста на поверхности
+- `theme.colorScheme.surfaceContainerHighest` - самый светлый контейнер
+- `theme.colorScheme.error` - цвет ошибки
+- `theme.colorScheme.onError` - цвет текста на ошибке
+
+**Типографика:**
+- `theme.textTheme.displayLarge` - самый большой заголовок
+- `theme.textTheme.displayMedium` - большой заголовок
+- `theme.textTheme.displaySmall` - средний заголовок
+- `theme.textTheme.headlineLarge` - заголовок списка
+- `theme.textTheme.headlineMedium` - заголовок секции
+- `theme.textTheme.headlineSmall` - подзаголовок
+- `theme.textTheme.titleLarge` - заголовок карточки
+- `theme.textTheme.titleMedium` - заголовок элемента
+- `theme.textTheme.titleSmall` - маленький заголовок
+- `theme.textTheme.bodyLarge` - основной текст
+- `theme.textTheme.bodyMedium` - вторичный текст
+- `theme.textTheme.bodySmall` - маленький текст
+- `theme.textTheme.labelLarge` - метка (кнопка)
+- `theme.textTheme.labelMedium` - средняя метка
+- `theme.textTheme.labelSmall` - маленькая метка
+
 ## Правила именования
 
 ### Провайдеры данных
@@ -176,6 +335,9 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 - [ ] UI layer: screens, widgets
 - [ ] Провайдеры данных в `data/providers/`
 - [ ] Провайдеры возвращают интерфейсы, а не имплементации
+- [ ] Все тексты локализованы (используется `AppLocalizations`)
+- [ ] Нет виджет-функций (только классы виджетов)
+- [ ] Все стили берутся из темы (цвета, шрифты)
 - [ ] Все warnings исправлены
 - [ ] Все errors исправлены
 - [ ] Код сгенерирован (`build_runner build`)
