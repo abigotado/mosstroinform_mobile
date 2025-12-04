@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
-import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Экран моих объектов
