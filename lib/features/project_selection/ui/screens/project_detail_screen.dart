@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
@@ -208,13 +209,14 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
         data: (state) {
           if (state.project == null) return const SizedBox.shrink();
 
-          // TODO: Проверять через ConstructionObjectRepository, существует ли объект для этого проекта
-          // final hasRequestBeenSent = false;
+          // Проверяем, запрошен ли проект
+          final requestedIds = ref.watch(requestedProjectsStateProvider);
+          final isRequested = requestedIds.contains(widget.projectId);
 
           // Не показываем кнопку, если запрос уже был отправлен
-          // if (hasRequestBeenSent) {
-          //   return const SizedBox.shrink();
-          // }
+          if (isRequested) {
+            return const SizedBox.shrink();
+          }
 
           return SafeArea(
             child: Padding(

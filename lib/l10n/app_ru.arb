@@ -502,6 +502,7 @@
     "description": "Подсказка для кнопки выхода"
   },
   "requestedProjectsTitle": "Запрошенные проекты",
+  "requested": "Запрошен",
   "@requestedProjectsTitle": {
     "description": "Заголовок экрана запрошенных проектов"
   },

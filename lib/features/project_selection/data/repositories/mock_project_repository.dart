@@ -37,19 +37,15 @@ class MockProjectRepository implements ProjectRepository {
     final mockData = ProjectsMockData.projects;
 
     // Создаем проекты напрямую из мок-данных
+    // НЕ фильтруем запрошенные - они остаются в списке со статусом
     final models = mockData.map((json) => ProjectModel.fromJson(json)).toList();
     final allProjects = models.map((model) => model.toEntity()).toList();
     
-    // Фильтруем проекты: исключаем запрошенные
-    final availableProjects = allProjects
-        .where((project) => !requestedProjects.contains(project.id))
-        .toList();
-    
     AppLogger.info(
       'MockProjectRepository.getProjects: создано ${allProjects.length} проектов, '
-      'запрошено ${requestedProjects.length}, доступно ${availableProjects.length}',
+      'запрошено ${requestedProjects.length}',
     );
-    return availableProjects;
+    return allProjects;
   }
 
   @override
@@ -61,18 +57,16 @@ class MockProjectRepository implements ProjectRepository {
       throw UnknownFailure('Провайдер disposed');
     }
 
-    final projects = await getProjects();
+    // Получаем проект напрямую из мок-данных, не через getProjects()
+    // чтобы избежать проблем с фильтрацией
+    final mockData = ProjectsMockData.projects;
+    final projectData = mockData.firstWhere(
+      (json) => json['id'] == id,
+      orElse: () => throw UnknownFailure('Проект с ID $id не найден'),
+    );
     
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed после загрузки проектов');
-    }
-    
-    try {
-      final project = projects.firstWhere((p) => p.id == id);
-      return project;
-    } catch (e) {
-      throw UnknownFailure('Проект с ID $id не найден');
-    }
+    final model = ProjectModel.fromJson(projectData);
+    return model.toEntity();
   }
 
   @override
