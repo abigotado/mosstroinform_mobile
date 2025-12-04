@@ -678,7 +678,6 @@ AppLogger.error('Ошибка', error, stackTrace);
 - Использование интерфейсов для репозиториев
 - Типобезопасность через Freezed
 
-Подробнее о правилах архитектуры см. [ARCHITECTURE_RULES.md](./ARCHITECTURE_RULES.md)
 
 ## 🔄 Работа с Git
 
