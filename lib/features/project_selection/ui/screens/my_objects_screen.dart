@@ -46,17 +46,14 @@ class _MyObjectsScreenState extends ConsumerState<MyObjectsScreen> {
           final myObjects = _getMyObjects(state.projects);
 
           if (state.isLoading && myObjects.isEmpty) {
-            return GridView.builder(
+            return ListView.builder(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.75,
-              ),
               itemCount: myObjects.length, // Используем реальное количество
               itemBuilder: (context, index) {
-                return const ProjectCardShimmer();
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: ProjectCardShimmer(),
+                );
               },
             );
           }
@@ -128,17 +125,14 @@ class _MyObjectsScreenState extends ConsumerState<MyObjectsScreen> {
             ),
           );
         },
-        loading: () => GridView.builder(
+        loading: () => ListView.builder(
           padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.75,
-          ),
           itemCount: 0, // При первой загрузке нотифаер вернёт пустой список
           itemBuilder: (context, index) {
-            return const ProjectCardShimmer();
+            return const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: ProjectCardShimmer(),
+            );
           },
         ),
         error: (error, stack) => Center(

@@ -130,17 +130,14 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
         data: (state) {
           // Если список пустой и загружается - показываем шиммер
           if (state.projects.isEmpty && state.isLoading) {
-            return GridView.builder(
+            return ListView.builder(
               padding: const EdgeInsets.all(16),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.75,
-              ),
               itemCount: state.projects.length, // Используем реальное количество
               itemBuilder: (context, index) {
-                return const ProjectCardShimmer();
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: 16),
+                  child: ProjectCardShimmer(),
+                );
               },
             );
           }
@@ -186,57 +183,51 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               await ref.read(projectsProvider.notifier).loadProjects();
             },
             child: state.isLoading && paginatedProjects.isEmpty
-                ? GridView.builder(
+                ? ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                      childAspectRatio: 0.75,
-                    ),
                     itemCount: paginatedProjects.length, // Используем реальное количество
                     itemBuilder: (context, index) {
-                      return const ProjectCardShimmer();
+                      return const Padding(
+                        padding: EdgeInsets.only(bottom: 16),
+                        child: ProjectCardShimmer(),
+                      );
                     },
                   )
                 : paginatedProjects.isEmpty
                     ? Center(child: Text(l10n.projectsNotFound))
-                    : GridView.builder(
+                    : ListView.builder(
                         controller: _scrollController,
                         padding: const EdgeInsets.all(16),
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 0.75,
-                        ),
                         itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
                         itemBuilder: (context, index) {
                           if (index == paginatedProjects.length) {
-                            return const Center(child: CircularProgressIndicator());
+                            return const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
                           }
                           final project = paginatedProjects[index];
-                          return ProjectCard(
-                            project: project,
-                            onTap: () {
-                              context.push('/projects/${project.id}');
-                            },
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: ProjectCard(
+                              project: project,
+                              onTap: () {
+                                context.push('/projects/${project.id}');
+                              },
+                            ),
                           );
                         },
                       ),
           );
         },
-        loading: () => GridView.builder(
+        loading: () => ListView.builder(
           padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 16,
-            mainAxisSpacing: 16,
-            childAspectRatio: 0.75,
-          ),
           itemCount: 0, // При первой загрузке нотифаер вернёт пустой список
           itemBuilder: (context, index) {
-            return const ProjectCardShimmer();
+            return const Padding(
+              padding: EdgeInsets.only(bottom: 16),
+              child: ProjectCardShimmer(),
+            );
           },
         ),
         error: (error, stack) => Center(
