@@ -67,6 +67,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   AppLogger.info('RouterProvider.build: initialLocation=$initialLocation');
   
   return GoRouter(
+    debugLogDiagnostics: true,
     initialLocation: initialLocation,
     redirect: (context, state) {
       // Если авторизация еще загружается, не делаем редирект
