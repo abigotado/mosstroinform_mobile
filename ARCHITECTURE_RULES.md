@@ -315,6 +315,38 @@ Container(
 - `theme.textTheme.labelMedium` - средняя метка
 - `theme.textTheme.labelSmall` - маленькая метка
 
+## Правила работы с Riverpod
+
+### Импорты для провайдеров
+
+**Всегда добавлять `flutter_riverpod` в импорты при использовании `riverpod_annotation`.**
+
+**❌ НЕПРАВИЛЬНО:**
+```dart
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+@riverpod
+MyType myProvider(MyProviderRef ref) {
+  // ...
+}
+```
+
+**✅ ПРАВИЛЬНО:**
+```dart
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+@riverpod
+MyType myProvider(Ref ref) {
+  // ...
+}
+```
+
+**Правила:**
+- Всегда использовать `Ref ref` вместо типов с суффиксом `Ref` (например, `MyProviderRef`)
+- Всегда добавлять `import 'package:flutter_riverpod/flutter_riverpod.dart';` при использовании `@riverpod`
+- Это необходимо для корректной работы code generation
+
 ## Правила именования
 
 ### Провайдеры данных
