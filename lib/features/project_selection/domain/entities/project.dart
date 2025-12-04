@@ -24,4 +24,9 @@ class Project {
     required this.price,
     this.imageUrl,
   });
+
+  @override
+  String toString() {
+    return 'Project(id: $id, name: $name, address: $address, area: $area, floors: $floors, bedrooms: $bedrooms, bathrooms: $bathrooms, price: $price)';
+  }
 }

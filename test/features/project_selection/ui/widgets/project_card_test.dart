@@ -32,8 +32,9 @@ void main() {
         description: 'Описание',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [],
       );
 
       await tester.pumpWidget(
@@ -51,8 +52,9 @@ void main() {
         description: 'Описание',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [],
       );
 
       await tester.pumpWidget(
@@ -70,8 +72,9 @@ void main() {
         description: 'Описание',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [],
       );
 
       bool tapped = false;
@@ -96,8 +99,9 @@ void main() {
         description: 'Описание',
         area: 100.0,
         floors: 3,
+        bedrooms: 4,
+        bathrooms: 3,
         price: 1000000,
-        stages: [],
       );
 
       await tester.pumpWidget(
@@ -108,7 +112,7 @@ void main() {
       expect(find.textContaining('3'), findsWidgets);
     });
 
-    testWidgets('отображает этапы строительства', (WidgetTester tester) async {
+    testWidgets('отображает параметры проекта', (WidgetTester tester) async {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
@@ -116,27 +120,18 @@ void main() {
         description: 'Описание',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [
-          ConstructionStage(
-            id: '1',
-            name: 'Этап 1',
-            status: StageStatus.pending,
-          ),
-          ConstructionStage(
-            id: '2',
-            name: 'Этап 2',
-            status: StageStatus.inProgress,
-          ),
-        ],
       );
 
       await tester.pumpWidget(
         createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
-      // Проверяем, что информация о этапах отображается
-      expect(find.textContaining('Этапы строительства'), findsOneWidget);
+      // Проверяем, что информация о параметрах отображается
+      expect(find.textContaining('100'), findsWidgets); // площадь
+      expect(find.textContaining('2'), findsWidgets); // этажи
     });
   });
 }

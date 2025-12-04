@@ -31,6 +31,11 @@ class ConstructionObject {
     required this.stages,
   });
 
+  @override
+  String toString() {
+    return 'ConstructionObject(id: $id, projectId: $projectId, name: $name, address: $address, area: $area, floors: $floors, stages: ${stages.length})';
+  }
+
   /// Создать объект из проекта
   factory ConstructionObject.fromProject(
     Project project,
@@ -65,6 +70,11 @@ class ConstructionStage {
     required this.name,
     required this.status,
   });
+
+  @override
+  String toString() {
+    return 'ConstructionStage(id: $id, name: $name, status: $status)';
+  }
 }
 
 /// Статус этапа строительства

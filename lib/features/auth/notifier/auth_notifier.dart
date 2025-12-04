@@ -1,38 +1,22 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/auth/domain/entities/user.dart';
 import 'package:mosstroinform_mobile/features/auth/domain/providers/auth_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
+part 'auth_notifier.freezed.dart';
 part 'auth_notifier.g.dart';
 
 /// Состояние авторизации
-class AuthState {
-  final User? user;
-  final bool isAuthenticated;
-  final bool isLoading;
-  final Failure? error;
-
-  const AuthState({
-    this.user,
-    this.isAuthenticated = false,
-    this.isLoading = false,
-    this.error,
-  });
-
-  AuthState copyWith({
-    User? user,
-    bool? isAuthenticated,
-    bool? isLoading,
-    Failure? error,
-  }) {
-    return AuthState(
-      user: user ?? this.user,
-      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      isLoading: isLoading ?? this.isLoading,
-      error: error,
-    );
-  }
+@freezed
+abstract class AuthState with _$AuthState {
+  const factory AuthState({
+    @Default(null) User? user,
+    @Default(false) bool isAuthenticated,
+    @Default(false) bool isLoading,
+    @Default(null) Failure? error,
+  }) = _AuthState;
 }
 
 /// Notifier для управления состоянием авторизации
@@ -96,13 +80,13 @@ class AuthNotifier extends _$AuthNotifier {
     } on Failure catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка авторизации: ${e.message}');
-      state = AsyncValue.data(AuthState(isAuthenticated: false, error: e));
+      state = AsyncValue.data(const AuthState().copyWith(isAuthenticated: false, error: e));
       rethrow;
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
       AppLogger.error('Неизвестная ошибка при авторизации: $e', stackTrace);
       state = AsyncValue.data(
-        AuthState(
+        const AuthState().copyWith(
           isAuthenticated: false,
           error: UnknownFailure('Неизвестная ошибка: $e'),
         ),
@@ -143,13 +127,13 @@ class AuthNotifier extends _$AuthNotifier {
     } on Failure catch (e) {
       if (!ref.mounted) return;
       AppLogger.error('Ошибка регистрации: ${e.message}');
-      state = AsyncValue.data(AuthState(isAuthenticated: false, error: e));
+      state = AsyncValue.data(const AuthState().copyWith(isAuthenticated: false, error: e));
       rethrow;
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
       AppLogger.error('Неизвестная ошибка при регистрации: $e', stackTrace);
       state = AsyncValue.data(
-        AuthState(
+        const AuthState().copyWith(
           isAuthenticated: false,
           error: UnknownFailure('Неизвестная ошибка: $e'),
         ),

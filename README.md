@@ -652,18 +652,34 @@ lib/
 
 ### Логирование
 
-Приложение использует `AppLogger` для логирования:
+Приложение использует пакет `logger` для логирования, построенный на базе Talker и Sentry:
 
 ```dart
-import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:logger/logger.dart';
 
-AppLogger.debug('Отладочное сообщение');
-AppLogger.info('Информационное сообщение');
-AppLogger.warning('Предупреждение', error);
-AppLogger.error('Ошибка', error, stackTrace);
+AppLogger.log('Информационное сообщение');
+AppLogger.log('Отладочное сообщение', level: LogLevel.debug);
+AppLogger.logError(error, stackTrace: stackTrace, reason: 'Описание ошибки');
 ```
 
-Логи отображаются только в debug режиме.
+Логи отображаются только в debug режиме или при использовании моков.
+
+#### Dev Console
+
+В debug режиме в верхнем правом углу экрана доступна кнопка для открытия Dev Console - интерактивного интерфейса для просмотра логов, ошибок и отладочной информации.
+
+**Возможности Dev Console:**
+- Просмотр всех логов приложения (debug, info, warning, error)
+- Фильтрация логов по уровню
+- Просмотр детальной информации об ошибках и stack traces
+- Информация о приложении (версия, build number, flavor, устройство)
+- Переключение между компактным и полным режимом вывода логов
+
+**Открытие Dev Console:**
+- Нажмите на кнопку с иконкой бага в верхнем правом углу экрана (только в debug режиме)
+- Или программно: `AppLogger.openConsole(context)`
+
+Подробнее о logger пакете см. [packages/logger/README.md](./packages/logger/README.md)
 
 ### Hot Reload и Hot Restart
 

@@ -26,9 +26,10 @@ void main() {
         description: 'Описание 1',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
         imageUrl: 'https://example.com/image1.jpg',
-        stages: [],
       ),
       Project(
         id: '2',
@@ -37,9 +38,10 @@ void main() {
         description: 'Описание 2',
         area: 150.0,
         floors: 3,
+        bedrooms: 4,
+        bathrooms: 3,
         price: 2000000,
         imageUrl: 'https://example.com/image2.jpg',
-        stages: [],
       ),
     ];
 

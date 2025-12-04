@@ -1,4 +1,5 @@
-import 'package:logger/logger.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class SentryTalkerObserver extends TalkerObserver {
   SentryTalkerObserver({this.filter, this.levelMapper, this.captureErrors = true});

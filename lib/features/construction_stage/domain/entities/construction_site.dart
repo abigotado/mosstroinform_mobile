@@ -19,6 +19,11 @@ class ConstructionSite {
     this.expectedCompletionDate,
     required this.progress,
   });
+
+  @override
+  String toString() {
+    return 'ConstructionSite(id: $id, projectId: $projectId, projectName: $projectName, address: $address, cameras: ${cameras.length}, progress: ${(progress * 100).toStringAsFixed(1)}%)';
+  }
 }
 
 /// Сущность камеры на стройке
@@ -38,4 +43,9 @@ class Camera {
     required this.isActive,
     this.thumbnailUrl,
   });
+
+  @override
+  String toString() {
+    return 'Camera(id: $id, name: $name, isActive: $isActive)';
+  }
 }

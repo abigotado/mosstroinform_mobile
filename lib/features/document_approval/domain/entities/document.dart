@@ -21,6 +21,11 @@ class Document {
     this.approvedAt,
     this.rejectionReason,
   });
+
+  @override
+  String toString() {
+    return 'Document(id: $id, projectId: $projectId, title: $title, status: $status)';
+  }
 }
 
 /// Статус документа

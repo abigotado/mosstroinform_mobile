@@ -19,6 +19,11 @@ class FinalDocument {
     this.signedAt,
     this.signatureUrl,
   });
+
+  @override
+  String toString() {
+    return 'FinalDocument(id: $id, title: $title, status: $status)';
+  }
 }
 
 /// Статус финального документа
@@ -50,4 +55,9 @@ class ConstructionCompletionStatus {
     required this.documents,
     required this.allDocumentsSigned,
   });
+
+  @override
+  String toString() {
+    return 'ConstructionCompletionStatus(projectId: $projectId, isCompleted: $isCompleted, progress: ${(progress * 100).toStringAsFixed(1)}%, documents: ${documents.length}, allDocumentsSigned: $allDocumentsSigned)';
+  }
 }

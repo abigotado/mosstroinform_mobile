@@ -2,14 +2,15 @@
 
 import 'dart:developer' as developer;
 
-import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:logger/src/observer/sentry_talker_observer.dart';
-import 'package:talker_bloc_logger/talker_bloc_logger_observer.dart';
 import 'package:talker_dio_logger/talker_dio_logger_interceptor.dart';
 import 'package:talker_dio_logger/talker_dio_logger_settings.dart';
+import 'package:logger/src/observer/talker_riverpod_observer.dart';
+import 'package:logger/src/domain/domain.dart';
 
 /// The AppLogger class is a singleton that provides a way to log messages to the console.
 /// It uses the Talker library to log messages and supports both compact and full output modes.
@@ -45,9 +46,9 @@ class AppLogger {
   /// It is used to log routes to the console.
   static TalkerRouteObserver get routeObserver => TalkerRouteObserver(talker);
 
-  /// The TalkerBlocObserver instance.
-  /// It is used to log blocs to the console.
-  static TalkerBlocObserver get blocObserver => TalkerBlocObserver(talker: talker);
+  /// The TalkerRiverpodObserver instance.
+  /// It is used to log Riverpod providers to the console.
+  static TalkerRiverpodObserver get riverpodObserver => TalkerRiverpodObserver(talker);
 
   /// The TalkerDioLogger instance.
   /// It is used to log dio requests to the console.
@@ -78,12 +79,15 @@ class AppLogger {
   static bool _showDebugFeatures = false;
 
   /// The method to open the console.
+  /// Uses go_router for navigation
   static void openConsole(BuildContext context) {
     if (!_instance._isInitialized) {
       return;
     }
 
-    context.pushRoute(const DevConsoleRoute());
+    // Используем go_router для навигации
+    final router = GoRouter.of(context);
+    router.push('/dev-console');
   }
 
   /// The method to initialize the logger.
@@ -136,6 +140,10 @@ class AppLogger {
     StackTrace? stackTrace,
     String? reason,
   }) {
+    if (!_instance._isInitialized) {
+      debugPrint('[AppLogger] Not initialized: $message');
+      return;
+    }
     final additional = data != null ? {'data': data} : null;
     return switch (level) {
       LogLevel.debug => _instance._talker.debug(message, additional),
@@ -145,6 +153,19 @@ class AppLogger {
       LogLevel.error => logError(message, stackTrace: stackTrace, reason: reason, level: level),
       LogLevel.critical => logError(message, stackTrace: stackTrace, reason: reason, level: level),
     };
+  }
+
+  /// Convenience methods for backward compatibility
+  static void info(String message, [Map<String, dynamic>? data]) {
+    log(message, level: LogLevel.info, data: data);
+  }
+
+  static void debug(String message, [Map<String, dynamic>? data]) {
+    log(message, level: LogLevel.debug, data: data);
+  }
+
+  static void warning(String message, [Map<String, dynamic>? data]) {
+    log(message, level: LogLevel.warning, data: data);
   }
 
   /// The method to log an error.
@@ -159,11 +180,20 @@ class AppLogger {
     String? reason,
     LogLevel level = LogLevel.error,
   }) {
+    if (!_instance._isInitialized) {
+      debugPrint('[AppLogger] Not initialized: Error: $error, Reason: $reason');
+      return;
+    }
     return switch (level) {
       LogLevel.warning => _instance._talker.warning(reason, error, stackTrace),
       LogLevel.critical => _instance._talker.critical(reason, error, stackTrace),
       _ => _instance._talker.error(reason, error, stackTrace),
     };
+  }
+
+  /// Convenience method for backward compatibility
+  static void error(String message, [Object? error, StackTrace? stackTrace]) {
+    logError(error ?? message, stackTrace: stackTrace, reason: message);
   }
 
   /// The method to set the output mode.

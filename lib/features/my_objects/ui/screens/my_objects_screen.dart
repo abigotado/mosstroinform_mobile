@@ -16,9 +16,7 @@ class MyObjectsScreen extends ConsumerWidget {
     final myObjects = <dynamic>[];
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.myObjectsTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.myObjectsTitle)),
       body: myObjects.isEmpty
           ? Center(
               child: Column(
@@ -27,7 +25,7 @@ class MyObjectsScreen extends ConsumerWidget {
                   Icon(
                     Icons.home_outlined,
                     size: 64,
-                    color: theme.colorScheme.onSurface.withOpacity(0.5),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
                   ),
                   const SizedBox(height: 16),
                   Text(

@@ -11,5 +11,10 @@ class User {
     required this.name,
     this.phone,
   });
+
+  @override
+  String toString() {
+    return 'User(id: $id, email: $email, name: $name, phone: $phone)';
+  }
 }
 

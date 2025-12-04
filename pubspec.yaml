@@ -43,6 +43,10 @@ dependencies:
   # Secure Storage
   flutter_secure_storage: ^9.2.2
 
+  # Logger
+  logger:
+    path: packages/logger
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -69,3 +73,6 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+
+workspace:
+  - packages/logger

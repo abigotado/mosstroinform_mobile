@@ -1,23 +1,21 @@
-/*
- * Copyright (C) 2025 Finharbor DOO. - All Rights Reserved
- *
- * Unauthorized copying or redistribution of this file in source and binary forms via any medium
- * is strictly prohibited.
- */
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:talker_flutter/talker_flutter.dart';
+import 'package:logger/src/app_logger.dart';
+import 'package:logger/src/presentation/notifier/dev_console_notifier.dart';
+import 'package:logger/l10n/generated/l10n.dart';
+import 'package:logger/src/domain/domain.dart';
 
-class DevConsoleScreen extends StatelessWidget {
+class DevConsoleScreen extends ConsumerWidget {
   const DevConsoleScreen({super.key});
 
   static const _talkerScreenTheme = TalkerScreenTheme();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final s = LoggerL10n.of(context);
+    final stateAsync = ref.watch(devConsoleProvider);
 
     return Theme(
       data: theme.copyWith(
@@ -27,53 +25,69 @@ class DevConsoleScreen extends StatelessWidget {
         endDrawer: Drawer(
           backgroundColor: _talkerScreenTheme.backgroundColor,
           child: SafeArea(
-            child: BlocSelector<DevConsoleCubit, DevConsoleState, DebugInfoEntity>(
-              selector: (state) => state.debugInfoState,
-              builder: (context, state) => switch (state) {
-                DebugInfoEntityLoading() => const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                ),
-                final DebugInfoEntityData data => DefaultTextStyle(
-                  style: theme.textTheme.bodyLarge!.copyWith(color: _talkerScreenTheme.textColor),
-                  child: SelectableRegion(
-                    selectionControls: MaterialTextSelectionControls(),
-                    child: Column(
-                      spacing: 16,
-                      children: [
-                        DrawerHeader(
-                          child: Text(
-                            s.devConsoleDebugInfo,
-                            style: theme.textTheme.headlineLarge!.copyWith(
-                              color: _talkerScreenTheme.textColor,
-                            ),
-                          ),
-                        ),
-                        Text('${s.devConsoleDebugInfoAppVersion}: ${data.appVersion}'),
-                        Text('${s.devConsoleDebugInfoAppBuildNumber}: ${data.appBuildNumber}'),
-                        Text('${s.devConsoleDebugInfoFlavor}: ${data.flavor}'),
-                        Text('${s.devConsoleDebugInfoDeviceModel}: ${data.deviceModel}'),
-                        Text('${s.devConsoleDebugInfoDeviceOS}: ${data.deviceOS}'),
-                      ],
+            child: stateAsync.when(
+              data: (state) {
+                final debugInfo = state.debugInfoState;
+                return switch (debugInfo) {
+                  DebugInfoEntityLoading() => const Center(
+                      child: CircularProgressIndicator.adaptive(),
                     ),
-                  ),
-                ),
-                _ => Center(child: Text(s.devConsoleDebugInfoNoData)),
+                  final DebugInfoEntityData data => DefaultTextStyle(
+                      style: theme.textTheme.bodyLarge!
+                          .copyWith(color: _talkerScreenTheme.textColor),
+                      child: SelectableRegion(
+                        selectionControls: MaterialTextSelectionControls(),
+                        child: Column(
+                          spacing: 16,
+                          children: [
+                            DrawerHeader(
+                              child: Text(
+                                s.devConsoleDebugInfo,
+                                style: theme.textTheme.headlineLarge!.copyWith(
+                                  color: _talkerScreenTheme.textColor,
+                                ),
+                              ),
+                            ),
+                            Text('${s.devConsoleDebugInfoAppVersion}: ${data.appVersion}'),
+                            Text('${s.devConsoleDebugInfoAppBuildNumber}: ${data.appBuildNumber}'),
+                            Text('${s.devConsoleDebugInfoFlavor}: ${data.flavor}'),
+                            Text('${s.devConsoleDebugInfoDeviceModel}: ${data.deviceModel}'),
+                            Text('${s.devConsoleDebugInfoDeviceOS}: ${data.deviceOS}'),
+                          ],
+                        ),
+                      ),
+                    ),
+                  _ => Center(child: Text(s.devConsoleDebugInfoNoData)),
+                };
               },
+              loading: () => const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+              error: (error, stack) => Center(
+                child: Text('Error: $error'),
+              ),
             ),
           ),
         ),
-        body: BlocSelector<DevConsoleCubit, DevConsoleState, AppLoggerOutputMode>(
-          selector: (state) => state.loggerOutputMode,
-          builder: (context, loggerOutputMode) => TalkerScreen(
+        body: stateAsync.when(
+          data: (state) => TalkerScreen(
             appBarTitle: s.devConsoleTitle,
             talker: AppLogger.talker,
             customSettings: [
               CustomSettingsGroup(
                 title: s.devConsoleLogsFullMode,
-                enabled: loggerOutputMode == AppLoggerOutputMode.full,
-                onToggleEnabled: (_) => context.read<DevConsoleCubit>().toggleLoggerOutputMode(),
+                enabled: state.loggerOutputMode == AppLoggerOutputMode.full,
+                onToggleEnabled: (_) => ref
+                    .read(devConsoleProvider.notifier)
+                    .toggleLoggerOutputMode(),
               ),
             ],
+          ),
+          loading: () => const Center(
+            child: CircularProgressIndicator.adaptive(),
+          ),
+          error: (error, stack) => Center(
+            child: Text('Error: $error'),
           ),
         ),
       ),

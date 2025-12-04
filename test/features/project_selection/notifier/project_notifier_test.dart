@@ -42,8 +42,9 @@ void main() {
           description: 'Описание 1',
           area: 100.0,
           floors: 2,
+          bedrooms: 3,
+          bathrooms: 2,
           price: 1000000,
-          stages: [],
         ),
         Project(
           id: '2',
@@ -52,8 +53,9 @@ void main() {
           description: 'Описание 2',
           area: 150.0,
           floors: 3,
+          bedrooms: 4,
+          bathrooms: 3,
           price: 2000000,
-          stages: [],
         ),
       ];
 
@@ -135,8 +137,9 @@ void main() {
         description: 'Описание 1',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [],
       );
 
       when(
@@ -185,28 +188,19 @@ void main() {
         description: 'Описание 1',
         area: 100.0,
         floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
         price: 1000000,
-        stages: [
-          ConstructionStage(
-            id: 'stage1',
-            name: 'Этап 1',
-            status: StageStatus.inProgress,
-          ),
-        ],
       );
 
       when(
         () => mockRepository.requestConstruction('1'),
       ).thenAnswer((_) async {});
-      when(
-        () => mockRepository.getProjectById('1'),
-      ).thenAnswer((_) async => project);
 
       final notifier = container.read(projectProvider.notifier);
       await notifier.requestConstruction('1');
 
       verify(() => mockRepository.requestConstruction('1')).called(1);
-      verify(() => mockRepository.getProjectById('1')).called(1);
     });
 
     test('requestConstruction обрабатывает Failure', () async {

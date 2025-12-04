@@ -26,9 +26,10 @@ void main() {
       description: 'Описание 1',
       area: 100.0,
       floors: 2,
+      bedrooms: 3,
+      bathrooms: 2,
       price: 1000000,
       imageUrl: 'https://example.com/image1.jpg',
-      stages: [],
     );
 
     when(

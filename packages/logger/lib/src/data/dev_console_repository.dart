@@ -1,11 +1,9 @@
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:injectable/injectable.dart';
 import 'package:logger/src/domain/domain.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
-@LazySingleton(as: IDevConsoleRepository)
 final class DevConsoleRepository implements IDevConsoleRepository {
   @override
   Future<DebugInfoEntity> fetchDebugInfo() async {
@@ -14,10 +12,13 @@ final class DevConsoleRepository implements IDevConsoleRepository {
       _fetchDeviceInfo(),
     ]);
 
+    // Используем appFlavor из Flutter services или значение по умолчанию
+    final flavor = appFlavor ?? 'unknown';
+
     return DebugInfoEntity.data(
       appVersion: packageInfo.version,
       appBuildNumber: packageInfo.buildNumber,
-      flavor: appFlavor ?? '-',
+      flavor: flavor,
       deviceModel: switch (deviceInfo) {
         final IosDeviceInfo info => info.modelName,
         final AndroidDeviceInfo info => info.model,

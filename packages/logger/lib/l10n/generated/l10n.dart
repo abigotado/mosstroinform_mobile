@@ -62,7 +62,8 @@ import 'l10n_ru.dart';
 /// be consistent with the languages listed in the LoggerL10n.supportedLocales
 /// property.
 abstract class LoggerL10n {
-  LoggerL10n(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  LoggerL10n(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +71,8 @@ abstract class LoggerL10n {
     return Localizations.of<LoggerL10n>(context, LoggerL10n)!;
   }
 
-  static const LocalizationsDelegate<LoggerL10n> delegate = _LoggerL10nDelegate();
+  static const LocalizationsDelegate<LoggerL10n> delegate =
+      _LoggerL10nDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,15 +84,19 @@ abstract class LoggerL10n {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
-  static const List<Locale> supportedLocales = <Locale>[Locale('en'), Locale('ru')];
+  static const List<Locale> supportedLocales = <Locale>[
+    Locale('en'),
+    Locale('ru'),
+  ];
 
   /// No description provided for @devConsoleDebugInfo.
   ///
@@ -162,7 +168,8 @@ class _LoggerL10nDelegate extends LocalizationsDelegate<LoggerL10n> {
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'ru'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_LoggerL10nDelegate old) => false;

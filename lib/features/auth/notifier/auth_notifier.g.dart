@@ -42,7 +42,7 @@ final class AuthNotifierProvider
   AuthNotifier create() => AuthNotifier();
 }
 
-String _$authNotifierHash() => r'ba4a863eb38f9f05fc6a4e625f76756c3edf9242';
+String _$authNotifierHash() => r'76e4088362108e6e63ce7eef294620fe121e5a65';
 
 /// Notifier для управления состоянием авторизации
 /// keepAlive: true - провайдер не должен быть disposed автоматически,

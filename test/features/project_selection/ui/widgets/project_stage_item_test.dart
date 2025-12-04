@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 

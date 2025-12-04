@@ -16,9 +16,7 @@ class ProfileScreen extends ConsumerWidget {
     final authState = ref.watch(authProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.profileTitle),
-      ),
+      appBar: AppBar(title: Text(l10n.profileTitle)),
       body: authState.when(
         data: (state) {
           final user = state.user;
@@ -44,22 +42,23 @@ class ProfileScreen extends ConsumerWidget {
                         radius: 50,
                         backgroundColor: theme.colorScheme.primary,
                         child: Text(
-                          user.name.isNotEmpty ? user.name[0].toUpperCase() : 'U',
+                          user.name.isNotEmpty
+                              ? user.name[0].toUpperCase()
+                              : 'U',
                           style: theme.textTheme.headlineMedium?.copyWith(
                             color: theme.colorScheme.onPrimary,
                           ),
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        user.name,
-                        style: theme.textTheme.headlineSmall,
-                      ),
+                      Text(user.name, style: theme.textTheme.headlineSmall),
                       const SizedBox(height: 8),
                       Text(
                         user.email,
                         style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.7,
+                          ),
                         ),
                       ),
                       if (user.phone != null) ...[
@@ -67,7 +66,9 @@ class ProfileScreen extends ConsumerWidget {
                         Text(
                           user.phone!,
                           style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurface.withOpacity(0.7),
+                            color: theme.colorScheme.onSurface.withValues(
+                              alpha: 0.7,
+                            ),
                           ),
                         ),
                       ],
@@ -79,10 +80,7 @@ class ProfileScreen extends ConsumerWidget {
               // Кнопка выхода
               Card(
                 child: ListTile(
-                  leading: Icon(
-                    Icons.logout,
-                    color: theme.colorScheme.error,
-                  ),
+                  leading: Icon(Icons.logout, color: theme.colorScheme.error),
                   title: Text(
                     l10n.logout,
                     style: TextStyle(color: theme.colorScheme.error),
@@ -131,4 +129,3 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 }
-
