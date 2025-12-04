@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
@@ -32,7 +34,6 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.projectsTitle),
-        // Кнопка для быстрого перехода к экрану камер (для тестирования)
         actions: [
           Builder(
             builder: (context) {
@@ -56,6 +57,32 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                 },
                 orElse: () => const SizedBox.shrink(),
               );
+            },
+          ),
+          // Кнопка выхода
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: l10n.logoutTooltip,
+            onPressed: () async {
+              AppLogger.info('ProjectListScreen: нажата кнопка выхода');
+              try {
+                await ref.read(authProvider.notifier).logout();
+                AppLogger.info('ProjectListScreen: выход выполнен успешно');
+                if (mounted) {
+                  context.go('/login');
+                }
+              } catch (e) {
+                AppLogger.error('ProjectListScreen: ошибка при выходе: $e');
+                if (mounted) {
+                  final theme = Theme.of(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Ошибка при выходе: $e'),
+                      backgroundColor: theme.colorScheme.error,
+                    ),
+                  );
+                }
+              }
             },
           ),
         ],

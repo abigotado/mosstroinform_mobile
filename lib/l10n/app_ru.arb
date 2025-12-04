@@ -492,5 +492,13 @@
         "type": "String"
       }
     }
+  },
+  "logout": "Выход",
+  "@logout": {
+    "description": "Кнопка выхода из системы"
+  },
+  "logoutTooltip": "Выйти из системы",
+  "@logoutTooltip": {
+    "description": "Подсказка для кнопки выхода"
   }
 }

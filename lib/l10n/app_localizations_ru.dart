@@ -363,4 +363,10 @@ class AppLocalizationsRu extends AppLocalizations {
   String errorOccurred(String error) {
     return 'Произошла ошибка: $error';
   }
+
+  @override
+  String get logout => 'Выход';
+
+  @override
+  String get logoutTooltip => 'Выйти из системы';
 }

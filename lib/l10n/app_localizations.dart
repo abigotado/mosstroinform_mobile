@@ -783,6 +783,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Произошла ошибка: {error}'**
   String errorOccurred(String error);
+
+  /// Кнопка выхода из системы
+  ///
+  /// In ru, this message translates to:
+  /// **'Выход'**
+  String get logout;
+
+  /// Подсказка для кнопки выхода
+  ///
+  /// In ru, this message translates to:
+  /// **'Выйти из системы'**
+  String get logoutTooltip;
 }
 
 class _AppLocalizationsDelegate
