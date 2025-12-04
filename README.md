@@ -230,7 +230,7 @@ flutter run --dart-define=FLAVOR=mock  # С моками (по умолчани�
 flutter run --dart-define=FLAVOR=prod   # Production
 ```
 
-Подробнее о flavors см. [FLAVORS_GUIDE.md](./FLAVORS_GUIDE.md)
+Подробнее о flavors см. [FLAVORS_GUIDE.md](./xdocs/FLAVORS_GUIDE.md)
 
 ## 📦 Сборка приложения
 
@@ -280,7 +280,7 @@ flutter build ios --release
 3. Product → Archive
 4. Следуйте инструкциям для публикации
 
-Подробные инструкции по сборке см. [BUILD_GUIDE.md](./BUILD_GUIDE.md)
+Подробные инструкции по сборке см. [BUILD_GUIDE.md](./xdocs/BUILD_GUIDE.md)
 
 ## 🧪 Тестирование
 
@@ -596,7 +596,7 @@ lib/
 3. **Notifier Layer** - управление состоянием через Riverpod с code generation
 4. **UI Layer** - экраны и виджеты фичи
 
-Подробнее об архитектуре см. [ARCHITECTURE.md](./ARCHITECTURE.md)
+Подробнее об архитектуре см. [ARCHITECTURE.md](./xdocs/ARCHITECTURE.md)
 
 ## 🎯 Основные функции
 
@@ -626,7 +626,7 @@ lib/
 - Хранят состояние в памяти (сбрасывается при перезапуске)
 - Позволяют тестировать весь функционал без бэкенда
 
-Подробнее о моках см. [MOCK_DATA_GUIDE.md](./MOCK_DATA_GUIDE.md)
+Подробнее о моках см. [MOCK_DATA_GUIDE.md](./xdocs/MOCK_DATA_GUIDE.md)
 
 ## 🗺 Навигация по приложению
 
@@ -688,11 +688,11 @@ AppLogger.error('Ошибка', error, stackTrace);
 
 ## 📖 Дополнительная документация
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) - подробное описание архитектуры проекта
-- [ARCHITECTURE_RULES.md](./ARCHITECTURE_RULES.md) - правила архитектуры и разработки
-- [BUILD_GUIDE.md](./BUILD_GUIDE.md) - подробные инструкции по сборке приложения
-- [FLAVORS_GUIDE.md](./FLAVORS_GUIDE.md) - руководство по использованию flavors
-- [MOCK_DATA_GUIDE.md](./MOCK_DATA_GUIDE.md) - руководство по работе с моками
+- [ARCHITECTURE.md](./xdocs/ARCHITECTURE.md) - подробное описание архитектуры проекта
+- [QUICK_START.md](./xdocs/QUICK_START.md) - быстрый старт для новых разработчиков
+- [BUILD_GUIDE.md](./xdocs/BUILD_GUIDE.md) - подробные инструкции по сборке приложения
+- [FLAVORS_GUIDE.md](./xdocs/FLAVORS_GUIDE.md) - руководство по использованию flavors
+- [MOCK_DATA_GUIDE.md](./xdocs/MOCK_DATA_GUIDE.md) - руководство по работе с моками
 
 ## ❓ Часто задаваемые вопросы
 
@@ -750,7 +750,7 @@ flutter build ios --release
   - Widget тесты для UI компонентов
   - Документация по тестированию и архитектуре
   - Рефакторинг виджет-функций в классы виджетов
-  - Документация структуры проекта (ARCHITECTURE.md, README.md)
+  - Документация структуры проекта ([ARCHITECTURE.md](./xdocs/ARCHITECTURE.md), README.md)
 
 - **Konkurent** ([@Konkurent](https://github.com/Konkurent)) - kechin.d@gmail.com (15 коммитов)
   - Реализация shimmer эффектов для всех экранов загрузки

@@ -49,3 +49,7 @@ app.*.map.json
 .env.staging
 .env.prod
 .env*.local
+
+# Working documentation (internal use only)
+ARCHITECTURE_RULES.md
+EVALUATION_CHECK.md
