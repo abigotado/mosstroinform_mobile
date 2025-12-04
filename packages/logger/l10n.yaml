@@ -1,0 +1,7 @@
+output-class: LoggerL10n
+arb-dir: lib/l10n
+output-dir: lib/l10n/generated
+template-arb-file: l10n_en.arb
+output-localization-file: l10n.dart
+nullable-getter: false
+line-length: 100

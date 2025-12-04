@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/notifier/final_document_notifier.dart';
@@ -38,21 +39,27 @@ class _CompletionStatusScreenState
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.constructionCompletion)),
-      body: statusAsync.when(
-        data: (state) {
-          // Если статус не загружен и нет ошибки - это начальное состояние, показываем шиммер
-          if (state.status == null && state.error == null) {
-            return const CompletionStatusShimmer();
-          }
+      body: AppAnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: statusAsync.when(
+          data: (state) {
+            // Если статус не загружен и нет ошибки - это начальное состояние, показываем шиммер
+            if (state.status == null && state.error == null) {
+              return const CompletionStatusShimmer(key: ValueKey('shimmer'));
+            }
 
-          // Если статус не найден и есть ошибка - показываем ошибку
-          if (state.status == null) {
-            return Center(child: Text(l10n.errorLoadingCompletionStatus));
-          }
+            // Если статус не найден и есть ошибка - показываем ошибку
+            if (state.status == null) {
+              return Center(
+                key: const ValueKey('error'),
+                child: Text(l10n.errorLoadingCompletionStatus),
+              );
+            }
 
-          final status = state.status!;
+            final status = state.status!;
 
-          return SingleChildScrollView(
+            return SingleChildScrollView(
+              key: const ValueKey('content'),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -80,136 +80,143 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
             return SingleChildScrollView(
               key: const ValueKey('content'),
               child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Изображение проекта
-                if (project.imageUrl != null)
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Image.network(
-                      project.imageUrl!,
-                      fit: BoxFit.cover,
-                      loadingBuilder: (context, child, loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        }
-                        return Container(
-                          color: theme.colorScheme.surfaceContainerHighest,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded /
-                                        loadingProgress.expectedTotalBytes!
-                                  : null,
-                            ),
-                          ),
-                        );
-                      },
-                      errorBuilder: (context, error, stackTrace) {
-                        debugPrint('Ошибка загрузки изображения: $error');
-                        debugPrint('URL: ${project.imageUrl}');
-                        return Container(
-                          color: theme.colorScheme.surfaceContainerHighest,
-                          child: const Center(
-                            child: Icon(Icons.image_not_supported, size: 64),
-                          ),
-                        );
-                      },
-                    ),
-                  )
-                else
-                  AspectRatio(
-                    aspectRatio: 16 / 9,
-                    child: Container(
-                      color: theme.colorScheme.surfaceContainerHighest,
-                      child: const Center(child: Icon(Icons.home, size: 64)),
-                    ),
-                  ),
-
-                // Информация о проекте
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Название и адрес
-                      Text(project.name, style: theme.textTheme.headlineMedium),
-                      const SizedBox(height: 8),
-                      Text(
-                        project.address,
-                        style: theme.textTheme.bodyLarge?.copyWith(
-                          color: theme.colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-
-                      // Описание
-                      Text(
-                        project.description,
-                        style: theme.textTheme.bodyLarge,
-                      ),
-                      const SizedBox(height: 24),
-
-                      // Характеристики
-                      _CharacteristicsSection(project: project),
-                      const SizedBox(height: 24),
-
-                      // Цена
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.primaryContainer,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(l10n.price, style: theme.textTheme.titleLarge),
-                            Text(
-                              _formatPrice(project.price),
-                              style: theme.textTheme.headlineMedium?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.bold,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Изображение проекта
+                  if (project.imageUrl != null)
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Image.network(
+                        project.imageUrl!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) {
+                            return child;
+                          }
+                          return Container(
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                value:
+                                    loadingProgress.expectedTotalBytes != null
+                                    ? loadingProgress.cumulativeBytesLoaded /
+                                          loadingProgress.expectedTotalBytes!
+                                    : null,
                               ),
                             ),
-                          ],
-                        ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          debugPrint('Ошибка загрузки изображения: $error');
+                          debugPrint('URL: ${project.imageUrl}');
+                          return Container(
+                            color: theme.colorScheme.surfaceContainerHighest,
+                            child: const Center(
+                              child: Icon(Icons.image_not_supported, size: 64),
+                            ),
+                          );
+                        },
                       ),
-                    ],
+                    )
+                  else
+                    AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Container(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        child: const Center(child: Icon(Icons.home, size: 64)),
+                      ),
+                    ),
+
+                  // Информация о проекте
+                  Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Название и адрес
+                        Text(
+                          project.name,
+                          style: theme.textTheme.headlineMedium,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          project.address,
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Описание
+                        Text(
+                          project.description,
+                          style: theme.textTheme.bodyLarge,
+                        ),
+                        const SizedBox(height: 24),
+
+                        // Характеристики
+                        _CharacteristicsSection(project: project),
+                        const SizedBox(height: 24),
+
+                        // Цена
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: theme.colorScheme.primaryContainer,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                l10n.price,
+                                style: theme.textTheme.titleLarge,
+                              ),
+                              Text(
+                                _formatPrice(project.price),
+                                style: theme.textTheme.headlineMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        },
-        loading: () => const ProjectDetailShimmer(),
-        error: (error, stack) {
-          final errorTheme = Theme.of(context);
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                const SizedBox(height: 16),
-                Text(
-                  '${l10n.error}: $error',
-                  style: errorTheme.textTheme.bodyLarge,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    ref
-                        .read(projectProvider.notifier)
-                        .loadProject(widget.projectId);
-                  },
-                  child: Text(l10n.retry),
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                ],
+              ),
+            );
+          },
+          loading: () => const ProjectDetailShimmer(),
+          error: (error, stack) {
+            final errorTheme = Theme.of(context);
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                  const SizedBox(height: 16),
+                  Text(
+                    '${l10n.error}: $error',
+                    style: errorTheme.textTheme.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: () {
+                      ref
+                          .read(projectProvider.notifier)
+                          .loadProject(widget.projectId);
+                    },
+                    child: Text(l10n.retry),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
       bottomNavigationBar: projectAsync.when(
         data: (state) {
@@ -241,12 +248,16 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                     AppLogger.debug(
                                       'projectId: ${widget.projectId}',
                                     );
-                                    final messenger = ScaffoldMessenger.of(context);
+                                    final messenger = ScaffoldMessenger.of(
+                                      context,
+                                    );
 
                                     try {
                                       await ref
                                           .read(projectProvider.notifier)
-                                          .requestConstruction(widget.projectId);
+                                          .requestConstruction(
+                                            widget.projectId,
+                                          );
                                       AppLogger.info(
                                         'Запрос на строительство отправлен успешно',
                                       );
@@ -257,7 +268,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                             content: Text(
                                               l10n.constructionRequestSent,
                                             ),
-                                            duration: const Duration(seconds: 2),
+                                            duration: const Duration(
+                                              seconds: 2,
+                                            ),
                                           ),
                                         );
                                       }
@@ -288,9 +301,10 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          theme.colorScheme.onPrimary,
-                                        ),
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                              theme.colorScheme.onPrimary,
+                                            ),
                                       ),
                                     )
                                   : Text(

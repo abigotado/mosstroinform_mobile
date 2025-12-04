@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
@@ -61,63 +62,69 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
             ),
         ],
       ),
-      body: documentsAsync.when(
-        data: (documents) {
-          // Если список пустой - это начальное состояние, показываем шиммер
-          // (начальное состояние возвращается как data с пустым списком)
-          if (documents.isEmpty) {
-            return ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: DocumentCardShimmer(),
-                );
-              },
-            );
-          }
+      body: AppAnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: documentsAsync.when(
+          data: (documents) {
+            // Если список пустой - это начальное состояние, показываем шиммер
+            // (начальное состояние возвращается как data с пустым списком)
+            if (documents.isEmpty) {
+              return ListView.builder(
+                key: const ValueKey('shimmer'),
+                padding: const EdgeInsets.all(16),
+                itemCount: 4,
+                itemBuilder: (context, index) {
+                  return const Padding(
+                    padding: EdgeInsets.only(bottom: 12),
+                    child: DocumentCardShimmer(),
+                  );
+                },
+              );
+            }
 
-          return RefreshIndicator(
-            onRefresh: () async {
-              await ref.read(documentsProvider.notifier).loadDocuments();
-            },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: documents.length,
-              itemBuilder: (context, index) {
-                final document = documents[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: DocumentCard(
-                    document: document,
-                    onTap: () {
-                      context.push('/documents/${document.id}');
-                    },
-                  ),
-                );
+            return RefreshIndicator(
+              key: ValueKey('list-${documents.length}'),
+              onRefresh: () async {
+                await ref.read(documentsProvider.notifier).loadDocuments();
               },
-            ),
-          );
-        },
-        loading: () => ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: 4,
-          itemBuilder: (context, index) {
-            return const Padding(
-              padding: EdgeInsets.only(bottom: 12),
-              child: DocumentCardShimmer(),
+              child: ListView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: documents.length,
+                itemBuilder: (context, index) {
+                  final document = documents[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 12),
+                    child: DocumentCard(
+                      document: document,
+                      onTap: () {
+                        context.push('/documents/${document.id}');
+                      },
+                    ),
+                  );
+                },
+              ),
             );
           },
-        ),
-        error: (error, stackTrace) => Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
-              const SizedBox(height: 16),
-              Text(
-                l10n.errorLoadingDocuments,
+          loading: () => ListView.builder(
+            key: const ValueKey('loading'),
+            padding: const EdgeInsets.all(16),
+            itemCount: 4,
+            itemBuilder: (context, index) {
+              return const Padding(
+                padding: EdgeInsets.only(bottom: 12),
+                child: DocumentCardShimmer(),
+              );
+            },
+          ),
+          error: (error, stackTrace) => Center(
+            key: const ValueKey('error'),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  l10n.errorLoadingDocuments,
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               const SizedBox(height: 8),

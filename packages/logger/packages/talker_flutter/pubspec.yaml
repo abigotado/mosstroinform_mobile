@@ -1,0 +1,20 @@
+name: talker_flutter
+description: Advanced error handler and logger package for flutter and dart. App monitoring, logs history, report sharing, custom logs, and etc.
+version: 5.0.2
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  talker: 5.0.2
+  group_button: 5.3.4
+  path_provider: 2.1.4
+  share_plus: 12.0.0
+  web: 1.1.0

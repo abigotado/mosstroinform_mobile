@@ -1,0 +1,13 @@
+{
+    "@@locale": "en",
+    "devConsoleDebugInfo": "Debug Info",
+    "devConsoleDebugInfoAppBuildNumber": "App Build Number",
+    "devConsoleDebugInfoAppVersion": "App Version",
+    "devConsoleDebugInfoDeviceModel": "Device Model",
+    "devConsoleDebugInfoDeviceOS": "Device OS",
+    "devConsoleDebugInfoFlavor": "Flavor",
+    "devConsoleDebugInfoNoData": "No data",
+    "devConsoleLogsFullMode": "Console logs full mode",
+    "devConsoleOpenConsole": "Open logger console",
+    "devConsoleTitle": "Dev Console"
+}

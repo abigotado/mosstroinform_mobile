@@ -1,0 +1,13 @@
+{
+    "@@locale": "ru",
+    "devConsoleDebugInfo": "Информация для отладки",
+    "devConsoleDebugInfoAppBuildNumber": "Номер сборки приложения",
+    "devConsoleDebugInfoAppVersion": "Версия приложения",
+    "devConsoleDebugInfoDeviceModel": "Модель устройства",
+    "devConsoleDebugInfoDeviceOS": "Операционная система устройства",
+    "devConsoleDebugInfoFlavor": "Флавр",
+    "devConsoleDebugInfoNoData": "Нет данных",
+    "devConsoleLogsFullMode": "Полный режим консоли",
+    "devConsoleOpenConsole": "Открыть консоль разработчика",
+    "devConsoleTitle": "Консоль разработчика"
+}

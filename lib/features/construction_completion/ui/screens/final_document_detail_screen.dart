@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
@@ -92,21 +93,27 @@ class _FinalDocumentDetailScreenState
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.finalDocument)),
-      body: documentAsync.when(
-        data: (state) {
-          // Если документ не загружен и нет ошибки - это начальное состояние, показываем шиммер
-          if (state.document == null && state.error == null) {
-            return const DocumentDetailShimmer();
-          }
+      body: AppAnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: documentAsync.when(
+          data: (state) {
+            // Если документ не загружен и нет ошибки - это начальное состояние, показываем шиммер
+            if (state.document == null && state.error == null) {
+              return const DocumentDetailShimmer(key: ValueKey('shimmer'));
+            }
 
-          // Если документ не найден и есть ошибка - показываем ошибку
-          if (state.document == null) {
-            return Center(child: Text(l10n.finalDocumentNotFound));
-          }
+            // Если документ не найден и есть ошибка - показываем ошибку
+            if (state.document == null) {
+              return Center(
+                key: const ValueKey('error'),
+                child: Text(l10n.finalDocumentNotFound),
+              );
+            }
 
-          final document = state.document!;
+            final document = state.document!;
 
-          return SingleChildScrollView(
+            return SingleChildScrollView(
+              key: const ValueKey('content'),
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

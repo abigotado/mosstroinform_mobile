@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/notifier/construction_site_notifier.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/camera_view_screen.dart';
@@ -62,21 +63,27 @@ class _ConstructionSiteScreenState
           ),
         ],
       ),
-      body: siteAsync.when(
-        data: (state) {
-          // Если площадка не загружена и нет ошибки - это начальное состояние, показываем шиммер
-          if (state.site == null && state.error == null) {
-            return const CameraGridShimmer();
-          }
+      body: AppAnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: siteAsync.when(
+          data: (state) {
+            // Если площадка не загружена и нет ошибки - это начальное состояние, показываем шиммер
+            if (state.site == null && state.error == null) {
+              return const CameraGridShimmer(key: ValueKey('shimmer'));
+            }
 
-          // Если площадка не найдена и есть ошибка - показываем ошибку
-          if (state.site == null) {
-            return Center(child: Text(l10n.errorLoadingConstructionSite));
-          }
+            // Если площадка не найдена и есть ошибка - показываем ошибку
+            if (state.site == null) {
+              return Center(
+                key: const ValueKey('error'),
+                child: Text(l10n.errorLoadingConstructionSite),
+              );
+            }
 
-          final site = state.site!;
+            final site = state.site!;
 
-          return SingleChildScrollView(
+            return SingleChildScrollView(
+              key: const ValueKey('content'),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
