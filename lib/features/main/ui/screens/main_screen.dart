@@ -37,25 +37,50 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         onDestinationSelected: (index) {
           ref.read(mainNavigationIndexProvider.notifier).setIndex(index);
         },
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         destinations: [
           NavigationDestination(
-            icon: const Icon(Icons.search),
-            selectedIcon: const Icon(Icons.search),
+            icon: Tooltip(
+              message: l10n.projectsTitle,
+              child: const Icon(Icons.search),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.projectsTitle,
+              child: const Icon(Icons.search),
+            ),
             label: l10n.projectsTitle,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.pending_actions),
-            selectedIcon: const Icon(Icons.pending_actions),
+            icon: Tooltip(
+              message: l10n.requestedProjectsTitle,
+              child: const Icon(Icons.pending_actions),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.requestedProjectsTitle,
+              child: const Icon(Icons.pending_actions),
+            ),
             label: l10n.requestedProjectsTitle,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.home),
-            selectedIcon: const Icon(Icons.home),
+            icon: Tooltip(
+              message: l10n.myObjectsTitle,
+              child: const Icon(Icons.home),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.myObjectsTitle,
+              child: const Icon(Icons.home),
+            ),
             label: l10n.myObjectsTitle,
           ),
           NavigationDestination(
-            icon: const Icon(Icons.person),
-            selectedIcon: const Icon(Icons.person),
+            icon: Tooltip(
+              message: l10n.profileTitle,
+              child: const Icon(Icons.person),
+            ),
+            selectedIcon: Tooltip(
+              message: l10n.profileTitle,
+              child: const Icon(Icons.person),
+            ),
             label: l10n.profileTitle,
           ),
         ],

@@ -5,7 +5,7 @@
     "description": "Название приложения"
   },
   
-  "projectsTitle": "Объекты",
+  "projectsTitle": "Проекты",
   "@projectsTitle": {
     "description": "Заголовок экрана списка проектов"
   },

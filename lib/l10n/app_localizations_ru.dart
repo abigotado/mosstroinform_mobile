@@ -12,7 +12,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Стройконтроль Онлайн';
 
   @override
-  String get projectsTitle => 'Объекты';
+  String get projectsTitle => 'Проекты';
 
   @override
   String get projectsNotFound => 'Проекты не найдены';

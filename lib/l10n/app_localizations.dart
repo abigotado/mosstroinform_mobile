@@ -103,7 +103,7 @@ abstract class AppLocalizations {
   /// Заголовок экрана списка проектов
   ///
   /// In ru, this message translates to:
-  /// **'Объекты'**
+  /// **'Проекты'**
   String get projectsTitle;
 
   /// Сообщение когда проектов нет
