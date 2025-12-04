@@ -38,6 +38,7 @@ dependencies:
   # UI
   cupertino_icons: ^1.0.8
   shimmer: ^3.0.0
+  sliver_tools: ^0.3.0
 
   # Secure Storage
   flutter_secure_storage: ^9.2.2

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
@@ -156,10 +157,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              l10n.price,
-                              style: theme.textTheme.titleLarge,
-                            ),
+                            Text(l10n.price, style: theme.textTheme.titleLarge),
                             Text(
                               _formatPrice(project.price),
                               style: theme.textTheme.headlineMedium?.copyWith(
@@ -215,7 +213,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
           final isRequesting = state.isRequestingConstruction;
 
-          return AnimatedSwitcher(
+          return AppAnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: isRequested
                 ? const SizedBox.shrink(key: ValueKey('hidden'))
@@ -230,7 +228,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                 AppLogger.debug(
                                   'Нажата кнопка "Отправить запрос на строительство"',
                                 );
-                                AppLogger.debug('projectId: ${widget.projectId}');
+                                AppLogger.debug(
+                                  'projectId: ${widget.projectId}',
+                                );
                                 final l10n = AppLocalizations.of(context)!;
                                 final messenger = ScaffoldMessenger.of(context);
 
@@ -245,13 +245,18 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                   if (mounted) {
                                     messenger.showSnackBar(
                                       SnackBar(
-                                        content: Text(l10n.constructionRequestSent),
+                                        content: Text(
+                                          l10n.constructionRequestSent,
+                                        ),
                                         duration: const Duration(seconds: 2),
                                       ),
                                     );
                                   }
                                 } catch (e) {
-                                  AppLogger.error('Ошибка при отправке запроса', e);
+                                  AppLogger.error(
+                                    'Ошибка при отправке запроса',
+                                    e,
+                                  );
                                   if (mounted) {
                                     messenger.showSnackBar(
                                       SnackBar(
@@ -265,7 +270,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                        child: AnimatedSwitcher(
+                        child: AppAnimatedSwitcher(
                           duration: const Duration(milliseconds: 200),
                           child: isRequesting
                               ? SizedBox(
@@ -346,13 +351,15 @@ class _CharacteristicsSection extends StatelessWidget {
             const Divider(),
             _CharacteristicRow(
               label: 'Спальни',
-              value: '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
+              value:
+                  '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
               icon: Icons.bed,
             ),
             const Divider(),
             _CharacteristicRow(
               label: 'Ванные',
-              value: '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
+              value:
+                  '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
               icon: Icons.bathtub,
             ),
           ],

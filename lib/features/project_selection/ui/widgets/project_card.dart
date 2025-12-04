@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
+import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -151,7 +152,7 @@ class ProjectCard extends ConsumerWidget {
           Positioned(
             top: 8,
             right: 8,
-            child: AnimatedSwitcher(
+            child: AppAnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
               child: isRequested
                   ? Container(
