@@ -20,6 +20,7 @@ import 'features/document_approval/ui/screens/document_detail_screen.dart';
 import 'features/document_approval/ui/screens/document_list_screen.dart';
 import 'features/project_selection/ui/screens/project_detail_screen.dart';
 import 'features/project_selection/ui/screens/project_list_screen.dart';
+import 'features/main/ui/screens/main_screen.dart';
 
 void main() {
   // Получаем flavor из константы компиляции или используем mock по умолчанию
@@ -87,7 +88,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
       ),
-      GoRoute(path: '/', builder: (context, state) => const ProjectListScreen()),
+      GoRoute(path: '/', builder: (context, state) => const MainScreen()),
       GoRoute(
         path: '/projects/:id',
         builder: (context, state) {

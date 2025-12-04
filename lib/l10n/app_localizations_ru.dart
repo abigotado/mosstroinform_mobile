@@ -369,4 +369,25 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get logoutTooltip => 'Выйти из системы';
+
+  @override
+  String get requestedProjectsTitle => 'Запрошенные проекты';
+
+  @override
+  String get myObjectsTitle => 'Мои объекты';
+
+  @override
+  String get profileTitle => 'Профиль';
+
+  @override
+  String get searchProjects => 'Поиск проектов';
+
+  @override
+  String get searchHint => 'Введите название или адрес';
+
+  @override
+  String get noRequestedProjects => 'Нет запрошенных проектов';
+
+  @override
+  String get noMyObjects => 'У вас пока нет объектов';
 }

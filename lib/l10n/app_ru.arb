@@ -500,5 +500,33 @@
   "logoutTooltip": "Выйти из системы",
   "@logoutTooltip": {
     "description": "Подсказка для кнопки выхода"
+  },
+  "requestedProjectsTitle": "Запрошенные проекты",
+  "@requestedProjectsTitle": {
+    "description": "Заголовок экрана запрошенных проектов"
+  },
+  "myObjectsTitle": "Мои объекты",
+  "@myObjectsTitle": {
+    "description": "Заголовок экрана моих объектов"
+  },
+  "profileTitle": "Профиль",
+  "@profileTitle": {
+    "description": "Заголовок экрана профиля"
+  },
+  "searchProjects": "Поиск проектов",
+  "@searchProjects": {
+    "description": "Заголовок поля поиска проектов"
+  },
+  "searchHint": "Введите название или адрес",
+  "@searchHint": {
+    "description": "Подсказка для поля поиска"
+  },
+  "noRequestedProjects": "Нет запрошенных проектов",
+  "@noRequestedProjects": {
+    "description": "Сообщение когда нет запрошенных проектов"
+  },
+  "noMyObjects": "У вас пока нет объектов",
+  "@noMyObjects": {
+    "description": "Сообщение когда нет объектов"
   }
 }

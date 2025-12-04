@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/core/utils/logger.dart';
-import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 
-/// Экран списка проектов
+/// Экран списка проектов с поиском и пагинацией
 class ProjectListScreen extends ConsumerStatefulWidget {
   const ProjectListScreen({super.key});
 
@@ -17,6 +16,12 @@ class ProjectListScreen extends ConsumerStatefulWidget {
 }
 
 class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  String _searchQuery = '';
+  int _currentPage = 0;
+  static const int _itemsPerPage = 10;
+
   @override
   void initState() {
     super.initState();
@@ -24,73 +29,106 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(projectsProvider.notifier).loadProjects();
     });
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels >=
+        _scrollController.position.maxScrollExtent * 0.8) {
+      // Загружаем следующую страницу при достижении 80% прокрутки
+      _loadNextPage();
+    }
+  }
+
+  void _loadNextPage() {
+    final projectsAsync = ref.read(projectsProvider);
+    projectsAsync.maybeWhen(
+      data: (state) {
+        final filteredProjects = _filterProjects(state.projects);
+        final totalPages = (filteredProjects.length / _itemsPerPage).ceil();
+        if (_currentPage < totalPages - 1) {
+          setState(() {
+            _currentPage++;
+          });
+        }
+      },
+      orElse: () {},
+    );
+  }
+
+  List<Project> _filterProjects(List<Project> projects) {
+    if (_searchQuery.isEmpty) {
+      return projects;
+    }
+    final query = _searchQuery.toLowerCase();
+    return projects.where((project) {
+      return project.name.toLowerCase().contains(query) ||
+          project.address.toLowerCase().contains(query) ||
+          project.description.toLowerCase().contains(query);
+    }).toList();
+  }
+
+  List<Project> _getPaginatedProjects(List<Project> projects) {
+    final filtered = _filterProjects(projects);
+    final startIndex = _currentPage * _itemsPerPage;
+    final endIndex = (startIndex + _itemsPerPage).clamp(0, filtered.length);
+    return filtered.sublist(0, endIndex);
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
     final projectsAsync = ref.watch(projectsProvider);
 
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.projectsTitle),
-        actions: [
-          Builder(
-            builder: (context) {
-              final projectsAsync = ref.watch(projectsProvider);
-              return projectsAsync.maybeWhen(
-                data: (state) {
-                  final firstProject = state.projects.isNotEmpty
-                      ? state.projects.first
-                      : null;
-                  return IconButton(
-                    icon: const Icon(Icons.videocam),
-                    tooltip: firstProject != null
-                        ? 'Перейти к камерам: ${firstProject.name}'
-                        : 'Перейти к камерам',
-                    onPressed: firstProject != null
-                        ? () {
-                            context.push('/construction/${firstProject.id}');
-                          }
-                        : null,
-                  );
-                },
-                orElse: () => const SizedBox.shrink(),
-              );
-            },
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(60),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: l10n.searchHint,
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _searchQuery.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            _searchQuery = '';
+                            _currentPage = 0;
+                            _searchController.clear();
+                          });
+                        },
+                      )
+                    : null,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                  _currentPage = 0;
+                });
+              },
+            ),
           ),
-          // Кнопка выхода
-          IconButton(
-            icon: const Icon(Icons.logout),
-            tooltip: l10n.logoutTooltip,
-            onPressed: () async {
-              AppLogger.info('ProjectListScreen: нажата кнопка выхода');
-              try {
-                await ref.read(authProvider.notifier).logout();
-                AppLogger.info('ProjectListScreen: выход выполнен успешно');
-                if (mounted) {
-                  context.go('/login');
-                }
-              } catch (e) {
-                AppLogger.error('ProjectListScreen: ошибка при выходе: $e');
-                if (mounted) {
-                  final theme = Theme.of(context);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Ошибка при выходе: $e'),
-                      backgroundColor: theme.colorScheme.error,
-                    ),
-                  );
-                }
-              }
-            },
-          ),
-        ],
+        ),
       ),
       body: projectsAsync.when(
         data: (state) {
           // Если список пустой и нет ошибки - это начальное состояние, показываем шиммер
-          // (начальное состояние возвращается как data с пустым списком)
           if (state.projects.isEmpty && state.error == null) {
             return ListView.builder(
               padding: const EdgeInsets.all(16),
@@ -118,7 +156,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                   const SizedBox(height: 16),
                   Text(
                     '${l10n.error}: ${state.error!.message}',
-                    style: Theme.of(context).textTheme.bodyLarge,
+                    style: theme.textTheme.bodyLarge,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
@@ -133,11 +171,18 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
             );
           }
 
+          final paginatedProjects = _getPaginatedProjects(state.projects);
+          final filteredProjects = _filterProjects(state.projects);
+          final hasMore = paginatedProjects.length < filteredProjects.length;
+
           return RefreshIndicator(
             onRefresh: () async {
+              setState(() {
+                _currentPage = 0;
+              });
               await ref.read(projectsProvider.notifier).loadProjects();
             },
-            child: state.isLoading
+            child: state.isLoading && paginatedProjects.isEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.all(16),
                     itemCount: 3,
@@ -148,22 +193,31 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                       );
                     },
                   )
-                : ListView.builder(
-                    padding: const EdgeInsets.all(16),
-                    itemCount: state.projects.length,
-                    itemBuilder: (context, index) {
-                      final project = state.projects[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: ProjectCard(
-                          project: project,
-                          onTap: () {
-                            context.push('/projects/${project.id}');
-                          },
-                        ),
-                      );
-                    },
-                  ),
+                : paginatedProjects.isEmpty
+                    ? Center(child: Text(l10n.projectsNotFound))
+                    : ListView.builder(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(16),
+                        itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (index == paginatedProjects.length) {
+                            return const Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: Center(child: CircularProgressIndicator()),
+                            );
+                          }
+                          final project = paginatedProjects[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: ProjectCard(
+                              project: project,
+                              onTap: () {
+                                context.push('/projects/${project.id}');
+                              },
+                            ),
+                          );
+                        },
+                      ),
           );
         },
         loading: () => ListView.builder(
@@ -184,7 +238,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               const SizedBox(height: 16),
               Text(
                 '${l10n.error}: $error',
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: theme.textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
