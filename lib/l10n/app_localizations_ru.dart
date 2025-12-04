@@ -374,6 +374,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get requestedProjectsTitle => 'Запрошенные проекты';
 
   @override
+  String get requested => 'Запрошен';
+
+  @override
   String get myObjectsTitle => 'Мои объекты';
 
   @override

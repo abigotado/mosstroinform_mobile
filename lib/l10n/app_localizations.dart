@@ -802,6 +802,12 @@ abstract class AppLocalizations {
   /// **'Запрошенные проекты'**
   String get requestedProjectsTitle;
 
+  /// No description provided for @requested.
+  ///
+  /// In ru, this message translates to:
+  /// **'Запрошен'**
+  String get requested;
+
   /// Заголовок экрана моих объектов
   ///
   /// In ru, this message translates to:
