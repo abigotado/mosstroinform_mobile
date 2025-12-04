@@ -92,14 +92,26 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 class ProjectState {
   final Project? project;
   final bool isLoading;
+  final bool isRequestingConstruction;
   final Failure? error;
 
-  const ProjectState({this.project, this.isLoading = false, this.error});
+  const ProjectState({
+    this.project,
+    this.isLoading = false,
+    this.isRequestingConstruction = false,
+    this.error,
+  });
 
-  ProjectState copyWith({Project? project, bool? isLoading, Failure? error}) {
+  ProjectState copyWith({
+    Project? project,
+    bool? isLoading,
+    bool? isRequestingConstruction,
+    Failure? error,
+  }) {
     return ProjectState(
       project: project ?? this.project,
       isLoading: isLoading ?? this.isLoading,
+      isRequestingConstruction: isRequestingConstruction ?? this.isRequestingConstruction,
       error: error,
     );
   }
@@ -143,25 +155,54 @@ class ProjectNotifier extends _$ProjectNotifier {
   Future<void> requestConstruction(String projectId) async {
     if (!ref.mounted) return;
     
+    // Устанавливаем состояние загрузки запроса
+    final currentState = state.value;
+    state = AsyncValue.data(
+      ProjectState(
+        project: currentState?.project,
+        isLoading: false,
+        isRequestingConstruction: true,
+        error: null,
+      ),
+    );
+    
     try {
       final repository = ref.read(projectRepositoryProvider);
       await repository.requestConstruction(projectId);
       
       if (!ref.mounted) return;
       
-      // Перезагружаем проект после отправки запроса
-      await loadProject(projectId);
+      // Обновляем состояние: запрос завершен, проект остается тем же
+      state = AsyncValue.data(
+        ProjectState(
+          project: currentState?.project,
+          isLoading: false,
+          isRequestingConstruction: false,
+          error: null,
+        ),
+      );
+      
+      // Обновляем список проектов, чтобы карточки обновились со статусом
+      if (ref.mounted) {
+        ref.read(projectsProvider.notifier).loadProjects();
+      }
     } on Failure catch (e) {
       if (!ref.mounted) return;
       state = AsyncValue.data(
-        ProjectState(project: state.value?.project, isLoading: false, error: e),
+        ProjectState(
+          project: currentState?.project,
+          isLoading: false,
+          isRequestingConstruction: false,
+          error: e,
+        ),
       );
     } catch (e) {
       if (!ref.mounted) return;
       state = AsyncValue.data(
         ProjectState(
-          project: state.value?.project,
+          project: currentState?.project,
           isLoading: false,
+          isRequestingConstruction: false,
           error: UnknownFailure('Неизвестная ошибка: $e'),
         ),
       );

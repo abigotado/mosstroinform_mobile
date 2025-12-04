@@ -218,11 +218,13 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
             return const SizedBox.shrink();
           }
 
+          final isRequesting = state.isRequestingConstruction;
+
           return SafeArea(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: ElevatedButton(
-                onPressed: state.isLoading
+                onPressed: isRequesting
                     ? null
                     : () async {
                         AppLogger.debug(
@@ -263,7 +265,18 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-                child: Text(l10n.sendConstructionRequest),
+                child: isRequesting
+                    ? SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            theme.colorScheme.onPrimary,
+                          ),
+                        ),
+                      )
+                    : Text(l10n.sendConstructionRequest),
               ),
             ),
           );
