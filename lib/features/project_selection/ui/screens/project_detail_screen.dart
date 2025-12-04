@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
-import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
-import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 // import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
