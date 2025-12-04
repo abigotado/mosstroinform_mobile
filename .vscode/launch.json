@@ -77,7 +77,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--dart-define=FLAVOR=prod"
+        "--flavor=prod"
       ],
       "flutterMode": "debug"
     }
