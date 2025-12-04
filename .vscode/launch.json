@@ -57,7 +57,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--flavor=mock"
+        "--dart-define=FLAVOR=mock"
       ],
       "flutterMode": "debug"
     },
@@ -77,7 +77,7 @@
       "type": "dart",
       "program": "lib/main.dart",
       "args": [
-        "--flavor=prod"
+        "--dart-define=FLAVOR=prod"
       ],
       "flutterMode": "debug"
     }
