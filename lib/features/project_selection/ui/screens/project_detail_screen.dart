@@ -79,7 +79,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
             return SingleChildScrollView(
               key: const ValueKey('content'),
-            child: Column(
+              child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Изображение проекта
