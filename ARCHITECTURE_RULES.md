@@ -317,6 +317,37 @@ Container(
 
 ## Правила работы с Riverpod
 
+### Проверка ref.mounted в async методах
+
+**Всегда проверять `ref.mounted` перед установкой state после async операций.**
+
+**❌ НЕПРАВИЛЬНО:**
+```dart
+Future<void> loadData() async {
+  state = const AsyncValue.loading();
+  final data = await repository.getData();
+  state = AsyncValue.data(data); // ❌ Может быть disposed
+}
+```
+
+**✅ ПРАВИЛЬНО:**
+```dart
+Future<void> loadData() async {
+  if (!ref.mounted) return;
+  state = const AsyncValue.loading();
+  final data = await repository.getData();
+  
+  if (!ref.mounted) return; // ✅ Проверка после async операции
+  state = AsyncValue.data(data);
+}
+```
+
+**Правила:**
+- Проверять `ref.mounted` в начале async метода
+- Проверять `ref.mounted` после каждой async операции (await)
+- Проверять `ref.mounted` перед установкой state
+- Это предотвращает ошибку "Cannot use the Ref after it has been disposed"
+
 ### Импорты для провайдеров
 
 **Всегда добавлять `flutter_riverpod` в импорты при использовании `riverpod_annotation`.**
