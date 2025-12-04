@@ -213,72 +213,80 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
           final requestedIds = ref.watch(requestedProjectsStateProvider);
           final isRequested = requestedIds.contains(widget.projectId);
 
-          // Не показываем кнопку, если запрос уже был отправлен
-          if (isRequested) {
-            return const SizedBox.shrink();
-          }
-
           final isRequesting = state.isRequestingConstruction;
 
-          return SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: ElevatedButton(
-                onPressed: isRequesting
-                    ? null
-                    : () async {
-                        AppLogger.debug(
-                          'Нажата кнопка "Отправить запрос на строительство"',
-                        );
-                        AppLogger.debug('projectId: ${widget.projectId}');
-                        final l10n = AppLocalizations.of(context)!;
-                        final messenger = ScaffoldMessenger.of(context);
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: isRequested
+                ? const SizedBox.shrink(key: ValueKey('hidden'))
+                : SafeArea(
+                    key: const ValueKey('button'),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: ElevatedButton(
+                        onPressed: isRequesting
+                            ? null
+                            : () async {
+                                AppLogger.debug(
+                                  'Нажата кнопка "Отправить запрос на строительство"',
+                                );
+                                AppLogger.debug('projectId: ${widget.projectId}');
+                                final l10n = AppLocalizations.of(context)!;
+                                final messenger = ScaffoldMessenger.of(context);
 
-                        try {
-                          await ref
-                              .read(projectProvider.notifier)
-                              .requestConstruction(widget.projectId);
-                          AppLogger.info(
-                            'Запрос на строительство отправлен успешно',
-                          );
+                                try {
+                                  await ref
+                                      .read(projectProvider.notifier)
+                                      .requestConstruction(widget.projectId);
+                                  AppLogger.info(
+                                    'Запрос на строительство отправлен успешно',
+                                  );
 
-                          if (mounted) {
-                            messenger.showSnackBar(
-                              SnackBar(
-                                content: Text(l10n.constructionRequestSent),
-                                duration: const Duration(seconds: 2),
-                              ),
-                            );
-                          }
-                        } catch (e) {
-                          AppLogger.error('Ошибка при отправке запроса', e);
-                          if (mounted) {
-                            messenger.showSnackBar(
-                              SnackBar(
-                                content: Text('${l10n.error}: $e'),
-                                backgroundColor: Colors.red,
-                              ),
-                            );
-                          }
-                        }
-                      },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                ),
-                child: isRequesting
-                    ? SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            theme.colorScheme.onPrimary,
-                          ),
+                                  if (mounted) {
+                                    messenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text(l10n.constructionRequestSent),
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  }
+                                } catch (e) {
+                                  AppLogger.error('Ошибка при отправке запроса', e);
+                                  if (mounted) {
+                                    messenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text('${l10n.error}: $e'),
+                                        backgroundColor: Colors.red,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
-                      )
-                    : Text(l10n.sendConstructionRequest),
-              ),
-            ),
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 200),
+                          child: isRequesting
+                              ? SizedBox(
+                                  key: const ValueKey('loading'),
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      theme.colorScheme.onPrimary,
+                                    ),
+                                  ),
+                                )
+                              : Text(
+                                  l10n.sendConstructionRequest,
+                                  key: const ValueKey('text'),
+                                ),
+                        ),
+                      ),
+                    ),
+                  ),
           );
         },
         loading: () => const SizedBox.shrink(),
