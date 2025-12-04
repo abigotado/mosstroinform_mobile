@@ -145,15 +145,30 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                       _CharacteristicsSection(project: project),
                       const SizedBox(height: 24),
 
-                      // Этапы строительства
-                      Text(
-                        l10n.constructionStages,
-                        style: theme.textTheme.titleLarge,
+                      // Цена
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.colorScheme.primaryContainer,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              l10n.price,
+                              style: theme.textTheme.titleLarge,
+                            ),
+                            Text(
+                              _formatPrice(project.price),
+                              style: theme.textTheme.headlineMedium?.copyWith(
+                                color: theme.colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 16),
-                      // TODO: Показывать этапы из объекта строительства через ConstructionObjectRepository
-                      // Проекты не содержат этапов
-                      const SizedBox.shrink(),
                     ],
                   ),
                 ),
@@ -273,6 +288,18 @@ class _CharacteristicsSection extends StatelessWidget {
 
   const _CharacteristicsSection({required this.project});
 
+  String _getBedroomsText(int bedrooms) {
+    if (bedrooms == 1) return 'спальня';
+    if (bedrooms >= 2 && bedrooms <= 4) return 'спальни';
+    return 'спален';
+  }
+
+  String _getBathroomsText(int bathrooms) {
+    if (bathrooms == 1) return 'ванная';
+    if (bathrooms >= 2 && bathrooms <= 4) return 'ванные';
+    return 'ванных';
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -295,10 +322,15 @@ class _CharacteristicsSection extends StatelessWidget {
             ),
             const Divider(),
             _CharacteristicRow(
-              label: l10n.price,
-              value:
-                  '${_ProjectDetailScreenState._formatPrice(project.price)} ₽',
-              icon: Icons.attach_money,
+              label: 'Спальни',
+              value: '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
+              icon: Icons.bed,
+            ),
+            const Divider(),
+            _CharacteristicRow(
+              label: 'Ванные',
+              value: '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
+              icon: Icons.bathtub,
             ),
           ],
         ),

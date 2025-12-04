@@ -4,9 +4,9 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 import 'package:mosstroinform_mobile/features/main/ui/providers/main_navigation_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_list_screen.dart';
-import 'package:mosstroinform_mobile/features/project_selection/ui/screens/requested_projects_screen.dart';
-import 'package:mosstroinform_mobile/features/project_selection/ui/screens/my_objects_screen.dart';
-import 'package:mosstroinform_mobile/features/auth/ui/screens/profile_screen.dart';
+import 'package:mosstroinform_mobile/features/requested_projects/ui/screens/requested_projects_screen.dart';
+import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
+import 'package:mosstroinform_mobile/features/profile/ui/screens/profile_screen.dart';
 
 /// Главный экран приложения с bottom navigation bar
 class MainScreen extends ConsumerStatefulWidget {

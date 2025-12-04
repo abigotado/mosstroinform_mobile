@@ -132,7 +132,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           if (state.projects.isEmpty && state.isLoading) {
             return ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: state.projects.length, // Используем реальное количество
+              itemCount: 3, // Фиксированное количество для шиммеров
               itemBuilder: (context, index) {
                 return const Padding(
                   padding: EdgeInsets.only(bottom: 16),
@@ -185,7 +185,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
             child: state.isLoading && paginatedProjects.isEmpty
                 ? ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: paginatedProjects.length, // Используем реальное количество
+                    itemCount: 3, // Фиксированное количество для шиммеров
                     itemBuilder: (context, index) {
                       return const Padding(
                         padding: EdgeInsets.only(bottom: 16),
@@ -222,7 +222,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
         },
         loading: () => ListView.builder(
           padding: const EdgeInsets.all(16),
-          itemCount: 0, // При первой загрузке нотифаер вернёт пустой список
+          itemCount: 3, // Фиксированное количество для шиммеров
           itemBuilder: (context, index) {
             return const Padding(
               padding: EdgeInsets.only(bottom: 16),
