@@ -5,7 +5,7 @@ import 'package:mosstroinform_mobile/core/data/mock_data/projects_mock_data.dart
 import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
-import 'package:mosstroinform_mobile/features/construction_completion/data/repositories/mock_final_document_repository.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/final_document_adapter.dart';
 
 /// Сервис для работы с локальной базой данных Hive
 /// Используется только в моковом режиме для имитации работы бэкенда
@@ -14,11 +14,13 @@ class HiveService {
   static const String _documentsBoxName = 'documents';
   static const String _constructionObjectsBoxName = 'construction_objects';
   static const String _requestedProjectsBoxName = 'requested_projects';
+  static const String _finalDocumentsBoxName = 'final_documents';
 
   static Box<ProjectAdapter>? _projectsBox;
   static Box<DocumentAdapter>? _documentsBox;
   static Box<ConstructionObjectAdapter>? _constructionObjectsBox;
   static Box<String>? _requestedProjectsBox;
+  static Box<FinalDocumentAdapter>? _finalDocumentsBox;
 
   /// Проверка, инициализирован ли Hive
   static bool get isInitialized => _projectsBox != null;
@@ -117,12 +119,20 @@ class HiveService {
       await _requestedProjectsBox!.clear();
       AppLogger.info('HiveService.clearUserData: запрошенные проекты очищены');
     }
-    
-    // Очищаем статические данные моковых репозиториев
-    MockFinalDocumentRepository.clearDocuments();
-    AppLogger.info('HiveService.clearUserData: документы объектов очищены');
+    if (_finalDocumentsBox != null) {
+      await _finalDocumentsBox!.clear();
+      AppLogger.info('HiveService.clearUserData: финальные документы очищены');
+    }
     
     AppLogger.info('HiveService.clearUserData: все данные очищены, база будет создана с нуля при следующем логине');
+  }
+
+  /// Получить бокс финальных документов
+  static Box<FinalDocumentAdapter> get finalDocumentsBox {
+    if (_finalDocumentsBox == null) {
+      throw StateError('HiveService не инициализирован. Вызовите initialize()');
+    }
+    return _finalDocumentsBox!;
   }
 
   /// Получить бокс проектов
