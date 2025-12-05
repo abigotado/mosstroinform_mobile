@@ -58,5 +58,17 @@ class ConstructionObjectRepositoryImpl
       await remoteDataSource.completeConstruction(objectId);
     }, methodName: 'completeConstruction');
   }
+
+  @override
+  Future<void> updateDocumentsSignedStatus(
+    String projectId,
+    bool allDocumentsSigned,
+  ) async {
+    return guard(() async {
+      // В реальной реализации бэкенд должен обновить статус документов для объекта
+      // Пока что это заглушка, так как в текущей реализации этот метод используется только в mock режиме
+      // TODO: Реализовать эндпоинт для обновления статуса документов
+    }, methodName: 'updateDocumentsSignedStatus');
+  }
 }
 

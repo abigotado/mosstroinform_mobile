@@ -16,6 +16,7 @@ class ConstructionObject {
   final String? imageUrl;
   final List<ConstructionStage> stages;
   final String? chatId; // ID чата для этого объекта
+  final bool allDocumentsSigned; // Все документы подписаны
 
   const ConstructionObject({
     required this.id,
@@ -31,6 +32,7 @@ class ConstructionObject {
     this.imageUrl,
     required this.stages,
     this.chatId,
+    this.allDocumentsSigned = false,
   });
 
   @override
@@ -45,6 +47,7 @@ class ConstructionObject {
     String address,
     List<ConstructionStage> initialStages, {
     String? chatId,
+    bool allDocumentsSigned = false,
   }) {
     return ConstructionObject(
       id: objectId,
@@ -60,6 +63,7 @@ class ConstructionObject {
       imageUrl: project.imageUrl,
       stages: initialStages,
       chatId: chatId,
+      allDocumentsSigned: allDocumentsSigned,
     );
   }
 }

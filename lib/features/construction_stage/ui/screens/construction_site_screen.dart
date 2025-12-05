@@ -10,6 +10,7 @@ import 'package:mosstroinform_mobile/features/construction_stage/notifier/constr
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/camera_view_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/camera_grid_item.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/notifier/final_document_notifier.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -204,19 +205,26 @@ class _ConstructionSiteScreenState
                 Builder(
                   builder: (context) {
                     final projectId = site.projectId;
-                    final completionStatusAsync = ref.watch(
-                      completionStatusProvider(projectId),
+                    final objectAsync = ref.watch(
+                      FutureProvider((ref) async {
+                        final objectRepository = ref.read(constructionObjectRepositoryProvider);
+                        final objects = await objectRepository.getObjects();
+                        return objects.firstWhere(
+                          (obj) => obj.projectId == projectId,
+                          orElse: () => throw UnknownFailure('Объект не найден'),
+                        );
+                      }),
                     );
 
-                    return completionStatusAsync.when(
-                      data: (statusState) {
-                        final status = statusState.status;
-                        if (status == null || !status.allDocumentsSigned) {
+                    return objectAsync.when(
+                      data: (object) {
+                        if (!object.allDocumentsSigned) {
                           return const SizedBox.shrink();
                         }
 
-                        // Проверяем, не завершено ли уже строительство
-                        final isCompleted = status.isCompleted;
+                        // Проверяем, не завершено ли уже строительство (все этапы completed)
+                        final isCompleted = object.stages.isNotEmpty &&
+                            object.stages.every((stage) => stage.status == StageStatus.completed);
                         if (isCompleted) {
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -1,6 +1,7 @@
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/providers/final_document_repository_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'final_document_notifier.g.dart';
@@ -162,6 +163,17 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
       final repository = ref.read(finalDocumentRepositoryProvider);
       await repository.signFinalDocument(params.$1, params.$2);
       await loadFinalDocument(); // Перезагрузить документ после подписания
+      
+      // Проверяем, все ли документы подписаны
+      final completionStatus = await repository.getCompletionStatus(params.$1);
+      final allDocumentsSigned = completionStatus.allDocumentsSigned;
+      
+      // Обновляем статус документов в объекте строительства
+      final objectRepository = ref.read(constructionObjectRepositoryProvider);
+      await objectRepository.updateDocumentsSignedStatus(
+        params.$1,
+        allDocumentsSigned,
+      );
       
       // Обновить статус завершения строительства
       ref.invalidate(completionStatusProvider(params.$1));
