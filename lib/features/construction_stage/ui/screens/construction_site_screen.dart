@@ -232,8 +232,11 @@ class _ConstructionSiteScreenState
                         data: (object) {
                           // Проверяем статус подписания финальных документов
                           final areFinalDocumentsSigned =
-                              completionStatusAsync.value?.status?.allDocumentsSigned ??
-                                  false;
+                              completionStatusAsync
+                                  .value
+                                  ?.status
+                                  ?.allDocumentsSigned ??
+                              false;
 
                           // Если документы не подписаны, кнопку не показываем
                           if (!areFinalDocumentsSigned) {
@@ -241,7 +244,11 @@ class _ConstructionSiteScreenState
                           }
 
                           // Проверяем, не завершено ли уже строительство (кнопка нажата)
-                          final isCompleted = object.isCompleted;
+                          // Получаем статус напрямую из completionStatusAsync, так как object может быть старым
+                          final isCompleted =
+                              completionStatusAsync.value?.status?.isCompleted ??
+                                  object.isCompleted;
+
                           if (isCompleted) {
                             return Padding(
                               padding: const EdgeInsets.symmetric(

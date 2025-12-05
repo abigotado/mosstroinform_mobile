@@ -229,22 +229,35 @@ class _FinalDocumentDetailScreenState
                 ],
 
                 // Кнопка подписания
-                if (document.status == FinalDocumentStatus.pending) ...[
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton.icon(
-                      onPressed: _isProcessing ? null : _handleSign,
-                      icon: _isProcessing
-                          ? const SizedBox(
-                              width: 16,
-                              height: 16,
-                              child: CircularProgressIndicator(strokeWidth: 2),
-                            )
-                          : const Icon(Icons.edit),
-                      label: Text(l10n.signDocument),
-                    ),
-                  ),
-                ],
+                Builder(
+                  builder: (context) {
+                    // Получаем статус завершения строительства
+                    final completionStatusAsync = ref.watch(
+                      completionStatusProvider(widget.projectId),
+                    );
+                    final isCompleted =
+                        completionStatusAsync.value?.status?.isCompleted ?? false;
+
+                    if (document.status == FinalDocumentStatus.pending &&
+                        !isCompleted) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: FilledButton.icon(
+                          onPressed: _isProcessing ? null : _handleSign,
+                          icon: _isProcessing
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(strokeWidth: 2),
+                                )
+                              : const Icon(Icons.edit),
+                          label: Text(l10n.signDocument),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               ],
             ),
           );

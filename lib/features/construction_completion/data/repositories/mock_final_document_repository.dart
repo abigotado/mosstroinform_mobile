@@ -116,7 +116,7 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
       projectId: projectId,
       isCompleted: isCompleted,
       completionDate: completionDate,
-      progress: 0.95, // Прогресс приходит с бэка
+      progress: 1.0, // Прогресс приходит с бэка, у объекта 100%
       documents: documents,
       allDocumentsSigned: allSigned,
     );
