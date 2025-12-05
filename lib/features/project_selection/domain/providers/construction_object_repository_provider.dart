@@ -14,9 +14,9 @@ part 'construction_object_repository_provider.g.dart';
 ConstructionObjectRepository constructionObjectRepository(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   if (config.useMocks) {
-    return MockConstructionObjectRepository(ref);
+    return MockConstructionObjectRepository();
   }
   // TODO: Реализовать реальный репозиторий когда будет готов бэкенд
-  return MockConstructionObjectRepository(ref);
+  return MockConstructionObjectRepository();
 }
 

@@ -45,6 +45,14 @@ class _ConstructionSiteScreenState
       appBar: AppBar(
         title: Text(l10n.constructionStage),
         actions: [
+          // Кнопка перехода к проекту
+          IconButton(
+            icon: const Icon(Icons.home),
+            tooltip: l10n.projectDetails,
+            onPressed: () {
+              context.push('/projects/${widget.projectId}');
+            },
+          ),
           // Кнопка перехода к завершению строительства
           IconButton(
             icon: const Icon(Icons.check_circle_outline),

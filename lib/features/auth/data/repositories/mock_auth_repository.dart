@@ -1,6 +1,9 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
+import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/storage/secure_storage_provider.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/auth/domain/entities/user.dart';
 import 'package:mosstroinform_mobile/features/auth/domain/repositories/auth_repository.dart';
 
@@ -44,6 +47,20 @@ class MockAuthRepository implements AuthRepository {
     await secureStorage.write(key: StorageKeys.refreshToken, value: 'refresh_$token');
     await secureStorage.write(key: StorageKeys.userId, value: userData['id'] as String);
     
+    // Очищаем базу данных при логине, чтобы начать с чистого листа
+    // Проекты загрузятся автоматически при первом обращении к списку проектов
+    try {
+      final flavor = AppConfigSimple.getFlavor();
+      final config = AppConfigSimple.fromFlavor(flavor);
+      if (config.useMocks) {
+        await HiveService.clearUserData();
+        AppLogger.info('MockAuthRepository.login: моковая база данных очищена, будет создана с нуля');
+      }
+    } catch (e) {
+      AppLogger.warning('MockAuthRepository.login: ошибка при очистке базы данных: $e');
+      // Не прерываем логин, даже если очистка не удалась
+    }
+    
     return token;
   }
 
@@ -74,15 +91,45 @@ class MockAuthRepository implements AuthRepository {
     await secureStorage.write(key: StorageKeys.refreshToken, value: 'refresh_$token');
     await secureStorage.write(key: StorageKeys.userId, value: userId);
     
+    // Очищаем базу данных при регистрации, чтобы начать с чистого листа
+    // Проекты загрузятся автоматически при первом обращении к списку проектов
+    try {
+      final flavor = AppConfigSimple.getFlavor();
+      final config = AppConfigSimple.fromFlavor(flavor);
+      if (config.useMocks) {
+        await HiveService.clearUserData();
+        AppLogger.info('MockAuthRepository.register: моковая база данных очищена, будет создана с нуля');
+      }
+    } catch (e) {
+      AppLogger.warning('MockAuthRepository.register: ошибка при очистке базы данных: $e');
+      // Не прерываем регистрацию, даже если очистка не удалась
+    }
+    
     return token;
   }
 
   @override
   Future<void> logout() async {
     await Future.delayed(const Duration(milliseconds: 200));
+    
+    // Очищаем токены
     await secureStorage.delete(key: StorageKeys.accessToken);
     await secureStorage.delete(key: StorageKeys.refreshToken);
     await secureStorage.delete(key: StorageKeys.userId);
+    
+    // Очищаем всю моковую базу данных при logout (только в моковом режиме)
+    // При новом логине база будет создана с нуля
+    try {
+      final flavor = AppConfigSimple.getFlavor();
+      final config = AppConfigSimple.fromFlavor(flavor);
+      if (config.useMocks) {
+        await HiveService.clearUserData();
+        AppLogger.info('MockAuthRepository.logout: вся моковая база данных очищена, будет создана с нуля при следующем логине');
+      }
+    } catch (e) {
+      AppLogger.warning('MockAuthRepository.logout: ошибка при очистке базы данных: $e');
+      // Не прерываем logout, даже если очистка базы не удалась
+    }
   }
 
   @override

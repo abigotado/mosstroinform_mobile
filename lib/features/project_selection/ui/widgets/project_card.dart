@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -17,10 +16,6 @@ class ProjectCard extends ConsumerWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context)!;
-    
-    // Проверяем, запрошен ли проект
-    final requestedIds = ref.watch(requestedProjectsStateProvider);
-    final isRequested = requestedIds.contains(project.id);
 
     return Card(
       clipBehavior: Clip.antiAlias,
@@ -88,104 +83,77 @@ class ProjectCard extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-                  
-                  // Адрес
-                  Text(
-                    project.address,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
 
-                  // Описание
-                  Text(
-                    project.description,
-                    style: theme.textTheme.bodySmall,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
+                      // Адрес строительства (если есть)
+                      if (project.constructionAddress != null)
+                        Text(
+                          project.constructionAddress!,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      const SizedBox(height: 8),
 
-                  // Параметры
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 4,
-                    children: [
-                      _InfoChip(
-                        icon: Icons.square_foot,
-                        text: '${project.area.toInt()} м²',
+                      // Описание
+                      Text(
+                        project.description,
+                        style: theme.textTheme.bodySmall,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      _InfoChip(
-                        icon: Icons.layers,
-                        text: '${project.floors} ${_getFloorsText(project.floors)}',
-                      ),
-                      _InfoChip(
-                        icon: Icons.bed,
-                        text: '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
-                      ),
-                      _InfoChip(
-                        icon: Icons.bathtub,
-                        text: '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
+                      const SizedBox(height: 8),
 
-                  // Цена
-                  Text(
-                    _formatPrice(project.price),
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      color: colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                      // Параметры
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        children: [
+                          _InfoChip(
+                            icon: Icons.square_foot,
+                            text: '${project.area.toInt()} м²',
+                          ),
+                          _InfoChip(
+                            icon: Icons.layers,
+                            text:
+                                '${project.floors} ${l10n.floors(project.floors)}',
+                          ),
+                          _InfoChip(
+                            icon: Icons.bed,
+                            text:
+                                '${project.bedrooms} ${l10n.bedrooms(project.bedrooms)}',
+                          ),
+                          _InfoChip(
+                            icon: Icons.bathtub,
+                            text:
+                                '${project.bathrooms} ${l10n.bathrooms(project.bathrooms)}',
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+
+                      // Цена
+                      Text(
+                        _formatPrice(project.price, l10n),
+                        style: theme.textTheme.titleSmall?.copyWith(
+                          color: colorScheme.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ],
             ),
           ),
-          // Наклейка статуса "запрошен"
+          // Наклейка статуса
           Positioned(
             top: 8,
             right: 8,
             child: AppAnimatedSwitcher(
               duration: const Duration(milliseconds: 300),
-              child: isRequested
-                  ? Container(
-                      key: const ValueKey('requested'),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primaryContainer,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: colorScheme.primary,
-                          width: 1,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.pending_actions,
-                            size: 14,
-                            color: colorScheme.onPrimaryContainer,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            l10n.requested,
-                            style: theme.textTheme.labelSmall?.copyWith(
-                              color: colorScheme.onPrimaryContainer,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  : const SizedBox.shrink(key: ValueKey('empty')),
+              child: _buildStatusBadge(project, theme, colorScheme, l10n),
             ),
           ),
         ],
@@ -193,31 +161,83 @@ class ProjectCard extends ConsumerWidget {
     );
   }
 
-  String _formatPrice(int price) {
+  String _formatPrice(int price, AppLocalizations l10n) {
     if (price >= 1000000) {
-      return '${(price / 1000000).toStringAsFixed(1)} млн ₽';
+      return '${(price / 1000000).toStringAsFixed(1)} ${l10n.million} ${l10n.ruble}';
     } else if (price >= 1000) {
-      return '${(price / 1000).toStringAsFixed(0)} тыс ₽';
+      return '${(price / 1000).toStringAsFixed(0)} ${l10n.thousand} ${l10n.ruble}';
     }
-    return '$price ₽';
+    return '$price ${l10n.ruble}';
   }
 
-  String _getFloorsText(int floors) {
-    if (floors == 1) return 'этаж';
-    if (floors >= 2 && floors <= 4) return 'этажа';
-    return 'этажей';
-  }
-
-  String _getBedroomsText(int bedrooms) {
-    if (bedrooms == 1) return 'спальня';
-    if (bedrooms >= 2 && bedrooms <= 4) return 'спальни';
-    return 'спален';
-  }
-
-  String _getBathroomsText(int bathrooms) {
-    if (bathrooms == 1) return 'ванная';
-    if (bathrooms >= 2 && bathrooms <= 4) return 'ванные';
-    return 'ванных';
+  Widget _buildStatusBadge(
+    Project project,
+    ThemeData theme,
+    ColorScheme colorScheme,
+    AppLocalizations l10n,
+  ) {
+    switch (project.status) {
+      case ProjectStatus.requested:
+        // Оранжевый цвет для статуса "запрошен"
+        return Container(
+          key: const ValueKey('requested'),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: colorScheme.tertiaryContainer,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: colorScheme.tertiary, width: 1),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.pending_actions,
+                size: 14,
+                color: colorScheme.onTertiaryContainer,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                l10n.requested,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onTertiaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      case ProjectStatus.construction:
+        // Синий/зеленый цвет для статуса "строительство"
+        return Container(
+          key: const ValueKey('construction'),
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: colorScheme.primaryContainer,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: colorScheme.primary, width: 1),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.construction,
+                size: 14,
+                color: colorScheme.onPrimaryContainer,
+              ),
+              const SizedBox(width: 4),
+              Text(
+                l10n.underConstruction,
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onPrimaryContainer,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
+      case ProjectStatus.available:
+        return const SizedBox.shrink(key: ValueKey('empty'));
+    }
   }
 }
 
@@ -236,12 +256,7 @@ class _InfoChip extends StatelessWidget {
       children: [
         Icon(icon, size: 14, color: theme.colorScheme.onSurfaceVariant),
         const SizedBox(width: 4),
-        Text(
-          text,
-          style: theme.textTheme.bodySmall?.copyWith(
-            fontSize: 11,
-          ),
-        ),
+        Text(text, style: theme.textTheme.bodySmall?.copyWith(fontSize: 11)),
       ],
     );
   }

@@ -1,52 +1,34 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/mock_state_providers.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/projects_mock_data.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
+import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
-import 'package:mosstroinform_mobile/features/project_selection/data/models/project_model.dart';
+import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/project_repository.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart';
 
 /// Интерактивная моковая реализация репозитория проектов
-/// Использует состояние через Riverpod для имитации реальной работы приложения
-/// Состояние сбрасывается при перезапуске приложения
+/// Использует локальную базу данных Hive для имитации реальной работы приложения
+/// Данные сохраняются между перезапусками приложения
 class MockProjectRepository implements ProjectRepository {
-  final Ref ref;
-
-  MockProjectRepository(this.ref);
-
   @override
   Future<List<Project>> getProjects() async {
-    // Получаем список запрошенных проектов ДО await, чтобы избежать disposed ошибок
-    if (!ref.mounted) {
-      AppLogger.warning('MockProjectRepository.getProjects: ref disposed, возвращаем пустой список');
-      return [];
-    }
-    final requestedProjects = ref.read(requestedProjectsStateProvider);
-    
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Проверяем, что ref все еще mounted после await
-    if (!ref.mounted) {
-      AppLogger.warning('MockProjectRepository.getProjects: ref disposed после await, возвращаем пустой список');
-      return [];
-    }
-    
-    // Всегда используем данные напрямую из мок-данных
-    final mockData = ProjectsMockData.projects;
+    // Обеспечиваем загрузку проектов, если бокс пустой (ленивая загрузка)
+    await HiveService.ensureProjectsLoaded();
 
-    // Создаем проекты напрямую из мок-данных
-    // НЕ фильтруем запрошенные - они остаются в списке со статусом
-    final models = mockData.map((json) => ProjectModel.fromJson(json)).toList();
-    final allProjects = models.map((model) => model.toEntity()).toList();
-    
+    // Получаем все проекты из базы
+    final projectsBox = HiveService.projectsBox;
+    final projects = projectsBox.values.map((adapter) => adapter.toProject()).toList();
+
     AppLogger.info(
-      'MockProjectRepository.getProjects: создано ${allProjects.length} проектов, '
-      'запрошено ${requestedProjects.length}',
+      'MockProjectRepository.getProjects: получено ${projects.length} проектов',
     );
-    return allProjects;
+    return projects;
   }
 
   @override
@@ -54,49 +36,267 @@ class MockProjectRepository implements ProjectRepository {
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 300));
 
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed');
+    // Обеспечиваем загрузку проектов, если бокс пустой (ленивая загрузка)
+    await HiveService.ensureProjectsLoaded();
+
+    // Получаем проект из базы
+    final projectsBox = HiveService.projectsBox;
+    final projectAdapter = projectsBox.get(id);
+
+    if (projectAdapter == null) {
+      throw UnknownFailure('Проект с ID $id не найден');
     }
 
-    // Получаем проект напрямую из мок-данных, не через getProjects()
-    // чтобы избежать проблем с фильтрацией
-    final mockData = ProjectsMockData.projects;
-    final projectData = mockData.firstWhere(
-      (json) => json['id'] == id,
-      orElse: () => throw UnknownFailure('Проект с ID $id не найден'),
-    );
-    
-    final model = ProjectModel.fromJson(projectData);
-    return model.toEntity();
+    return projectAdapter.toProject();
   }
 
   @override
   Future<void> requestConstruction(String projectId) async {
-    // Проверяем mounted ДО await
-    if (!ref.mounted) {
-      AppLogger.warning('MockProjectRepository.requestConstruction: ref disposed, пропускаем запрос');
-      return;
-    }
-    
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
+    // Обновляем статус проекта на "requested"
+    final projectsBox = HiveService.projectsBox;
+    final projectAdapter = projectsBox.get(projectId);
+
+    if (projectAdapter != null) {
+      // Создаем обновленный адаптер со статусом "requested"
+      // Сохраняем все поля, включая objectId (если он был установлен ранее)
+      final updatedAdapter = ProjectAdapter(
+        id: projectAdapter.id,
+        name: projectAdapter.name,
+        address: projectAdapter.address,
+        description: projectAdapter.description,
+        area: projectAdapter.area,
+        floors: projectAdapter.floors,
+        bedrooms: projectAdapter.bedrooms,
+        bathrooms: projectAdapter.bathrooms,
+        price: projectAdapter.price,
+        imageUrl: projectAdapter.imageUrl,
+        statusString: 'requested',
+        constructionAddress: projectAdapter.constructionAddress,
+        objectId: projectAdapter.objectId, // Сохраняем objectId если он был установлен
+      );
+      await projectsBox.put(projectId, updatedAdapter);
+      AppLogger.info(
+        'MockProjectRepository.requestConstruction: статус проекта $projectId изменен на requested',
+      );
+    }
+
     // Добавляем проект в список запрошенных
-    if (ref.mounted) {
-      ref.read(requestedProjectsStateProvider.notifier).addRequestedProject(projectId);
+    final requestedBox = HiveService.requestedProjectsBox;
+    if (!requestedBox.containsKey(projectId)) {
+      await requestedBox.put(projectId, projectId);
       AppLogger.info(
         'MockProjectRepository.requestConstruction: проект $projectId добавлен в запрошенные',
       );
-
-      // Создаем документы для проекта
-      ref.read(mockDocumentsStateProvider.notifier).createDocumentsForProject(projectId);
-      AppLogger.info(
-        'MockProjectRepository.requestConstruction: созданы документы для проекта $projectId',
-      );
-    } else {
-      AppLogger.warning('MockProjectRepository.requestConstruction: ref disposed после await, пропускаем добавление');
     }
-    
+
+    // Создаем документы для проекта
+    await _createDocumentsForProject(projectId);
+    AppLogger.info(
+      'MockProjectRepository.requestConstruction: созданы документы для проекта $projectId',
+    );
+
     // Объект строительства будет создан после подписания всех документов
+  }
+
+  /// Создать документы для проекта
+  Future<void> _createDocumentsForProject(String projectId) async {
+    final documentsBox = HiveService.documentsBox;
+
+    // Проверяем, не созданы ли уже документы для этого проекта
+    // Проверяем по конкретным ID документов, чтобы избежать дублирования
+    final docIds = [
+      'doc_${projectId}_1',
+      'doc_${projectId}_2',
+      'doc_${projectId}_3',
+    ];
+    
+    final existingDocs = docIds
+        .where((id) => documentsBox.containsKey(id))
+        .toList();
+    
+    if (existingDocs.isNotEmpty) {
+      AppLogger.info(
+        'MockProjectRepository._createDocumentsForProject: документы для проекта $projectId уже существуют (найдено ${existingDocs.length} из ${docIds.length})',
+      );
+      return;
+    }
+
+    // Создаем стандартный набор документов
+    final documents = [
+      Document(
+        id: 'doc_${projectId}_1',
+        projectId: projectId,
+        title: 'Проектная документация',
+        description: 'Полный комплект проектной документации для строительства',
+        fileUrl: 'https://example.com/docs/project-docs.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: DateTime.now().subtract(const Duration(days: 2)),
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+      Document(
+        id: 'doc_${projectId}_2',
+        projectId: projectId,
+        title: 'Разрешение на строительство',
+        description: 'Официальное разрешение на начало строительных работ',
+        fileUrl: 'https://example.com/docs/building-permit.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: DateTime.now().subtract(const Duration(days: 1)),
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+      Document(
+        id: 'doc_${projectId}_3',
+        projectId: projectId,
+        title: 'Договор подряда',
+        description: 'Договор на выполнение строительных работ',
+        fileUrl: 'https://example.com/docs/contract.pdf',
+        status: DocumentStatus.pending,
+        submittedAt: DateTime.now().subtract(const Duration(days: 1)),
+        approvedAt: null,
+        rejectionReason: null,
+      ),
+    ];
+
+    // Сохраняем документы в базу
+    for (final doc in documents) {
+      await documentsBox.put(doc.id, DocumentAdapter.fromDocument(doc));
+    }
+
+    AppLogger.info(
+      'MockProjectRepository._createDocumentsForProject: создано ${documents.length} документов для проекта $projectId',
+    );
+  }
+
+  @override
+  Future<List<Project>> getRequestedProjects() async {
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Получаем список запрошенных проектов из базы
+    final requestedBox = HiveService.requestedProjectsBox;
+    final requestedIds = requestedBox.values.toSet();
+
+    // Получаем проекты из базы
+    final projectsBox = HiveService.projectsBox;
+    final requestedProjects = projectsBox.values
+        .where((adapter) => requestedIds.contains(adapter.id))
+        .map((adapter) => adapter.toProject())
+        .toList();
+
+    AppLogger.info(
+      'MockProjectRepository.getRequestedProjects: получено ${requestedProjects.length} запрошенных проектов',
+    );
+    return requestedProjects;
+  }
+
+  Future<void> startConstruction(String projectId, String address) async {
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Обновляем статус проекта на "construction" и добавляем адрес
+    final projectsBox = HiveService.projectsBox;
+    final projectAdapter = projectsBox.get(projectId);
+
+    if (projectAdapter == null) {
+      throw UnknownFailure('Проект с ID $projectId не найден');
+    }
+
+    // Создаем объект строительства (получаем objectId)
+    final objectId = await _createConstructionObject(projectId, address);
+
+    // Создаем обновленный адаптер с новыми полями, включая objectId
+    final updatedAdapter = ProjectAdapter(
+      id: projectAdapter.id,
+      name: projectAdapter.name,
+      address: projectAdapter.address,
+      description: projectAdapter.description,
+      area: projectAdapter.area,
+      floors: projectAdapter.floors,
+      bedrooms: projectAdapter.bedrooms,
+      bathrooms: projectAdapter.bathrooms,
+      price: projectAdapter.price,
+      imageUrl: projectAdapter.imageUrl,
+      statusString: 'construction',
+      constructionAddress: address,
+      objectId: objectId,
+    );
+    await projectsBox.put(projectId, updatedAdapter);
+
+    // Удаляем из списка запрошенных
+    final requestedBox = HiveService.requestedProjectsBox;
+    await requestedBox.delete(projectId);
+
+    AppLogger.info(
+      'MockProjectRepository.startConstruction: строительство проекта $projectId начато по адресу "$address"',
+    );
+  }
+
+  @override
+  Future<bool> isProjectRequested(String projectId) async {
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 200));
+
+    // Проверяем в базе
+    final requestedBox = HiveService.requestedProjectsBox;
+    return requestedBox.containsKey(projectId);
+  }
+
+  /// Создать объект строительства для проекта
+  /// Возвращает ID созданного объекта
+  Future<String> _createConstructionObject(String projectId, String address) async {
+    // Получаем проект для создания объекта
+    final projectsBox = HiveService.projectsBox;
+    final projectAdapter = projectsBox.get(projectId);
+
+    if (projectAdapter == null) {
+      throw UnknownFailure('Проект с ID $projectId не найден');
+    }
+
+    final project = projectAdapter.toProject();
+
+    // Создаем начальные этапы строительства
+    final initialStages = [
+      const ConstructionStage(id: '1', name: 'Подготовительные работы', status: StageStatus.pending),
+      const ConstructionStage(id: '2', name: 'Фундамент', status: StageStatus.pending),
+      const ConstructionStage(id: '3', name: 'Возведение стен', status: StageStatus.pending),
+      const ConstructionStage(id: '4', name: 'Кровля', status: StageStatus.pending),
+      const ConstructionStage(id: '5', name: 'Отделочные работы', status: StageStatus.pending),
+    ];
+
+    // Создаем объект строительства
+    final object = ConstructionObject.fromProject(
+      project,
+      'object_$projectId',
+      initialStages,
+    );
+
+    // Сохраняем объект в базе
+    final objectsBox = HiveService.constructionObjectsBox;
+    await objectsBox.put(
+      object.id,
+      ConstructionObjectAdapter.fromObject(object),
+    );
+
+    AppLogger.info(
+      'MockProjectRepository._createConstructionObject: создан объект строительства ${object.id} для проекта $projectId',
+    );
+
+    return object.id;
+  }
+
+  /// Метод для удаления проекта из запрошенных
+  /// Используется только в моковой реализации для имитации работы бэкенда
+  /// Не является частью интерфейса ProjectRepository
+  Future<void> removeRequestedProject(String projectId) async {
+    await Future.delayed(const Duration(milliseconds: 200));
+    final requestedBox = HiveService.requestedProjectsBox;
+    await requestedBox.delete(projectId);
+    AppLogger.info(
+      'MockProjectRepository.removeRequestedProject: проект $projectId удален из запрошенных',
+    );
   }
 }

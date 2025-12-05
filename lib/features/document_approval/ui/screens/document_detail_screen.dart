@@ -58,8 +58,19 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
         final l10n = AppLocalizations.of(context)!;
         final messenger = ScaffoldMessenger.of(context);
 
-        // Перезагружаем список документов для проверки статуса
-        await ref.read(documentsProvider.notifier).loadDocuments();
+        // Получаем projectId для обновления списка документов проекта
+        final currentDocument = ref.read(documentProvider(documentId));
+        final projectId = currentDocument.maybeWhen(
+          data: (doc) => doc?.projectId,
+          orElse: () => null,
+        );
+
+        // Обновляем список документов для проекта (не все документы)
+        if (projectId != null) {
+          await ref
+              .read(documentsProvider.notifier)
+              .loadDocumentsForProject(projectId);
+        }
 
         if (!mounted) return;
 
@@ -222,6 +233,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
             return const DocumentDetailShimmer();
           }
 
+          // Показываем документ с кнопками (кнопки будут некликабельными и с лоадером при _isProcessing)
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),
             child: Column(
@@ -357,11 +369,14 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
                               ? null
                               : () => _handleApprove(document.id),
                           icon: _isProcessing
-                              ? const SizedBox(
+                              ? SizedBox(
                                   width: 16,
                                   height: 16,
-                                  child: CircularProgressIndicator(
+                                  child: CircularProgressIndicator.adaptive(
                                     strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      colorScheme.onPrimary,
+                                    ),
                                   ),
                                 )
                               : const Icon(Icons.check),

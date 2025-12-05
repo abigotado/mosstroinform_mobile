@@ -46,7 +46,7 @@ class ConstructionObject {
       id: objectId,
       projectId: project.id,
       name: project.name,
-      address: project.address,
+      address: project.constructionAddress ?? 'Адрес не указан',
       description: project.description,
       area: project.area,
       floors: project.floors,

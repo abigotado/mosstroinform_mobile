@@ -1,12 +1,8 @@
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/mock_state_providers.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
-import 'package:mosstroinform_mobile/core/utils/logger.dart';
-import 'package:mosstroinform_mobile/features/document_approval/domain/providers/document_repository_provider.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
-import 'package:mosstroinform_mobile/features/project_selection/data/repositories/mock_construction_object_repository.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
+import 'package:mosstroinform_mobile/features/document_approval/domain/providers/document_repository_provider.dart';
+import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'document_notifier.g.dart';
 
@@ -20,14 +16,18 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить список документов
   Future<void> loadDocuments() async {
+    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocuments();
+      if (!ref.mounted) return;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документов: $e'),
         stackTrace,
@@ -37,14 +37,18 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить документы для проекта
   Future<void> loadDocumentsForProject(String projectId) async {
+    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocumentsByProjectId(projectId);
+      if (!ref.mounted) return;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документов проекта: $e'),
         stackTrace,
@@ -63,14 +67,18 @@ class DocumentNotifier extends _$DocumentNotifier {
 
   /// Загрузить документ по ID
   Future<void> loadDocument(String documentId) async {
+    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final document = await repository.getDocumentById(documentId);
+      if (!ref.mounted) return;
       state = AsyncValue.data(document);
     } on Failure catch (failure, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документа: $e'),
         stackTrace,
@@ -80,58 +88,74 @@ class DocumentNotifier extends _$DocumentNotifier {
 
   /// Одобрить документ
   Future<void> approveDocument(String documentId) async {
+    if (!ref.mounted) return;
+
+    // Сохраняем текущее состояние документа перед обновлением
+    final currentDocument = state.value;
+
     try {
       final repository = ref.read(documentRepositoryProvider);
       await repository.approveDocument(documentId);
-      // Перезагружаем документ после одобрения
-      await loadDocument(documentId);
 
-      // Проверяем, все ли документы проекта одобрены
-      final document = state.value;
-      if (document != null) {
-        final projectId = document.projectId;
-        final allApproved = ref.read(mockDocumentsStateProvider.notifier).areAllDocumentsApproved(projectId);
+      if (!ref.mounted) return;
 
-        if (allApproved) {
-          AppLogger.info(
-            'DocumentNotifier.approveDocument: все документы проекта $projectId одобрены, создаем объект',
-          );
+      // Получаем обновленный документ напрямую из репозитория
+      // чтобы избежать перезагрузки через loadDocument, которая может вызвать шиммер
+      final updatedDocument = await repository.getDocumentById(documentId);
 
-          // Получаем проект
-          final projectRepository = ref.read(projectRepositoryProvider);
-          final project = await projectRepository.getProjectById(projectId);
+      if (!ref.mounted) return;
 
-          // Создаем объект строительства
-          final objectRepository = ref.read(constructionObjectRepositoryProvider);
-          if (objectRepository.runtimeType.toString() == 'MockConstructionObjectRepository') {
-            final mockRepo = objectRepository as MockConstructionObjectRepository;
-            await mockRepo.createObjectFromProject(projectId, project);
-            AppLogger.info(
-              'DocumentNotifier.approveDocument: объект создан для проекта $projectId',
-            );
-          }
-        }
+      // Обновляем состояние напрямую, не вызывая loadDocument
+      state = AsyncValue.data(updatedDocument);
+
+      // Получаем projectId для обновления UI
+      final projectId = updatedDocument.projectId;
+
+      // Инвалидируем провайдер объектов, чтобы обновить список "Мои объекты"
+      // (в моковой реализации объект уже создан внутри approveDocument)
+      if (ref.mounted) {
+        ref.invalidate(myObjectsProvider);
+
+        // Обновляем список документов, чтобы показать обновленное состояние
+        await ref
+            .read(documentsProvider.notifier)
+            .loadDocumentsForProject(projectId);
       }
     } on Failure catch (failure, stackTrace) {
-      state = AsyncValue.error(failure, stackTrace);
+      if (!ref.mounted) return;
+      // Восстанавливаем предыдущее состояние при ошибке
+      state = currentDocument != null
+          ? AsyncValue.data(currentDocument)
+          : AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      state = AsyncValue.error(
-        UnknownFailure('Ошибка при одобрении документа: $e'),
-        stackTrace,
-      );
+      if (!ref.mounted) return;
+      // Восстанавливаем предыдущее состояние при ошибке
+      state = currentDocument != null
+          ? AsyncValue.data(currentDocument)
+          : AsyncValue.error(
+              UnknownFailure('Ошибка при одобрении документа: $e'),
+              stackTrace,
+            );
     }
   }
 
   /// Отклонить документ
   Future<void> rejectDocument(String documentId, String reason) async {
+    if (!ref.mounted) return;
+
     try {
       final repository = ref.read(documentRepositoryProvider);
       await repository.rejectDocument(documentId, reason);
+
+      if (!ref.mounted) return;
+
       // Перезагружаем документ после отклонения
       await loadDocument(documentId);
     } on Failure catch (failure, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
+      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при отклонении документа: $e'),
         stackTrace,

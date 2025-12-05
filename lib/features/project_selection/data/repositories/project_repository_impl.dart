@@ -44,4 +44,45 @@ class ProjectRepositoryImpl implements ProjectRepository {
       throw UnknownFailure('Ошибка при отправке запроса: $e');
     }
   }
+
+  @override
+  Future<void> startConstruction(String projectId, String address) async {
+    try {
+      // TODO: Добавить метод в IProjectRemoteDataSource
+      // await remoteDataSource.startConstruction(projectId, address);
+      throw UnimplementedError('startConstruction not implemented');
+    } on Failure {
+      rethrow;
+    } catch (e) {
+      throw UnknownFailure('Ошибка при начале строительства: $e');
+    }
+  }
+
+  @override
+  Future<List<Project>> getRequestedProjects() async {
+    try {
+      // В реальной реализации бэкенд должен иметь отдельный эндпоинт для запрошенных проектов
+      // TODO: Добавить отдельный эндпоинт в IProjectRemoteDataSource
+      // Пока возвращаем пустой список, так как в реальной реализации нужен отдельный эндпоинт
+      return [];
+    } on Failure {
+      rethrow;
+    } catch (e) {
+      throw UnknownFailure('Ошибка при получении запрошенных проектов: $e');
+    }
+  }
+
+  @override
+  Future<bool> isProjectRequested(String projectId) async {
+    try {
+      // В реальной реализации бэкенд должен вернуть статус в самом проекте
+      // TODO: Добавить поле status в Project entity для проверки статуса
+      // Пока возвращаем false, так как в реальной реализации нужен отдельный эндпоинт
+      return false;
+    } on Failure {
+      rethrow;
+    } catch (e) {
+      throw UnknownFailure('Ошибка при проверке статуса проекта: $e');
+    }
+  }
 }

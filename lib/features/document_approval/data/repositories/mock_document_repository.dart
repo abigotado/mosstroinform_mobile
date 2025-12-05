@@ -1,155 +1,234 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/mock_state_providers.dart';
+import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/repositories/document_repository.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/project_repository.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
 
 /// Интерактивная моковая реализация репозитория документов
-/// Использует состояние через Riverpod для имитации реальной работы приложения
-/// Состояние сбрасывается при перезапуске приложения
+/// Использует локальную базу данных Hive для имитации реальной работы приложения
+/// Данные сохраняются между перезапусками приложения
 class MockDocumentRepository implements DocumentRepository {
-  final Ref ref;
+  final ProjectRepository projectRepository;
 
-  MockDocumentRepository(this.ref);
+  MockDocumentRepository({required this.projectRepository});
 
   @override
   Future<List<Document>> getDocuments() async {
-    // Проверяем mounted ДО await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed');
-    }
-
-    // Получаем текущее состояние из провайдера ДО await
-    final state = ref.read(mockDocumentsStateProvider);
-
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Проверяем mounted после await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed после await');
-    }
+    // Получаем все документы из базы
+    final documentsBox = HiveService.documentsBox;
+    final documents = documentsBox.values.map((adapter) => adapter.toDocument()).toList();
 
-    return state;
+    return documents;
   }
 
   @override
   Future<List<Document>> getDocumentsByProjectId(String projectId) async {
-    // Проверяем mounted ДО await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed');
-    }
-
-    // Получаем документы для проекта из состояния ДО await
-    final allDocuments = ref.read(mockDocumentsStateProvider);
-
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 300));
 
-    // Проверяем mounted после await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed после await');
+    // Получаем документы для проекта из базы
+    final documentsBox = HiveService.documentsBox;
+    
+    // Используем keys для получения уникальных документов по ID
+    // Это гарантирует, что каждый документ будет только один раз
+    final documentIds = <String>{};
+    for (final key in documentsBox.keys) {
+      if (key is String && key.startsWith('doc_$projectId')) {
+        documentIds.add(key);
+      }
     }
+    
+    final documents = documentIds
+        .map((id) => documentsBox.get(id))
+        .whereType<DocumentAdapter>() // Фильтруем null значения
+        .map((adapter) => adapter.toDocument())
+        .toList();
 
-    // Фильтруем документы по projectId
-    return allDocuments.where((doc) => doc.projectId == projectId).toList();
+    AppLogger.info(
+      'MockDocumentRepository.getDocumentsByProjectId: получено ${documents.length} уникальных документов для проекта $projectId (ключей: ${documentIds.length})',
+    );
+
+    return documents;
   }
 
   @override
   Future<Document> getDocumentById(String id) async {
-    // Проверяем mounted ДО await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed');
-    }
-
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 300));
 
-    // Проверяем mounted после await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed после await');
-    }
+    // Получаем документ из базы
+    final documentsBox = HiveService.documentsBox;
+    final documentAdapter = documentsBox.get(id);
 
-    final documents = await getDocuments();
-    try {
-      final document = documents.firstWhere((d) => d.id == id);
-      return document;
-    } catch (e) {
+    if (documentAdapter == null) {
       throw UnknownFailure('Документ с ID $id не найден');
     }
+
+    return documentAdapter.toDocument();
   }
 
   @override
   Future<void> approveDocument(String documentId) async {
-    debugPrint('=== MockDocumentRepository.approveDocument ===');
-    debugPrint('documentId: $documentId');
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Получаем текущий документ
-    final documents = ref.read(mockDocumentsStateProvider);
-    debugPrint('Текущее количество документов: ${documents.length}');
-    final document = documents.firstWhere((d) => d.id == documentId);
-    debugPrint(
-      'Документ найден: ${document.title}, текущий статус: ${document.status}',
-    );
+    // Получаем текущий документ из базы
+    final documentsBox = HiveService.documentsBox;
+    final documentAdapter = documentsBox.get(documentId);
 
-    // Создаем обновленный документ со статусом approved
-    final updatedDocument = Document(
-      id: document.id,
-      projectId: document.projectId,
-      title: document.title,
-      description: document.description,
-      fileUrl: document.fileUrl,
-      status: DocumentStatus.approved,
-      submittedAt: document.submittedAt,
+    if (documentAdapter == null) {
+      throw UnknownFailure('Документ с ID $documentId не найден');
+    }
+
+    // Обновляем существующий документ напрямую через HiveObject
+    // Используем copyWith-подобный подход, создавая новый адаптер с обновленными полями
+    final updatedAdapter = DocumentAdapter(
+      id: documentAdapter.id,
+      projectId: documentAdapter.projectId,
+      title: documentAdapter.title,
+      description: documentAdapter.description,
+      fileUrl: documentAdapter.fileUrl,
+      statusString: 'approved',
+      submittedAt: documentAdapter.submittedAt,
       approvedAt: DateTime.now(),
       rejectionReason: null,
     );
 
-    debugPrint('Обновляем документ со статусом: ${updatedDocument.status}');
-    // Обновляем состояние
-    ref
-        .read(mockDocumentsStateProvider.notifier)
-        .updateDocument(updatedDocument);
-    debugPrint('Состояние обновлено');
+    // Обновляем документ в базе, используя тот же ключ (ID)
+    // Hive.put с тем же ключом заменяет существующую запись, а не создает новую
+    await documentsBox.put(documentId, updatedAdapter);
+    
+    AppLogger.info(
+      'MockDocumentRepository.approveDocument: документ $documentId обновлен со статусом approved',
+    );
+    
+    // Проверяем, что нет дубликатов (по ID должен быть только один документ)
+    final documentsWithSameId = documentsBox.values
+        .where((adapter) => adapter.id == documentId)
+        .length;
+    if (documentsWithSameId > 1) {
+      AppLogger.error(
+        'MockDocumentRepository.approveDocument: ОШИБКА! Обнаружены дубликаты документа $documentId (${documentsWithSameId} записей)!',
+      );
+    }
+
+    // Проверяем, все ли документы проекта одобрены
+    // Используем прямой запрос к базе после обновления, чтобы получить актуальные данные
+    final projectId = documentAdapter.projectId;
+    final projectDocuments = documentsBox.values
+        .where((adapter) => adapter.projectId == projectId)
+        .map((adapter) => adapter.toDocument())
+        .toList();
+    final allApproved = projectDocuments.isNotEmpty &&
+        projectDocuments.every((doc) => doc.status == DocumentStatus.approved);
+
+    if (allApproved) {
+      AppLogger.info(
+        'MockDocumentRepository.approveDocument: все документы проекта $projectId одобрены, создаем объект',
+      );
+
+      // Получаем проект через интерфейс репозитория
+      final project = await projectRepository.getProjectById(projectId);
+
+      // Проверяем, не существует ли уже объект для этого проекта
+      final objectsBox = HiveService.constructionObjectsBox;
+      final existingObject = objectsBox.values
+          .where((obj) => obj.projectId == projectId)
+          .firstOrNull;
+
+      if (existingObject == null) {
+        // Создаем начальные этапы строительства
+        final initialStages = [
+          ConstructionStageAdapter(
+            id: '1',
+            name: 'Подготовительные работы',
+            statusString: 'pending',
+          ),
+          ConstructionStageAdapter(
+            id: '2',
+            name: 'Фундамент',
+            statusString: 'pending',
+          ),
+          ConstructionStageAdapter(
+            id: '3',
+            name: 'Возведение стен',
+            statusString: 'pending',
+          ),
+          ConstructionStageAdapter(
+            id: '4',
+            name: 'Кровля',
+            statusString: 'pending',
+          ),
+          ConstructionStageAdapter(
+            id: '5',
+            name: 'Отделочные работы',
+            statusString: 'pending',
+          ),
+        ];
+
+        // Создаем объект из проекта
+        final objectAdapter = ConstructionObjectAdapter.fromObject(
+          ConstructionObject.fromProject(
+            project,
+            'object_$projectId', // ID объекта формируется из projectId
+            initialStages.map((s) => s.toStage()).toList(),
+          ),
+        );
+
+        // Сохраняем объект в базу
+        await objectsBox.put(objectAdapter.id, objectAdapter);
+
+        AppLogger.info(
+          'MockDocumentRepository.approveDocument: объект ${objectAdapter.id} создан для проекта $projectId',
+        );
+      } else {
+        AppLogger.info(
+          'MockDocumentRepository.approveDocument: объект для проекта $projectId уже существует',
+        );
+      }
+
+      // Удаляем проект из списка запрошенных
+      final requestedBox = HiveService.requestedProjectsBox;
+      await requestedBox.delete(projectId);
+      AppLogger.info(
+        'MockDocumentRepository.approveDocument: проект $projectId удален из списка запрошенных',
+      );
+    }
   }
 
   @override
   Future<void> rejectDocument(String documentId, String reason) async {
-    // Проверяем mounted ДО await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed');
-    }
-
-    // Получаем текущий документ ДО await
-    final documents = ref.read(mockDocumentsStateProvider);
-    final document = documents.firstWhere((d) => d.id == documentId);
-
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
-    // Проверяем mounted после await
-    if (!ref.mounted) {
-      throw UnknownFailure('Провайдер disposed после await');
+    // Получаем текущий документ из базы
+    final documentsBox = HiveService.documentsBox;
+    final documentAdapter = documentsBox.get(documentId);
+
+    if (documentAdapter == null) {
+      throw UnknownFailure('Документ с ID $documentId не найден');
     }
 
     // Создаем обновленный документ со статусом rejected
-    final updatedDocument = Document(
-      id: document.id,
-      projectId: document.projectId,
-      title: document.title,
-      description: document.description,
-      fileUrl: document.fileUrl,
-      status: DocumentStatus.rejected,
-      submittedAt: document.submittedAt,
+    final updatedAdapter = DocumentAdapter(
+      id: documentAdapter.id,
+      projectId: documentAdapter.projectId,
+      title: documentAdapter.title,
+      description: documentAdapter.description,
+      fileUrl: documentAdapter.fileUrl,
+      statusString: 'rejected',
+      submittedAt: documentAdapter.submittedAt,
       approvedAt: null,
       rejectionReason: reason,
     );
 
-    // Обновляем состояние
-    ref
-        .read(mockDocumentsStateProvider.notifier)
-        .updateDocument(updatedDocument);
+    // Обновляем документ в базе
+    await documentsBox.put(documentId, updatedAdapter);
   }
 }

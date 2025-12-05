@@ -38,7 +38,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
     final documentsAsync = ref.watch(documentsProvider);
 
     // Проверяем, все ли документы одобрены для показа кнопки перехода к строительству
-    final allApproved = documentsAsync.maybeWhen(
+    documentsAsync.maybeWhen(
       data: (docs) =>
           docs.isNotEmpty &&
           docs.every((doc) => doc.status == DocumentStatus.approved),
@@ -46,7 +46,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
     );
 
     // Получаем projectId из первого документа (все документы относятся к одному проекту)
-    final projectId = documentsAsync.maybeWhen(
+    documentsAsync.maybeWhen(
       data: (docs) => docs.isNotEmpty ? docs.first.projectId : null,
       orElse: () => null,
     );
@@ -55,17 +55,7 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
       appBar: AppBar(
         title: Text(l10n.documentApprovalTitle),
         actions: [
-          // Кнопка перехода к строительству (показывается когда все документы одобрены)
-          if (allApproved && projectId != null)
-            IconButton(
-              icon: const Icon(Icons.construction),
-              tooltip: l10n.toConstruction,
-              onPressed: () {
-                if (mounted) {
-                  context.push('/construction/$projectId');
-                }
-              },
-            ),
+        // Ничего не показываем - кнопка "Начать строительство" теперь на экране проекта
         ],
       ),
       body: AppAnimatedSwitcher(

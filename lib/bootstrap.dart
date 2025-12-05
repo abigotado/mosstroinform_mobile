@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:mosstroinform_mobile/app.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
+import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 
 /// Функция инициализации и запуска приложения
 Future<void> bootstrap() async {
@@ -23,6 +24,17 @@ Future<void> bootstrap() async {
   AppLogger.log('Окружение: ${config.environmentName}');
   AppLogger.log('Использование моков: ${config.useMocks}');
   AppLogger.log('Base URL: ${config.baseUrl}');
+
+  // Инициализируем Hive базу данных в моковом режиме
+  if (config.useMocks) {
+    try {
+      await HiveService.initialize();
+      AppLogger.log('Hive база данных инициализирована');
+    } catch (e) {
+      AppLogger.error('Ошибка при инициализации Hive: $e');
+      // Не прерываем запуск приложения, даже если Hive не удалось инициализировать
+    }
+  }
 
   runApp(
     ProviderScope(

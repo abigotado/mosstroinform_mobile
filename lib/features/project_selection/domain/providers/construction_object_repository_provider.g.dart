@@ -72,4 +72,4 @@ final class ConstructionObjectRepositoryProvider
 }
 
 String _$constructionObjectRepositoryHash() =>
-    r'f7e122b2ff7b26d095048d9c336fef71e0bb4790';
+    r'8c12b52ae756cb0a6f40b924f185cb68eb9e830c';

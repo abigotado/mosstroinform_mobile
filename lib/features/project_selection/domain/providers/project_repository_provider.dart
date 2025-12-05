@@ -16,7 +16,7 @@ part 'project_repository_provider.g.dart';
 ProjectRepository projectRepository(Ref ref) {
   final config = ref.watch(appConfigSimpleProvider);
   if (config.useMocks) {
-    return MockProjectRepository(ref);
+    return MockProjectRepository();
   }
   final remoteDataSource = ref.watch(projectRemoteDataSourceProvider);
   return ProjectRepositoryImpl(remoteDataSource: remoteDataSource);

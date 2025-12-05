@@ -71,4 +71,4 @@ final class DocumentRepositoryProvider
 }
 
 String _$documentRepositoryHash() =>
-    r'5704502d20a26bc5d6350ed236294f8981380f7e';
+    r'4c3700c4a75682ce03b11e4c1d600aae02b21d0a';

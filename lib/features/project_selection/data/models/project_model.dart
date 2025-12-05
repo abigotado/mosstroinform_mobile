@@ -11,7 +11,6 @@ abstract class ProjectModel with _$ProjectModel {
   const factory ProjectModel({
     required String id,
     required String name,
-    required String address,
     required String description,
     required double area,
     required int floors,
@@ -19,6 +18,9 @@ abstract class ProjectModel with _$ProjectModel {
     required int bathrooms,
     required int price,
     String? imageUrl,
+    String? status, // 'available', 'requested', 'construction'
+    String? constructionAddress,
+    String? objectId, // ID объекта строительства
   }) = _ProjectModel;
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) =>
@@ -31,7 +33,6 @@ extension ProjectModelX on ProjectModel {
     return Project(
       id: id,
       name: name,
-      address: address,
       description: description,
       area: area,
       floors: floors,
@@ -39,6 +40,21 @@ extension ProjectModelX on ProjectModel {
       bathrooms: bathrooms,
       price: price,
       imageUrl: imageUrl,
+      status: _parseStatus(status),
+      constructionAddress: constructionAddress,
+      objectId: objectId,
     );
+  }
+
+  static ProjectStatus _parseStatus(String? status) {
+    switch (status) {
+      case 'requested':
+        return ProjectStatus.requested;
+      case 'construction':
+        return ProjectStatus.construction;
+      case 'available':
+      default:
+        return ProjectStatus.available;
+    }
   }
 }

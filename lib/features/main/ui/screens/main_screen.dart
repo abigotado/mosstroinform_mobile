@@ -41,11 +41,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           NavigationDestination(
             icon: Tooltip(
               message: l10n.projectsTitle,
-              child: const Icon(Icons.search),
+              child: const Icon(Icons.home),
             ),
             selectedIcon: Tooltip(
               message: l10n.projectsTitle,
-              child: const Icon(Icons.search),
+              child: const Icon(Icons.home),
             ),
             label: l10n.projectsTitle,
           ),
@@ -63,11 +63,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           NavigationDestination(
             icon: Tooltip(
               message: l10n.myObjectsTitle,
-              child: const Icon(Icons.home),
+              child: const Icon(Icons.construction),
             ),
             selectedIcon: Tooltip(
               message: l10n.myObjectsTitle,
-              child: const Icon(Icons.home),
+              child: const Icon(Icons.construction),
             ),
             label: l10n.myObjectsTitle,
           ),

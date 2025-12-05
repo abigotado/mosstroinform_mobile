@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mosstroinform_mobile/core/data/mock_data/requested_projects_state.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
+import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
+import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 // import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_stage_item.dart';
@@ -28,6 +29,10 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     // Загружаем проект при инициализации
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(projectProvider.notifier).loadProject(widget.projectId);
+      // Загружаем документы для проверки статуса одобрения
+      ref
+          .read(documentsProvider.notifier)
+          .loadDocumentsForProject(widget.projectId);
     });
   }
 
@@ -36,7 +41,6 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     final l10n = AppLocalizations.of(context)!;
     final projectAsync = ref.watch(projectProvider);
     final theme = Theme.of(context);
-    final requestedIds = ref.watch(requestedProjectsStateProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -52,8 +56,20 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
               if (projectState == null) return const SizedBox.shrink();
 
-              // TODO: Проверять через ConstructionObjectRepository, существует ли объект для этого проекта
-              // TODO: Показывать кнопки навигации к объекту строительства
+              // Показываем кнопку перехода к объекту, если проект в статусе строительства и есть objectId
+              if (projectState.status == ProjectStatus.construction &&
+                  projectState.objectId != null) {
+                return IconButton(
+                  icon: const Icon(Icons.construction),
+                  tooltip: l10n.toConstruction,
+                  onPressed: () {
+                    // Навигация к объекту строительства по projectId
+                    // (роутер использует projectId для поиска объекта)
+                    context.push('/construction/${projectState.id}');
+                  },
+                );
+              }
+
               return const SizedBox.shrink();
             },
           ),
@@ -134,18 +150,21 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Название и адрес
+                        // Название
                         Text(
                           project.name,
                           style: theme.textTheme.headlineMedium,
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          project.address,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
+
+                        // Адрес строительства (если есть)
+                        if (project.constructionAddress != null)
+                          Text(
+                            project.constructionAddress!,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 16),
 
                         // Описание
@@ -174,7 +193,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                 style: theme.textTheme.titleLarge,
                               ),
                               Text(
-                                _formatPrice(project.price),
+                                _formatPrice(project.price, l10n),
                                 style: theme.textTheme.headlineMedium?.copyWith(
                                   color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.bold,
@@ -223,20 +242,70 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
         data: (state) {
           if (state.project == null) return const SizedBox.shrink();
 
-          // Проверяем, запрошен ли проект
-          final isRequested = requestedIds.contains(widget.projectId);
+          final project = state.project!;
+          final isRequested = project.status == ProjectStatus.requested;
+          final isUnderConstruction =
+              project.status == ProjectStatus.construction;
           final isRequesting = state.isRequestingConstruction;
 
-          return AppAnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: SafeArea(
-              key: ValueKey(isRequested ? 'toDocuments' : 'request'),
+          // Проверяем, все ли документы одобрены для запрошенных проектов
+          final documentsAsync = isRequested
+              ? ref.watch(documentsProvider)
+              : null;
+          final allDocumentsApproved =
+              documentsAsync?.maybeWhen(
+                data: (docs) =>
+                    docs.isNotEmpty &&
+                    docs.every((doc) => doc.status == DocumentStatus.approved),
+                orElse: () => false,
+              ) ??
+              false;
+
+          // Для проектов в строительстве показываем только кнопку "К документам"
+          if (isUnderConstruction) {
+            return SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: SizedBox(
                   width: double.infinity,
-                  child: isRequested
-                      ? Tooltip(
+                  child: Tooltip(
+                    message: l10n.toDocuments,
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        context.push(
+                          '/documents?projectId=${widget.projectId}',
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                      icon: const Icon(Icons.description),
+                      label: Text(
+                        l10n.toDocuments,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          }
+
+          return AppAnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: SafeArea(
+              key: ValueKey(isRequested ? 'requested' : 'available'),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    // Для запрошенных проектов показываем кнопки
+                    if (isRequested) ...[
+                      // Кнопка "К документам"
+                      SizedBox(
+                        width: double.infinity,
+                        child: Tooltip(
                           message: l10n.toDocuments,
                           child: ElevatedButton.icon(
                             onPressed: () {
@@ -253,8 +322,42 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                        )
-                      : Tooltip(
+                        ),
+                      ),
+                      // Кнопка "Начать" показывается только если все документы одобрены
+                      if (allDocumentsApproved) ...[
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Tooltip(
+                            message: l10n.startConstruction,
+                            child: ElevatedButton.icon(
+                              onPressed: () => _showAddressInputDialog(context),
+                              style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 16,
+                                ),
+                                backgroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.secondaryContainer,
+                                foregroundColor: Theme.of(
+                                  context,
+                                ).colorScheme.onSecondaryContainer,
+                              ),
+                              icon: const Icon(Icons.construction),
+                              label: Text(
+                                l10n.startConstruction,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ] else
+                      // Для доступных проектов - кнопка запроса строительства
+                      SizedBox(
+                        width: double.infinity,
+                        child: Tooltip(
                           message: l10n.sendConstructionRequest,
                           child: ElevatedButton(
                             onPressed: isRequesting
@@ -333,6 +436,8 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             ),
                           ),
                         ),
+                      ),
+                  ],
                 ),
               ),
             ),
@@ -344,13 +449,108 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     );
   }
 
-  static String _formatPrice(int price) {
-    if (price >= 1000000) {
-      return '${(price / 1000000).toStringAsFixed(1)} млн';
-    } else if (price >= 1000) {
-      return '${(price / 1000).toStringAsFixed(0)} тыс';
+  /// Показать диалог ввода адреса строительства
+  void _showAddressInputDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final addressController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                l10n.constructionAddressTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: addressController,
+                decoration: InputDecoration(
+                  labelText: l10n.enterConstructionAddress,
+                  hintText: 'ул. Ленина, д. 1',
+                  border: const OutlineInputBorder(),
+                ),
+                maxLines: 3,
+                autofocus: true,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: Text(l10n.cancel),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final address = addressController.text.trim();
+                        if (address.isNotEmpty) {
+                          Navigator.of(context).pop();
+                          await _startConstruction(address);
+                        }
+                      },
+                      child: Text(l10n.startConstruction),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  /// Начать строительство с указанным адресом
+  Future<void> _startConstruction(String address) async {
+    try {
+      await ref
+          .read(projectProvider.notifier)
+          .startConstruction(widget.projectId, address);
+
+      if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.constructionStarted),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Ошибка при начале строительства: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
-    return price.toString();
+  }
+
+  static String _formatPrice(int price, AppLocalizations l10n) {
+    if (price >= 1000000) {
+      return '${(price / 1000000).toStringAsFixed(1)} ${l10n.million}';
+    } else if (price >= 1000) {
+      return '${(price / 1000).toStringAsFixed(0)} ${l10n.thousand}';
+    }
+    return '$price ${l10n.ruble}';
   }
 }
 
@@ -359,18 +559,6 @@ class _CharacteristicsSection extends StatelessWidget {
   final Project project;
 
   const _CharacteristicsSection({required this.project});
-
-  String _getBedroomsText(int bedrooms) {
-    if (bedrooms == 1) return 'спальня';
-    if (bedrooms >= 2 && bedrooms <= 4) return 'спальни';
-    return 'спален';
-  }
-
-  String _getBathroomsText(int bathrooms) {
-    if (bathrooms == 1) return 'ванная';
-    if (bathrooms >= 2 && bathrooms <= 4) return 'ванные';
-    return 'ванных';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -387,23 +575,21 @@ class _CharacteristicsSection extends StatelessWidget {
             ),
             const Divider(),
             _CharacteristicRow(
-              label: l10n.floors,
-              value:
-                  '${project.floors} ${project.floors > 1 ? l10n.floorsPlural : l10n.floor}',
+              label: l10n.floorsLabel,
+              value: '${project.floors} ${l10n.floors(project.floors)}',
               icon: Icons.layers,
             ),
             const Divider(),
             _CharacteristicRow(
               label: 'Спальни',
-              value:
-                  '${project.bedrooms} ${_getBedroomsText(project.bedrooms)}',
+              value: '${project.bedrooms} ${l10n.bedrooms(project.bedrooms)}',
               icon: Icons.bed,
             ),
             const Divider(),
             _CharacteristicRow(
               label: 'Ванные',
               value:
-                  '${project.bathrooms} ${_getBathroomsText(project.bathrooms)}',
+                  '${project.bathrooms} ${l10n.bathrooms(project.bathrooms)}',
               icon: Icons.bathtub,
             ),
           ],

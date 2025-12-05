@@ -10,4 +10,13 @@ abstract class ProjectRepository {
 
   /// Отправить запрос на строительство проекта
   Future<void> requestConstruction(String projectId);
+
+  /// Начать строительство проекта с указанным адресом
+  Future<void> startConstruction(String projectId, String address);
+
+  /// Получить список запрошенных проектов
+  Future<List<Project>> getRequestedProjects();
+
+  /// Проверить, запрошен ли проект
+  Future<bool> isProjectRequested(String projectId);
 }

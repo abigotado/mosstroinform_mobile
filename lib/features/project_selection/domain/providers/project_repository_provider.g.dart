@@ -70,4 +70,4 @@ final class ProjectRepositoryProvider
   }
 }
 
-String _$projectRepositoryHash() => r'0833323bee02f8361e2b7e66fd7d3d8c9c73b7bf';
+String _$projectRepositoryHash() => r'28047f2c2eb9eae1e3548512f8e03cf75ff04ac6';

@@ -45,10 +45,38 @@
   "documentStatusRejected": "Отклонён",
   "constructionStages": "Этапы строительства",
   "area": "Площадь",
-  "floors": "Этажность",
+  "floorsLabel": "Этажность",
   "price": "Стоимость",
-  "floor": "этаж",
-  "floorsPlural": "этажа",
+  "floors": "{count, plural, =1{этаж} few{этажа} many{этажей} other{этажей}}",
+  "@floors": {
+    "description": "Множественное число для этажей",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bedrooms": "{count, plural, =1{спальня} few{спальни} many{спален} other{спален}}",
+  "@bedrooms": {
+    "description": "Множественное число для спален",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "bathrooms": "{count, plural, =1{ванная} few{ванные} many{ванных} other{ванных}}",
+  "@bathrooms": {
+    "description": "Множественное число для ванных",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "million": "млн",
+  "thousand": "тыс",
+  "ruble": "₽",
   "constructionStage": "Этап строительства",
   "cameras": "Камеры",
   "camera": "Камера",
@@ -144,6 +172,7 @@
   "logoutTooltip": "Выйти из системы",
   "requestedProjectsTitle": "Запрошенные проекты",
   "requested": "Запрошен",
+  "underConstruction": "Строительство",
   "myObjectsTitle": "Мои объекты",
   "profileTitle": "Профиль",
   "searchProjects": "Поиск проектов",
@@ -151,5 +180,9 @@
   "noRequestedProjects": "Нет запрошенных проектов",
   "noMyObjects": "У вас пока нет объектов",
   "constructionProgress": "Прогресс строительства",
-  "stagesCompleted": "этапов завершено"
+  "stagesCompleted": "этапов завершено",
+  "startConstruction": "Начать",
+  "constructionAddressTitle": "Адрес строительства",
+  "enterConstructionAddress": "Введите адрес строительства",
+  "constructionStarted": "Строительство начато!"
 }

@@ -104,7 +104,7 @@ final class DocumentNotifierProvider
   }
 }
 
-String _$documentNotifierHash() => r'dc6b085680bab5fef4514de53ec8f13d9adb4ea5';
+String _$documentNotifierHash() => r'e87f36e977db45ac7e1008e6f0fc201d1767b9aa';
 
 /// Notifier для управления состоянием отдельного документа
 

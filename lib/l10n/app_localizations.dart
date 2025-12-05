@@ -316,11 +316,11 @@ abstract class AppLocalizations {
   /// **'Площадь'**
   String get area;
 
-  /// No description provided for @floors.
+  /// No description provided for @floorsLabel.
   ///
   /// In ru, this message translates to:
   /// **'Этажность'**
-  String get floors;
+  String get floorsLabel;
 
   /// No description provided for @price.
   ///
@@ -328,17 +328,41 @@ abstract class AppLocalizations {
   /// **'Стоимость'**
   String get price;
 
-  /// No description provided for @floor.
+  /// Множественное число для этажей
   ///
   /// In ru, this message translates to:
-  /// **'этаж'**
-  String get floor;
+  /// **'{count, plural, =1{этаж} few{этажа} many{этажей} other{этажей}}'**
+  String floors(int count);
 
-  /// No description provided for @floorsPlural.
+  /// Множественное число для спален
   ///
   /// In ru, this message translates to:
-  /// **'этажа'**
-  String get floorsPlural;
+  /// **'{count, plural, =1{спальня} few{спальни} many{спален} other{спален}}'**
+  String bedrooms(int count);
+
+  /// Множественное число для ванных
+  ///
+  /// In ru, this message translates to:
+  /// **'{count, plural, =1{ванная} few{ванные} many{ванных} other{ванных}}'**
+  String bathrooms(int count);
+
+  /// No description provided for @million.
+  ///
+  /// In ru, this message translates to:
+  /// **'млн'**
+  String get million;
+
+  /// No description provided for @thousand.
+  ///
+  /// In ru, this message translates to:
+  /// **'тыс'**
+  String get thousand;
+
+  /// No description provided for @ruble.
+  ///
+  /// In ru, this message translates to:
+  /// **'₽'**
+  String get ruble;
 
   /// No description provided for @constructionStage.
   ///
@@ -814,6 +838,12 @@ abstract class AppLocalizations {
   /// **'Запрошен'**
   String get requested;
 
+  /// No description provided for @underConstruction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Строительство'**
+  String get underConstruction;
+
   /// No description provided for @myObjectsTitle.
   ///
   /// In ru, this message translates to:
@@ -861,6 +891,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'этапов завершено'**
   String get stagesCompleted;
+
+  /// No description provided for @startConstruction.
+  ///
+  /// In ru, this message translates to:
+  /// **'Начать'**
+  String get startConstruction;
+
+  /// No description provided for @constructionAddressTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Адрес строительства'**
+  String get constructionAddressTitle;
+
+  /// No description provided for @enterConstructionAddress.
+  ///
+  /// In ru, this message translates to:
+  /// **'Введите адрес строительства'**
+  String get enterConstructionAddress;
+
+  /// No description provided for @constructionStarted.
+  ///
+  /// In ru, this message translates to:
+  /// **'Строительство начато!'**
+  String get constructionStarted;
 }
 
 class _AppLocalizationsDelegate

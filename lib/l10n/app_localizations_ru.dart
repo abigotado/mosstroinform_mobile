@@ -123,16 +123,58 @@ class AppLocalizationsRu extends AppLocalizations {
   String get area => 'Площадь';
 
   @override
-  String get floors => 'Этажность';
+  String get floorsLabel => 'Этажность';
 
   @override
   String get price => 'Стоимость';
 
   @override
-  String get floor => 'этаж';
+  String floors(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'этажей',
+      many: 'этажей',
+      few: 'этажа',
+      one: 'этаж',
+    );
+    return '$_temp0';
+  }
 
   @override
-  String get floorsPlural => 'этажа';
+  String bedrooms(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'спален',
+      many: 'спален',
+      few: 'спальни',
+      one: 'спальня',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String bathrooms(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'ванных',
+      many: 'ванных',
+      few: 'ванные',
+      one: 'ванная',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get million => 'млн';
+
+  @override
+  String get thousand => 'тыс';
+
+  @override
+  String get ruble => '₽';
 
   @override
   String get constructionStage => 'Этап строительства';
@@ -380,6 +422,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get requested => 'Запрошен';
 
   @override
+  String get underConstruction => 'Строительство';
+
+  @override
   String get myObjectsTitle => 'Мои объекты';
 
   @override
@@ -402,4 +447,16 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get stagesCompleted => 'этапов завершено';
+
+  @override
+  String get startConstruction => 'Начать';
+
+  @override
+  String get constructionAddressTitle => 'Адрес строительства';
+
+  @override
+  String get enterConstructionAddress => 'Введите адрес строительства';
+
+  @override
+  String get constructionStarted => 'Строительство начато!';
 }
