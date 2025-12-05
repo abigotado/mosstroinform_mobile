@@ -157,7 +157,14 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
 
   /// Загрузить финальный документ по ID
   Future<void> loadFinalDocument() async {
-    state = const AsyncValue.loading();
+    // Сохраняем предыдущее состояние, если оно есть
+    final previousState = state.value;
+    // Устанавливаем loading только если нет предыдущих данных
+    if (previousState == null || previousState.document == null) {
+      state = const AsyncValue.loading();
+    }
+    // Если есть данные, не меняем состояние - обновляем в фоне
+    
     try {
       final repository = ref.read(finalDocumentRepositoryProvider);
       final document = await repository.getFinalDocumentById(
@@ -168,9 +175,19 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
         FinalDocumentState(document: document, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      // При ошибке сохраняем предыдущие данные, если они были
+      if (previousState != null && previousState.document != null) {
+        state = AsyncValue.data(previousState.copyWith(error: e, isLoading: false));
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.document != null) {
+        state = AsyncValue.data(previousState.copyWith(error: failure, isLoading: false));
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 
@@ -195,6 +212,9 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
 
       // Обновить статус завершения строительства
       ref.invalidate(completionStatusProvider(params.$1));
+      
+      // Инвалидируем провайдер объекта строительства, чтобы обновилась кнопка "Завершить строительство"
+      ref.invalidate(constructionObjectByProjectProvider(params.$1));
     } on Failure catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } catch (e, s) {
