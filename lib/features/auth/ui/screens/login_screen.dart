@@ -37,14 +37,24 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    setState(() => _isLoading = true);
-    AppLogger.info('LoginScreen._handleLogin: начало, email=${_emailController.text.trim()}');
+    // Сохраняем значения перед блокировкой полей
+    final emailValue = _emailController.text;
+    final passwordValue = _passwordController.text;
+
+    // Устанавливаем состояние загрузки
+    if (mounted) {
+      setState(() {
+        _isLoading = true;
+      });
+    }
+    
+    AppLogger.info('LoginScreen._handleLogin: начало, email=$emailValue');
 
     try {
       AppLogger.info('LoginScreen._handleLogin: вызов authProvider.notifier.login');
       await ref.read(authProvider.notifier).login(
-            _emailController.text.trim(),
-            _passwordController.text,
+            emailValue.trim(),
+            passwordValue,
           );
       AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
@@ -127,7 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       // Email поле
                       TextFormField(
                         controller: _emailController,
-                        enabled: !_isLoading,
+                        readOnly: _isLoading,
                         keyboardType: TextInputType.emailAddress,
                         textInputAction: TextInputAction.next,
                         decoration: InputDecoration(
@@ -152,7 +162,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       // Пароль поле
                       TextFormField(
                         controller: _passwordController,
-                        enabled: !_isLoading,
+                        readOnly: _isLoading,
                         obscureText: _obscurePassword,
                         textInputAction: TextInputAction.done,
                         onFieldSubmitted: (_) {
@@ -220,10 +230,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             ),
             // Полноэкранный лоадер поверх формы
             if (_isLoading)
-              Container(
-                color: Colors.black.withValues(alpha: 0.3),
-                child: const Center(
-                  child: CircularProgressIndicator(),
+              IgnorePointer(
+                ignoring: false,
+                child: Container(
+                  color: Colors.black.withValues(alpha: 0.5),
+                  child: const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 ),
               ),
           ],
