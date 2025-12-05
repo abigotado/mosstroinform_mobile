@@ -144,74 +144,27 @@ GoRouter router(Ref ref) {
             path: '/register',
             builder: (context, state) => const RegisterScreen(),
           ),
-          // Главный экран с bottom navigation используя StatefulShellRoute
-          StatefulShellRoute.indexedStack(
-            builder: (context, state, navigationShell) {
-              return Stack(
-                children: [
-                  MainScreen(navigationShell: navigationShell),
-                  if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-                ],
-              );
-            },
-            branches: [
-              StatefulShellBranch(
-                routes: [
-                  GoRoute(
-                    path: '/',
-                    builder: (context, state) => const ProjectListScreen(),
-                  ),
-                ],
-              ),
-              StatefulShellBranch(
-                routes: [
-                  GoRoute(
-                    path: '/requested',
-                    builder: (context, state) =>
-                        const RequestedProjectsScreen(),
-                  ),
-                ],
-              ),
-              StatefulShellBranch(
-                routes: [
-                  GoRoute(
-                    path: '/objects',
-                    builder: (context, state) => const MyObjectsScreen(),
-                  ),
-                ],
-              ),
-              StatefulShellBranch(
-                routes: [
-                  GoRoute(
-                    path: '/profile',
-                    builder: (context, state) => const ProfileScreen(),
-                  ),
-                ],
-              ),
+        ],
+      ),
+      // Главный экран с bottom navigation используя StatefulShellRoute
+      // Все остальные маршруты вложены внутрь для сохранения bottom navigation
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return Stack(
+            children: [
+              MainScreen(navigationShell: navigationShell),
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
             ],
-          ),
-          // Остальные маршруты без bottom navigation
-          ShellRoute(
-            pageBuilder: (context, state, child) => CustomTransitionPage(
-              key: state.pageKey,
-              transitionDuration: const Duration(milliseconds: 600),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                    return FadeTransition(
-                      opacity: CurveTween(
-                        curve: Curves.easeInOutCirc,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-              child: Stack(
-                children: [
-                  child,
-                  if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-                ],
-              ),
-            ),
+          );
+        },
+        branches: [
+          StatefulShellBranch(
             routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const ProjectListScreen(),
+              ),
+              // Вложенные маршруты для первого таба
               GoRoute(
                 path: '/projects/:id',
                 builder: (context, state) {
@@ -264,6 +217,31 @@ GoRouter router(Ref ref) {
                     documentId: documentId,
                   );
                 },
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/requested',
+                builder: (context, state) =>
+                    const RequestedProjectsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/objects',
+                builder: (context, state) => const MyObjectsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileScreen(),
               ),
               GoRoute(
                 path: '/chats',

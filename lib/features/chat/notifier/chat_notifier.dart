@@ -81,7 +81,20 @@ class MessagesState {
 class MessagesNotifier extends _$MessagesNotifier {
   @override
   Future<MessagesState> build(String chatId) async {
-    return const MessagesState(messages: []);
+    // Сразу загружаем сообщения при создании провайдера
+    try {
+      final repository = ref.read(chatRepositoryProvider);
+      final messages = await repository.getMessages(chatId);
+      return MessagesState(messages: messages, isLoading: false);
+    } on Failure catch (e) {
+      return MessagesState(messages: [], isLoading: false, error: e);
+    } catch (e) {
+      return MessagesState(
+        messages: [],
+        isLoading: false,
+        error: UnknownFailure('Неизвестная ошибка: $e'),
+      );
+    }
   }
 
   /// Загрузить сообщения чата

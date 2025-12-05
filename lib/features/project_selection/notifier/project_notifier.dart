@@ -84,8 +84,13 @@ class ProjectNotifier extends _$ProjectNotifier {
   }
 
   /// Загрузить проект по ID
-  Future<void> loadProject(String id) async {
-    state = const AsyncValue.loading();
+  Future<void> loadProject(String id, {bool showLoading = true}) async {
+    // Если showLoading = false и есть данные, обновляем без показа loading
+    final currentState = state.value;
+    if (showLoading || currentState == null || currentState.project == null) {
+      state = const AsyncValue.loading();
+    }
+    
     try {
       final repository = ref.read(projectRepositoryProvider);
       final project = await repository.getProjectById(id);
@@ -93,14 +98,19 @@ class ProjectNotifier extends _$ProjectNotifier {
       state = AsyncValue.data(ProjectState(project: project, isLoading: false));
     } on Failure catch (e) {
       state = AsyncValue.data(
-        const ProjectState().copyWith(isLoading: false, error: e),
+        currentState?.copyWith(isLoading: false, error: e) ??
+            const ProjectState().copyWith(isLoading: false, error: e),
       );
     } catch (e) {
       state = AsyncValue.data(
-        const ProjectState().copyWith(
-          isLoading: false,
-          error: UnknownFailure('Неизвестная ошибка: $e'),
-        ),
+        currentState?.copyWith(
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ) ??
+            const ProjectState().copyWith(
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ),
       );
     }
   }
@@ -177,7 +187,8 @@ class ProjectNotifier extends _$ProjectNotifier {
 
       // Перезагружаем данные после инвалидации
       // Перезагружаем текущий проект для обновления статуса на странице деталей
-      await loadProject(projectId);
+      // Не показываем loading, так как данные уже есть
+      await loadProject(projectId, showLoading: false);
       // Перезагружаем список проектов для обновления карточек
       ref.read(projectsProvider.notifier).loadProjects();
       // Перезагружаем список запрошенных проектов
