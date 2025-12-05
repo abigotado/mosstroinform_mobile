@@ -47,7 +47,7 @@ class ProjectsNotifier extends _$ProjectsNotifier {
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(isLoading: false, error: e),
       );
-    } catch (e, stackTrace) {
+    } catch (e, _) {
       // Игнорируем ошибку использования disposed ref, если она возникла
       if (e.toString().contains('disposed')) return;
       
