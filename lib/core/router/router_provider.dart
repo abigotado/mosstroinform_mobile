@@ -18,12 +18,30 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router_provider.g.dart';
 
+/// ChangeNotifier для уведомления GoRouter об изменениях авторизации
+class AuthChangeNotifier extends ChangeNotifier {
+  AuthChangeNotifier(this.ref) {
+    // Слушаем изменения authProvider и уведомляем роутер
+    ref.listen<AsyncValue<AuthState>>(
+      authProvider,
+      (previous, next) {
+        notifyListeners();
+      },
+    );
+  }
+
+  final Ref ref;
+}
+
 /// Провайдер роутера с защитой роутов
 /// Использует ref.watch для отслеживания изменений авторизации
 @riverpod
 GoRouter router(Ref ref) {
   // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
   final authState = ref.watch(authProvider);
+  
+  // Создаем ChangeNotifier для refreshListenable
+  final authChangeNotifier = AuthChangeNotifier(ref);
 
   AppLogger.log(
     'RouterProvider.build: создание роутера, '
@@ -50,6 +68,7 @@ GoRouter router(Ref ref) {
   return GoRouter(
     debugLogDiagnostics: true,
     initialLocation: initialLocation,
+    refreshListenable: authChangeNotifier,
     redirect: (context, state) {
       // Если авторизация еще загружается, не делаем редирект
       if (authState.isLoading) {

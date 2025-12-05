@@ -47,31 +47,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         _isLoading = true;
       });
     }
-    
+
     AppLogger.info('LoginScreen._handleLogin: начало, email=$emailValue');
 
     try {
-      AppLogger.info('LoginScreen._handleLogin: вызов authProvider.notifier.login');
+      AppLogger.info(
+        'LoginScreen._handleLogin: вызов authProvider.notifier.login',
+      );
       await ref.read(authProvider.notifier).login(
             emailValue.trim(),
             passwordValue,
           );
       AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
-      if (mounted) {
-        // Проверяем состояние авторизации перед редиректом
-        final authState = ref.read(authProvider);
-        AppLogger.info(
-          'LoginScreen._handleLogin: перед редиректом, '
-          'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
-        );
-        
-        // После успешного входа перенаправляем на главную страницу
-        // Роутер автоматически перенаправит благодаря redirect логике
-        AppLogger.info('LoginScreen._handleLogin: вызов context.go("/")');
-        context.go('/');
-        AppLogger.info('LoginScreen._handleLogin: context.go("/") завершен');
-      }
+      // Роутер автоматически перенаправит благодаря refreshListenable и redirect логике
+      // Не нужно вызывать context.go('/') вручную
     } on Failure catch (e) {
       if (mounted) {
         final theme = Theme.of(context);
@@ -182,7 +172,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               onPressed: _isLoading
                                   ? null
                                   : () {
-                                      setState(() => _obscurePassword = !_obscurePassword);
+                                      setState(
+                                        () => _obscurePassword =
+                                            !_obscurePassword,
+                                      );
                                     },
                             ),
                             border: OutlineInputBorder(
@@ -232,9 +225,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               if (_isLoading)
                 Container(
                   color: Colors.black.withValues(alpha: 0.5),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
             ],
           ),
@@ -243,4 +234,3 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 }
-
