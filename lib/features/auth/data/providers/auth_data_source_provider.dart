@@ -16,7 +16,35 @@ Dio authDio(Ref ref) {
   
   // Создаём новый Dio с interceptor для авторизации
   final dio = Dio(baseDio.options);
-  dio.interceptors.add(AuthInterceptor(secureStorage: secureStorage));
+  
+  // Создаем временный AuthRemoteDataSource для обновления токена
+  // (избегаем циклической зависимости с authRepositoryProvider)
+  final tempDataSource = AuthRemoteDataSource(dio, baseUrl: AppConstants.baseUrl);
+  
+  dio.interceptors.add(
+    AuthInterceptor(
+      secureStorage: secureStorage,
+      refreshTokenCallback: () async {
+        // Функция для обновления токена через временный data source
+        final refreshTokenValue = await secureStorage.read(key: StorageKeys.refreshToken);
+        if (refreshTokenValue == null) {
+          throw Exception('Refresh token не найден');
+        }
+        final response = await tempDataSource.refreshToken(
+          RefreshTokenRequest(refreshToken: refreshTokenValue),
+        );
+        await secureStorage.write(
+          key: StorageKeys.accessToken,
+          value: response.accessToken,
+        );
+        await secureStorage.write(
+          key: StorageKeys.refreshToken,
+          value: response.refreshToken,
+        );
+        return response.accessToken;
+      },
+    ),
+  );
   
   return dio;
 }

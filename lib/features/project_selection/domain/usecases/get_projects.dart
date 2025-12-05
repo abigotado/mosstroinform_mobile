@@ -8,9 +8,9 @@ class GetProjects {
 
   GetProjects(this.repository);
 
-  Future<List<Project>> call() async {
+  Future<List<Project>> call({int? page, int? limit}) async {
     try {
-      return await repository.getProjects();
+      return await repository.getProjects(page: page, limit: limit);
     } catch (e) {
       throw UnknownFailure('Ошибка при получении списка проектов: $e');
     }

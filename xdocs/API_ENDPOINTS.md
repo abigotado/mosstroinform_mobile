@@ -106,6 +106,10 @@ https://api.mosstroinform.ru/v1
 ### GET /projects
 Получить список всех доступных проектов.
 
+**Query Parameters:**
+- `page` (int, optional) - номер страницы (начиная с 0)
+- `limit` (int, optional) - количество элементов на странице
+
 **Response:**
 ```json
 [

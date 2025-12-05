@@ -11,9 +11,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
   ProjectRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<Project>> getProjects() async {
+  Future<List<Project>> getProjects({int? page, int? limit}) async {
     return guard(() async {
-      final models = await remoteDataSource.getProjects();
+      final models = await remoteDataSource.getProjects(page: page, limit: limit);
       return models.map((model) => model.toEntity()).toList();
     }, methodName: 'getProjects');
   }
@@ -46,13 +46,8 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<List<Project>> getRequestedProjects() async {
     return guard(() async {
-      // Получаем все проекты и фильтруем по статусу "requested"
-      final allProjects = await remoteDataSource.getProjects();
-      final requestedProjects = allProjects
-          .where((model) => model.status == 'requested')
-          .map((model) => model.toEntity())
-          .toList();
-      return requestedProjects;
+      final models = await remoteDataSource.getRequestedProjects();
+      return models.map((model) => model.toEntity()).toList();
     }, methodName: 'getRequestedProjects');
   }
 

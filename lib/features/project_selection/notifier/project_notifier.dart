@@ -36,7 +36,7 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
     try {
       final repository = ref.read(projectRepositoryProvider);
-      final projects = await repository.getProjects();
+      final projects = await repository.getProjects(); // Без пагинации - получаем все проекты
 
       AppLogger.info(
         'ProjectsNotifier.loadProjects: получено ${projects.length} проектов',
