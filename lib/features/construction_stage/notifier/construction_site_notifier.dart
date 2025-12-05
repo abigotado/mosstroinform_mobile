@@ -31,18 +31,29 @@ class ConstructionSiteState {
 class ConstructionSiteNotifier extends _$ConstructionSiteNotifier {
   @override
   Future<ConstructionSiteState> build(String objectId) async {
-    return const ConstructionSiteState();
+    // Сразу загружаем данные при создании провайдера
+    try {
+      final repository = ref.read(constructionSiteRepositoryProvider);
+      final site = await repository.getConstructionSiteByObjectId(objectId);
+      return ConstructionSiteState(site: site, isLoading: false);
+    } on Failure catch (e) {
+      return ConstructionSiteState(error: e, isLoading: false);
+    } catch (e) {
+      return ConstructionSiteState(
+        error: UnknownFailure('Неизвестная ошибка: $e'),
+        isLoading: false,
+      );
+    }
   }
 
   /// Загрузить информацию о строительной площадке
   Future<void> loadConstructionSite() async {
     final objectId = this.objectId;
+    final previousState = state.value;
     
-    // Если данные уже есть, ставим isLoading=true в данных, чтобы не было шиммера
-    if (state.value?.site != null) {
-      state = AsyncValue.data(
-        state.value!.copyWith(isLoading: true),
-      );
+    // Если данные уже есть, обновляем в фоне без шиммера
+    if (previousState != null && previousState.site != null) {
+      state = AsyncValue.data(previousState.copyWith(isLoading: true));
     } else {
       state = const AsyncValue.loading();
     }
@@ -54,9 +65,18 @@ class ConstructionSiteNotifier extends _$ConstructionSiteNotifier {
         ConstructionSiteState(site: site, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      if (previousState != null && previousState.site != null) {
+        state = AsyncValue.data(previousState.copyWith(error: e, isLoading: false));
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.site != null) {
+        state = AsyncValue.data(previousState.copyWith(error: failure, isLoading: false));
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 }

@@ -96,6 +96,8 @@ class MockConstructionObjectRepository implements ConstructionObjectRepository {
       imageUrl: objectAdapter.imageUrl,
       stages: completedStages,
       chatId: objectAdapter.chatId,
+      allDocumentsSigned: objectAdapter.allDocumentsSigned, // Сохраняем статус документов
+      isCompleted: true, // Устанавливаем true при завершении строительства
     );
 
     // Сохраняем обновленный объект

@@ -246,8 +246,11 @@ class _ConstructionSiteScreenState
                           // Проверяем, не завершено ли уже строительство (кнопка нажата)
                           // Получаем статус напрямую из completionStatusAsync, так как object может быть старым
                           final isCompleted =
-                              completionStatusAsync.value?.status?.isCompleted ??
-                                  object.isCompleted;
+                              completionStatusAsync
+                                  .value
+                                  ?.status
+                                  ?.isCompleted ??
+                              object.isCompleted;
 
                           if (isCompleted) {
                             return Padding(
