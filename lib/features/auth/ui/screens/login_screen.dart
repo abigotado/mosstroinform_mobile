@@ -218,7 +218,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             // Полноэкранный лоадер поверх формы
             if (_isLoading)
               Container(
-                color: Colors.black.withOpacity(0.3),
+                color: Colors.black.withValues(alpha: 0.3),
                 child: const Center(
                   child: CircularProgressIndicator(),
                 ),
