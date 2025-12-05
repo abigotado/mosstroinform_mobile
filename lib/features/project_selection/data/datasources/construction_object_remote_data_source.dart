@@ -32,14 +32,6 @@ abstract class ConstructionObjectRemoteDataSource
   Future<void> updateDocumentsSignedStatus(
     @Path('projectId') String projectId,
     @Body() Map<String, dynamic> body,
-  ) {
-    return _updateDocumentsSignedStatus(projectId, body);
-  }
-
-  @PATCH('/construction-objects/by-project/{projectId}/documents-status')
-  Future<void> _updateDocumentsSignedStatus(
-    @Path('projectId') String projectId,
-    @Body() Map<String, dynamic> body,
   );
 }
 

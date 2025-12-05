@@ -103,7 +103,7 @@ class _ConstructionObjectRemoteDataSource
   }
 
   @override
-  Future<void> _updateDocumentsSignedStatus(
+  Future<void> updateDocumentsSignedStatus(
     String projectId,
     Map<String, dynamic> body,
   ) async {
