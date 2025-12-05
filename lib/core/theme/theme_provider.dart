@@ -56,8 +56,8 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
           themeModeString = 'dark';
           break;
         case ThemeMode.system:
-        default:
           themeModeString = 'system';
+          break;
       }
       
       await settingsBox.put(_themeModeKey, themeModeString);
