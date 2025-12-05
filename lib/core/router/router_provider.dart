@@ -144,141 +144,143 @@ GoRouter router(Ref ref) {
             path: '/register',
             builder: (context, state) => const RegisterScreen(),
           ),
-        ],
-      ),
-      // Главный экран с bottom navigation используя StatefulShellRoute
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return Stack(
-            children: [
-              MainScreen(navigationShell: navigationShell),
-              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-            ],
-          );
-        },
-        branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/',
-                builder: (context, state) => const ProjectListScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/requested',
-                builder: (context, state) => const RequestedProjectsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/objects',
-                builder: (context, state) => const MyObjectsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
-              ),
-            ],
-          ),
-        ],
-      ),
-      // Остальные маршруты без bottom navigation
-      ShellRoute(
-        pageBuilder: (context, state, child) => CustomTransitionPage(
-          key: state.pageKey,
-          transitionDuration: const Duration(milliseconds: 600),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(
-              opacity: CurveTween(
-                curve: Curves.easeInOutCirc,
-              ).animate(animation),
-              child: child,
-            );
-          },
-          child: Stack(
-            children: [
-              child,
-              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-            ],
-          ),
-        ),
-        routes: [
-          GoRoute(
-            path: '/projects/:id',
-            builder: (context, state) {
-              final projectId = state.pathParameters['id']!;
-              return ProjectDetailScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/documents',
-            builder: (context, state) {
-              final projectId = state.uri.queryParameters['projectId'];
-              return DocumentListScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/documents/:id',
-            builder: (context, state) {
-              final documentId = state.pathParameters['id']!;
-              return DocumentDetailScreen(documentId: documentId);
-            },
-          ),
-          GoRoute(
-            path: '/construction/:objectId',
-            builder: (context, state) {
-              final objectId = state.pathParameters['objectId']!;
-              return ConstructionSiteScreen(objectId: objectId);
-            },
-          ),
-          GoRoute(
-            path: '/construction/:projectId/chat',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              return ObjectChatScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/completion/:projectId',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              return CompletionStatusScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/completion/:projectId/documents/:documentId',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              final documentId = state.pathParameters['documentId']!;
-              return FinalDocumentDetailScreen(
-                projectId: projectId,
-                documentId: documentId,
+          // Главный экран с bottom navigation используя StatefulShellRoute
+          StatefulShellRoute.indexedStack(
+            builder: (context, state, navigationShell) {
+              return Stack(
+                children: [
+                  MainScreen(navigationShell: navigationShell),
+                  if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+                ],
               );
             },
+            branches: [
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/',
+                    builder: (context, state) => const ProjectListScreen(),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/requested',
+                    builder: (context, state) =>
+                        const RequestedProjectsScreen(),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/objects',
+                    builder: (context, state) => const MyObjectsScreen(),
+                  ),
+                ],
+              ),
+              StatefulShellBranch(
+                routes: [
+                  GoRoute(
+                    path: '/profile',
+                    builder: (context, state) => const ProfileScreen(),
+                  ),
+                ],
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/chats',
-            builder: (context, state) => const ChatListScreen(),
-          ),
-          GoRoute(
-            path: '/chats/:chatId',
-            builder: (context, state) {
-              final chatId = state.pathParameters['chatId']!;
-              return ChatDetailScreen(chatId: chatId);
-            },
-          ),
-          GoRoute(
-            path: '/dev-console',
-            builder: (context, state) => const DevConsolePage(),
+          // Остальные маршруты без bottom navigation
+          ShellRoute(
+            pageBuilder: (context, state, child) => CustomTransitionPage(
+              key: state.pageKey,
+              transitionDuration: const Duration(milliseconds: 600),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                    return FadeTransition(
+                      opacity: CurveTween(
+                        curve: Curves.easeInOutCirc,
+                      ).animate(animation),
+                      child: child,
+                    );
+                  },
+              child: Stack(
+                children: [
+                  child,
+                  if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+                ],
+              ),
+            ),
+            routes: [
+              GoRoute(
+                path: '/projects/:id',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['id']!;
+                  return ProjectDetailScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/documents',
+                builder: (context, state) {
+                  final projectId = state.uri.queryParameters['projectId'];
+                  return DocumentListScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/documents/:id',
+                builder: (context, state) {
+                  final documentId = state.pathParameters['id']!;
+                  return DocumentDetailScreen(documentId: documentId);
+                },
+              ),
+              GoRoute(
+                path: '/construction/:objectId',
+                builder: (context, state) {
+                  final objectId = state.pathParameters['objectId']!;
+                  return ConstructionSiteScreen(objectId: objectId);
+                },
+              ),
+              GoRoute(
+                path: '/construction/:projectId/chat',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  return ObjectChatScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/completion/:projectId',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  return CompletionStatusScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/completion/:projectId/documents/:documentId',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  final documentId = state.pathParameters['documentId']!;
+                  return FinalDocumentDetailScreen(
+                    projectId: projectId,
+                    documentId: documentId,
+                  );
+                },
+              ),
+              GoRoute(
+                path: '/chats',
+                builder: (context, state) => const ChatListScreen(),
+              ),
+              GoRoute(
+                path: '/chats/:chatId',
+                builder: (context, state) {
+                  final chatId = state.pathParameters['chatId']!;
+                  return ChatDetailScreen(chatId: chatId);
+                },
+              ),
+              GoRoute(
+                path: '/dev-console',
+                builder: (context, state) => const DevConsolePage(),
+              ),
+            ],
           ),
         ],
       ),

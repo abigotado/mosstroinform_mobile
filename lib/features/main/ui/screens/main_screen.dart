@@ -7,10 +7,7 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 class MainScreen extends ConsumerWidget {
   final StatefulNavigationShell navigationShell;
 
-  const MainScreen({
-    super.key,
-    required this.navigationShell,
-  });
+  const MainScreen({super.key, required this.navigationShell});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
