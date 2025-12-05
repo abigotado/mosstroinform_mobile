@@ -19,7 +19,6 @@ abstract class ProjectModel with _$ProjectModel {
     required int price,
     String? imageUrl,
     String? status, // 'available', 'requested', 'construction'
-    String? constructionAddress,
     String? objectId, // ID объекта строительства
   }) = _ProjectModel;
 
@@ -41,7 +40,6 @@ extension ProjectModelX on ProjectModel {
       price: price,
       imageUrl: imageUrl,
       status: _parseStatus(status),
-      constructionAddress: constructionAddress,
       objectId: objectId,
     );
   }

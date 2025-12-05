@@ -36,7 +36,7 @@ final class ChatsNotifierProvider
   ChatsNotifier create() => ChatsNotifier();
 }
 
-String _$chatsNotifierHash() => r'4fb388397d3bd89d11eae811d097531d49f0d994';
+String _$chatsNotifierHash() => r'802b79b0c20aa52f31b4223ba0f30313cdb7758b';
 
 /// Notifier для управления состоянием списка чатов
 
@@ -110,7 +110,7 @@ final class MessagesNotifierProvider
   }
 }
 
-String _$messagesNotifierHash() => r'ff0b63e2cb4db5736f21468a73be5a9798f624bb';
+String _$messagesNotifierHash() => r'bf071288fefee739d0a94694869de8350824a8dc';
 
 /// Notifier для управления состоянием сообщений чата
 /// keepAlive: true - провайдер не должен быть disposed автоматически,

@@ -83,17 +83,6 @@ class ProjectCard extends ConsumerWidget {
                         overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
-
-                      // Адрес строительства (если есть)
-                      if (project.constructionAddress != null)
-                        Text(
-                          project.constructionAddress!,
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
                       const SizedBox(height: 8),
 
                       // Описание

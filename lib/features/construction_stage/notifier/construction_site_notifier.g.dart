@@ -59,7 +59,7 @@ final class ConstructionSiteNotifierProvider
 }
 
 String _$constructionSiteNotifierHash() =>
-    r'd47465146006b6d8feeb10429915c8261057b70e';
+    r'f0d839a7154635dacd608f39f660197f47a0f459';
 
 /// Notifier для управления состоянием строительной площадки
 
@@ -165,7 +165,7 @@ final class CamerasNotifierProvider
   }
 }
 
-String _$camerasNotifierHash() => r'c8699ea194515f6ec95fc6a08ea6867c54cfc361';
+String _$camerasNotifierHash() => r'e61fabf5684bc23fd4baae91b19a9fb25ebc3c56';
 
 /// Notifier для управления состоянием списка камер
 

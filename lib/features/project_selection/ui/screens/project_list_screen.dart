@@ -71,7 +71,6 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
     final query = _searchQuery.toLowerCase();
     return projects.where((project) {
       return project.name.toLowerCase().contains(query) ||
-          (project.constructionAddress?.toLowerCase().contains(query) ?? false) ||
           project.description.toLowerCase().contains(query);
     }).toList();
   }

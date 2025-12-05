@@ -158,14 +158,6 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                         ),
                         const SizedBox(height: 8),
 
-                        // Адрес строительства (если есть)
-                        if (project.constructionAddress != null)
-                          Text(
-                            project.constructionAddress!,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
-                          ),
                         const SizedBox(height: 16),
 
                         // Описание
