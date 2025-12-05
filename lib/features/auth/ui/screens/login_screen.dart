@@ -66,8 +66,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           SnackBar(
             content: Text(e.message),
             backgroundColor: theme.colorScheme.error,
+            duration: const Duration(seconds: 3),
           ),
         );
+        setState(() => _isLoading = false);
       }
     } catch (e) {
       if (mounted) {
@@ -76,14 +78,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           SnackBar(
             content: Text(e.toLocalizedMessage(context)),
             backgroundColor: theme.colorScheme.error,
+            duration: const Duration(seconds: 3),
           ),
         );
-      }
-    } finally {
-      if (mounted) {
         setState(() => _isLoading = false);
       }
     }
+    // Не сбрасываем _isLoading в finally, так как при успехе происходит навигация,
+    // и мы хотим, чтобы лоадер крутился до ухода с экрана.
+    // Сбрасываем только при ошибке (выше).
   }
 
   @override

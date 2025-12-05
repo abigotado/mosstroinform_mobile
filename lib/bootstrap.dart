@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:mosstroinform_mobile/app.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
@@ -18,6 +19,11 @@ Future<void> bootstrap() async {
 
   // Инициализируем логгер перед использованием
   await AppLogger.init(showLogs: kDebugMode || config.useMocks);
+
+  // Устанавливаем только вертикальную ориентацию для всего приложения
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   // В production можно логировать текущее окружение
   AppLogger.log('Запуск приложения с flavor: $flavor');

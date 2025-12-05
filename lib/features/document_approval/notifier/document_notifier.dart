@@ -16,12 +16,19 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить список документов
   Future<void> loadDocuments() async {
-    state = const AsyncValue.loading();
+    // Если список пустой, ставим loading, иначе обновляем в фоне
+    if (state.value == null || state.value!.isEmpty) {
+       state = const AsyncValue.loading();
+    }
+    
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocuments();
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
+      // Если были данные, оставляем их и показываем ошибку (можно через доп поле в стейте, но тут AsyncValue)
+      // В Riverpod 2 AsyncValue.error может содержать previousValue, но state = ... затирает.
+      // Используем guard или ручную обработку.
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
       state = AsyncValue.error(
@@ -33,7 +40,11 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить документы для проекта
   Future<void> loadDocumentsForProject(String projectId) async {
-    state = const AsyncValue.loading();
+    // Если список пустой, ставим loading
+    if (state.value == null || state.value!.isEmpty) {
+      state = const AsyncValue.loading();
+    }
+
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocumentsByProjectId(projectId);

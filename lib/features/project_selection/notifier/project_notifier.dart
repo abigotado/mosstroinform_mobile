@@ -26,7 +26,8 @@ abstract class ProjectsState with _$ProjectsState {
 class ProjectsNotifier extends _$ProjectsNotifier {
   @override
   Future<ProjectsState> build() async {
-    return const ProjectsState(projects: []);
+    // Начинаем с загрузки, чтобы UI показывал шиммер, а не "нет проектов"
+    return const ProjectsState(projects: [], isLoading: true);
   }
 
   /// Загрузить список проектов
