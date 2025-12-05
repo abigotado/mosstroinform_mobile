@@ -22,15 +22,8 @@ class CompletionStatusScreen extends ConsumerStatefulWidget {
 
 class _CompletionStatusScreenState
     extends ConsumerState<CompletionStatusScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(completionStatusProvider(widget.projectId).notifier)
-          .loadCompletionStatus();
-    });
-  }
+  // Убрали вызов loadCompletionStatus из initState,
+  // так как build метод провайдера теперь сам загружает данные
 
   @override
   Widget build(BuildContext context) {
