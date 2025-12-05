@@ -224,8 +224,7 @@ GoRouter router(Ref ref) {
             routes: [
               GoRoute(
                 path: '/requested',
-                builder: (context, state) =>
-                    const RequestedProjectsScreen(),
+                builder: (context, state) => const RequestedProjectsScreen(),
               ),
             ],
           ),
