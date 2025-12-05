@@ -122,6 +122,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Email поле
                   TextFormField(
                     controller: _emailController,
+                    enabled: !_isLoading, // Блокируем при загрузке
                     keyboardType: TextInputType.emailAddress,
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
@@ -146,6 +147,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   // Пароль поле
                   TextFormField(
                     controller: _passwordController,
+                    enabled: !_isLoading, // Блокируем при загрузке
                     obscureText: _obscurePassword,
                     textInputAction: TextInputAction.done,
                     onFieldSubmitted: (_) => _handleLogin(),

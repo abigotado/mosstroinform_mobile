@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
@@ -25,6 +26,9 @@ abstract class ProjectsState with _$ProjectsState {
 class ProjectsNotifier extends _$ProjectsNotifier {
   @override
   Future<ProjectsState> build() async {
+    // Следим за состоянием авторизации, чтобы сбрасывать состояние при выходе
+    ref.watch(authProvider);
+    
     // Начинаем с загрузки, чтобы UI показывал шиммер, а не "нет проектов"
     return const ProjectsState(projects: [], isLoading: true);
   }
