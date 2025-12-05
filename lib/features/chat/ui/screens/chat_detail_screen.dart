@@ -22,8 +22,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   @override
   void initState() {
     super.initState();
+    // Сообщения загружаются автоматически в build методе MessagesNotifier
+    // Здесь только отмечаем как прочитанные
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(messagesProvider(widget.chatId).notifier).loadMessages();
       ref.read(messagesProvider(widget.chatId).notifier).markAsRead();
     });
   }
