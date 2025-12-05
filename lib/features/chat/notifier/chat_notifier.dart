@@ -75,7 +75,9 @@ class MessagesState {
 }
 
 /// Notifier для управления состоянием сообщений чата
-@riverpod
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние сообщений должно сохраняться при навигации
+@Riverpod(keepAlive: true)
 class MessagesNotifier extends _$MessagesNotifier {
   @override
   Future<MessagesState> build(String chatId) async {
@@ -110,7 +112,6 @@ class MessagesNotifier extends _$MessagesNotifier {
     try {
       final repository = ref.read(chatRepositoryProvider);
       final newMessage = await repository.sendMessage(chatId, text.trim());
-
       final updatedMessages = [...currentState.messages, newMessage];
       state = AsyncValue.data(
         MessagesState(

@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/error_guard_extension.dart';
 import 'package:mosstroinform_mobile/core/storage/secure_storage_provider.dart';
 import 'package:mosstroinform_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:mosstroinform_mobile/features/auth/data/models/user_model.dart';
@@ -19,7 +18,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<String> login(String email, String password) async {
-    try {
+    return guard(() async {
       final response = await remoteDataSource.login(
         LoginRequest(email: email, password: password),
       );
@@ -39,18 +38,7 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       
       return response.accessToken;
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        throw ValidationFailure('Неверный email или пароль');
-      } else if (e.response?.statusCode == 404) {
-        throw ValidationFailure('Пользователь не найден');
-      } else {
-        throw NetworkFailure('Ошибка сети: ${e.message}');
-      }
-    } catch (e) {
-      if (e is Failure) rethrow;
-      throw UnknownFailure('Ошибка при входе: $e');
-    }
+    }, methodName: 'login');
   }
 
   @override
@@ -60,7 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
     required String name,
     String? phone,
   }) async {
-    try {
+    return guard(() async {
       final response = await remoteDataSource.register(
         RegisterRequest(
           email: email,
@@ -85,49 +73,25 @@ class AuthRepositoryImpl implements AuthRepository {
       );
       
       return response.accessToken;
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 400) {
-        throw ValidationFailure(
-          e.response?.data['message'] as String? ?? 'Неверные данные',
-        );
-      } else if (e.response?.statusCode == 409) {
-        throw ValidationFailure('Пользователь с таким email уже существует');
-      } else {
-        throw NetworkFailure('Ошибка сети: ${e.message}');
-      }
-    } catch (e) {
-      if (e is Failure) rethrow;
-      throw UnknownFailure('Ошибка при регистрации: $e');
-    }
+    }, methodName: 'register');
   }
 
   @override
   Future<void> logout() async {
-    try {
+    return guard(() async {
       // Удаляем токены из хранилища
       await secureStorage.delete(key: StorageKeys.accessToken);
       await secureStorage.delete(key: StorageKeys.refreshToken);
       await secureStorage.delete(key: StorageKeys.userId);
-    } catch (e) {
-      throw UnknownFailure('Ошибка при выходе: $e');
-    }
+    }, methodName: 'logout');
   }
 
   @override
   Future<User> getCurrentUser() async {
-    try {
+    return guard(() async {
       final userModel = await remoteDataSource.getCurrentUser();
       return userModel.toEntity();
-    } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
-        throw ValidationFailure('Требуется авторизация');
-      } else {
-        throw NetworkFailure('Ошибка сети: ${e.message}');
-      }
-    } catch (e) {
-      if (e is Failure) rethrow;
-      throw UnknownFailure('Ошибка при получении пользователя: $e');
-    }
+    }, methodName: 'getCurrentUser');
   }
 
   @override

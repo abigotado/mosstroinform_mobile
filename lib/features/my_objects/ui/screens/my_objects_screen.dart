@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
@@ -101,7 +102,7 @@ class MyObjectsScreen extends ConsumerWidget {
                 Text(l10n.error, style: theme.textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Text(
-                  error.toString(),
+                  error.toLocalizedMessage(context),
                   style: theme.textTheme.bodySmall,
                   textAlign: TextAlign.center,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -69,11 +70,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         final theme = Theme.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(e.toString())),
+            content: Text(e.toLocalizedMessage(context)),
             backgroundColor: theme.colorScheme.error,
           ),
         );

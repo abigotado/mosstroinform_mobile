@@ -4,7 +4,8 @@ import 'package:mosstroinform_mobile/features/chat/domain/repositories/chat_repo
 
 /// Моковая реализация репозитория чатов
 class MockChatRepository implements ChatRepository {
-  final List<Chat> _mockChats = [
+  // Статический список чатов для доступа из других моковых репозиториев
+  static final List<Chat> _sharedMockChats = [
     Chat(
       id: 'chat1',
       projectId: '1',
@@ -27,7 +28,8 @@ class MockChatRepository implements ChatRepository {
     ),
   ];
 
-  final Map<String, List<Message>> _mockMessages = {
+  // Статический список сообщений для доступа из других моковых репозиториев
+  static final Map<String, List<Message>> _sharedMockMessages = {
     'chat1': [
       Message(
         id: 'msg1',
@@ -66,6 +68,10 @@ class MockChatRepository implements ChatRepository {
     ],
   };
 
+  // Геттеры для доступа к приватным спискам
+  List<Chat> get _mockChats => _sharedMockChats;
+  Map<String, List<Message>> get _mockMessages => _sharedMockMessages;
+
   @override
   Future<List<Chat>> getChats() async {
     await Future.delayed(const Duration(milliseconds: 500));
@@ -79,6 +85,35 @@ class MockChatRepository implements ChatRepository {
       return _mockChats.firstWhere((chat) => chat.id == chatId);
     } catch (e) {
       throw UnknownFailure('Моковый чат с ID $chatId не найден');
+    }
+  }
+
+  /// Создать чат для проекта (используется только в моковом режиме)
+  /// Чат создается автоматически при создании объекта строительства
+  /// Этот метод вызывается из MockProjectRepository при создании объекта
+  static String createChatForProject(String projectId) {
+    // Проверяем, не существует ли уже чат для этого проекта
+    try {
+      final existingChat = _sharedMockChats.firstWhere(
+        (chat) => chat.projectId == projectId,
+      );
+      return existingChat.id;
+    } catch (e) {
+      // Если чат не найден, создаем новый
+      final newChat = Chat(
+        id: 'chat_$projectId',
+        projectId: projectId,
+        specialistName: 'Специалист по проекту $projectId',
+        specialistAvatarUrl: 'https://via.placeholder.com/64?text=СП',
+        lastMessage: null,
+        lastMessageAt: null,
+        unreadCount: 0,
+        isActive: true,
+      );
+      _sharedMockChats.add(newChat);
+      // Создаем пустой список сообщений для нового чата
+      _sharedMockMessages[newChat.id] = [];
+      return newChat.id;
     }
   }
 

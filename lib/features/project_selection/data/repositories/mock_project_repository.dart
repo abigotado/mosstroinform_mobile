@@ -1,6 +1,7 @@
 import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/features/chat/data/repositories/mock_chat_repository.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
@@ -258,6 +259,11 @@ class MockProjectRepository implements ProjectRepository {
 
     final project = projectAdapter.toProject();
 
+    // Создаем чат для объекта автоматически (в моковом режиме)
+    // В реальном режиме чат будет создан автоматически на бэкенде при создании объекта
+    // и chatId будет возвращен в ответе от API
+    final chatId = MockChatRepository.createChatForProject(projectId);
+
     // Создаем начальные этапы строительства
     final initialStages = [
       const ConstructionStage(id: '1', name: 'Подготовительные работы', status: StageStatus.pending),
@@ -267,11 +273,12 @@ class MockProjectRepository implements ProjectRepository {
       const ConstructionStage(id: '5', name: 'Отделочные работы', status: StageStatus.pending),
     ];
 
-    // Создаем объект строительства
+    // Создаем объект строительства с chatId
     final object = ConstructionObject.fromProject(
       project,
       'object_$projectId',
       initialStages,
+      chatId: chatId,
     );
 
     // Сохраняем объект в базе
@@ -282,7 +289,7 @@ class MockProjectRepository implements ProjectRepository {
     );
 
     AppLogger.info(
-      'MockProjectRepository._createConstructionObject: создан объект строительства ${object.id} для проекта $projectId',
+      'MockProjectRepository._createConstructionObject: создан объект строительства ${object.id} для проекта $projectId с чатом $chatId',
     );
 
     return object.id;

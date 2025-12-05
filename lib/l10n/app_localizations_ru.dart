@@ -292,6 +292,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get errorLoadingMessages => 'Ошибка загрузки сообщений';
 
   @override
+  String get chatNotFound => 'Чат для этого объекта не найден';
+
+  @override
   String get errorSendingMessage => 'Ошибка отправки сообщения';
 
   @override

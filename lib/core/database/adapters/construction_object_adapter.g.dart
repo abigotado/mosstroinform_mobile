@@ -71,13 +71,14 @@ class ConstructionObjectAdapterAdapter
       price: (fields[9] as num).toInt(),
       imageUrl: fields[10] as String?,
       stages: (fields[11] as List).cast<ConstructionStageAdapter>(),
+      chatId: fields[12] as String?,
     );
   }
 
   @override
   void write(BinaryWriter writer, ConstructionObjectAdapter obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -101,7 +102,9 @@ class ConstructionObjectAdapterAdapter
       ..writeByte(10)
       ..write(obj.imageUrl)
       ..writeByte(11)
-      ..write(obj.stages);
+      ..write(obj.stages)
+      ..writeByte(12)
+      ..write(obj.chatId);
   }
 
   @override

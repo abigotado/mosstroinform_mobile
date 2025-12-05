@@ -10,5 +10,12 @@ abstract class IProjectRemoteDataSource {
   Future<ProjectModel> getProjectById(String id);
 
   /// Отправить запрос на строительство проекта
+  /// POST /projects/{projectId}/request
   Future<void> requestConstruction(String projectId);
+
+  /// Начать строительство проекта
+  /// POST /projects/{projectId}/start
+  /// Body: {"address": "string"}
+  /// Возвращает обновленный проект с objectId и chatId
+  Future<ProjectModel> startConstruction(String projectId, Map<String, dynamic> body);
 }

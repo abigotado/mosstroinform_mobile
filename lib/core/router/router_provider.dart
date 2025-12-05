@@ -6,6 +6,7 @@ import 'package:mosstroinform_mobile/features/auth/ui/screens/login_screen.dart'
 import 'package:mosstroinform_mobile/features/auth/ui/screens/register_screen.dart';
 import 'package:mosstroinform_mobile/features/chat/ui/screens/chat_detail_screen.dart';
 import 'package:mosstroinform_mobile/features/chat/ui/screens/chat_list_screen.dart';
+import 'package:mosstroinform_mobile/features/chat/ui/screens/object_chat_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/ui/screens/completion_status_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/ui/screens/final_document_detail_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/construction_site_screen.dart';
@@ -131,6 +132,13 @@ GoRouter router(Ref ref) {
             builder: (context, state) {
               final projectId = state.pathParameters['projectId']!;
               return ConstructionSiteScreen(projectId: projectId);
+            },
+          ),
+          GoRoute(
+            path: '/construction/:projectId/chat',
+            builder: (context, state) {
+              final projectId = state.pathParameters['projectId']!;
+              return ObjectChatScreen(projectId: projectId);
             },
           ),
           GoRoute(

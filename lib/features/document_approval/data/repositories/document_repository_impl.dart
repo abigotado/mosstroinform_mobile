@@ -1,4 +1,4 @@
-import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/error_guard_extension.dart';
 import 'package:mosstroinform_mobile/features/document_approval/data/models/document_model.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/datasources/document_remote_data_source.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
@@ -12,60 +12,40 @@ class DocumentRepositoryImpl implements DocumentRepository {
 
   @override
   Future<List<Document>> getDocuments() async {
-    try {
+    return guard(() async {
       final models = await remoteDataSource.getDocuments();
       return models.map((model) => model.toEntity()).toList();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении документов: $e');
-    }
+    }, methodName: 'getDocuments');
   }
 
   @override
   Future<List<Document>> getDocumentsByProjectId(String projectId) async {
-    try {
+    return guard(() async {
       // Фильтруем документы по projectId
       final allDocuments = await getDocuments();
       return allDocuments.where((doc) => doc.projectId == projectId).toList();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении документов проекта: $e');
-    }
+    }, methodName: 'getDocumentsByProjectId');
   }
 
   @override
   Future<Document> getDocumentById(String id) async {
-    try {
+    return guard(() async {
       final model = await remoteDataSource.getDocumentById(id);
       return model.toEntity();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении документа: $e');
-    }
+    }, methodName: 'getDocumentById');
   }
 
   @override
   Future<void> approveDocument(String documentId) async {
-    try {
+    return guard(() async {
       await remoteDataSource.approveDocument(documentId);
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при одобрении документа: $e');
-    }
+    }, methodName: 'approveDocument');
   }
 
   @override
   Future<void> rejectDocument(String documentId, String reason) async {
-    try {
+    return guard(() async {
       await remoteDataSource.rejectDocument(documentId, {'reason': reason});
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при отклонении документа: $e');
-    }
+    }, methodName: 'rejectDocument');
   }
 }

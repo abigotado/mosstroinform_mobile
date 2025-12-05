@@ -20,6 +20,7 @@ abstract class ConstructionObjectModel with _$ConstructionObjectModel {
     required int price,
     String? imageUrl,
     required List<ConstructionStageModel> stages,
+    String? chatId,
   }) = _ConstructionObjectModel;
 
   factory ConstructionObjectModel.fromJson(Map<String, dynamic> json) =>
@@ -55,6 +56,7 @@ extension ConstructionObjectModelX on ConstructionObjectModel {
       price: price,
       imageUrl: imageUrl,
       stages: stages.map((s) => s.toEntity()).toList(),
+      chatId: chatId,
     );
   }
 }

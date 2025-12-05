@@ -36,7 +36,7 @@ final class ChatsNotifierProvider
   ChatsNotifier create() => ChatsNotifier();
 }
 
-String _$chatsNotifierHash() => r'802b79b0c20aa52f31b4223ba0f30313cdb7758b';
+String _$chatsNotifierHash() => r'4fb388397d3bd89d11eae811d097531d49f0d994';
 
 /// Notifier для управления состоянием списка чатов
 
@@ -60,21 +60,27 @@ abstract class _$ChatsNotifier extends $AsyncNotifier<ChatsState> {
 }
 
 /// Notifier для управления состоянием сообщений чата
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние сообщений должно сохраняться при навигации
 
 @ProviderFor(MessagesNotifier)
 const messagesProvider = MessagesNotifierFamily._();
 
 /// Notifier для управления состоянием сообщений чата
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние сообщений должно сохраняться при навигации
 final class MessagesNotifierProvider
     extends $AsyncNotifierProvider<MessagesNotifier, MessagesState> {
   /// Notifier для управления состоянием сообщений чата
+  /// keepAlive: true - провайдер не должен быть disposed автоматически,
+  /// так как состояние сообщений должно сохраняться при навигации
   const MessagesNotifierProvider._({
     required MessagesNotifierFamily super.from,
     required String super.argument,
   }) : super(
          retry: null,
          name: r'messagesProvider',
-         isAutoDispose: true,
+         isAutoDispose: false,
          dependencies: null,
          $allTransitiveDependencies: null,
        );
@@ -104,9 +110,11 @@ final class MessagesNotifierProvider
   }
 }
 
-String _$messagesNotifierHash() => r'5f1c5e7e51409b1969fe7c17f1b5077b0ed0266a';
+String _$messagesNotifierHash() => r'ff0b63e2cb4db5736f21468a73be5a9798f624bb';
 
 /// Notifier для управления состоянием сообщений чата
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние сообщений должно сохраняться при навигации
 
 final class MessagesNotifierFamily extends $Family
     with
@@ -123,10 +131,12 @@ final class MessagesNotifierFamily extends $Family
         name: r'messagesProvider',
         dependencies: null,
         $allTransitiveDependencies: null,
-        isAutoDispose: true,
+        isAutoDispose: false,
       );
 
   /// Notifier для управления состоянием сообщений чата
+  /// keepAlive: true - провайдер не должен быть disposed автоматически,
+  /// так как состояние сообщений должно сохраняться при навигации
 
   MessagesNotifierProvider call(String chatId) =>
       MessagesNotifierProvider._(argument: chatId, from: this);
@@ -136,6 +146,8 @@ final class MessagesNotifierFamily extends $Family
 }
 
 /// Notifier для управления состоянием сообщений чата
+/// keepAlive: true - провайдер не должен быть disposed автоматически,
+/// так как состояние сообщений должно сохраняться при навигации
 
 abstract class _$MessagesNotifier extends $AsyncNotifier<MessagesState> {
   late final _$args = ref.$arg as String;

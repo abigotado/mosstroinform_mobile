@@ -101,6 +101,9 @@ class ConstructionObjectAdapter extends HiveObject {
   @HiveField(11)
   final List<ConstructionStageAdapter> stages;
 
+  @HiveField(12)
+  final String? chatId;
+
   ConstructionObjectAdapter({
     required this.id,
     required this.projectId,
@@ -114,6 +117,7 @@ class ConstructionObjectAdapter extends HiveObject {
     required this.price,
     this.imageUrl,
     required this.stages,
+    this.chatId,
   });
 
   /// Конвертация из ConstructionObject в ConstructionObjectAdapter
@@ -133,6 +137,7 @@ class ConstructionObjectAdapter extends HiveObject {
       stages: object.stages
           .map((stage) => ConstructionStageAdapter.fromStage(stage))
           .toList(),
+      chatId: object.chatId,
     );
   }
 
@@ -151,6 +156,7 @@ class ConstructionObjectAdapter extends HiveObject {
       price: price,
       imageUrl: imageUrl,
       stages: stages.map((stage) => stage.toStage()).toList(),
+      chatId: chatId,
     );
   }
 }

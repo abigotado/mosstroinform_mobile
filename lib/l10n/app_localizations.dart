@@ -586,6 +586,12 @@ abstract class AppLocalizations {
   /// **'Ошибка загрузки сообщений'**
   String get errorLoadingMessages;
 
+  /// No description provided for @chatNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Чат для этого объекта не найден'**
+  String get chatNotFound;
+
   /// No description provided for @errorSendingMessage.
   ///
   /// In ru, this message translates to:

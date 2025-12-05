@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -67,10 +68,9 @@ class _FinalDocumentDetailScreenState
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${l10n.error}: $e'),
+            content: Text(e.toLocalizedMessage(context)),
             backgroundColor: Colors.red,
           ),
         );
@@ -257,7 +257,7 @@ class _FinalDocumentDetailScreenState
               ),
               const SizedBox(height: 8),
               Text(
-                error.toString(),
+                error.toLocalizedMessage(context),
                 style: theme.textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),

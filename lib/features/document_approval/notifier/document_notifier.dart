@@ -16,18 +16,14 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить список документов
   Future<void> loadDocuments() async {
-    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocuments();
-      if (!ref.mounted) return;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документов: $e'),
         stackTrace,
@@ -37,18 +33,14 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить документы для проекта
   Future<void> loadDocumentsForProject(String projectId) async {
-    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocumentsByProjectId(projectId);
-      if (!ref.mounted) return;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документов проекта: $e'),
         stackTrace,
@@ -67,18 +59,14 @@ class DocumentNotifier extends _$DocumentNotifier {
 
   /// Загрузить документ по ID
   Future<void> loadDocument(String documentId) async {
-    if (!ref.mounted) return;
     state = const AsyncValue.loading();
     try {
       final repository = ref.read(documentRepositoryProvider);
       final document = await repository.getDocumentById(documentId);
-      if (!ref.mounted) return;
       state = AsyncValue.data(document);
     } on Failure catch (failure, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при загрузке документа: $e'),
         stackTrace,
@@ -88,8 +76,6 @@ class DocumentNotifier extends _$DocumentNotifier {
 
   /// Одобрить документ
   Future<void> approveDocument(String documentId) async {
-    if (!ref.mounted) return;
-
     // Сохраняем текущее состояние документа перед обновлением
     final currentDocument = state.value;
 
@@ -97,13 +83,9 @@ class DocumentNotifier extends _$DocumentNotifier {
       final repository = ref.read(documentRepositoryProvider);
       await repository.approveDocument(documentId);
 
-      if (!ref.mounted) return;
-
       // Получаем обновленный документ напрямую из репозитория
       // чтобы избежать перезагрузки через loadDocument, которая может вызвать шиммер
       final updatedDocument = await repository.getDocumentById(documentId);
-
-      if (!ref.mounted) return;
 
       // Обновляем состояние напрямую, не вызывая loadDocument
       state = AsyncValue.data(updatedDocument);
@@ -113,22 +95,18 @@ class DocumentNotifier extends _$DocumentNotifier {
 
       // Инвалидируем провайдер объектов, чтобы обновить список "Мои объекты"
       // (в моковой реализации объект уже создан внутри approveDocument)
-      if (ref.mounted) {
-        ref.invalidate(myObjectsProvider);
+      ref.invalidate(myObjectsProvider);
 
-        // Обновляем список документов, чтобы показать обновленное состояние
-        await ref
-            .read(documentsProvider.notifier)
-            .loadDocumentsForProject(projectId);
-      }
+      // Обновляем список документов, чтобы показать обновленное состояние
+      await ref
+          .read(documentsProvider.notifier)
+          .loadDocumentsForProject(projectId);
     } on Failure catch (failure, stackTrace) {
-      if (!ref.mounted) return;
       // Восстанавливаем предыдущее состояние при ошибке
       state = currentDocument != null
           ? AsyncValue.data(currentDocument)
           : AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      if (!ref.mounted) return;
       // Восстанавливаем предыдущее состояние при ошибке
       state = currentDocument != null
           ? AsyncValue.data(currentDocument)
@@ -141,21 +119,15 @@ class DocumentNotifier extends _$DocumentNotifier {
 
   /// Отклонить документ
   Future<void> rejectDocument(String documentId, String reason) async {
-    if (!ref.mounted) return;
-
     try {
       final repository = ref.read(documentRepositoryProvider);
       await repository.rejectDocument(documentId, reason);
 
-      if (!ref.mounted) return;
-
       // Перезагружаем документ после отклонения
       await loadDocument(documentId);
     } on Failure catch (failure, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
-      if (!ref.mounted) return;
       state = AsyncValue.error(
         UnknownFailure('Ошибка при отклонении документа: $e'),
         stackTrace,

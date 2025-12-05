@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -118,7 +119,7 @@ class ProfileScreen extends ConsumerWidget {
               const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
               Text(
-                l10n.errorOccurred(error.toString()),
+                error.toLocalizedMessage(context),
                 style: theme.textTheme.bodyLarge,
                 textAlign: TextAlign.center,
               ),

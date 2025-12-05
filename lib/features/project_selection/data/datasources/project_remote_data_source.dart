@@ -23,4 +23,11 @@ abstract class ProjectRemoteDataSource implements IProjectRemoteDataSource {
   @override
   @POST('/projects/{id}/request')
   Future<void> requestConstruction(@Path('id') String projectId);
+
+  @override
+  @POST('/projects/{id}/start')
+  Future<ProjectModel> startConstruction(
+    @Path('id') String projectId,
+    @Body() Map<String, dynamic> body,
+  );
 }

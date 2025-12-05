@@ -6,6 +6,7 @@ abstract class ChatRepository {
   Future<List<Chat>> getChats();
 
   /// Получить чат по ID
+  /// Чат создается автоматически на бэкенде при создании объекта строительства
   Future<Chat> getChatById(String chatId);
 
   /// Получить сообщения чата

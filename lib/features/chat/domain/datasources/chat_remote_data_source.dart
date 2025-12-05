@@ -6,6 +6,8 @@ abstract class IChatRemoteDataSource {
   Future<List<ChatModel>> getChats();
 
   /// Получить чат по ID
+  /// Чат создается автоматически на бэкенде при создании объекта строительства
+  /// GET /chats/{chatId}
   Future<ChatModel> getChatById(String chatId);
 
   /// Получить сообщения чата

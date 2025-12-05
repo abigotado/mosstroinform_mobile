@@ -80,6 +80,7 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
       // TODO: Обновить репозиторий для поддержки пагинации
       // Пока используем старый метод, но возвращаем только первую страницу
       final allProjects = await repository.getProjects();
+      
       final itemsPerPage = paginationParams['limit'] as int;
       final firstPageItems = allProjects.take(itemsPerPage).toList();
       final hasMore = allProjects.length > itemsPerPage;
@@ -153,6 +154,7 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
       // TODO: Обновить репозиторий для поддержки пагинации
       // Пока используем старый метод и берем следующую страницу
       final allProjects = await repository.getProjects();
+      
       final nextPage = currentState.currentPage + 1;
       final startIndex = nextPage * currentState.itemsPerPage;
       final endIndex = (startIndex + currentState.itemsPerPage).clamp(

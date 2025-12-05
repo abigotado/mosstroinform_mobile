@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
@@ -403,7 +404,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                       if (mounted) {
                                         messenger.showSnackBar(
                                           SnackBar(
-                                            content: Text('${l10n.error}: $e'),
+                                            content: Text(
+                                              e.toLocalizedMessage(context),
+                                            ),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
@@ -536,7 +539,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Ошибка при начале строительства: $e'),
+            content: Text(e.toLocalizedMessage(context)),
             backgroundColor: Colors.red,
           ),
         );

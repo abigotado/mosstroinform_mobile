@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
 import 'package:mosstroinform_mobile/features/document_approval/notifier/document_notifier.dart';
@@ -86,10 +87,9 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${l10n.error}: $e'),
+            content: Text(e.toLocalizedMessage(context)),
             backgroundColor: Colors.red,
           ),
         );
@@ -135,10 +135,9 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${l10n.error}: $e'),
+            content: Text(e.toLocalizedMessage(context)),
             backgroundColor: Colors.red,
           ),
         );
@@ -403,7 +402,7 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                error.toString(),
+                error.toLocalizedMessage(context),
                 style: theme.textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),

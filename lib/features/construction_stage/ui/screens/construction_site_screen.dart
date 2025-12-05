@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
@@ -61,12 +62,12 @@ class _ConstructionSiteScreenState
               context.push('/completion/${widget.projectId}');
             },
           ),
-          // Кнопка перехода к чату
+          // Кнопка перехода к чату объекта
           IconButton(
             icon: const Icon(Icons.chat_bubble_outline),
             tooltip: l10n.chatTooltip,
             onPressed: () {
-              context.push('/chats');
+              context.push('/construction/${widget.projectId}/chat');
             },
           ),
         ],
@@ -245,7 +246,7 @@ class _ConstructionSiteScreenState
               ),
               const SizedBox(height: 8),
               Text(
-                error.toString(),
+                error.toLocalizedMessage(context),
                 style: theme.textTheme.bodySmall,
                 textAlign: TextAlign.center,
               ),

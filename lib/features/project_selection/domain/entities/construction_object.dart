@@ -15,6 +15,7 @@ class ConstructionObject {
   final int price;
   final String? imageUrl;
   final List<ConstructionStage> stages;
+  final String? chatId; // ID чата для этого объекта
 
   const ConstructionObject({
     required this.id,
@@ -29,6 +30,7 @@ class ConstructionObject {
     required this.price,
     this.imageUrl,
     required this.stages,
+    this.chatId,
   });
 
   @override
@@ -40,8 +42,9 @@ class ConstructionObject {
   factory ConstructionObject.fromProject(
     Project project,
     String objectId,
-    List<ConstructionStage> initialStages,
-  ) {
+    List<ConstructionStage> initialStages, {
+    String? chatId,
+  }) {
     return ConstructionObject(
       id: objectId,
       projectId: project.id,
@@ -55,6 +58,7 @@ class ConstructionObject {
       price: project.price,
       imageUrl: project.imageUrl,
       stages: initialStages,
+      chatId: chatId,
     );
   }
 }

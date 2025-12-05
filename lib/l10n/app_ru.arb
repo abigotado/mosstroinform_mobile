@@ -114,6 +114,7 @@
   "send": "Отправить",
   "errorLoadingChats": "Ошибка загрузки чатов",
   "errorLoadingMessages": "Ошибка загрузки сообщений",
+  "chatNotFound": "Чат для этого объекта не найден",
   "errorSendingMessage": "Ошибка отправки сообщения",
   "messageSent": "Сообщение отправлено",
   "unread": "Непрочитано",

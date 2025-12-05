@@ -1,4 +1,4 @@
-import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/core/utils/extensions/error_guard_extension.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/data/models/construction_site_model.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/datasources/construction_site_remote_data_source.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
@@ -14,39 +14,27 @@ class ConstructionSiteRepositoryImpl implements ConstructionSiteRepository {
   Future<ConstructionSite> getConstructionSiteByProjectId(
     String projectId,
   ) async {
-    try {
+    return guard(() async {
       final model = await remoteDataSource.getConstructionSiteByProjectId(
         projectId,
       );
       return model.toEntity();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении информации о стройке: $e');
-    }
+    }, methodName: 'getConstructionSiteByProjectId');
   }
 
   @override
   Future<List<Camera>> getCameras(String siteId) async {
-    try {
+    return guard(() async {
       final models = await remoteDataSource.getCameras(siteId);
       return models.map((model) => model.toEntity()).toList();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении списка камер: $e');
-    }
+    }, methodName: 'getCameras');
   }
 
   @override
   Future<Camera> getCameraById(String siteId, String cameraId) async {
-    try {
+    return guard(() async {
       final model = await remoteDataSource.getCameraById(siteId, cameraId);
       return model.toEntity();
-    } on Failure {
-      rethrow;
-    } catch (e) {
-      throw UnknownFailure('Ошибка при получении информации о камере: $e');
-    }
+    }, methodName: 'getCameraById');
   }
 }
