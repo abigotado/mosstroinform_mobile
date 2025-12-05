@@ -84,7 +84,13 @@ class _ConstructionSiteScreenState
                   // Кнопка перехода к чату объекта (только если объект не завершен)
                   if (siteState == null ||
                       siteAsync.hasError ||
-                      (ref.read(constructionObjectByProjectProvider(projectId)).valueOrNull?.isCompleted ?? false))
+                      (ref
+                              .read(
+                                constructionObjectByProjectProvider(projectId),
+                              )
+                              .valueOrNull
+                              ?.isCompleted ??
+                          false))
                     const SizedBox.shrink()
                   else
                     IconButton(
