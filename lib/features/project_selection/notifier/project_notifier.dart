@@ -32,29 +32,25 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
-    AppLogger.info('ProjectsNotifier.loadProjects: начинаем загрузку');
     state = const AsyncValue.loading();
 
     try {
       final repository = ref.read(projectRepositoryProvider);
       final projects = await repository.getProjects(); // Без пагинации - получаем все проекты
 
-      AppLogger.info(
-        'ProjectsNotifier.loadProjects: получено ${projects.length} проектов',
-      );
-      state = AsyncValue.data(
-        ProjectsState(projects: projects, isLoading: false),
-      );
+      if (state.hasValue || !state.hasError) {
+         state = AsyncValue.data(
+          ProjectsState(projects: projects, isLoading: false),
+        );
+      }
     } on Failure catch (e) {
-      AppLogger.error('ProjectsNotifier.loadProjects: ошибка Failure: $e');
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(isLoading: false, error: e),
       );
     } catch (e, stackTrace) {
-      AppLogger.error(
-        'ProjectsNotifier.loadProjects: неизвестная ошибка: $e',
-        stackTrace,
-      );
+      // Игнорируем ошибку использования disposed ref, если она возникла
+      if (e.toString().contains('disposed')) return;
+      
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(
           isLoading: false,

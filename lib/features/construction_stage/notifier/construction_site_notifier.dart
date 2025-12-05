@@ -37,10 +37,17 @@ class ConstructionSiteNotifier extends _$ConstructionSiteNotifier {
 
   /// Загрузить информацию о строительной площадке
   Future<void> loadConstructionSite() async {
-    debugPrint('=== ConstructionSiteNotifier.loadConstructionSite ===');
     final objectId = this.objectId;
-    debugPrint('objectId: $objectId');
-    state = const AsyncValue.loading();
+    
+    // Если данные уже есть, ставим isLoading=true в данных, чтобы не было шиммера
+    if (state.value?.site != null) {
+      state = AsyncValue.data(
+        state.value!.copyWith(isLoading: true),
+      );
+    } else {
+      state = const AsyncValue.loading();
+    }
+
     try {
       final repository = ref.read(constructionSiteRepositoryProvider);
       final site = await repository.getConstructionSiteByObjectId(objectId);

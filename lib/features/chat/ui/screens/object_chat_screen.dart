@@ -139,8 +139,8 @@ class _ObjectChatScreenState extends ConsumerState<ObjectChatScreen> {
           Expanded(
             child: messagesAsync.when(
               data: (state) {
-                // Если список пустой и нет ошибки - это начальное состояние, показываем шиммер
-                if (state.messages.isEmpty && state.error == null) {
+                // Если идет загрузка и сообщений нет - показываем индикатор
+                if (state.isLoading && state.messages.isEmpty) {
                   return const Center(child: CircularProgressIndicator());
                 }
 

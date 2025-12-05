@@ -81,14 +81,19 @@ class _ConstructionSiteScreenState
                       context.push('/completion/$projectId');
                     },
                   ),
-                  // Кнопка перехода к чату объекта
-                  IconButton(
-                    icon: const Icon(Icons.chat_bubble_outline),
-                    tooltip: l10n.chatTooltip,
-                    onPressed: () {
-                      context.push('/construction/$projectId/chat');
-                    },
-                  ),
+                  // Кнопка перехода к чату объекта (только если объект не завершен)
+                  if (siteState == null ||
+                      siteAsync.hasError ||
+                      (ref.read(constructionObjectByProjectProvider(projectId)).valueOrNull?.isCompleted ?? false))
+                    const SizedBox.shrink()
+                  else
+                    IconButton(
+                      icon: const Icon(Icons.chat_bubble_outline),
+                      tooltip: l10n.chatTooltip,
+                      onPressed: () {
+                        context.push('/construction/$projectId/chat');
+                      },
+                    ),
                 ],
               );
             },
