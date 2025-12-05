@@ -9,7 +9,6 @@ import 'package:mosstroinform_mobile/features/construction_completion/notifier/f
 import 'package:mosstroinform_mobile/features/construction_stage/notifier/construction_site_notifier.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/camera_view_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/camera_grid_item.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_by_project_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
