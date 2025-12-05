@@ -23,7 +23,6 @@ class Project {
   final int price;
   final String? imageUrl;
   final ProjectStatus status;
-  final String? constructionAddress; // Адрес строительства (добавляется при начале строительства)
   final String? objectId; // ID объекта строительства (если проект в статусе строительства)
 
   const Project({
@@ -37,12 +36,11 @@ class Project {
     required this.price,
     this.imageUrl,
     this.status = ProjectStatus.available,
-    this.constructionAddress,
     this.objectId,
   });
 
   @override
   String toString() {
-    return 'Project(id: $id, name: $name, status: $status, constructionAddress: $constructionAddress, objectId: $objectId, area: $area, floors: $floors, bedrooms: $bedrooms, bathrooms: $bathrooms, price: $price)';
+    return 'Project(id: $id, name: $name, status: $status, objectId: $objectId, area: $area, floors: $floors, bedrooms: $bedrooms, bathrooms: $bathrooms, price: $price)';
   }
 }

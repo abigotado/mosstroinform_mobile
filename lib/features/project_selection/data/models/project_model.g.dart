@@ -18,7 +18,6 @@ _ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) =>
       price: (json['price'] as num).toInt(),
       imageUrl: json['imageUrl'] as String?,
       status: json['status'] as String?,
-      constructionAddress: json['constructionAddress'] as String?,
       objectId: json['objectId'] as String?,
     );
 
@@ -34,6 +33,5 @@ Map<String, dynamic> _$ProjectModelToJson(_ProjectModel instance) =>
       'price': instance.price,
       'imageUrl': ?instance.imageUrl,
       'status': ?instance.status,
-      'constructionAddress': ?instance.constructionAddress,
       'objectId': ?instance.objectId,
     };

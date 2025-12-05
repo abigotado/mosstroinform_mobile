@@ -75,7 +75,7 @@ class ProjectAdapter extends HiveObject {
       price: project.price,
       imageUrl: project.imageUrl,
       statusString: _statusToString(project.status),
-      constructionAddress: project.constructionAddress,
+      constructionAddress: null, // Адрес больше не хранится в проекте
       objectId: project.objectId,
     );
   }
@@ -104,7 +104,6 @@ class ProjectAdapter extends HiveObject {
       price: price,
       imageUrl: imageUrl,
       status: _parseStatus(statusString),
-      constructionAddress: constructionAddress,
       objectId: objectId,
     );
   }

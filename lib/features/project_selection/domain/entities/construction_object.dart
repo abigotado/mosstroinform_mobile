@@ -42,6 +42,7 @@ class ConstructionObject {
   factory ConstructionObject.fromProject(
     Project project,
     String objectId,
+    String address,
     List<ConstructionStage> initialStages, {
     String? chatId,
   }) {
@@ -49,7 +50,7 @@ class ConstructionObject {
       id: objectId,
       projectId: project.id,
       name: project.name,
-      address: project.constructionAddress ?? 'Адрес не указан',
+      address: address,
       description: project.description,
       area: project.area,
       floors: project.floors,

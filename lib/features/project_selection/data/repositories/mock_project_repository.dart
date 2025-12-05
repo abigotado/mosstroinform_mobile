@@ -75,7 +75,7 @@ class MockProjectRepository implements ProjectRepository {
         price: projectAdapter.price,
         imageUrl: projectAdapter.imageUrl,
         statusString: 'requested',
-        constructionAddress: projectAdapter.constructionAddress,
+        constructionAddress: null, // Адрес больше не хранится в проекте
         objectId: projectAdapter.objectId, // Сохраняем objectId если он был установлен
       );
       await projectsBox.put(projectId, updatedAdapter);
@@ -222,7 +222,7 @@ class MockProjectRepository implements ProjectRepository {
       price: projectAdapter.price,
       imageUrl: projectAdapter.imageUrl,
       statusString: 'construction',
-      constructionAddress: address,
+      constructionAddress: null, // Адрес больше не хранится в проекте
       objectId: objectId,
     );
     await projectsBox.put(projectId, updatedAdapter);
@@ -277,6 +277,7 @@ class MockProjectRepository implements ProjectRepository {
     final object = ConstructionObject.fromProject(
       project,
       'object_$projectId',
+      address,
       initialStages,
       chatId: chatId,
     );
