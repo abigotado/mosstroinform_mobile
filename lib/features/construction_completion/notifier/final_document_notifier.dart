@@ -223,6 +223,9 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
 
       // Обновить статус завершения строительства
       ref.invalidate(completionStatusProvider(params.$1));
+      
+      // Инвалидируем провайдер списка документов, чтобы обновился список на экране
+      ref.invalidate(finalDocumentsProvider(params.$1));
 
       // Инвалидируем провайдер объекта строительства, чтобы обновилась кнопка "Завершить строительство"
       ref.invalidate(constructionObjectByProjectProvider(params.$1));
