@@ -88,7 +88,7 @@ class _ConstructionSiteScreenState
                               .read(
                                 constructionObjectByProjectProvider(projectId),
                               )
-                              .valueOrNull
+                              .value
                               ?.isCompleted ??
                           false))
                     const SizedBox.shrink()
