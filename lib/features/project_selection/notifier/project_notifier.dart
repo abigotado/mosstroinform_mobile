@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
-import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
@@ -26,34 +26,34 @@ abstract class ProjectsState with _$ProjectsState {
 class ProjectsNotifier extends _$ProjectsNotifier {
   @override
   Future<ProjectsState> build() async {
-    return const ProjectsState(projects: []);
+    // Следим за состоянием авторизации, чтобы сбрасывать состояние при выходе
+    ref.watch(authProvider);
+    
+    // Начинаем с загрузки, чтобы UI показывал шиммер, а не "нет проектов"
+    return const ProjectsState(projects: [], isLoading: true);
   }
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
-    AppLogger.info('ProjectsNotifier.loadProjects: начинаем загрузку');
     state = const AsyncValue.loading();
 
     try {
       final repository = ref.read(projectRepositoryProvider);
-      final projects = await repository.getProjects();
+      final projects = await repository.getProjects(); // Без пагинации - получаем все проекты
 
-      AppLogger.info(
-        'ProjectsNotifier.loadProjects: получено ${projects.length} проектов',
-      );
-      state = AsyncValue.data(
-        ProjectsState(projects: projects, isLoading: false),
-      );
+      if (state.hasValue || !state.hasError) {
+         state = AsyncValue.data(
+          ProjectsState(projects: projects, isLoading: false),
+        );
+      }
     } on Failure catch (e) {
-      AppLogger.error('ProjectsNotifier.loadProjects: ошибка Failure: $e');
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(isLoading: false, error: e),
       );
-    } catch (e, stackTrace) {
-      AppLogger.error(
-        'ProjectsNotifier.loadProjects: неизвестная ошибка: $e',
-        stackTrace,
-      );
+    } catch (e, _) {
+      // Игнорируем ошибку использования disposed ref, если она возникла
+      if (e.toString().contains('disposed')) return;
+      
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(
           isLoading: false,
@@ -84,8 +84,13 @@ class ProjectNotifier extends _$ProjectNotifier {
   }
 
   /// Загрузить проект по ID
-  Future<void> loadProject(String id) async {
-    state = const AsyncValue.loading();
+  Future<void> loadProject(String id, {bool showLoading = true}) async {
+    // Если showLoading = false и есть данные, обновляем без показа loading
+    final currentState = state.value;
+    if (showLoading || currentState == null || currentState.project == null) {
+      state = const AsyncValue.loading();
+    }
+    
     try {
       final repository = ref.read(projectRepositoryProvider);
       final project = await repository.getProjectById(id);
@@ -93,14 +98,19 @@ class ProjectNotifier extends _$ProjectNotifier {
       state = AsyncValue.data(ProjectState(project: project, isLoading: false));
     } on Failure catch (e) {
       state = AsyncValue.data(
-        const ProjectState().copyWith(isLoading: false, error: e),
+        currentState?.copyWith(isLoading: false, error: e) ??
+            const ProjectState().copyWith(isLoading: false, error: e),
       );
     } catch (e) {
       state = AsyncValue.data(
-        const ProjectState().copyWith(
-          isLoading: false,
-          error: UnknownFailure('Неизвестная ошибка: $e'),
-        ),
+        currentState?.copyWith(
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ) ??
+            const ProjectState().copyWith(
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ),
       );
     }
   }
@@ -177,7 +187,8 @@ class ProjectNotifier extends _$ProjectNotifier {
 
       // Перезагружаем данные после инвалидации
       // Перезагружаем текущий проект для обновления статуса на странице деталей
-      await loadProject(projectId);
+      // Не показываем loading, так как данные уже есть
+      await loadProject(projectId, showLoading: false);
       // Перезагружаем список проектов для обновления карточек
       ref.read(projectsProvider.notifier).loadProjects();
       // Перезагружаем список запрошенных проектов

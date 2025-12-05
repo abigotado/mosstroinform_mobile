@@ -1,40 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:mosstroinform_mobile/features/main/ui/providers/main_navigation_provider.dart';
-import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
-import 'package:mosstroinform_mobile/features/profile/ui/screens/profile_screen.dart';
-import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_list_screen.dart';
-import 'package:mosstroinform_mobile/features/requested_projects/ui/screens/requested_projects_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
 /// Главный экран приложения с bottom navigation bar
-class MainScreen extends ConsumerStatefulWidget {
-  const MainScreen({super.key});
+class MainScreen extends ConsumerWidget {
+  final StatefulNavigationShell navigationShell;
+
+  const MainScreen({super.key, required this.navigationShell});
 
   @override
-  ConsumerState<MainScreen> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends ConsumerState<MainScreen> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
-    final currentIndex = ref.watch(mainNavigationIndexProvider);
 
     return Scaffold(
-      body: IndexedStack(
-        index: currentIndex,
-        children: [
-          const ProjectListScreen(),
-          const RequestedProjectsScreen(),
-          const MyObjectsScreen(),
-          const ProfileScreen(),
-        ],
-      ),
+      body: navigationShell,
       bottomNavigationBar: NavigationBar(
-        selectedIndex: currentIndex,
+        selectedIndex: navigationShell.currentIndex,
         onDestinationSelected: (index) {
-          ref.read(mainNavigationIndexProvider.notifier).setIndex(index);
+          navigationShell.goBranch(
+            index,
+            initialLocation: index == navigationShell.currentIndex,
+          );
         },
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
         destinations: [

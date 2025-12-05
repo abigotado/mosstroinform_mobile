@@ -81,12 +81,30 @@ class MessagesState {
 class MessagesNotifier extends _$MessagesNotifier {
   @override
   Future<MessagesState> build(String chatId) async {
-    return const MessagesState(messages: []);
+    // Сразу загружаем сообщения при создании провайдера
+    try {
+      final repository = ref.read(chatRepositoryProvider);
+      final messages = await repository.getMessages(chatId);
+      return MessagesState(messages: messages, isLoading: false);
+    } on Failure catch (e) {
+      return MessagesState(messages: [], isLoading: false, error: e);
+    } catch (e) {
+      return MessagesState(
+        messages: [],
+        isLoading: false,
+        error: UnknownFailure('Неизвестная ошибка: $e'),
+      );
+    }
   }
 
   /// Загрузить сообщения чата
-  Future<void> loadMessages() async {
-    state = const AsyncValue.loading();
+  Future<void> loadMessages({bool showLoading = true}) async {
+    // Если showLoading = false и есть данные, обновляем без показа loading
+    final currentState = state.value;
+    if (showLoading || currentState == null || currentState.messages.isEmpty) {
+      state = const AsyncValue.loading();
+    }
+    
     try {
       final repository = ref.read(chatRepositoryProvider);
       final messages = await repository.getMessages(chatId);
@@ -94,9 +112,22 @@ class MessagesNotifier extends _$MessagesNotifier {
         MessagesState(messages: messages, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      state = AsyncValue.data(
+        currentState?.copyWith(isLoading: false, error: e) ??
+            MessagesState(messages: [], isLoading: false, error: e),
+      );
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      state = AsyncValue.data(
+        currentState?.copyWith(
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ) ??
+            MessagesState(
+              messages: [],
+              isLoading: false,
+              error: UnknownFailure('Неизвестная ошибка: $e'),
+            ),
+      );
     }
   }
 
@@ -111,19 +142,29 @@ class MessagesNotifier extends _$MessagesNotifier {
 
     try {
       final repository = ref.read(chatRepositoryProvider);
-      final newMessage = await repository.sendMessage(chatId, text.trim());
-      final updatedMessages = [...currentState.messages, newMessage];
+      await repository.sendMessage(chatId, text.trim());
+      
+      // Перезагружаем сообщения вместо добавления вручную,
+      // чтобы избежать дублирования (репозиторий уже добавил сообщение)
+      // Не показываем loading, так как данные уже есть
+      await loadMessages(showLoading: false);
+      
+      // Обновляем состояние, убирая флаг отправки
+      final updatedState = state.value;
+      if (updatedState != null) {
+        state = AsyncValue.data(updatedState.copyWith(isSending: false));
+      }
+    } on Failure catch (e) {
       state = AsyncValue.data(
-        MessagesState(
-          messages: updatedMessages,
-          isLoading: false,
+        currentState.copyWith(isSending: false, error: e),
+      );
+    } catch (e, s) {
+      state = AsyncValue.data(
+        currentState.copyWith(
           isSending: false,
+          error: UnknownFailure('Неизвестная ошибка: $e'),
         ),
       );
-    } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
-    } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
     }
   }
 
@@ -132,7 +173,8 @@ class MessagesNotifier extends _$MessagesNotifier {
     try {
       final repository = ref.read(chatRepositoryProvider);
       await repository.markMessagesAsRead(chatId);
-      await loadMessages(); // Перезагрузить сообщения
+      // Перезагружаем сообщения без показа loading
+      await loadMessages(showLoading: false);
     } on Failure catch (_) {
       // Игнорируем ошибки при отметке как прочитанные
     } catch (_) {

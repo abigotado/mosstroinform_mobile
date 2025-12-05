@@ -93,6 +93,18 @@
   "completionStatus": "Статус завершения",
   "finalDocuments": "Финальные документы",
   "noFinalDocuments": "Нет финальных документов",
+  "documentsSignedCount": "Подписано: {signed}/{total} документов",
+  "@documentsSignedCount": {
+    "description": "Количество подписанных документов из общего количества",
+    "placeholders": {
+      "signed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "finalDocument": "Финальный документ",
   "finalDocumentNotFound": "Финальный документ не найден",
   "signDocument": "Подписать документ",
@@ -187,5 +199,8 @@
   "enterConstructionAddress": "Введите адрес строительства",
   "constructionStarted": "Строительство начато!",
   "completeConstruction": "Завершить строительство",
-  "constructionCompletedSuccess": "Строительство успешно завершено!"
+  "constructionCompletedSuccess": "Строительство успешно завершено!",
+  "networkError": "Ошибка сети. Проверьте подключение к интернету",
+  "serverError": "Ошибка сервера",
+  "cacheError": "Ошибка сохранения данных"
 }

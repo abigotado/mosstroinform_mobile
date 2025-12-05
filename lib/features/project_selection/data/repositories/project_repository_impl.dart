@@ -11,9 +11,9 @@ class ProjectRepositoryImpl implements ProjectRepository {
   ProjectRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<Project>> getProjects() async {
+  Future<List<Project>> getProjects({int? page, int? limit}) async {
     return guard(() async {
-      final models = await remoteDataSource.getProjects();
+      final models = await remoteDataSource.getProjects(page: page, limit: limit);
       return models.map((model) => model.toEntity()).toList();
     }, methodName: 'getProjects');
   }
@@ -46,20 +46,17 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<List<Project>> getRequestedProjects() async {
     return guard(() async {
-      // В реальной реализации бэкенд должен иметь отдельный эндпоинт для запрошенных проектов
-      // TODO: Добавить отдельный эндпоинт в IProjectRemoteDataSource
-      // Пока возвращаем пустой список, так как в реальной реализации нужен отдельный эндпоинт
-      return [];
+      final models = await remoteDataSource.getRequestedProjects();
+      return models.map((model) => model.toEntity()).toList();
     }, methodName: 'getRequestedProjects');
   }
 
   @override
   Future<bool> isProjectRequested(String projectId) async {
     return guard(() async {
-      // В реальной реализации бэкенд должен вернуть статус в самом проекте
-      // TODO: Добавить поле status в Project entity для проверки статуса
-      // Пока возвращаем false, так как в реальной реализации нужен отдельный эндпоинт
-      return false;
+      // Получаем проект по ID и проверяем его статус
+      final project = await remoteDataSource.getProjectById(projectId);
+      return project.status == 'requested';
     }, methodName: 'isProjectRequested');
   }
 }

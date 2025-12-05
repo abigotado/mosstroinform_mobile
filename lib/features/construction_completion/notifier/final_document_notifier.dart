@@ -1,6 +1,8 @@
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/providers/final_document_repository_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_by_project_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'final_document_notifier.g.dart';
@@ -35,12 +37,22 @@ class CompletionStatusState {
 class CompletionStatusNotifier extends _$CompletionStatusNotifier {
   @override
   Future<CompletionStatusState> build(String projectId) async {
-    return const CompletionStatusState();
+    // Сразу загружаем данные при создании провайдера
+    final repository = ref.read(finalDocumentRepositoryProvider);
+    final status = await repository.getCompletionStatus(projectId);
+    return CompletionStatusState(status: status, isLoading: false);
   }
 
   /// Загрузить статус завершения строительства
   Future<void> loadCompletionStatus() async {
-    state = const AsyncValue.loading();
+    // Сохраняем предыдущее состояние, если оно есть
+    final previousState = state.value;
+    // Устанавливаем loading только если нет предыдущих данных
+    if (previousState == null || previousState.status == null) {
+      state = const AsyncValue.loading();
+    }
+    // Если есть данные, не меняем состояние - обновляем в фоне
+
     try {
       final repository = ref.read(finalDocumentRepositoryProvider);
       final status = await repository.getCompletionStatus(projectId);
@@ -48,9 +60,23 @@ class CompletionStatusNotifier extends _$CompletionStatusNotifier {
         CompletionStatusState(status: status, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      // При ошибке сохраняем предыдущие данные, если они были
+      if (previousState != null && previousState.status != null) {
+        state = AsyncValue.data(
+          previousState.copyWith(error: e, isLoading: false),
+        );
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.status != null) {
+        state = AsyncValue.data(
+          previousState.copyWith(error: failure, isLoading: false),
+        );
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 }
@@ -138,7 +164,14 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
 
   /// Загрузить финальный документ по ID
   Future<void> loadFinalDocument() async {
-    state = const AsyncValue.loading();
+    // Сохраняем предыдущее состояние, если оно есть
+    final previousState = state.value;
+    // Устанавливаем loading только если нет предыдущих данных
+    if (previousState == null || previousState.document == null) {
+      state = const AsyncValue.loading();
+    }
+    // Если есть данные, не меняем состояние - обновляем в фоне
+
     try {
       final repository = ref.read(finalDocumentRepositoryProvider);
       final document = await repository.getFinalDocumentById(
@@ -149,9 +182,23 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
         FinalDocumentState(document: document, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      // При ошибке сохраняем предыдущие данные, если они были
+      if (previousState != null && previousState.document != null) {
+        state = AsyncValue.data(
+          previousState.copyWith(error: e, isLoading: false),
+        );
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.document != null) {
+        state = AsyncValue.data(
+          previousState.copyWith(error: failure, isLoading: false),
+        );
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 
@@ -162,6 +209,26 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
       final repository = ref.read(finalDocumentRepositoryProvider);
       await repository.signFinalDocument(params.$1, params.$2);
       await loadFinalDocument(); // Перезагрузить документ после подписания
+
+      // Проверяем, все ли документы подписаны
+      final completionStatus = await repository.getCompletionStatus(params.$1);
+      final allDocumentsSigned = completionStatus.allDocumentsSigned;
+
+      // Обновляем статус документов в объекте строительства
+      final objectRepository = ref.read(constructionObjectRepositoryProvider);
+      await objectRepository.updateDocumentsSignedStatus(
+        params.$1,
+        allDocumentsSigned,
+      );
+
+      // Обновить статус завершения строительства
+      ref.invalidate(completionStatusProvider(params.$1));
+
+      // Инвалидируем провайдер списка документов, чтобы обновился список на экране
+      ref.invalidate(finalDocumentsProvider(params.$1));
+
+      // Инвалидируем провайдер объекта строительства, чтобы обновилась кнопка "Завершить строительство"
+      ref.invalidate(constructionObjectByProjectProvider(params.$1));
     } on Failure catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } catch (e, s) {

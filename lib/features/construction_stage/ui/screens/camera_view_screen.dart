@@ -176,7 +176,27 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: Text(widget.camera.name)),
+      appBar: AppBar(
+        title: Text(widget.camera.name),
+        leading: BackButton(onPressed: () => Navigator.of(context).pop()),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.fullscreen),
+            onPressed: () {
+              if (_controller != null && _controller!.value.isInitialized) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => VideoFullscreenScreen(
+                      controller: _controller!,
+                      cameraName: widget.camera.name,
+                    ),
+                  ),
+                );
+              }
+            },
+          ),
+        ],
+      ),
       body: _hasError || (_controller?.value.hasError ?? false)
           ? _VideoErrorWidget(
               camera: widget.camera,

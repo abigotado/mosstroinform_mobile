@@ -7,6 +7,7 @@ import 'package:mosstroinform_mobile/features/project_selection/domain/entities/
 import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/project_repository.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
+import 'package:mosstroinform_mobile/features/chat/data/repositories/mock_chat_repository.dart';
 
 /// Интерактивная моковая реализация репозитория документов
 /// Использует локальную базу данных Hive для имитации реальной работы приложения
@@ -143,32 +144,36 @@ class MockDocumentRepository implements DocumentRepository {
           .firstOrNull;
 
       if (existingObject == null) {
+        // Создаем чат для объекта автоматически (в моковом режиме)
+        final chatId = MockChatRepository.createChatForProject(projectId);
+        
         // Создаем начальные этапы строительства
+        // Для моков все этапы создаются со статусом completed (100% прогресс) для тестирования подписания документов
         final initialStages = [
           ConstructionStageAdapter(
             id: '1',
             name: 'Подготовительные работы',
-            statusString: 'pending',
+            statusString: 'completed',
           ),
           ConstructionStageAdapter(
             id: '2',
             name: 'Фундамент',
-            statusString: 'pending',
+            statusString: 'completed',
           ),
           ConstructionStageAdapter(
             id: '3',
             name: 'Возведение стен',
-            statusString: 'pending',
+            statusString: 'completed',
           ),
           ConstructionStageAdapter(
             id: '4',
             name: 'Кровля',
-            statusString: 'pending',
+            statusString: 'completed',
           ),
           ConstructionStageAdapter(
             id: '5',
             name: 'Отделочные работы',
-            statusString: 'pending',
+            statusString: 'completed',
           ),
         ];
 
@@ -180,6 +185,7 @@ class MockDocumentRepository implements DocumentRepository {
             'object_$projectId', // ID объекта формируется из projectId
             'Адрес будет указан при начале строительства', // Временный адрес
             initialStages.map((s) => s.toStage()).toList(),
+            chatId: chatId,
           ),
         );
 

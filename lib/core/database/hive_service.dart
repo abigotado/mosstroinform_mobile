@@ -5,6 +5,7 @@ import 'package:mosstroinform_mobile/core/data/mock_data/projects_mock_data.dart
 import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/final_document_adapter.dart';
 
 /// Сервис для работы с локальной базой данных Hive
 /// Используется только в моковом режиме для имитации работы бэкенда
@@ -13,11 +14,13 @@ class HiveService {
   static const String _documentsBoxName = 'documents';
   static const String _constructionObjectsBoxName = 'construction_objects';
   static const String _requestedProjectsBoxName = 'requested_projects';
+  static const String _finalDocumentsBoxName = 'final_documents';
 
   static Box<ProjectAdapter>? _projectsBox;
   static Box<DocumentAdapter>? _documentsBox;
   static Box<ConstructionObjectAdapter>? _constructionObjectsBox;
   static Box<String>? _requestedProjectsBox;
+  static Box<FinalDocumentAdapter>? _finalDocumentsBox;
 
   /// Проверка, инициализирован ли Hive
   static bool get isInitialized => _projectsBox != null;
@@ -28,12 +31,19 @@ class HiveService {
     // Если уже инициализирован, просто возвращаемся
     if (isInitialized) {
       AppLogger.info('HiveService.initialize: Hive уже инициализирован');
+      // Открываем settings box если еще не открыт
+      if (!Hive.isBoxOpen('settings')) {
+        await Hive.openBox('settings');
+      }
       return;
     }
 
     try {
       await Hive.initFlutter();
       AppLogger.info('HiveService.initialize: Hive инициализирован');
+      
+      // Открываем settings box для хранения настроек приложения
+      await Hive.openBox('settings');
 
       // Регистрируем адаптеры
       if (!Hive.isAdapterRegistered(0)) {
@@ -48,6 +58,9 @@ class HiveService {
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(ConstructionObjectAdapterAdapter());
       }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FinalDocumentAdapterAdapter());
+      }
 
       // Открываем боксы
       _projectsBox = await Hive.openBox<ProjectAdapter>(_projectsBoxName);
@@ -56,6 +69,8 @@ class HiveService {
           await Hive.openBox<ConstructionObjectAdapter>(_constructionObjectsBoxName);
       _requestedProjectsBox =
           await Hive.openBox<String>(_requestedProjectsBoxName);
+      _finalDocumentsBox =
+          await Hive.openBox<FinalDocumentAdapter>(_finalDocumentsBoxName);
 
       AppLogger.info('HiveService.initialize: боксы открыты');
 
@@ -116,7 +131,20 @@ class HiveService {
       await _requestedProjectsBox!.clear();
       AppLogger.info('HiveService.clearUserData: запрошенные проекты очищены');
     }
+    if (_finalDocumentsBox != null) {
+      await _finalDocumentsBox!.clear();
+      AppLogger.info('HiveService.clearUserData: финальные документы очищены');
+    }
+    
     AppLogger.info('HiveService.clearUserData: все данные очищены, база будет создана с нуля при следующем логине');
+  }
+
+  /// Получить бокс финальных документов
+  static Box<FinalDocumentAdapter> get finalDocumentsBox {
+    if (_finalDocumentsBox == null) {
+      throw StateError('HiveService не инициализирован. Вызовите initialize()');
+    }
+    return _finalDocumentsBox!;
   }
 
   /// Получить бокс проектов
@@ -185,6 +213,9 @@ class HiveService {
       }
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(ConstructionObjectAdapterAdapter());
+      }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FinalDocumentAdapterAdapter());
       }
 
       // Открываем боксы

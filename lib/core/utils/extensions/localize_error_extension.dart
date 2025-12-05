@@ -28,14 +28,15 @@ extension LocalizeErrorMessage on Object {
 extension FailureLocalization on Failure {
   /// Преобразует Failure в локализованное сообщение для пользователя
   String toLocalizedMessage(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     if (this is NetworkFailure) {
-      // TODO: Добавить ключ локализации для ошибки сети
-      return 'Ошибка сети. Проверьте подключение к интернету';
+      return l10n.networkError;
     }
     
     if (this is ServerFailure) {
-      // TODO: Добавить ключ локализации для ошибки сервера
-      return message;
+      // Для ServerFailure показываем сообщение от сервера, если оно есть
+      return message.isNotEmpty ? message : l10n.serverError;
     }
     
     if (this is ValidationFailure) {
@@ -43,12 +44,11 @@ extension FailureLocalization on Failure {
     }
     
     if (this is CacheFailure) {
-      // TODO: Добавить ключ локализации для ошибки кэша
-      return 'Ошибка сохранения данных';
+      return l10n.cacheError;
     }
     
     // UnknownFailure
-    return AppLocalizations.of(context)!.error;
+    return l10n.error;
   }
 }
 

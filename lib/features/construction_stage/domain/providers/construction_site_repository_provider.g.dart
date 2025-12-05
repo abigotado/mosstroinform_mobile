@@ -12,6 +12,7 @@ part of 'construction_site_repository_provider.dart';
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 @ProviderFor(constructionSiteRepository)
 const constructionSiteRepositoryProvider =
@@ -21,6 +22,7 @@ const constructionSiteRepositoryProvider =
 /// Возвращает интерфейс, а не имплементацию
 /// Использует моковый репозиторий если включены моки, иначе реальный
 /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+/// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
 
 final class ConstructionSiteRepositoryProvider
     extends
@@ -34,13 +36,14 @@ final class ConstructionSiteRepositoryProvider
   /// Возвращает интерфейс, а не имплементацию
   /// Использует моковый репозиторий если включены моки, иначе реальный
   /// Находится в domain слое, так как предоставляет доступ к интерфейсу репозитория
+  /// keepAlive: true - репозиторий не должен быть disposed при перестроении виджетов
   const ConstructionSiteRepositoryProvider._()
     : super(
         from: null,
         argument: null,
         retry: null,
         name: r'constructionSiteRepositoryProvider',
-        isAutoDispose: true,
+        isAutoDispose: false,
         dependencies: null,
         $allTransitiveDependencies: null,
       );
@@ -69,4 +72,4 @@ final class ConstructionSiteRepositoryProvider
 }
 
 String _$constructionSiteRepositoryHash() =>
-    r'1b28b211480eb3a081393020038b41dab349224d';
+    r'65b16ba3c132327ba563d8c80effc12c8a8a67f2';

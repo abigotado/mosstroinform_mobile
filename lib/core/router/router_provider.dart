@@ -13,10 +13,26 @@ import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/cons
 import 'package:mosstroinform_mobile/features/document_approval/ui/screens/document_detail_screen.dart';
 import 'package:mosstroinform_mobile/features/document_approval/ui/screens/document_list_screen.dart';
 import 'package:mosstroinform_mobile/features/main/ui/screens/main_screen.dart';
+import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
+import 'package:mosstroinform_mobile/features/profile/ui/screens/profile_screen.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_detail_screen.dart';
+import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_list_screen.dart';
+import 'package:mosstroinform_mobile/features/requested_projects/ui/screens/requested_projects_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router_provider.g.dart';
+
+/// ChangeNotifier для уведомления GoRouter об изменениях авторизации
+class AuthChangeNotifier extends ChangeNotifier {
+  AuthChangeNotifier(this.ref) {
+    // Слушаем изменения authProvider и уведомляем роутер
+    ref.listen<AsyncValue<AuthState>>(authProvider, (previous, next) {
+      notifyListeners();
+    });
+  }
+
+  final Ref ref;
+}
 
 /// Провайдер роутера с защитой роутов
 /// Использует ref.watch для отслеживания изменений авторизации
@@ -24,6 +40,9 @@ part 'router_provider.g.dart';
 GoRouter router(Ref ref) {
   // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
   final authState = ref.watch(authProvider);
+
+  // Создаем ChangeNotifier для refreshListenable
+  final authChangeNotifier = AuthChangeNotifier(ref);
 
   AppLogger.log(
     'RouterProvider.build: создание роутера, '
@@ -49,7 +68,9 @@ GoRouter router(Ref ref) {
 
   return GoRouter(
     debugLogDiagnostics: true,
+    observers: [AppLogger.routeObserver],
     initialLocation: initialLocation,
+    refreshListenable: authChangeNotifier,
     redirect: (context, state) {
       // Если авторизация еще загружается, не делаем редирект
       if (authState.isLoading) {
@@ -62,11 +83,16 @@ GoRouter router(Ref ref) {
       final isLoginRoute =
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
+      final isMainRoute =
+          state.matchedLocation == '/' ||
+          state.matchedLocation == '/requested' ||
+          state.matchedLocation == '/objects' ||
+          state.matchedLocation == '/profile';
 
       AppLogger.log(
         'Router.redirect: matchedLocation=${state.matchedLocation}, '
         'isAuthenticated=$isAuthenticated, isLoginRoute=$isLoginRoute, '
-        'authState.hasValue=${authState.hasValue}',
+        'isMainRoute=$isMainRoute, authState.hasValue=${authState.hasValue}',
       );
 
       // Если пользователь не авторизован и пытается попасть на защищённый роут
@@ -89,12 +115,25 @@ GoRouter router(Ref ref) {
       return null; // Разрешаем навигацию
     },
     routes: [
+      // Маршруты авторизации без bottom navigation
       ShellRoute(
-        builder: (context, state, child) => Stack(
-          children: [
-            child,
-            if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-          ],
+        pageBuilder: (context, state, child) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 600),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(
+                curve: Curves.easeInOutCirc,
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: Stack(
+            children: [
+              child,
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          ),
         ),
         routes: [
           GoRoute(
@@ -105,74 +144,120 @@ GoRouter router(Ref ref) {
             path: '/register',
             builder: (context, state) => const RegisterScreen(),
           ),
-          GoRoute(path: '/', builder: (context, state) => const MainScreen()),
-          GoRoute(
-            path: '/projects/:id',
-            builder: (context, state) {
-              final projectId = state.pathParameters['id']!;
-              return ProjectDetailScreen(projectId: projectId);
-            },
+        ],
+      ),
+      // Главный экран с bottom navigation используя StatefulShellRoute
+      // Все остальные маршруты вложены внутрь для сохранения bottom navigation
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return Stack(
+            children: [
+              MainScreen(navigationShell: navigationShell),
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          );
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const ProjectListScreen(),
+              ),
+              // Вложенные маршруты для первого таба
+              GoRoute(
+                path: '/projects/:id',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['id']!;
+                  return ProjectDetailScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/documents',
+                builder: (context, state) {
+                  final projectId = state.uri.queryParameters['projectId'];
+                  return DocumentListScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/documents/:id',
+                builder: (context, state) {
+                  final documentId = state.pathParameters['id']!;
+                  return DocumentDetailScreen(documentId: documentId);
+                },
+              ),
+              GoRoute(
+                path: '/construction/:objectId',
+                builder: (context, state) {
+                  final objectId = state.pathParameters['objectId']!;
+                  return ConstructionSiteScreen(objectId: objectId);
+                },
+              ),
+              GoRoute(
+                path: '/construction/:projectId/chat',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  return ObjectChatScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/completion/:projectId',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  return CompletionStatusScreen(projectId: projectId);
+                },
+              ),
+              GoRoute(
+                path: '/completion/:projectId/documents/:documentId',
+                builder: (context, state) {
+                  final projectId = state.pathParameters['projectId']!;
+                  final documentId = state.pathParameters['documentId']!;
+                  return FinalDocumentDetailScreen(
+                    projectId: projectId,
+                    documentId: documentId,
+                  );
+                },
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/documents',
-            builder: (context, state) {
-              final projectId = state.uri.queryParameters['projectId'];
-              return DocumentListScreen(projectId: projectId);
-            },
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/requested',
+                builder: (context, state) => const RequestedProjectsScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/documents/:id',
-            builder: (context, state) {
-              final documentId = state.pathParameters['id']!;
-              return DocumentDetailScreen(documentId: documentId);
-            },
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/objects',
+                builder: (context, state) => const MyObjectsScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            path: '/construction/:objectId',
-            builder: (context, state) {
-              final objectId = state.pathParameters['objectId']!;
-              return ConstructionSiteScreen(objectId: objectId);
-            },
-          ),
-          GoRoute(
-            path: '/construction/:projectId/chat',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              return ObjectChatScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/completion/:projectId',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              return CompletionStatusScreen(projectId: projectId);
-            },
-          ),
-          GoRoute(
-            path: '/completion/:projectId/documents/:documentId',
-            builder: (context, state) {
-              final projectId = state.pathParameters['projectId']!;
-              final documentId = state.pathParameters['documentId']!;
-              return FinalDocumentDetailScreen(
-                projectId: projectId,
-                documentId: documentId,
-              );
-            },
-          ),
-          GoRoute(
-            path: '/chats',
-            builder: (context, state) => const ChatListScreen(),
-          ),
-          GoRoute(
-            path: '/chats/:chatId',
-            builder: (context, state) {
-              final chatId = state.pathParameters['chatId']!;
-              return ChatDetailScreen(chatId: chatId);
-            },
-          ),
-          GoRoute(
-            path: '/dev-console',
-            builder: (context, state) => const DevConsolePage(),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+              GoRoute(
+                path: '/chats',
+                builder: (context, state) => const ChatListScreen(),
+              ),
+              GoRoute(
+                path: '/chats/:chatId',
+                builder: (context, state) {
+                  final chatId = state.pathParameters['chatId']!;
+                  return ChatDetailScreen(chatId: chatId);
+                },
+              ),
+              GoRoute(
+                path: '/dev-console',
+                builder: (context, state) => const DevConsolePage(),
+              ),
+            ],
           ),
         ],
       ),

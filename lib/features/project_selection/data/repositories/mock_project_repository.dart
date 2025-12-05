@@ -15,7 +15,7 @@ import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart
 /// Данные сохраняются между перезапусками приложения
 class MockProjectRepository implements ProjectRepository {
   @override
-  Future<List<Project>> getProjects() async {
+  Future<List<Project>> getProjects({int? page, int? limit}) async {
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));
 
@@ -24,12 +24,32 @@ class MockProjectRepository implements ProjectRepository {
 
     // Получаем все проекты из базы
     final projectsBox = HiveService.projectsBox;
-    final projects = projectsBox.values.map((adapter) => adapter.toProject()).toList();
+    final allProjects = projectsBox.values.map((adapter) => adapter.toProject()).toList();
 
+    // Если указаны параметры пагинации, применяем их
+    if (page != null && limit != null) {
+      final startIndex = page * limit;
+      final endIndex = (startIndex + limit).clamp(0, allProjects.length);
+      
+      if (startIndex >= allProjects.length) {
+        AppLogger.info(
+          'MockProjectRepository.getProjects: страница $page пуста (всего проектов: ${allProjects.length})',
+        );
+        return [];
+      }
+      
+      final paginatedProjects = allProjects.sublist(startIndex, endIndex);
+      AppLogger.info(
+        'MockProjectRepository.getProjects: страница $page, получено ${paginatedProjects.length} из ${allProjects.length} проектов',
+      );
+      return paginatedProjects;
+    }
+
+    // Если пагинация не указана, возвращаем все проекты
     AppLogger.info(
-      'MockProjectRepository.getProjects: получено ${projects.length} проектов',
+      'MockProjectRepository.getProjects: получено ${allProjects.length} проектов (без пагинации)',
     );
-    return projects;
+    return allProjects;
   }
 
   @override

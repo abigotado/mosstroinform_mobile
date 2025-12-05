@@ -30,5 +30,9 @@ abstract class AuthRepository {
 
   /// Получить токен доступа
   Future<String?> getAccessToken();
+
+  /// Обновить токен доступа используя refresh token
+  /// Выбрасывает Failure при ошибке
+  Future<String> refreshToken();
 }
 

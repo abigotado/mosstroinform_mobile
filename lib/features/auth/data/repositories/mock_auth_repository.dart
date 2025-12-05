@@ -165,5 +165,31 @@ class MockAuthRepository implements AuthRepository {
   Future<String?> getAccessToken() async {
     return await secureStorage.read(key: StorageKeys.accessToken);
   }
+
+  @override
+  Future<String> refreshToken() async {
+    // Имитация задержки сети
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    final refreshTokenValue =
+        await secureStorage.read(key: StorageKeys.refreshToken);
+    if (refreshTokenValue == null) {
+      throw ValidationFailure('Refresh token не найден');
+    }
+
+    // Генерируем новый mock токен
+    final newToken =
+        'mock_token_refreshed_${DateTime.now().millisecondsSinceEpoch}';
+    final newRefreshToken = 'refresh_$newToken';
+
+    // Сохраняем новые токены
+    await secureStorage.write(key: StorageKeys.accessToken, value: newToken);
+    await secureStorage.write(
+      key: StorageKeys.refreshToken,
+      value: newRefreshToken,
+    );
+
+    return newToken;
+  }
 }
 

@@ -22,8 +22,9 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
   @override
   void initState() {
     super.initState();
+    // Сообщения загружаются автоматически в build методе MessagesNotifier
+    // Здесь только отмечаем как прочитанные
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(messagesProvider(widget.chatId).notifier).loadMessages();
       ref.read(messagesProvider(widget.chatId).notifier).markAsRead();
     });
   }
@@ -67,8 +68,8 @@ class _ChatDetailScreenState extends ConsumerState<ChatDetailScreen> {
           Expanded(
             child: messagesAsync.when(
               data: (state) {
-                // Если список пустой и нет ошибки - это начальное состояние, показываем шиммер
-                if (state.messages.isEmpty && state.error == null) {
+                // Если загрузка еще идет - показываем загрузчик
+                if (state.isLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
 

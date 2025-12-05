@@ -1,4 +1,6 @@
 import 'package:mosstroinform_mobile/core/config/app_config_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/data/providers/construction_object_data_source_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/data/repositories/construction_object_repository_impl.dart';
 import 'package:mosstroinform_mobile/features/project_selection/data/repositories/mock_construction_object_repository.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/construction_object_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -16,7 +18,7 @@ ConstructionObjectRepository constructionObjectRepository(Ref ref) {
   if (config.useMocks) {
     return MockConstructionObjectRepository();
   }
-  // TODO: Реализовать реальный репозиторий когда будет готов бэкенд
-  return MockConstructionObjectRepository();
+  final remoteDataSource = ref.watch(constructionObjectRemoteDataSourceProvider);
+  return ConstructionObjectRepositoryImpl(remoteDataSource: remoteDataSource);
 }
 

@@ -104,6 +104,12 @@ class ConstructionObjectAdapter extends HiveObject {
   @HiveField(12)
   final String? chatId;
 
+  @HiveField(13)
+  final bool allDocumentsSigned;
+
+  @HiveField(14)
+  final bool isCompleted;
+
   ConstructionObjectAdapter({
     required this.id,
     required this.projectId,
@@ -118,6 +124,8 @@ class ConstructionObjectAdapter extends HiveObject {
     this.imageUrl,
     required this.stages,
     this.chatId,
+    this.allDocumentsSigned = false,
+    this.isCompleted = false,
   });
 
   /// Конвертация из ConstructionObject в ConstructionObjectAdapter
@@ -138,6 +146,8 @@ class ConstructionObjectAdapter extends HiveObject {
           .map((stage) => ConstructionStageAdapter.fromStage(stage))
           .toList(),
       chatId: object.chatId,
+      allDocumentsSigned: object.allDocumentsSigned,
+      isCompleted: object.isCompleted,
     );
   }
 
@@ -157,6 +167,8 @@ class ConstructionObjectAdapter extends HiveObject {
       imageUrl: imageUrl,
       stages: stages.map((stage) => stage.toStage()).toList(),
       chatId: chatId,
+      allDocumentsSigned: allDocumentsSigned,
+      isCompleted: isCompleted,
     );
   }
 }

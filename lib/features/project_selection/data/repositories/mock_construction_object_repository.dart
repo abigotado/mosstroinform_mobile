@@ -96,6 +96,8 @@ class MockConstructionObjectRepository implements ConstructionObjectRepository {
       imageUrl: objectAdapter.imageUrl,
       stages: completedStages,
       chatId: objectAdapter.chatId,
+      allDocumentsSigned: objectAdapter.allDocumentsSigned, // Сохраняем статус документов
+      isCompleted: true, // Устанавливаем true при завершении строительства
     );
 
     // Сохраняем обновленный объект
@@ -103,6 +105,49 @@ class MockConstructionObjectRepository implements ConstructionObjectRepository {
 
     AppLogger.info(
       'MockConstructionObjectRepository.completeConstruction: строительство объекта $objectId завершено',
+    );
+  }
+
+  @override
+  Future<void> updateDocumentsSignedStatus(
+    String projectId,
+    bool allDocumentsSigned,
+  ) async {
+    // Симуляция задержки сети
+    await Future.delayed(const Duration(milliseconds: 300));
+
+    // Находим объект по projectId
+    final objectsBox = HiveService.constructionObjectsBox;
+    final objectAdapter = objectsBox.values.firstWhere(
+      (adapter) => adapter.projectId == projectId,
+      orElse: () => throw UnknownFailure(
+        'Объект строительства для проекта $projectId не найден',
+      ),
+    );
+
+    // Создаем обновленный адаптер с новым статусом документов
+    final updatedAdapter = ConstructionObjectAdapter(
+      id: objectAdapter.id,
+      projectId: objectAdapter.projectId,
+      name: objectAdapter.name,
+      address: objectAdapter.address,
+      description: objectAdapter.description,
+      area: objectAdapter.area,
+      floors: objectAdapter.floors,
+      bedrooms: objectAdapter.bedrooms,
+      bathrooms: objectAdapter.bathrooms,
+      price: objectAdapter.price,
+      imageUrl: objectAdapter.imageUrl,
+      stages: objectAdapter.stages,
+      chatId: objectAdapter.chatId,
+      allDocumentsSigned: allDocumentsSigned,
+    );
+
+    // Сохраняем обновленный объект
+    await objectsBox.put(objectAdapter.id, updatedAdapter);
+
+    AppLogger.info(
+      'MockConstructionObjectRepository.updateDocumentsSignedStatus: статус документов для проекта $projectId обновлен: $allDocumentsSigned',
     );
   }
 }

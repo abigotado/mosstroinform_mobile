@@ -4,14 +4,15 @@ import 'package:mosstroinform_mobile/features/construction_stage/data/models/con
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/repositories/construction_site_repository.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
-import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/construction_object_repository.dart';
 
 /// Моковая реализация репозитория строительной площадки
 class MockConstructionSiteRepository implements ConstructionSiteRepository {
-  final Ref _ref;
+  final ConstructionObjectRepository _constructionObjectRepository;
 
-  MockConstructionSiteRepository(this._ref);
+  MockConstructionSiteRepository({
+    required ConstructionObjectRepository constructionObjectRepository,
+  }) : _constructionObjectRepository = constructionObjectRepository;
 
   @override
   Future<ConstructionSite> getConstructionSiteByObjectId(
@@ -24,8 +25,7 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
     await Future.delayed(const Duration(milliseconds: 500));
 
     // Получаем объект строительства по objectId
-    final objectRepository = _ref.read(constructionObjectRepositoryProvider);
-    final object = await objectRepository.getObjectById(objectId);
+    final object = await _constructionObjectRepository.getObjectById(objectId);
 
     // Вычисляем прогресс на основе этапов (все этапы должны быть completed для 100%)
     final completedStages = object.stages.where(
@@ -102,8 +102,7 @@ class MockConstructionSiteRepository implements ConstructionSiteRepository {
     debugPrint('projectId: $projectId');
     
     // Пытаемся найти объект по projectId
-    final objectRepository = _ref.read(constructionObjectRepositoryProvider);
-    final objects = await objectRepository.getObjects();
+    final objects = await _constructionObjectRepository.getObjects();
     final object = objects.firstWhere(
       (obj) => obj.projectId == projectId,
       orElse: () => throw UnknownFailure(

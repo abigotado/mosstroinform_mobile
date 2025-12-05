@@ -14,7 +14,10 @@ abstract class ProjectRemoteDataSource implements IProjectRemoteDataSource {
 
   @override
   @GET('/projects')
-  Future<List<ProjectModel>> getProjects();
+  Future<List<ProjectModel>> getProjects({
+    @Query('page') int? page,
+    @Query('limit') int? limit,
+  });
 
   @override
   @GET('/projects/{id}')
@@ -30,4 +33,8 @@ abstract class ProjectRemoteDataSource implements IProjectRemoteDataSource {
     @Path('id') String projectId,
     @Body() Map<String, dynamic> body,
   );
+
+  @override
+  @GET('/projects/requested')
+  Future<List<ProjectModel>> getRequestedProjects();
 }

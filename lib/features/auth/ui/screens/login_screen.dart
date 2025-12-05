@@ -20,10 +20,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
+    // Очищаем креды только при закрытии экрана (после успешного входа)
+    _emailController.clear();
+    _passwordController.clear();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -34,31 +36,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       return;
     }
 
-    setState(() => _isLoading = true);
-    AppLogger.info('LoginScreen._handleLogin: начало, email=${_emailController.text.trim()}');
+    // Сохраняем значения перед блокировкой полей
+    final emailValue = _emailController.text;
+    final passwordValue = _passwordController.text;
+
+    AppLogger.info('LoginScreen._handleLogin: начало, email=$emailValue');
 
     try {
-      AppLogger.info('LoginScreen._handleLogin: вызов authProvider.notifier.login');
-      await ref.read(authProvider.notifier).login(
-            _emailController.text.trim(),
-            _passwordController.text,
-          );
+      AppLogger.info(
+        'LoginScreen._handleLogin: вызов authProvider.notifier.login',
+      );
+      await ref
+          .read(authProvider.notifier)
+          .login(emailValue.trim(), passwordValue);
       AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
-      if (mounted) {
-        // Проверяем состояние авторизации перед редиректом
-        final authState = ref.read(authProvider);
-        AppLogger.info(
-          'LoginScreen._handleLogin: перед редиректом, '
-          'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
-        );
-        
-        // После успешного входа перенаправляем на главную страницу
-        // Роутер автоматически перенаправит благодаря redirect логике
-        AppLogger.info('LoginScreen._handleLogin: вызов context.go("/")');
-        context.go('/');
-        AppLogger.info('LoginScreen._handleLogin: context.go("/") завершен');
-      }
+      // Роутер автоматически перенаправит благодаря refreshListenable и redirect логике
+      // Не нужно вызывать context.go('/') вручную
     } on Failure catch (e) {
       if (mounted) {
         final theme = Theme.of(context);
@@ -66,6 +60,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           SnackBar(
             content: Text(e.message),
             backgroundColor: theme.colorScheme.error,
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -76,12 +71,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           SnackBar(
             content: Text(e.toLocalizedMessage(context)),
             backgroundColor: theme.colorScheme.error,
+            duration: const Duration(seconds: 3),
           ),
         );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
       }
     }
   }
@@ -90,124 +82,139 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final authState = ref.watch(authProvider);
+    final isLoading = authState.isLoading;
 
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  // Логотип или заголовок
-                  Icon(
-                    Icons.home,
-                    size: 80,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(height: 32),
-                  Text(
-                    l10n.loginTitle,
-                    style: theme.textTheme.headlineMedium,
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 48),
-
-                  // Email поле
-                  TextFormField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    decoration: InputDecoration(
-                      labelText: l10n.emailLabel,
-                      prefixIcon: const Icon(Icons.email),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
+    return Stack(
+      children: [
+        Scaffold(
+          body: SafeArea(
+            child: Center(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      // Логотип или заголовок
+                      Icon(
+                        Icons.home,
+                        size: 80,
+                        color: theme.colorScheme.primary,
                       ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return l10n.enterEmail;
-                      }
-                      if (!value.contains('@')) {
-                        return l10n.enterValidEmail;
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
+                      const SizedBox(height: 32),
+                      Text(
+                        l10n.loginTitle,
+                        style: theme.textTheme.headlineMedium,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 48),
 
-                  // Пароль поле
-                  TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obscurePassword,
-                    textInputAction: TextInputAction.done,
-                    onFieldSubmitted: (_) => _handleLogin(),
-                    decoration: InputDecoration(
-                      labelText: l10n.passwordLabel,
-                      prefixIcon: const Icon(Icons.lock),
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscurePassword
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                      // Email поле
+                      TextFormField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: l10n.emailLabel,
+                          prefixIcon: const Icon(Icons.email),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        onPressed: () {
-                          setState(() => _obscurePassword = !_obscurePassword);
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return l10n.enterEmail;
+                          }
+                          if (!value.contains('@')) {
+                            return l10n.enterValidEmail;
+                          }
+                          return null;
                         },
                       ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return l10n.enterPassword;
-                      }
-                      if (value.length < 6) {
-                        return l10n.passwordMinLength;
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 24),
+                      const SizedBox(height: 16),
 
-                  // Кнопка входа
-                  ElevatedButton(
-                    onPressed: _isLoading ? null : _handleLogin,
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      // Пароль поле
+                      TextFormField(
+                        controller: _passwordController,
+                        obscureText: _obscurePassword,
+                        textInputAction: TextInputAction.done,
+                        onFieldSubmitted: (_) {
+                          if (!isLoading) {
+                            _handleLogin();
+                          }
+                        },
+                        decoration: InputDecoration(
+                          labelText: l10n.passwordLabel,
+                          prefixIcon: const Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                            onPressed: isLoading
+                                ? null
+                                : () {
+                                    setState(
+                                      () =>
+                                          _obscurePassword = !_obscurePassword,
+                                    );
+                                  },
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return l10n.enterPassword;
+                          }
+                          if (value.length < 6) {
+                            return l10n.passwordMinLength;
+                          }
+                          return null;
+                        },
                       ),
-                    ),
-                    child: _isLoading
-                        ? const SizedBox(
-                            height: 20,
-                            width: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Text(l10n.loginButton),
-                  ),
-                  const SizedBox(height: 16),
+                      const SizedBox(height: 24),
 
-                  // Ссылка на регистрацию
-                  TextButton(
-                    onPressed: () {
-                      context.push('/register');
-                    },
-                    child: Text(l10n.noAccount),
+                      // Кнопка входа
+                      ElevatedButton(
+                        onPressed: isLoading ? null : _handleLogin,
+                        style: ElevatedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                        ),
+                        child: Text(l10n.loginButton),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Ссылка на регистрацию
+                      TextButton(
+                        onPressed: isLoading
+                            ? null
+                            : () {
+                                context.push('/register');
+                              },
+                        child: Text(l10n.noAccount),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ),
         ),
-      ),
+        if (isLoading)
+          Container(
+            color: Colors.black.withValues(alpha: 0.5),
+            child: const Center(child: CircularProgressIndicator()),
+          ),
+      ],
     );
   }
 }
-

@@ -77,13 +77,14 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
         'PaginatedProjectsNotifier.loadFirstPage: запрос с параметрами: $paginationParams',
       );
 
-      // TODO: Обновить репозиторий для поддержки пагинации
-      // Пока используем старый метод, но возвращаем только первую страницу
-      final allProjects = await repository.getProjects();
+      final page = paginationParams['page'] as int;
+      final limit = paginationParams['limit'] as int;
       
-      final itemsPerPage = paginationParams['limit'] as int;
-      final firstPageItems = allProjects.take(itemsPerPage).toList();
-      final hasMore = allProjects.length > itemsPerPage;
+      // Запрашиваем первую страницу с бэкенда
+      final firstPageItems = await repository.getProjects(page: page, limit: limit);
+      
+      // Проверяем, есть ли еще данные (если получили меньше limit, значит это последняя страница)
+      final hasMore = firstPageItems.length == limit;
 
       AppLogger.info(
         'PaginatedProjectsNotifier.loadFirstPage: получено ${firstPageItems.length} проектов, hasMore=$hasMore',
@@ -93,9 +94,9 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
         PaginatedProjectsState(
           items: firstPageItems,
           currentPage: 0,
-          itemsPerPage: itemsPerPage,
+          itemsPerPage: limit,
           hasMore: hasMore,
-          totalCount: allProjects.length,
+          totalCount: null, // Бэкенд может не возвращать totalCount
         ),
       );
     } on Failure catch (e) {
@@ -151,29 +152,17 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
         'PaginatedProjectsNotifier.loadNextPage: запрос с параметрами: $paginationParams',
       );
 
-      // TODO: Обновить репозиторий для поддержки пагинации
-      // Пока используем старый метод и берем следующую страницу
-      final allProjects = await repository.getProjects();
-      
       final nextPage = currentState.currentPage + 1;
-      final startIndex = nextPage * currentState.itemsPerPage;
-      final endIndex = (startIndex + currentState.itemsPerPage).clamp(
-        0,
-        allProjects.length,
+      final limit = currentState.itemsPerPage;
+      
+      // Запрашиваем следующую страницу с бэкенда
+      final nextPageItems = await repository.getProjects(
+        page: nextPage,
+        limit: limit,
       );
-
-      if (startIndex >= allProjects.length) {
-        AppLogger.info(
-          'PaginatedProjectsNotifier.loadNextPage: больше нет данных',
-        );
-        state = AsyncValue.data(
-          currentState.copyWith(hasMore: false, isLoadingMore: false),
-        );
-        return;
-      }
-
-      final nextPageItems = allProjects.sublist(startIndex, endIndex);
-      final hasMore = endIndex < allProjects.length;
+      
+      // Проверяем, есть ли еще данные (если получили меньше limit, значит это последняя страница)
+      final hasMore = nextPageItems.length == limit;
 
       AppLogger.info(
         'PaginatedProjectsNotifier.loadNextPage: получено ${nextPageItems.length} проектов, hasMore=$hasMore',

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'project_remote_data_source.dart';
+part of 'construction_object_remote_data_source.dart';
 
 // dart format off
 
@@ -10,8 +10,13 @@ part of 'project_remote_data_source.dart';
 
 // ignore_for_file: unnecessary_brace_in_string_interps,no_leading_underscores_for_local_identifiers,unused_element,unnecessary_string_interpolations,unused_element_parameter,avoid_unused_constructor_parameters,unreachable_from_main
 
-class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
-  _ProjectRemoteDataSource(this._dio, {this.baseUrl, this.errorLogger});
+class _ConstructionObjectRemoteDataSource
+    implements ConstructionObjectRemoteDataSource {
+  _ConstructionObjectRemoteDataSource(
+    this._dio, {
+    this.baseUrl,
+    this.errorLogger,
+  });
 
   final Dio _dio;
 
@@ -20,27 +25,29 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<List<ProjectModel>> getProjects({int? page, int? limit}) async {
+  Future<List<ConstructionObjectModel>> getObjects() async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'page': page, r'limit': limit};
-    queryParameters.removeWhere((k, v) => v == null);
+    final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<ProjectModel>>(
+    final _options = _setStreamType<List<ConstructionObjectModel>>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/projects',
+            '/construction-objects',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ProjectModel> _value;
+    late List<ConstructionObjectModel> _value;
     try {
       _value = _result.data!
-          .map((dynamic i) => ProjectModel.fromJson(i as Map<String, dynamic>))
+          .map(
+            (dynamic i) =>
+                ConstructionObjectModel.fromJson(i as Map<String, dynamic>),
+          )
           .toList();
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, _result);
@@ -50,25 +57,25 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectModel> getProjectById(String id) async {
+  Future<ConstructionObjectModel> getObjectById(String objectId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ProjectModel>(
+    final _options = _setStreamType<ConstructionObjectModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/projects/${id}',
+            '/construction-objects/${objectId}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ProjectModel _value;
+    late ConstructionObjectModel _value;
     try {
-      _value = ProjectModel.fromJson(_result.data!);
+      _value = ConstructionObjectModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, _result);
       rethrow;
@@ -77,7 +84,7 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
   }
 
   @override
-  Future<void> requestConstruction(String projectId) async {
+  Future<void> completeConstruction(String objectId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -86,7 +93,7 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/projects/${projectId}/request',
+            '/construction-objects/${objectId}/complete',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -96,7 +103,7 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
   }
 
   @override
-  Future<ProjectModel> startConstruction(
+  Future<void> updateDocumentsSignedStatus(
     String projectId,
     Map<String, dynamic> body,
   ) async {
@@ -105,54 +112,17 @@ class _ProjectRemoteDataSource implements ProjectRemoteDataSource {
     final _headers = <String, dynamic>{};
     final _data = <String, dynamic>{};
     _data.addAll(body);
-    final _options = _setStreamType<ProjectModel>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
+    final _options = _setStreamType<void>(
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/projects/${projectId}/start',
+            '/construction-objects/by-project/${projectId}/documents-status',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
-    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ProjectModel _value;
-    try {
-      _value = ProjectModel.fromJson(_result.data!);
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
-      rethrow;
-    }
-    return _value;
-  }
-
-  @override
-  Future<List<ProjectModel>> getRequestedProjects() async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<List<ProjectModel>>(
-      Options(method: 'GET', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            '/projects/requested',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch<List<dynamic>>(_options);
-    late List<ProjectModel> _value;
-    try {
-      _value = _result.data!
-          .map((dynamic i) => ProjectModel.fromJson(i as Map<String, dynamic>))
-          .toList();
-    } on Object catch (e, s) {
-      errorLogger?.logError(e, s, _options, _result);
-      rethrow;
-    }
-    return _value;
+    await _dio.fetch<void>(_options);
   }
 
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {

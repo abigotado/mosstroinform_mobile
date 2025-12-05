@@ -106,6 +106,10 @@ https://api.mosstroinform.ru/v1
 ### GET /projects
 Получить список всех доступных проектов.
 
+**Query Parameters:**
+- `page` (int, optional) - номер страницы (начиная с 0)
+- `limit` (int, optional) - количество элементов на странице
+
 **Response:**
 ```json
 [
@@ -345,6 +349,87 @@ https://api.mosstroinform.ru/v1
 }
 ```
 
+## Объекты строительства (CRUD)
+
+### GET /construction-objects
+Получить список всех объектов строительства текущего пользователя.
+
+**Response:**
+```json
+[
+  {
+    "id": "string",
+    "projectId": "string",
+    "name": "string",
+    "address": "string",
+    "description": "string",
+    "area": 0.0,
+    "floors": 0,
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "price": 0,
+    "imageUrl": "string | null",
+    "stages": [
+      {
+        "id": "string",
+        "name": "string",
+        "status": "pending | in_progress | completed"
+      }
+    ],
+    "chatId": "string | null",
+    "allDocumentsSigned": false,
+    "isCompleted": false
+  }
+]
+```
+
+### GET /construction-objects/{objectId}
+Получить информацию о конкретном объекте строительства.
+
+**Path Parameters:**
+- `objectId` (string) - ID объекта строительства
+
+**Response:** (Аналогично элементу из списка `GET /construction-objects`)
+
+### POST /construction-objects/{objectId}/complete
+Завершить строительство объекта (после подписания всех финальных документов и достижения 100% прогресса).
+
+**Path Parameters:**
+- `objectId` (string) - ID объекта строительства
+
+**Требования:**
+- Все финальные документы должны быть подписаны (`allDocumentsSigned = true`)
+- Прогресс строительства должен быть 100% (`progress = 1.0`)
+
+**Response:**
+```
+204 No Content
+```
+
+**Примечание:** После завершения строительства:
+- `isCompleted` устанавливается в `true`
+- Документы становятся доступными только для просмотра
+- Чат и камеры скрываются
+- Объект отображается как завершенный
+
+### PATCH /construction-objects/by-project/{projectId}/documents-status
+Обновить статус подписания документов для объекта строительства.
+
+**Path Parameters:**
+- `projectId` (string) - ID проекта, связанного с объектом строительства
+
+**Request Body:**
+```json
+{
+  "allDocumentsSigned": true
+}
+```
+
+**Response:**
+```
+204 No Content
+```
+
 ## Чат
 
 ### GET /chats
@@ -458,7 +543,8 @@ https://api.mosstroinform.ru/v1
   "projectId": "string",
   "isCompleted": false,
   "completionDate": "ISO 8601 datetime | null",
-  "progress": 0.95,
+  "progress": 1.0,
+  "allDocumentsSigned": false,
   "documents": [
     {
       "id": "string",
@@ -474,7 +560,10 @@ https://api.mosstroinform.ru/v1
 }
 ```
 
-**Примечание:** `progress` - значение от 0.0 до 1.0 (0% - 100%). `isCompleted` становится `true` когда все документы подписаны.
+**Примечание:** 
+- `progress` - значение от 0.0 до 1.0 (0% - 100%), приходит с бэкенда
+- `isCompleted` - становится `true` только после вызова `POST /construction-objects/{objectId}/complete` (нажатие кнопки "Завершить строительство")
+- `allDocumentsSigned` - отдельный параметр, который показывает, что все финальные документы подписаны. Когда `allDocumentsSigned = true`, появляется кнопка "Завершить строительство"
 
 ### GET /projects/{projectId}/final-documents
 Получить список финальных документов для подписания.

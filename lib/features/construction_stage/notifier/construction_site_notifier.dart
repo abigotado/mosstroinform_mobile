@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/providers/construction_site_repository_provider.dart';
@@ -32,15 +31,33 @@ class ConstructionSiteState {
 class ConstructionSiteNotifier extends _$ConstructionSiteNotifier {
   @override
   Future<ConstructionSiteState> build(String objectId) async {
-    return const ConstructionSiteState();
+    // Сразу загружаем данные при создании провайдера
+    try {
+      final repository = ref.read(constructionSiteRepositoryProvider);
+      final site = await repository.getConstructionSiteByObjectId(objectId);
+      return ConstructionSiteState(site: site, isLoading: false);
+    } on Failure catch (e) {
+      return ConstructionSiteState(error: e, isLoading: false);
+    } catch (e) {
+      return ConstructionSiteState(
+        error: UnknownFailure('Неизвестная ошибка: $e'),
+        isLoading: false,
+      );
+    }
   }
 
   /// Загрузить информацию о строительной площадке
   Future<void> loadConstructionSite() async {
-    debugPrint('=== ConstructionSiteNotifier.loadConstructionSite ===');
     final objectId = this.objectId;
-    debugPrint('objectId: $objectId');
-    state = const AsyncValue.loading();
+    final previousState = state.value;
+    
+    // Если данные уже есть, обновляем в фоне без шиммера
+    if (previousState != null && previousState.site != null) {
+      state = AsyncValue.data(previousState.copyWith(isLoading: true));
+    } else {
+      state = const AsyncValue.loading();
+    }
+
     try {
       final repository = ref.read(constructionSiteRepositoryProvider);
       final site = await repository.getConstructionSiteByObjectId(objectId);
@@ -48,9 +65,18 @@ class ConstructionSiteNotifier extends _$ConstructionSiteNotifier {
         ConstructionSiteState(site: site, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      if (previousState != null && previousState.site != null) {
+        state = AsyncValue.data(previousState.copyWith(error: e, isLoading: false));
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.site != null) {
+        state = AsyncValue.data(previousState.copyWith(error: failure, isLoading: false));
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 }

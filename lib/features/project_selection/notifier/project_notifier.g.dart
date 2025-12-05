@@ -36,7 +36,7 @@ final class ProjectsNotifierProvider
   ProjectsNotifier create() => ProjectsNotifier();
 }
 
-String _$projectsNotifierHash() => r'2782031c87e4eb51c3b127e886ab8da87afb9ec7';
+String _$projectsNotifierHash() => r'41b822685c9b6bafcca2fab6828dce99374301ae';
 
 /// Notifier для управления состоянием списка проектов
 

@@ -8,6 +8,7 @@ import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/notifier/final_document_notifier.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/ui/widgets/final_document_card.dart';
+import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 
 /// Экран статуса завершения строительства
 class CompletionStatusScreen extends ConsumerStatefulWidget {
@@ -22,15 +23,8 @@ class CompletionStatusScreen extends ConsumerStatefulWidget {
 
 class _CompletionStatusScreenState
     extends ConsumerState<CompletionStatusScreen> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref
-          .read(completionStatusProvider(widget.projectId).notifier)
-          .loadCompletionStatus();
-    });
-  }
+  // Убрали вызов loadCompletionStatus из initState,
+  // так как build метод провайдера теперь сам загружает данные
 
   @override
   Widget build(BuildContext context) {
@@ -45,147 +39,64 @@ class _CompletionStatusScreenState
         child: statusAsync.when(
           data: (state) {
             // Если статус не загружен и нет ошибки - это начальное состояние, показываем шиммер
-            if (state.status == null && state.error == null) {
+            if (state.status == null && state.error == null && !state.isLoading) {
               return const CompletionStatusShimmer(key: ValueKey('shimmer'));
             }
 
             // Если статус не найден и есть ошибка - показываем ошибку
-            if (state.status == null) {
+            if (state.status == null && state.error != null) {
               return Center(
                 key: const ValueKey('error'),
                 child: Text(l10n.errorLoadingCompletionStatus),
               );
             }
 
+            // Если статус не загружен, но идет загрузка - показываем предыдущие данные или шиммер
+            if (state.status == null) {
+              return const CompletionStatusShimmer(key: ValueKey('shimmer'));
+            }
+
             final status = state.status!;
+            
+            // Подсчитываем количество подписанных документов
+            final signedCount = status.documents
+                .where((doc) => doc.status == FinalDocumentStatus.signed)
+                .length;
+            final totalCount = status.documents.length;
 
             return SingleChildScrollView(
               key: const ValueKey('content'),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Статус завершения
+                // Статус подписания документов (упрощенный виджет)
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Card(
-                    color: status.isCompleted
-                        ? theme.colorScheme.tertiaryContainer
-                        : theme.colorScheme.surfaceContainerHighest,
                     child: Padding(
                       padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Row(
                         children: [
-                          Row(
-                            children: [
-                              Icon(
-                                status.isCompleted
-                                    ? Icons.check_circle
-                                    : Icons.construction,
-                                color: status.isCompleted
-                                    ? theme.colorScheme.onTertiaryContainer
+                          Icon(
+                            signedCount == totalCount
+                                ? Icons.check_circle
+                                : Icons.description,
+                            color: signedCount == totalCount
+                                ? theme.colorScheme.primary
+                                : theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Text(
+                              l10n.documentsSignedCount(signedCount, totalCount),
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.w500,
+                                color: signedCount == totalCount
+                                    ? theme.colorScheme.primary
                                     : theme.colorScheme.onSurface,
-                                size: 32,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Text(
-                                  status.isCompleted
-                                      ? l10n.constructionCompleted
-                                      : l10n.completionStatus,
-                                  style: theme.textTheme.headlineSmall
-                                      ?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                        color: status.isCompleted
-                                            ? theme
-                                                  .colorScheme
-                                                  .onTertiaryContainer
-                                            : theme.colorScheme.onSurface,
-                                      ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          // Прогресс
-                          Text(
-                            l10n.progress,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: status.isCompleted
-                                  ? theme.colorScheme.onTertiaryContainer
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            value: status.progress,
-                            minHeight: 8,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${(status.progress * 100).toInt()}%',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: status.isCompleted
-                                  ? theme.colorScheme.onTertiaryContainer
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          if (status.completionDate != null) ...[
-                            const SizedBox(height: 16),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.event,
-                                  size: 16,
-                                  color: status.isCompleted
-                                      ? theme.colorScheme.onTertiaryContainer
-                                      : theme.colorScheme.onSurface,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '${l10n.completionDate}: ${_formatDate(status.completionDate!)}',
-                                  style: theme.textTheme.bodyMedium?.copyWith(
-                                    color: status.isCompleted
-                                        ? theme.colorScheme.onTertiaryContainer
-                                        : theme.colorScheme.onSurface,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                          if (status.allDocumentsSigned) ...[
-                            const SizedBox(height: 16),
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: theme.colorScheme.primaryContainer,
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.check_circle,
-                                    color: theme.colorScheme.onPrimaryContainer,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      l10n.allDocumentsSigned,
-                                      style: theme.textTheme.bodyMedium
-                                          ?.copyWith(
-                                            color: theme
-                                                .colorScheme
-                                                .onPrimaryContainer,
-                                            fontWeight: FontWeight.w600,
-                                          ),
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
-                          ],
+                          ),
                         ],
                       ),
                     ),
@@ -242,6 +153,8 @@ class _CompletionStatusScreenState
           );
         },
         loading: () {
+          // При переходе из data в loading показываем шиммер только если нет предыдущих данных
+          // В противном случае данные должны оставаться видимыми с индикатором загрузки
           final theme = Theme.of(context);
           return Shimmer.fromColors(
             baseColor: theme.colorScheme.surfaceContainerHighest,
@@ -303,9 +216,5 @@ class _CompletionStatusScreenState
       ),
       ),
     );
-  }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}.${date.month}.${date.year}';
   }
 }

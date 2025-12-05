@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/core/utils/extensions/error_guard_extension.dart';
 import 'package:mosstroinform_mobile/core/storage/secure_storage_provider.dart';
 import 'package:mosstroinform_mobile/features/auth/data/datasources/auth_remote_data_source.dart';
@@ -103,6 +104,33 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String?> getAccessToken() async {
     return await secureStorage.read(key: StorageKeys.accessToken);
+  }
+
+  @override
+  Future<String> refreshToken() async {
+    return guard(() async {
+      final refreshTokenValue =
+          await secureStorage.read(key: StorageKeys.refreshToken);
+      if (refreshTokenValue == null) {
+        throw ValidationFailure('Refresh token не найден');
+      }
+
+      final response = await remoteDataSource.refreshToken(
+        RefreshTokenRequest(refreshToken: refreshTokenValue),
+      );
+
+      // Сохраняем новые токены
+      await secureStorage.write(
+        key: StorageKeys.accessToken,
+        value: response.accessToken,
+      );
+      await secureStorage.write(
+        key: StorageKeys.refreshToken,
+        value: response.refreshToken,
+      );
+
+      return response.accessToken;
+    }, methodName: 'refreshToken');
   }
 }
 

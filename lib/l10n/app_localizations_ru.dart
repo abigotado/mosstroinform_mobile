@@ -226,6 +226,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get noFinalDocuments => 'Нет финальных документов';
 
   @override
+  String documentsSignedCount(int signed, int total) {
+    return 'Подписано: $signed/$total документов';
+  }
+
+  @override
   String get finalDocument => 'Финальный документ';
 
   @override
@@ -468,4 +473,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get constructionCompletedSuccess => 'Строительство успешно завершено!';
+
+  @override
+  String get networkError => 'Ошибка сети. Проверьте подключение к интернету';
+
+  @override
+  String get serverError => 'Ошибка сервера';
+
+  @override
+  String get cacheError => 'Ошибка сохранения данных';
 }

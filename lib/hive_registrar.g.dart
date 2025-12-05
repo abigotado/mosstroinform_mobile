@@ -5,6 +5,7 @@
 import 'package:hive_ce/hive.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/final_document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart';
 
 extension HiveRegistrar on HiveInterface {
@@ -12,6 +13,7 @@ extension HiveRegistrar on HiveInterface {
     registerAdapter(ConstructionObjectAdapterAdapter());
     registerAdapter(ConstructionStageAdapterAdapter());
     registerAdapter(DocumentAdapterAdapter());
+    registerAdapter(FinalDocumentAdapterAdapter());
     registerAdapter(ProjectAdapterAdapter());
   }
 }
@@ -21,6 +23,7 @@ extension IsolatedHiveRegistrar on IsolatedHiveInterface {
     registerAdapter(ConstructionObjectAdapterAdapter());
     registerAdapter(ConstructionStageAdapterAdapter());
     registerAdapter(DocumentAdapterAdapter());
+    registerAdapter(FinalDocumentAdapterAdapter());
     registerAdapter(ProjectAdapterAdapter());
   }
 }
