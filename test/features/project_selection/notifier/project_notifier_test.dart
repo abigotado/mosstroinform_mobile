@@ -10,6 +10,17 @@ import 'package:mosstroinform_mobile/features/project_selection/notifier/project
 
 class MockProjectRepository extends Mock implements ProjectRepository {}
 
+class _MockAuthNotifier extends AuthNotifier {
+  @override
+  Future<AuthState> build() async {
+    return const AuthState(
+      isAuthenticated: true,
+      user: null,
+      isLoading: false,
+    );
+  }
+}
+
 void main() {
   late MockProjectRepository mockRepository;
   late ProviderContainer container;
@@ -20,14 +31,9 @@ void main() {
       overrides: [
         projectRepositoryProvider.overrideWithValue(mockRepository),
         // Мок для authProvider, который используется в ProjectsNotifier.build
+        // authProvider это AsyncNotifierProvider, поэтому нужно переопределить через overrideWith
         authProvider.overrideWith(
-          (ref) => Future.value(
-            const AuthState(
-              isAuthenticated: true,
-              user: null,
-              isLoading: false,
-            ),
-          ),
+          () => _MockAuthNotifier(),
         ),
       ],
     );
