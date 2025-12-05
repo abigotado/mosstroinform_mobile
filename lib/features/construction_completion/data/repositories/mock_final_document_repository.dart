@@ -58,11 +58,19 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
       (doc) => doc.status == FinalDocumentStatus.signed,
     );
 
+    // Вычисляем прогресс на основе подписанных документов
+    final signedCount = documents.where(
+      (doc) => doc.status == FinalDocumentStatus.signed,
+    ).length;
+    final progress = documents.isEmpty
+        ? 0.0
+        : signedCount / documents.length;
+
     return ConstructionCompletionStatus(
       projectId: projectId,
       isCompleted: allSigned,
       completionDate: allSigned ? DateTime.now() : null,
-      progress: 0.95,
+      progress: progress,
       documents: documents,
       allDocumentsSigned: allSigned,
     );

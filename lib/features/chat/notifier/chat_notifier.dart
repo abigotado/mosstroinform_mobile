@@ -111,15 +111,17 @@ class MessagesNotifier extends _$MessagesNotifier {
 
     try {
       final repository = ref.read(chatRepositoryProvider);
-      final newMessage = await repository.sendMessage(chatId, text.trim());
-      final updatedMessages = [...currentState.messages, newMessage];
-      state = AsyncValue.data(
-        MessagesState(
-          messages: updatedMessages,
-          isLoading: false,
-          isSending: false,
-        ),
-      );
+      await repository.sendMessage(chatId, text.trim());
+      
+      // Перезагружаем сообщения вместо добавления вручную,
+      // чтобы избежать дублирования (репозиторий уже добавил сообщение)
+      await loadMessages();
+      
+      // Обновляем состояние, убирая флаг отправки
+      final updatedState = state.value;
+      if (updatedState != null) {
+        state = AsyncValue.data(updatedState.copyWith(isSending: false));
+      }
     } on Failure catch (e) {
       state = AsyncValue.error(e, StackTrace.current);
     } catch (e, s) {
