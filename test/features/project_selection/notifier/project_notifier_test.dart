@@ -25,11 +25,13 @@ void main() {
   });
 
   group('ProjectsNotifier', () {
-    test('build возвращает начальное состояние с пустым списком', () async {
+    test('build возвращает начальное состояние с пустым списком и isLoading=true', () async {
+      // ProjectsNotifier.build теперь возвращает состояние с isLoading: true
+      // чтобы UI показывал shimmer, а не "нет проектов"
       final state = await container.read(projectsProvider.future);
 
       expect(state.projects, isEmpty);
-      expect(state.isLoading, false);
+      expect(state.isLoading, true);
       expect(state.error, isNull);
     });
 
@@ -178,31 +180,40 @@ void main() {
     });
 
     test('requestConstruction успешно отправляет запрос', () async {
-      final projects = [
-        Project(
-          id: '1',
-          name: 'Проект 1',
-          description: 'Описание 1',
-          area: 100.0,
-          floors: 2,
-          bedrooms: 3,
-          bathrooms: 2,
-          price: 1000000,
-        ),
-      ];
+      final project = Project(
+        id: '1',
+        name: 'Проект 1',
+        description: 'Описание 1',
+        area: 100.0,
+        floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
+        price: 1000000,
+      );
+
+      final projects = [project];
 
       when(
         () => mockRepository.requestConstruction('1'),
       ).thenAnswer((_) async {});
       
+      when(
+        () => mockRepository.getProjectById('1'),
+      ).thenAnswer((_) async => project);
+      
       // getProjects вызывается несколько раз из-за пагинации и обновления списков
-      when(() => mockRepository.getProjects()).thenAnswer((_) async => projects);
+      // PaginatedProjectsNotifier вызывает getProjects с параметрами пагинации
+      when(() => mockRepository.getProjects(page: any(named: 'page'), limit: any(named: 'limit')))
+          .thenAnswer((_) async => projects);
+      when(() => mockRepository.getProjects())
+          .thenAnswer((_) async => projects);
 
       final notifier = container.read(projectProvider.notifier);
       await notifier.requestConstruction('1');
 
       verify(() => mockRepository.requestConstruction('1')).called(1);
-      // getProjects может вызываться несколько раз из-за пагинации
+      verify(() => mockRepository.getProjectById('1')).called(1);
+      // getProjects может вызываться несколько раз из-за пагинации и обновления списков
       verify(() => mockRepository.getProjects()).called(greaterThanOrEqualTo(1));
     });
 
