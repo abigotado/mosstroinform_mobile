@@ -463,7 +463,7 @@ abstract class AppLocalizations {
   /// Количество подписанных документов из общего количества
   ///
   /// In ru, this message translates to:
-  /// **'{signed, plural, =0{Нет подписанных документов} =1{Подписан 1 документ} few{Подписано {signed} документа} many{Подписано {signed} документов} other{Подписано {signed} документов}} из {total, plural, =1{1 документа} few{{total} документов} many{{total} документов} other{{total} документов}}'**
+  /// **'Подписано: {signed}/{total} документов'**
   String documentsSignedCount(int signed, int total);
 
   /// No description provided for @finalDocument.

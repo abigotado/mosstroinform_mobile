@@ -6,6 +6,7 @@ import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/final_document_adapter.dart';
+import 'package:mosstroinform_mobile/core/database/adapters/final_document_adapter.g.dart';
 
 /// Сервис для работы с локальной базой данных Hive
 /// Используется только в моковом режиме для имитации работы бэкенда

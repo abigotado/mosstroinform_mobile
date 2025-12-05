@@ -227,24 +227,7 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String documentsSignedCount(int signed, int total) {
-    String _temp0 = intl.Intl.pluralLogic(
-      signed,
-      locale: localeName,
-      other: 'Подписано $signed документов',
-      many: 'Подписано $signed документов',
-      few: 'Подписано $signed документа',
-      one: 'Подписан 1 документ',
-      zero: 'Нет подписанных документов',
-    );
-    String _temp1 = intl.Intl.pluralLogic(
-      total,
-      locale: localeName,
-      other: '$total документов',
-      many: '$total документов',
-      few: '$total документов',
-      one: '1 документа',
-    );
-    return '$_temp0 из $_temp1';
+    return 'Подписано: $signed/$total документов';
   }
 
   @override

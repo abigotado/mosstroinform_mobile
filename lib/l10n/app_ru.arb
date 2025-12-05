@@ -93,7 +93,7 @@
   "completionStatus": "Статус завершения",
   "finalDocuments": "Финальные документы",
   "noFinalDocuments": "Нет финальных документов",
-  "documentsSignedCount": "{signed, plural, =0{Нет подписанных документов} =1{Подписан 1 документ} few{Подписано {signed} документа} many{Подписано {signed} документов} other{Подписано {signed} документов}} из {total, plural, =1{1 документа} few{{total} документов} many{{total} документов} other{{total} документов}}",
+  "documentsSignedCount": "Подписано: {signed}/{total} документов",
   "@documentsSignedCount": {
     "description": "Количество подписанных документов из общего количества",
     "placeholders": {
