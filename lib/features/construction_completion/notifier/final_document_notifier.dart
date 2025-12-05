@@ -163,18 +163,18 @@ class FinalDocumentNotifier extends _$FinalDocumentNotifier {
       final repository = ref.read(finalDocumentRepositoryProvider);
       await repository.signFinalDocument(params.$1, params.$2);
       await loadFinalDocument(); // Перезагрузить документ после подписания
-      
+
       // Проверяем, все ли документы подписаны
       final completionStatus = await repository.getCompletionStatus(params.$1);
       final allDocumentsSigned = completionStatus.allDocumentsSigned;
-      
+
       // Обновляем статус документов в объекте строительства
       final objectRepository = ref.read(constructionObjectRepositoryProvider);
       await objectRepository.updateDocumentsSignedStatus(
         params.$1,
         allDocumentsSigned,
       );
-      
+
       // Обновить статус завершения строительства
       ref.invalidate(completionStatusProvider(params.$1));
     } on Failure catch (e) {

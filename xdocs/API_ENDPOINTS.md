@@ -400,6 +400,24 @@ https://api.mosstroinform.ru/v1
 204 No Content
 ```
 
+### PATCH /construction-objects/by-project/{projectId}/documents-status
+Обновить статус подписания документов для объекта строительства.
+
+**Path Parameters:**
+- `projectId` (string) - ID проекта, связанного с объектом строительства
+
+**Request Body:**
+```json
+{
+  "allDocumentsSigned": true
+}
+```
+
+**Response:**
+```
+204 No Content
+```
+
 ## Чат
 
 ### GET /chats

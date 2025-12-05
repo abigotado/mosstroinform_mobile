@@ -26,5 +26,20 @@ abstract class ConstructionObjectRemoteDataSource
   @override
   @POST('/construction-objects/{objectId}/complete')
   Future<void> completeConstruction(@Path('objectId') String objectId);
+
+  @override
+  @PATCH('/construction-objects/by-project/{projectId}/documents-status')
+  Future<void> updateDocumentsSignedStatus(
+    @Path('projectId') String projectId,
+    @Body() Map<String, dynamic> body,
+  ) {
+    return _updateDocumentsSignedStatus(projectId, body);
+  }
+
+  @PATCH('/construction-objects/by-project/{projectId}/documents-status')
+  Future<void> _updateDocumentsSignedStatus(
+    @Path('projectId') String projectId,
+    @Body() Map<String, dynamic> body,
+  );
 }
 
