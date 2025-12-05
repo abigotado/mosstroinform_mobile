@@ -266,12 +266,13 @@ class MockProjectRepository implements ProjectRepository {
     final chatId = MockChatRepository.createChatForProject(projectId);
 
     // Создаем начальные этапы строительства
+    // Для моков все этапы создаются со статусом completed (100% прогресс) для тестирования подписания документов
     final initialStages = [
-      const ConstructionStage(id: '1', name: 'Подготовительные работы', status: StageStatus.pending),
-      const ConstructionStage(id: '2', name: 'Фундамент', status: StageStatus.pending),
-      const ConstructionStage(id: '3', name: 'Возведение стен', status: StageStatus.pending),
-      const ConstructionStage(id: '4', name: 'Кровля', status: StageStatus.pending),
-      const ConstructionStage(id: '5', name: 'Отделочные работы', status: StageStatus.pending),
+      const ConstructionStage(id: '1', name: 'Подготовительные работы', status: StageStatus.completed),
+      const ConstructionStage(id: '2', name: 'Фундамент', status: StageStatus.completed),
+      const ConstructionStage(id: '3', name: 'Возведение стен', status: StageStatus.completed),
+      const ConstructionStage(id: '4', name: 'Кровля', status: StageStatus.completed),
+      const ConstructionStage(id: '5', name: 'Отделочные работы', status: StageStatus.completed),
     ];
 
     // Создаем объект строительства с chatId
