@@ -17,6 +17,7 @@ class ConstructionObject {
   final List<ConstructionStage> stages;
   final String? chatId; // ID чата для этого объекта
   final bool allDocumentsSigned; // Все документы подписаны
+  final bool isCompleted; // Строительство завершено (кнопка нажата)
 
   const ConstructionObject({
     required this.id,
@@ -33,11 +34,12 @@ class ConstructionObject {
     required this.stages,
     this.chatId,
     this.allDocumentsSigned = false,
+    this.isCompleted = false,
   });
 
   @override
   String toString() {
-    return 'ConstructionObject(id: $id, projectId: $projectId, name: $name, address: $address, area: $area, floors: $floors, stages: ${stages.length})';
+    return 'ConstructionObject(id: $id, projectId: $projectId, name: $name, address: $address, area: $area, floors: $floors, stages: ${stages.length}, allDocumentsSigned: $allDocumentsSigned, isCompleted: $isCompleted)';
   }
 
   /// Создать объект из проекта
@@ -48,6 +50,7 @@ class ConstructionObject {
     List<ConstructionStage> initialStages, {
     String? chatId,
     bool allDocumentsSigned = false,
+    bool isCompleted = false,
   }) {
     return ConstructionObject(
       id: objectId,
@@ -64,6 +67,7 @@ class ConstructionObject {
       stages: initialStages,
       chatId: chatId,
       allDocumentsSigned: allDocumentsSigned,
+      isCompleted: isCompleted,
     );
   }
 }
