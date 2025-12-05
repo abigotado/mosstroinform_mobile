@@ -13,7 +13,11 @@ import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/cons
 import 'package:mosstroinform_mobile/features/document_approval/ui/screens/document_detail_screen.dart';
 import 'package:mosstroinform_mobile/features/document_approval/ui/screens/document_list_screen.dart';
 import 'package:mosstroinform_mobile/features/main/ui/screens/main_screen.dart';
+import 'package:mosstroinform_mobile/features/my_objects/ui/screens/my_objects_screen.dart';
+import 'package:mosstroinform_mobile/features/profile/ui/screens/profile_screen.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_detail_screen.dart';
+import 'package:mosstroinform_mobile/features/project_selection/ui/screens/project_list_screen.dart';
+import 'package:mosstroinform_mobile/features/requested_projects/ui/screens/requested_projects_screen.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'router_provider.g.dart';
@@ -64,6 +68,7 @@ GoRouter router(Ref ref) {
 
   return GoRouter(
     debugLogDiagnostics: true,
+    observers: [AppLogger.routeObserver],
     initialLocation: initialLocation,
     refreshListenable: authChangeNotifier,
     redirect: (context, state) {
@@ -78,11 +83,16 @@ GoRouter router(Ref ref) {
       final isLoginRoute =
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
+      final isMainRoute =
+          state.matchedLocation == '/' ||
+          state.matchedLocation == '/requested' ||
+          state.matchedLocation == '/objects' ||
+          state.matchedLocation == '/profile';
 
       AppLogger.log(
         'Router.redirect: matchedLocation=${state.matchedLocation}, '
         'isAuthenticated=$isAuthenticated, isLoginRoute=$isLoginRoute, '
-        'authState.hasValue=${authState.hasValue}',
+        'isMainRoute=$isMainRoute, authState.hasValue=${authState.hasValue}',
       );
 
       // Если пользователь не авторизован и пытается попасть на защищённый роут
@@ -105,71 +115,103 @@ GoRouter router(Ref ref) {
       return null; // Разрешаем навигацию
     },
     routes: [
+      // Маршруты авторизации без bottom navigation
       ShellRoute(
-        builder: (context, state, child) => Stack(
-          children: [
-            child,
-            if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
-          ],
+        pageBuilder: (context, state, child) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 600),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(
+                curve: Curves.easeInOutCirc,
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: Stack(
+            children: [
+              child,
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          ),
         ),
         routes: [
           GoRoute(
             path: '/login',
-            pageBuilder: (context, state) => CustomTransitionPage<void>(
-              key: state.pageKey,
-              child: const LoginScreen(),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                  child: child,
-                );
-              },
-              transitionDuration: const Duration(milliseconds: 300),
-            ),
+            builder: (context, state) => const LoginScreen(),
           ),
           GoRoute(
             path: '/register',
-            pageBuilder: (context, state) => CustomTransitionPage<void>(
-              key: state.pageKey,
-              child: const RegisterScreen(),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                  child: child,
-                );
-              },
-              transitionDuration: const Duration(milliseconds: 300),
-            ),
+            builder: (context, state) => const RegisterScreen(),
           ),
-          GoRoute(
-            path: '/',
-            pageBuilder: (context, state) => CustomTransitionPage<void>(
-              key: state.pageKey,
-              child: const MainScreen(),
-              transitionsBuilder: (
-                context,
-                animation,
-                secondaryAnimation,
-                child,
-              ) {
-                return FadeTransition(
-                  opacity: CurveTween(curve: Curves.easeInOut).animate(animation),
-                  child: child,
-                );
-              },
-              transitionDuration: const Duration(milliseconds: 300),
-            ),
+        ],
+      ),
+      // Главный экран с bottom navigation используя StatefulShellRoute
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
+          return Stack(
+            children: [
+              MainScreen(navigationShell: navigationShell),
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          );
+        },
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/',
+                builder: (context, state) => const ProjectListScreen(),
+              ),
+            ],
           ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/requested',
+                builder: (context, state) => const RequestedProjectsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/objects',
+                builder: (context, state) => const MyObjectsScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/profile',
+                builder: (context, state) => const ProfileScreen(),
+              ),
+            ],
+          ),
+        ],
+      ),
+      // Остальные маршруты без bottom navigation
+      ShellRoute(
+        pageBuilder: (context, state, child) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 600),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(
+                curve: Curves.easeInOutCirc,
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: Stack(
+            children: [
+              child,
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          ),
+        ),
+        routes: [
           GoRoute(
             path: '/projects/:id',
             builder: (context, state) {
