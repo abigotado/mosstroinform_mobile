@@ -264,7 +264,7 @@ class _ConstructionSiteScreenState
                         );
                       },
                       loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
+                      error: (_, _) => const SizedBox.shrink(),
                     );
                   },
                 ),
@@ -382,7 +382,7 @@ class _ConstructionSiteScreenState
       ref.invalidate(completionStatusProvider(projectId));
       ref.invalidate(constructionSiteProvider(widget.objectId));
 
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.constructionCompletedSuccess),
@@ -391,7 +391,7 @@ class _ConstructionSiteScreenState
         );
       }
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(e.toLocalizedMessage(context)),

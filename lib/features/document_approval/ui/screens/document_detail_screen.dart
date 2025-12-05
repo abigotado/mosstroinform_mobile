@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/document_approval/domain/entities/document.dart';
@@ -191,22 +190,6 @@ class _DocumentDetailScreenState extends ConsumerState<DocumentDetailScreen> {
     final documentAsync = ref.watch(documentProvider(widget.documentId));
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
-    // Проверяем, все ли документы одобрены для показа кнопки перехода
-    final allDocuments = ref.watch(documentsProvider);
-    final allApproved = allDocuments.maybeWhen(
-      data: (docs) =>
-          docs.isNotEmpty &&
-          docs.every((doc) => doc.status == DocumentStatus.approved),
-      orElse: () => false,
-    );
-
-    // Получаем projectId из текущего документа
-    final currentDocument = ref.read(documentProvider(widget.documentId));
-    final projectId = currentDocument.maybeWhen(
-      data: (doc) => doc?.projectId,
-      orElse: () => null,
-    );
 
     return Scaffold(
       appBar: AppBar(
