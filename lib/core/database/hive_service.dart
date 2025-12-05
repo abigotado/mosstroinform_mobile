@@ -51,6 +51,9 @@ class HiveService {
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(ConstructionObjectAdapterAdapter());
       }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FinalDocumentAdapterAdapter());
+      }
 
       // Открываем боксы
       _projectsBox = await Hive.openBox<ProjectAdapter>(_projectsBoxName);
@@ -203,6 +206,9 @@ class HiveService {
       }
       if (!Hive.isAdapterRegistered(3)) {
         Hive.registerAdapter(ConstructionObjectAdapterAdapter());
+      }
+      if (!Hive.isAdapterRegistered(4)) {
+        Hive.registerAdapter(FinalDocumentAdapterAdapter());
       }
 
       // Открываем боксы
