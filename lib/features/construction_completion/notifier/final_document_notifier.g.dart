@@ -271,7 +271,7 @@ final class FinalDocumentNotifierProvider
 }
 
 String _$finalDocumentNotifierHash() =>
-    r'ee7d433b27985e0e3be0aba7233462fc17516846';
+    r'2ad5ae54681cf2a76316e9ae602c5d98e9c90468';
 
 /// Notifier для управления состоянием отдельного финального документа
 

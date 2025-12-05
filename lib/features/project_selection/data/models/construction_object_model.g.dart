@@ -25,6 +25,7 @@ _ConstructionObjectModel _$ConstructionObjectModelFromJson(
       .toList(),
   chatId: json['chatId'] as String?,
   allDocumentsSigned: json['allDocumentsSigned'] as bool? ?? false,
+  isCompleted: json['isCompleted'] as bool? ?? false,
 );
 
 Map<String, dynamic> _$ConstructionObjectModelToJson(
@@ -44,6 +45,7 @@ Map<String, dynamic> _$ConstructionObjectModelToJson(
   'stages': instance.stages.map((e) => e.toJson()).toList(),
   'chatId': ?instance.chatId,
   'allDocumentsSigned': instance.allDocumentsSigned,
+  'isCompleted': instance.isCompleted,
 };
 
 _ConstructionStageModel _$ConstructionStageModelFromJson(

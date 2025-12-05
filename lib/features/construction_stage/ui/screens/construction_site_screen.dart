@@ -215,11 +215,10 @@ class _ConstructionSiteScreenState
                           return const SizedBox.shrink();
                         }
 
-                        // Проверяем, не завершено ли уже строительство (все этапы completed)
-                        final isCompleted = object.stages.isNotEmpty &&
-                            object.stages.every((stage) => stage.status == StageStatus.completed);
-                        if (isCompleted) {
-                          return Padding(
+                                 // Проверяем, не завершено ли уже строительство (кнопка нажата)
+                                 final isCompleted = object.isCompleted;
+                                 if (isCompleted) {
+                                   return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 16),
                             child: Container(
                               padding: const EdgeInsets.all(16),
