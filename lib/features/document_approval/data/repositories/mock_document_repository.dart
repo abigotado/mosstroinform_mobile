@@ -7,6 +7,7 @@ import 'package:mosstroinform_mobile/features/project_selection/domain/entities/
 import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/project_repository.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
+import 'package:mosstroinform_mobile/features/chat/data/repositories/mock_chat_repository.dart';
 
 /// Интерактивная моковая реализация репозитория документов
 /// Использует локальную базу данных Hive для имитации реальной работы приложения
