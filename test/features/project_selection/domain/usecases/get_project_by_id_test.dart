@@ -22,7 +22,6 @@ void main() {
     final project = Project(
       id: projectId,
       name: 'Проект 1',
-      address: 'Адрес 1',
       description: 'Описание 1',
       area: 100.0,
       floors: 2,

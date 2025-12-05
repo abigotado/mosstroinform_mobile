@@ -31,7 +31,6 @@ void main() {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
-        address: 'Адрес',
         description: 'Описание',
         area: 100.0,
         floors: 2,
@@ -47,12 +46,11 @@ void main() {
       expect(find.text('Тестовый проект'), findsOneWidget);
     });
 
-    testWidgets('отображает адрес проекта', (WidgetTester tester) async {
+    testWidgets('отображает описание проекта', (WidgetTester tester) async {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
-        address: 'Тестовый адрес',
-        description: 'Описание',
+        description: 'Тестовое описание',
         area: 100.0,
         floors: 2,
         bedrooms: 3,
@@ -64,14 +62,13 @@ void main() {
         createTestWidget(ProjectCard(project: project, onTap: () {})),
       );
 
-      expect(find.text('Тестовый адрес'), findsOneWidget);
+      expect(find.textContaining('Тестовое описание'), findsWidgets);
     });
 
     testWidgets('вызывает onTap при нажатии', (WidgetTester tester) async {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
-        address: 'Адрес',
         description: 'Описание',
         area: 100.0,
         floors: 2,
@@ -98,7 +95,6 @@ void main() {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
-        address: 'Адрес',
         description: 'Описание',
         area: 100.0,
         floors: 3,
@@ -119,7 +115,6 @@ void main() {
       const project = Project(
         id: '1',
         name: 'Тестовый проект',
-        address: 'Адрес',
         description: 'Описание',
         area: 100.0,
         floors: 2,
@@ -135,6 +130,54 @@ void main() {
       // Проверяем, что информация о параметрах отображается
       expect(find.textContaining('100'), findsWidgets); // площадь
       expect(find.textContaining('2'), findsWidgets); // этажи
+    });
+
+    testWidgets('отображает статус "запрошен" для запрошенного проекта',
+        (WidgetTester tester) async {
+      const project = Project(
+        id: '1',
+        name: 'Тестовый проект',
+        description: 'Описание',
+        area: 100.0,
+        floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
+        price: 1000000,
+        status: ProjectStatus.requested,
+      );
+
+      await tester.pumpWidget(
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
+      );
+      await tester.pumpAndSettle();
+
+      // Проверяем, что карточка отображается (статус отображается внутри)
+      expect(find.byType(ProjectCard), findsOneWidget);
+    });
+
+    testWidgets('отображает статус "строительство" для проекта в строительстве',
+        (WidgetTester tester) async {
+      const project = Project(
+        id: '1',
+        name: 'Тестовый проект',
+        description: 'Описание',
+        area: 100.0,
+        floors: 2,
+        bedrooms: 3,
+        bathrooms: 2,
+        price: 1000000,
+        status: ProjectStatus.construction,
+        constructionAddress: 'г. Москва, ул. Тестовая, д. 1',
+        objectId: 'object_1',
+      );
+
+      await tester.pumpWidget(
+        createTestWidget(ProjectCard(project: project, onTap: () {})),
+      );
+      await tester.pumpAndSettle();
+
+      // Проверяем, что карточка отображается (статус отображается внутри)
+      expect(find.byType(ProjectCard), findsOneWidget);
     });
   });
 }

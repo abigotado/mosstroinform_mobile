@@ -22,7 +22,6 @@ void main() {
       Project(
         id: '1',
         name: 'Проект 1',
-        address: 'Адрес 1',
         description: 'Описание 1',
         area: 100.0,
         floors: 2,
@@ -34,7 +33,6 @@ void main() {
       Project(
         id: '2',
         name: 'Проект 2',
-        address: 'Адрес 2',
         description: 'Описание 2',
         area: 150.0,
         floors: 3,

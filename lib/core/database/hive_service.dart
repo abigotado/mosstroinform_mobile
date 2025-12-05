@@ -159,5 +159,51 @@ class HiveService {
     await _requestedProjectsBox?.clear();
     await ensureProjectsLoaded();
   }
+
+  /// Инициализация для тестов (без Flutter bindings)
+  /// Использует Hive.init() вместо Hive.initFlutter()
+  static Future<void> initializeForTests(String testPath) async {
+    // Если уже инициализирован, просто возвращаемся
+    if (isInitialized) {
+      AppLogger.info('HiveService.initializeForTests: Hive уже инициализирован');
+      return;
+    }
+
+    try {
+      Hive.init(testPath);
+      AppLogger.info('HiveService.initializeForTests: Hive инициализирован для тестов');
+
+      // Регистрируем адаптеры
+      if (!Hive.isAdapterRegistered(0)) {
+        Hive.registerAdapter(ProjectAdapterAdapter());
+      }
+      if (!Hive.isAdapterRegistered(1)) {
+        Hive.registerAdapter(DocumentAdapterAdapter());
+      }
+      if (!Hive.isAdapterRegistered(2)) {
+        Hive.registerAdapter(ConstructionStageAdapterAdapter());
+      }
+      if (!Hive.isAdapterRegistered(3)) {
+        Hive.registerAdapter(ConstructionObjectAdapterAdapter());
+      }
+
+      // Открываем боксы
+      _projectsBox = await Hive.openBox<ProjectAdapter>(_projectsBoxName);
+      _documentsBox = await Hive.openBox<DocumentAdapter>(_documentsBoxName);
+      _constructionObjectsBox =
+          await Hive.openBox<ConstructionObjectAdapter>(_constructionObjectsBoxName);
+      _requestedProjectsBox =
+          await Hive.openBox<String>(_requestedProjectsBoxName);
+
+      AppLogger.info('HiveService.initializeForTests: боксы открыты');
+      AppLogger.info('HiveService.initializeForTests: инициализация завершена');
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'HiveService.initializeForTests: ошибка инициализации: $e',
+        stackTrace,
+      );
+      rethrow;
+    }
+  }
 }
 
