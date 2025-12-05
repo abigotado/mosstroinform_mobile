@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/repositories/project_repository.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/project_repository_provider.dart';
@@ -16,7 +17,19 @@ void main() {
   setUp(() {
     mockRepository = MockProjectRepository();
     container = ProviderContainer(
-      overrides: [projectRepositoryProvider.overrideWithValue(mockRepository)],
+      overrides: [
+        projectRepositoryProvider.overrideWithValue(mockRepository),
+        // Мок для authProvider, который используется в ProjectsNotifier.build
+        authProvider.overrideWith(
+          (ref) => Future.value(
+            const AuthState(
+              isAuthenticated: true,
+              user: null,
+              isLoading: false,
+            ),
+          ),
+        ),
+      ],
     );
   });
 
