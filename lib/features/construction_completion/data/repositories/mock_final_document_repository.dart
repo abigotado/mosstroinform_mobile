@@ -4,39 +4,48 @@ import 'package:mosstroinform_mobile/features/construction_completion/domain/rep
 
 /// Моковая реализация репозитория финальных документов
 class MockFinalDocumentRepository implements FinalDocumentRepository {
-  final List<FinalDocument> _mockDocuments = [
-    FinalDocument(
-      id: 'final1',
-      title: 'Акт приёмки выполненных работ',
-      description: 'Финальный акт приёмки всех выполненных строительных работ',
-      fileUrl: 'https://example.com/act.pdf',
-      status: FinalDocumentStatus.pending,
-      submittedAt: null,
-      signedAt: null,
-      signatureUrl: null,
-    ),
-    FinalDocument(
-      id: 'final2',
-      title: 'Гарантийное обязательство',
-      description:
-          'Документ о гарантийных обязательствах на выполненные работы',
-      fileUrl: 'https://example.com/warranty.pdf',
-      status: FinalDocumentStatus.pending,
-      submittedAt: null,
-      signedAt: null,
-      signatureUrl: null,
-    ),
-    FinalDocument(
-      id: 'final3',
-      title: 'Паспорт объекта',
-      description: 'Технический паспорт построенного объекта',
-      fileUrl: 'https://example.com/passport.pdf',
-      status: FinalDocumentStatus.signed,
-      submittedAt: DateTime.now().subtract(const Duration(days: 5)),
-      signedAt: DateTime.now().subtract(const Duration(days: 2)),
-      signatureUrl: 'https://example.com/signature3.png',
-    ),
-  ];
+  // Храним документы по projectId для каждого объекта строительства
+  static final Map<String, List<FinalDocument>> _documentsByProject = {};
+
+  /// Получить документы для проекта (создаются при первом запросе)
+  List<FinalDocument> _getDocumentsForProject(String projectId) {
+    if (!_documentsByProject.containsKey(projectId)) {
+      _documentsByProject[projectId] = [
+        FinalDocument(
+          id: 'final1_$projectId',
+          title: 'Акт приёмки выполненных работ',
+          description: 'Финальный акт приёмки всех выполненных строительных работ',
+          fileUrl: 'https://example.com/act.pdf',
+          status: FinalDocumentStatus.pending,
+          submittedAt: null,
+          signedAt: null,
+          signatureUrl: null,
+        ),
+        FinalDocument(
+          id: 'final2_$projectId',
+          title: 'Гарантийное обязательство',
+          description:
+              'Документ о гарантийных обязательствах на выполненные работы',
+          fileUrl: 'https://example.com/warranty.pdf',
+          status: FinalDocumentStatus.pending,
+          submittedAt: null,
+          signedAt: null,
+          signatureUrl: null,
+        ),
+        FinalDocument(
+          id: 'final3_$projectId',
+          title: 'Паспорт объекта',
+          description: 'Технический паспорт построенного объекта',
+          fileUrl: 'https://example.com/passport.pdf',
+          status: FinalDocumentStatus.pending,
+          submittedAt: null,
+          signedAt: null,
+          signatureUrl: null,
+        ),
+      ];
+    }
+    return _documentsByProject[projectId]!;
+  }
 
   @override
   Future<ConstructionCompletionStatus> getCompletionStatus(
@@ -44,7 +53,8 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
   ) async {
     await Future.delayed(const Duration(milliseconds: 500));
 
-    final allSigned = _mockDocuments.every(
+    final documents = _getDocumentsForProject(projectId);
+    final allSigned = documents.every(
       (doc) => doc.status == FinalDocumentStatus.signed,
     );
 
@@ -53,7 +63,7 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
       isCompleted: allSigned,
       completionDate: allSigned ? DateTime.now() : null,
       progress: 0.95,
-      documents: _mockDocuments,
+      documents: documents,
       allDocumentsSigned: allSigned,
     );
   }
@@ -61,7 +71,7 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
   @override
   Future<List<FinalDocument>> getFinalDocuments(String projectId) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    return _mockDocuments;
+    return _getDocumentsForProject(projectId);
   }
 
   @override
@@ -70,8 +80,9 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
     String documentId,
   ) async {
     await Future.delayed(const Duration(milliseconds: 500));
+    final documents = _getDocumentsForProject(projectId);
     try {
-      return _mockDocuments.firstWhere((doc) => doc.id == documentId);
+      return documents.firstWhere((doc) => doc.id == documentId);
     } catch (e) {
       throw UnknownFailure('Моковый документ с ID $documentId не найден');
     }
@@ -80,15 +91,16 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
   @override
   Future<void> signFinalDocument(String projectId, String documentId) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    final index = _mockDocuments.indexWhere((doc) => doc.id == documentId);
+    final documents = _getDocumentsForProject(projectId);
+    final index = documents.indexWhere((doc) => doc.id == documentId);
     if (index != -1) {
-      _mockDocuments[index] = FinalDocument(
-        id: _mockDocuments[index].id,
-        title: _mockDocuments[index].title,
-        description: _mockDocuments[index].description,
-        fileUrl: _mockDocuments[index].fileUrl,
+      documents[index] = FinalDocument(
+        id: documents[index].id,
+        title: documents[index].title,
+        description: documents[index].description,
+        fileUrl: documents[index].fileUrl,
         status: FinalDocumentStatus.signed,
-        submittedAt: _mockDocuments[index].submittedAt ?? DateTime.now(),
+        submittedAt: documents[index].submittedAt ?? DateTime.now(),
         signedAt: DateTime.now(),
         signatureUrl: 'https://example.com/signature$documentId.png',
       );
