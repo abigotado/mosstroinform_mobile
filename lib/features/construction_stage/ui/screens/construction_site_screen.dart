@@ -124,6 +124,11 @@ class _ConstructionSiteScreenState
             }
 
             final site = state.site!;
+            final projectId = site.projectId;
+            final objectAsync = ref.watch(
+              constructionObjectByProjectProvider(projectId),
+            );
+            final isCompleted = objectAsync.value?.isCompleted ?? false;
 
             return SingleChildScrollView(
               key: const ValueKey('content'),
@@ -218,10 +223,20 @@ class _ConstructionSiteScreenState
                       final objectAsync = ref.watch(
                         constructionObjectByProjectProvider(projectId),
                       );
+                      // Следим за статусом финальных документов
+                      final completionStatusAsync = ref.watch(
+                        completionStatusProvider(projectId),
+                      );
 
                       return objectAsync.when(
                         data: (object) {
-                          if (!object.allDocumentsSigned) {
+                          // Проверяем статус подписания финальных документов
+                          final areFinalDocumentsSigned =
+                              completionStatusAsync.value?.status?.allDocumentsSigned ??
+                                  false;
+
+                          // Если документы не подписаны, кнопку не показываем
+                          if (!areFinalDocumentsSigned) {
                             return const SizedBox.shrink();
                           }
 
@@ -292,55 +307,57 @@ class _ConstructionSiteScreenState
                   const Divider(),
 
                   // Список камер
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      l10n.cameras,
-                      style: theme.textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  if (site.cameras.isEmpty)
+                  if (!isCompleted) ...[
                     Padding(
-                      padding: const EdgeInsets.all(32),
-                      child: Center(
-                        child: Text(
-                          l10n.noCameras,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+                      padding: const EdgeInsets.all(16),
+                      child: Text(
+                        l10n.cameras,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
-                  else
-                    GridView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: const EdgeInsets.all(16),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: 0.8,
-                          ),
-                      itemCount: site.cameras.length,
-                      itemBuilder: (context, index) {
-                        final camera = site.cameras[index];
-                        return CameraGridItem(
-                          camera: camera,
-                          onTap: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    CameraViewScreen(camera: camera),
-                              ),
-                            );
-                          },
-                        );
-                      },
                     ),
+                    if (site.cameras.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(32),
+                        child: Center(
+                          child: Text(
+                            l10n.noCameras,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      GridView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 16,
+                              mainAxisSpacing: 16,
+                              childAspectRatio: 0.8,
+                            ),
+                        itemCount: site.cameras.length,
+                        itemBuilder: (context, index) {
+                          final camera = site.cameras[index];
+                          return CameraGridItem(
+                            camera: camera,
+                            onTap: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      CameraViewScreen(camera: camera),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                  ],
                 ],
               ),
             );

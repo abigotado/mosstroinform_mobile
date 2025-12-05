@@ -93,12 +93,29 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
       (doc) => doc.status == FinalDocumentStatus.signed,
     );
 
-    // Прогресс приходит с бэка, для моков используем фиксированное значение
-    // isCompleted должен быть false - строительство завершается только после нажатия кнопки
+    // Получаем реальный статус завершения из объекта строительства
+    bool isCompleted = false;
+    DateTime? completionDate;
+    
+    try {
+      final objectsBox = HiveService.constructionObjectsBox;
+      final objectAdapter = objectsBox.values.firstWhere(
+        (adapter) => adapter.projectId == projectId,
+      );
+      isCompleted = objectAdapter.isCompleted;
+      // В моке не храним дату завершения отдельно, поэтому если завершено - ставим текущую (или надо добавить в адаптер)
+      // Для простоты, если завершено, ставим заглушку даты
+      if (isCompleted) {
+        completionDate = DateTime.now(); 
+      }
+    } catch (_) {
+      // Если объект не найден, считаем что не завершено
+    }
+
     return ConstructionCompletionStatus(
       projectId: projectId,
-      isCompleted: false, // Строительство завершается только после нажатия кнопки "Завершить строительство"
-      completionDate: null, // Дата завершения устанавливается только после нажатия кнопки
+      isCompleted: isCompleted,
+      completionDate: completionDate,
       progress: 0.95, // Прогресс приходит с бэка
       documents: documents,
       allDocumentsSigned: allSigned,
