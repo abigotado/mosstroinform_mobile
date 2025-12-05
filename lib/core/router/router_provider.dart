@@ -22,12 +22,9 @@ part 'router_provider.g.dart';
 class AuthChangeNotifier extends ChangeNotifier {
   AuthChangeNotifier(this.ref) {
     // Слушаем изменения authProvider и уведомляем роутер
-    ref.listen<AsyncValue<AuthState>>(
-      authProvider,
-      (previous, next) {
-        notifyListeners();
-      },
-    );
+    ref.listen<AsyncValue<AuthState>>(authProvider, (previous, next) {
+      notifyListeners();
+    });
   }
 
   final Ref ref;
@@ -39,7 +36,7 @@ class AuthChangeNotifier extends ChangeNotifier {
 GoRouter router(Ref ref) {
   // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
   final authState = ref.watch(authProvider);
-  
+
   // Создаем ChangeNotifier для refreshListenable
   final authChangeNotifier = AuthChangeNotifier(ref);
 

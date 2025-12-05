@@ -20,7 +20,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _obscurePassword = true;
-  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -41,23 +40,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final emailValue = _emailController.text;
     final passwordValue = _passwordController.text;
 
-    // Устанавливаем состояние загрузки
-    if (mounted) {
-      setState(() {
-        _isLoading = true;
-      });
-    }
-
     AppLogger.info('LoginScreen._handleLogin: начало, email=$emailValue');
 
     try {
       AppLogger.info(
         'LoginScreen._handleLogin: вызов authProvider.notifier.login',
       );
-      await ref.read(authProvider.notifier).login(
-            emailValue.trim(),
-            passwordValue,
-          );
+      await ref
+          .read(authProvider.notifier)
+          .login(emailValue.trim(), passwordValue);
       AppLogger.info('LoginScreen._handleLogin: login завершен успешно');
 
       // Роутер автоматически перенаправит благодаря refreshListenable и redirect логике
@@ -72,7 +63,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             duration: const Duration(seconds: 3),
           ),
         );
-        setState(() => _isLoading = false);
       }
     } catch (e) {
       if (mounted) {
@@ -84,23 +74,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             duration: const Duration(seconds: 3),
           ),
         );
-        setState(() => _isLoading = false);
       }
     }
-    // Не сбрасываем _isLoading в finally, так как при успехе происходит навигация,
-    // и мы хотим, чтобы лоадер крутился до ухода с экрана.
-    // Сбрасываем только при ошибке (выше).
   }
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
+    final authState = ref.watch(authProvider);
+    final isLoading = authState.isLoading;
 
     return Scaffold(
       body: SafeArea(
         child: AbsorbPointer(
-          absorbing: _isLoading,
+          absorbing: isLoading,
           child: Stack(
             children: [
               Center(
@@ -156,7 +144,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           obscureText: _obscurePassword,
                           textInputAction: TextInputAction.done,
                           onFieldSubmitted: (_) {
-                            if (!_isLoading) {
+                            if (!isLoading) {
                               _handleLogin();
                             }
                           },
@@ -169,7 +157,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                     ? Icons.visibility
                                     : Icons.visibility_off,
                               ),
-                              onPressed: _isLoading
+                              onPressed: isLoading
                                   ? null
                                   : () {
                                       setState(
@@ -196,7 +184,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                         // Кнопка входа
                         ElevatedButton(
-                          onPressed: _isLoading ? null : _handleLogin,
+                          onPressed: isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
@@ -209,7 +197,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
                         // Ссылка на регистрацию
                         TextButton(
-                          onPressed: _isLoading
+                          onPressed: isLoading
                               ? null
                               : () {
                                   context.push('/register');
@@ -222,7 +210,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
               ),
               // Полноэкранный лоадер поверх формы
-              if (_isLoading)
+              if (isLoading)
                 Container(
                   color: Colors.black.withValues(alpha: 0.5),
                   child: const Center(child: CircularProgressIndicator()),
