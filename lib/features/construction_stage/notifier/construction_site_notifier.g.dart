@@ -59,7 +59,7 @@ final class ConstructionSiteNotifierProvider
 }
 
 String _$constructionSiteNotifierHash() =>
-    r'1d359d3c9c681ba42193b4672094df15d128a0c5';
+    r'd3c6a014526039413c9661cc2dd639a2a617c3f0';
 
 /// Notifier для управления состоянием строительной площадки
 

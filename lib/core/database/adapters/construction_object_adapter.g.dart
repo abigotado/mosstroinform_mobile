@@ -73,13 +73,14 @@ class ConstructionObjectAdapterAdapter
       stages: (fields[11] as List).cast<ConstructionStageAdapter>(),
       chatId: fields[12] as String?,
       allDocumentsSigned: fields[13] == null ? false : fields[13] as bool,
+      isCompleted: fields[14] == null ? false : fields[14] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, ConstructionObjectAdapter obj) {
     writer
-      ..writeByte(14)
+      ..writeByte(15)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -107,7 +108,9 @@ class ConstructionObjectAdapterAdapter
       ..writeByte(12)
       ..write(obj.chatId)
       ..writeByte(13)
-      ..write(obj.allDocumentsSigned);
+      ..write(obj.allDocumentsSigned)
+      ..writeByte(14)
+      ..write(obj.isCompleted);
   }
 
   @override

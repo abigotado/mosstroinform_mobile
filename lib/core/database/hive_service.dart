@@ -31,12 +31,19 @@ class HiveService {
     // Если уже инициализирован, просто возвращаемся
     if (isInitialized) {
       AppLogger.info('HiveService.initialize: Hive уже инициализирован');
+      // Открываем settings box если еще не открыт
+      if (!Hive.isBoxOpen('settings')) {
+        await Hive.openBox('settings');
+      }
       return;
     }
 
     try {
       await Hive.initFlutter();
       AppLogger.info('HiveService.initialize: Hive инициализирован');
+      
+      // Открываем settings box для хранения настроек приложения
+      await Hive.openBox('settings');
 
       // Регистрируем адаптеры
       if (!Hive.isAdapterRegistered(0)) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/theme/theme_provider.dart';
 import 'package:mosstroinform_mobile/core/utils/extensions/localize_error_extension.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
@@ -78,6 +79,53 @@ class ProfileScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 16),
+              // Переключатель темы
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.brightness_6),
+                      title: Text('Тема приложения'),
+                      subtitle: Text(_getThemeModeText(ref.watch(themeModeProvider))),
+                    ),
+                    Divider(height: 1),
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.light,
+                      groupValue: ref.watch(themeModeProvider),
+                      onChanged: (value) {
+                        if (value != null) {
+                          ref.read(themeModeProvider.notifier).setThemeMode(value);
+                        }
+                      },
+                      title: Text('Светлая'),
+                      secondary: Icon(Icons.light_mode),
+                    ),
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.dark,
+                      groupValue: ref.watch(themeModeProvider),
+                      onChanged: (value) {
+                        if (value != null) {
+                          ref.read(themeModeProvider.notifier).setThemeMode(value);
+                        }
+                      },
+                      title: Text('Темная'),
+                      secondary: Icon(Icons.dark_mode),
+                    ),
+                    RadioListTile<ThemeMode>(
+                      value: ThemeMode.system,
+                      groupValue: ref.watch(themeModeProvider),
+                      onChanged: (value) {
+                        if (value != null) {
+                          ref.read(themeModeProvider.notifier).setThemeMode(value);
+                        }
+                      },
+                      title: Text('Системная'),
+                      secondary: Icon(Icons.brightness_auto),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 16),
               // Кнопка выхода
               Card(
                 child: ListTile(
@@ -128,5 +176,16 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _getThemeModeText(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.light:
+        return 'Светлая';
+      case ThemeMode.dark:
+        return 'Темная';
+      case ThemeMode.system:
+        return 'Системная (следует настройкам устройства)';
+    }
   }
 }
