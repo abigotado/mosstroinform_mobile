@@ -4,44 +4,41 @@ import 'package:flutter/material.dart';
 /// Подготовлена для будущей мультитематизации
 class AppTheme {
   static ThemeData get lightTheme {
-    final colorScheme = ColorScheme.fromSeed(
-      seedColor: const Color(0xFF2196F3),
-      brightness: Brightness.light,
-    );
-    
     return ThemeData(
       useMaterial3: true,
-      colorScheme: colorScheme.copyWith(
-        surface: Colors.white,
-        surfaceContainerHighest: Colors.grey.shade50,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xFF2196F3),
+        brightness: Brightness.light,
       ),
       textTheme: _textTheme,
       appBarTheme: _appBarTheme,
-      cardTheme: _cardThemeLight,
+      cardTheme: _cardTheme,
       elevatedButtonTheme: _elevatedButtonTheme,
       inputDecorationTheme: _inputDecorationTheme,
-      scaffoldBackgroundColor: Colors.grey.shade100,
     );
   }
 
   static ThemeData get darkTheme {
-    final colorScheme = ColorScheme.fromSeed(
+    // Создаем более контрастную цветовую схему для темной темы
+    final baseColorScheme = ColorScheme.fromSeed(
       seedColor: const Color(0xFF2196F3),
       brightness: Brightness.dark,
     );
     
+    // Увеличиваем контрастность surface для карточек
+    final darkColorScheme = baseColorScheme.copyWith(
+      surface: const Color(0xFF2C2C2C), // Более светлый фон для карточек
+      surfaceContainerHighest: const Color(0xFF3A3A3A), // Еще более светлый для контейнеров
+    );
+
     return ThemeData(
       useMaterial3: true,
-      colorScheme: colorScheme.copyWith(
-        surface: Colors.grey.shade900,
-        surfaceContainerHighest: Colors.grey.shade800,
-      ),
+      colorScheme: darkColorScheme,
       textTheme: _textTheme,
       appBarTheme: _appBarTheme,
-      cardTheme: _cardThemeDark,
+      cardTheme: _darkCardTheme,
       elevatedButtonTheme: _elevatedButtonTheme,
       inputDecorationTheme: _inputDecorationTheme,
-      scaffoldBackgroundColor: Colors.black,
     );
   }
 
@@ -76,22 +73,19 @@ class AppTheme {
     elevation: 0,
   );
 
-  static const CardThemeData _cardThemeLight = CardThemeData(
-    elevation: 4,
-    shadowColor: Colors.black26,
+  static const CardThemeData _cardTheme = CardThemeData(
+    elevation: 2,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
-    color: Colors.white,
   );
 
-  static const CardThemeData _cardThemeDark = CardThemeData(
-    elevation: 6,
-    shadowColor: Colors.black54,
+  // Более контрастная тема карточек для темной темы
+  static const CardThemeData _darkCardTheme = CardThemeData(
+    elevation: 4, // Увеличена elevation для большего контраста
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
-    color: Color(0xFF1E1E1E),
   );
 
   static ElevatedButtonThemeData get _elevatedButtonTheme {
