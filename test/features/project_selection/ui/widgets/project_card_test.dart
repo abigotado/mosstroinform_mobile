@@ -167,7 +167,6 @@ void main() {
         bathrooms: 2,
         price: 1000000,
         status: ProjectStatus.construction,
-        constructionAddress: 'г. Москва, ул. Тестовая, д. 1',
         objectId: 'object_1',
       );
 

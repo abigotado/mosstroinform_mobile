@@ -393,8 +393,8 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                         'Ошибка при отправке запроса',
                                         e,
                                       );
-                                      if (mounted) {
-                                        messenger.showSnackBar(
+                                      if (mounted && context.mounted) {
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
                                             content: Text(
                                               e.toLocalizedMessage(context),

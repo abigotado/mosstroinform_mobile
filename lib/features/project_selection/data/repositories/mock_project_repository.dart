@@ -194,6 +194,7 @@ class MockProjectRepository implements ProjectRepository {
     return requestedProjects;
   }
 
+  @override
   Future<void> startConstruction(String projectId, String address) async {
     // Симуляция задержки сети
     await Future.delayed(const Duration(milliseconds: 500));

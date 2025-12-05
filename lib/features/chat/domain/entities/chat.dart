@@ -46,6 +46,7 @@ class Message {
 
   @override
   String toString() {
-    return 'Message(id: $id, chatId: $chatId, text: ${text.length > 50 ? text.substring(0, 50) + '...' : text}, sentAt: $sentAt, isFromSpecialist: $isFromSpecialist, isRead: $isRead)';
+    final textPreview = text.length > 50 ? '${text.substring(0, 50)}...' : text;
+    return 'Message(id: $id, chatId: $chatId, text: $textPreview, sentAt: $sentAt, isFromSpecialist: $isFromSpecialist, isRead: $isRead)';
   }
 }

@@ -114,7 +114,7 @@ class MockDocumentRepository implements DocumentRepository {
         .length;
     if (documentsWithSameId > 1) {
       AppLogger.error(
-        'MockDocumentRepository.approveDocument: ОШИБКА! Обнаружены дубликаты документа $documentId (${documentsWithSameId} записей)!',
+        'MockDocumentRepository.approveDocument: ОШИБКА! Обнаружены дубликаты документа $documentId ($documentsWithSameId записей)!',
       );
     }
 
@@ -173,10 +173,12 @@ class MockDocumentRepository implements DocumentRepository {
         ];
 
         // Создаем объект из проекта
+        // Адрес будет добавлен позже при начале строительства
         final objectAdapter = ConstructionObjectAdapter.fromObject(
           ConstructionObject.fromProject(
             project,
             'object_$projectId', // ID объекта формируется из projectId
+            'Адрес будет указан при начале строительства', // Временный адрес
             initialStages.map((s) => s.toStage()).toList(),
           ),
         );
