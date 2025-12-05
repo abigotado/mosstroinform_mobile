@@ -217,8 +217,4 @@ class _CompletionStatusScreenState
       ),
     );
   }
-
-  String _formatDate(DateTime date) {
-    return '${date.day}.${date.month}.${date.year}';
-  }
 }

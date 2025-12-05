@@ -94,10 +94,11 @@ class MockFinalDocumentRepository implements FinalDocumentRepository {
     );
 
     // Прогресс приходит с бэка, для моков используем фиксированное значение
+    // isCompleted должен быть false - строительство завершается только после нажатия кнопки
     return ConstructionCompletionStatus(
       projectId: projectId,
-      isCompleted: allSigned,
-      completionDate: allSigned ? DateTime.now() : null,
+      isCompleted: false, // Строительство завершается только после нажатия кнопки "Завершить строительство"
+      completionDate: null, // Дата завершения устанавливается только после нажатия кнопки
       progress: 0.95, // Прогресс приходит с бэка
       documents: documents,
       allDocumentsSigned: allSigned,
