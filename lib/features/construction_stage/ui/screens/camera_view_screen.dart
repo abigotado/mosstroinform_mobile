@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
+import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/video_fullscreen_screen.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -187,7 +189,10 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           : _isInitialized &&
                 _controller != null &&
                 _controller!.value.isInitialized
-          ? _VideoPlayerWidget(controller: _controller!)
+          ? _VideoPlayerWidget(
+              controller: _controller!,
+              camera: widget.camera,
+            )
           : const _VideoLoadingWidget(),
     );
   }
@@ -197,8 +202,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
 /// Для live потоков не нужны кнопки паузы/запуска и прогресс-бар
 class _VideoPlayerWidget extends StatelessWidget {
   final VideoPlayerController controller;
+  final Camera camera;
 
-  const _VideoPlayerWidget({required this.controller});
+  const _VideoPlayerWidget({
+    required this.controller,
+    required this.camera,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -289,6 +298,39 @@ class _VideoPlayerWidget extends StatelessWidget {
                   ),
                 ),
               ),
+            // Кнопка полноэкранного режима
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => VideoFullscreenScreen(
+                          controller: controller,
+                          cameraName: camera.name,
+                        ),
+                      ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(8),
+                  child: Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.black54,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.fullscreen,
+                      color: Colors.white,
+                      size: 24,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
