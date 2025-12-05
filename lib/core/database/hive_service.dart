@@ -59,6 +59,8 @@ class HiveService {
           await Hive.openBox<ConstructionObjectAdapter>(_constructionObjectsBoxName);
       _requestedProjectsBox =
           await Hive.openBox<String>(_requestedProjectsBoxName);
+      _finalDocumentsBox =
+          await Hive.openBox<FinalDocumentAdapter>(_finalDocumentsBoxName);
 
       AppLogger.info('HiveService.initialize: боксы открыты');
 
