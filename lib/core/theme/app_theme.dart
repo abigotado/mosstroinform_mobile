@@ -4,32 +4,44 @@ import 'package:flutter/material.dart';
 /// Подготовлена для будущей мультитематизации
 class AppTheme {
   static ThemeData get lightTheme {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2196F3),
+      brightness: Brightness.light,
+    );
+    
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF2196F3),
-        brightness: Brightness.light,
+      colorScheme: colorScheme.copyWith(
+        surface: Colors.white,
+        surfaceContainerHighest: Colors.grey.shade50,
       ),
       textTheme: _textTheme,
       appBarTheme: _appBarTheme,
-      cardTheme: _cardTheme,
+      cardTheme: _cardThemeLight,
       elevatedButtonTheme: _elevatedButtonTheme,
       inputDecorationTheme: _inputDecorationTheme,
+      scaffoldBackgroundColor: Colors.grey.shade100,
     );
   }
 
   static ThemeData get darkTheme {
+    final colorScheme = ColorScheme.fromSeed(
+      seedColor: const Color(0xFF2196F3),
+      brightness: Brightness.dark,
+    );
+    
     return ThemeData(
       useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF2196F3),
-        brightness: Brightness.dark,
+      colorScheme: colorScheme.copyWith(
+        surface: Colors.grey.shade900,
+        surfaceContainerHighest: Colors.grey.shade800,
       ),
       textTheme: _textTheme,
       appBarTheme: _appBarTheme,
-      cardTheme: _cardTheme,
+      cardTheme: _cardThemeDark,
       elevatedButtonTheme: _elevatedButtonTheme,
       inputDecorationTheme: _inputDecorationTheme,
+      scaffoldBackgroundColor: Colors.black,
     );
   }
 
@@ -64,11 +76,22 @@ class AppTheme {
     elevation: 0,
   );
 
-  static const CardThemeData _cardTheme = CardThemeData(
-    elevation: 2,
+  static const CardThemeData _cardThemeLight = CardThemeData(
+    elevation: 4,
+    shadowColor: Colors.black26,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(12)),
     ),
+    color: Colors.white,
+  );
+
+  static const CardThemeData _cardThemeDark = CardThemeData(
+    elevation: 6,
+    shadowColor: Colors.black54,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(12)),
+    ),
+    color: Color(0xFF1E1E1E),
   );
 
   static ElevatedButtonThemeData get _elevatedButtonTheme {
