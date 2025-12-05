@@ -6,6 +6,11 @@ import 'package:mosstroinform_mobile/features/construction_completion/domain/rep
 class MockFinalDocumentRepository implements FinalDocumentRepository {
   // Храним документы по projectId для каждого объекта строительства
   static final Map<String, List<FinalDocument>> _documentsByProject = {};
+  
+  /// Очистить все документы (вызывается при logout)
+  static void clearDocuments() {
+    _documentsByProject.clear();
+  }
 
   /// Получить документы для проекта (создаются при первом запросе)
   List<FinalDocument> _getDocumentsForProject(String projectId) {

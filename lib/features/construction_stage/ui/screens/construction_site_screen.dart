@@ -11,6 +11,7 @@ import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/came
 import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/camera_grid_item.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/notifier/final_document_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_by_project_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -206,14 +207,7 @@ class _ConstructionSiteScreenState
                   builder: (context) {
                     final projectId = site.projectId;
                     final objectAsync = ref.watch(
-                      FutureProvider((ref) async {
-                        final objectRepository = ref.read(constructionObjectRepositoryProvider);
-                        final objects = await objectRepository.getObjects();
-                        return objects.firstWhere(
-                          (obj) => obj.projectId == projectId,
-                          orElse: () => throw UnknownFailure('Объект не найден'),
-                        );
-                      }),
+                      constructionObjectByProjectProvider(projectId),
                     );
 
                     return objectAsync.when(
@@ -376,14 +370,10 @@ class _ConstructionSiteScreenState
     final l10n = AppLocalizations.of(context)!;
     try {
       // Получаем объект строительства по projectId
-      final objectRepository = ref.read(constructionObjectRepositoryProvider);
-      final objects = await objectRepository.getObjects();
-      final object = objects.firstWhere(
-        (obj) => obj.projectId == projectId,
-        orElse: () => throw UnknownFailure('Объект строительства не найден'),
-      );
+      final object = await ref.read(constructionObjectByProjectProvider(projectId).future);
 
       // Завершаем строительство
+      final objectRepository = ref.read(constructionObjectRepositoryProvider);
       await objectRepository.completeConstruction(object.id);
 
       // Обновляем статус завершения

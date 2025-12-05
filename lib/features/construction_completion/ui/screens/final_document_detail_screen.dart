@@ -98,16 +98,21 @@ class _FinalDocumentDetailScreenState
         child: documentAsync.when(
           data: (state) {
             // Если документ не загружен и нет ошибки - это начальное состояние, показываем шиммер
-            if (state.document == null && state.error == null) {
+            if (state.document == null && state.error == null && !state.isLoading) {
               return const DocumentDetailShimmer(key: ValueKey('shimmer'));
             }
 
             // Если документ не найден и есть ошибка - показываем ошибку
-            if (state.document == null) {
+            if (state.document == null && state.error != null) {
               return Center(
                 key: const ValueKey('error'),
                 child: Text(l10n.finalDocumentNotFound),
               );
+            }
+
+            // Если документ не загружен, но идет загрузка - показываем предыдущие данные или шиммер
+            if (state.document == null) {
+              return const DocumentDetailShimmer(key: ValueKey('shimmer'));
             }
 
             final document = state.document!;

@@ -5,6 +5,7 @@ import 'package:mosstroinform_mobile/core/data/mock_data/projects_mock_data.dart
 import 'package:mosstroinform_mobile/core/database/adapters/project_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/document_adapter.dart';
 import 'package:mosstroinform_mobile/core/database/adapters/construction_object_adapter.dart';
+import 'package:mosstroinform_mobile/features/construction_completion/data/repositories/mock_final_document_repository.dart';
 
 /// Сервис для работы с локальной базой данных Hive
 /// Используется только в моковом режиме для имитации работы бэкенда
@@ -116,6 +117,11 @@ class HiveService {
       await _requestedProjectsBox!.clear();
       AppLogger.info('HiveService.clearUserData: запрошенные проекты очищены');
     }
+    
+    // Очищаем статические данные моковых репозиториев
+    MockFinalDocumentRepository.clearDocuments();
+    AppLogger.info('HiveService.clearUserData: документы объектов очищены');
+    
     AppLogger.info('HiveService.clearUserData: все данные очищены, база будет создана с нуля при следующем логине');
   }
 

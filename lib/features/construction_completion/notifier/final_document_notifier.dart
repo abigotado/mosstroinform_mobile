@@ -2,6 +2,7 @@ import 'package:mosstroinform_mobile/core/errors/failures.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/entities/final_document.dart';
 import 'package:mosstroinform_mobile/features/construction_completion/domain/providers/final_document_repository_provider.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_repository_provider.dart';
+import 'package:mosstroinform_mobile/features/project_selection/domain/providers/construction_object_by_project_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'final_document_notifier.g.dart';
@@ -41,7 +42,14 @@ class CompletionStatusNotifier extends _$CompletionStatusNotifier {
 
   /// Загрузить статус завершения строительства
   Future<void> loadCompletionStatus() async {
-    state = const AsyncValue.loading();
+    // Сохраняем предыдущее состояние, если оно есть
+    final previousState = state.value;
+    // Устанавливаем loading только если нет предыдущих данных
+    if (previousState == null || previousState.status == null) {
+      state = const AsyncValue.loading();
+    }
+    // Если есть данные, не меняем состояние - обновляем в фоне
+    
     try {
       final repository = ref.read(finalDocumentRepositoryProvider);
       final status = await repository.getCompletionStatus(projectId);
@@ -49,9 +57,19 @@ class CompletionStatusNotifier extends _$CompletionStatusNotifier {
         CompletionStatusState(status: status, isLoading: false),
       );
     } on Failure catch (e) {
-      state = AsyncValue.error(e, StackTrace.current);
+      // При ошибке сохраняем предыдущие данные, если они были
+      if (previousState != null && previousState.status != null) {
+        state = AsyncValue.data(previousState.copyWith(error: e, isLoading: false));
+      } else {
+        state = AsyncValue.error(e, StackTrace.current);
+      }
     } catch (e, s) {
-      state = AsyncValue.error(UnknownFailure('Неизвестная ошибка: $e'), s);
+      final failure = UnknownFailure('Неизвестная ошибка: $e');
+      if (previousState != null && previousState.status != null) {
+        state = AsyncValue.data(previousState.copyWith(error: failure, isLoading: false));
+      } else {
+        state = AsyncValue.error(failure, s);
+      }
     }
   }
 }

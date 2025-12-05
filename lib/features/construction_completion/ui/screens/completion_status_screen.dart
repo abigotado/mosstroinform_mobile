@@ -45,16 +45,21 @@ class _CompletionStatusScreenState
         child: statusAsync.when(
           data: (state) {
             // Если статус не загружен и нет ошибки - это начальное состояние, показываем шиммер
-            if (state.status == null && state.error == null) {
+            if (state.status == null && state.error == null && !state.isLoading) {
               return const CompletionStatusShimmer(key: ValueKey('shimmer'));
             }
 
             // Если статус не найден и есть ошибка - показываем ошибку
-            if (state.status == null) {
+            if (state.status == null && state.error != null) {
               return Center(
                 key: const ValueKey('error'),
                 child: Text(l10n.errorLoadingCompletionStatus),
               );
+            }
+
+            // Если статус не загружен, но идет загрузка - показываем предыдущие данные или шиммер
+            if (state.status == null) {
+              return const CompletionStatusShimmer(key: ValueKey('shimmer'));
             }
 
             final status = state.status!;
@@ -106,33 +111,8 @@ class _CompletionStatusScreenState
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          // Прогресс
-                          Text(
-                            l10n.progress,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: status.isCompleted
-                                  ? theme.colorScheme.onTertiaryContainer
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          LinearProgressIndicator(
-                            value: status.progress,
-                            minHeight: 8,
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${(status.progress * 100).toInt()}%',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: status.isCompleted
-                                  ? theme.colorScheme.onTertiaryContainer
-                                  : theme.colorScheme.onSurface,
-                            ),
-                          ),
                           if (status.completionDate != null) ...[
+                            const SizedBox(height: 16),
                             const SizedBox(height: 16),
                             Row(
                               children: [
@@ -242,6 +222,8 @@ class _CompletionStatusScreenState
           );
         },
         loading: () {
+          // При переходе из data в loading показываем шиммер только если нет предыдущих данных
+          // В противном случае данные должны оставаться видимыми с индикатором загрузки
           final theme = Theme.of(context);
           return Shimmer.fromColors(
             baseColor: theme.colorScheme.surfaceContainerHighest,

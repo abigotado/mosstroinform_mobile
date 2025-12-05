@@ -59,7 +59,7 @@ final class CompletionStatusNotifierProvider
 }
 
 String _$completionStatusNotifierHash() =>
-    r'0ac96695d52bbf4dcb1fc80b53d06870984edfe4';
+    r'3c1e6c5eb71ce38c4502c83c6e36f426851a576e';
 
 /// Notifier для управления состоянием завершения строительства
 
