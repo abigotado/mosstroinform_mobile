@@ -46,20 +46,22 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<List<Project>> getRequestedProjects() async {
     return guard(() async {
-      // В реальной реализации бэкенд должен иметь отдельный эндпоинт для запрошенных проектов
-      // TODO: Добавить отдельный эндпоинт в IProjectRemoteDataSource
-      // Пока возвращаем пустой список, так как в реальной реализации нужен отдельный эндпоинт
-      return [];
+      // Получаем все проекты и фильтруем по статусу "requested"
+      final allProjects = await remoteDataSource.getProjects();
+      final requestedProjects = allProjects
+          .where((model) => model.status == 'requested')
+          .map((model) => model.toEntity())
+          .toList();
+      return requestedProjects;
     }, methodName: 'getRequestedProjects');
   }
 
   @override
   Future<bool> isProjectRequested(String projectId) async {
     return guard(() async {
-      // В реальной реализации бэкенд должен вернуть статус в самом проекте
-      // TODO: Добавить поле status в Project entity для проверки статуса
-      // Пока возвращаем false, так как в реальной реализации нужен отдельный эндпоинт
-      return false;
+      // Получаем проект по ID и проверяем его статус
+      final project = await remoteDataSource.getProjectById(projectId);
+      return project.status == 'requested';
     }, methodName: 'isProjectRequested');
   }
 }

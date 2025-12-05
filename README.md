@@ -771,23 +771,31 @@ flutter build ios --release
 
 ### Разработчики
 
-- **castlele** ([@castlele](https://github.com/castlele)) - castlelecs@gmail.com (15 коммитов)
+- **castlele** ([@castlele](https://github.com/castlele)) - castlelecs@gmail.com (19 коммитов)
   - Полное тестовое покрытие проекта (76 тестов)
   - Unit тесты для notifiers, repositories, use cases
   - Widget тесты для UI компонентов
   - Документация по тестированию и архитектуре
   - Рефакторинг виджет-функций в классы виджетов
   - Документация структуры проекта ([ARCHITECTURE.md](./xdocs/ARCHITECTURE.md), README.md)
+  - Stage 5: Object Page and Chat/Video
+  - Удаление поля constructionAddress из Project entity
+  - Обновление тестов для Stage 4
 
-- **Konkurent** ([@Konkurent](https://github.com/Konkurent)) - kechin.d@gmail.com (15 коммитов)
+- **Konkurent** ([@Konkurent](https://github.com/Konkurent)) - kechin.d@gmail.com (20 коммитов)
   - Реализация shimmer эффектов для всех экранов загрузки
   - Создание системы логирования (AppLogger)
   - Улучшение навигации между экранами (постоянные кнопки в AppBar)
   - Оптимизация видеопотока (удаление контролов для live потоков, остановка при выходе)
   - Настройки платформ для потокового видео (Android Manifest, iOS Info.plist)
   - Добавление демо-видеопотоков для демонстрации
+  - Полноэкранный режим для видео с возможностью смены ориентации
+  - Документация всех API эндпойнтов для бэкенда
+  - Исправление предупреждений анализатора
+  - Обновление use case и тестов для использования objectId
+  - Обновление документации use case
 
-- **NikBakly** ([@NikBakly](https://github.com/NikBakly)) - baklykov.nikita369@gmail.com (15 коммитов)
+- **NikBakly** ([@NikBakly](https://github.com/NikBakly)) - baklykov.nikita369@gmail.com (19 коммитов)
   - Исправление ошибок UI (CardTheme)
   - Работа с документами (одобрение отклоненных документов, projectId в Document entity)
   - Исправления в document_remote_data_source
@@ -795,14 +803,23 @@ flutter build ios --release
   - Навигация к стройке после одобрения всех документов
   - Исправления локализации и навигации
   - Добавление видеоплеера и навигации между этапами
+  - Исправление страницы объекта - использование objectId вместо projectId
+  - Генерация моковых объектов с прогрессом по этапам в 100%
+  - Исправление подписания документа у объекта (завершающие строительство)
+  - Добавление кнопки завершить строительство после подписания всех документов
 
 ### Тимлид
 
-- **Nikita Kovalenko** ([@abigotado](https://github.com/abigotado)) - nik.koval.89@gmail.com (21 коммит)
+- **Nikita Kovalenko** ([@abigotado](https://github.com/abigotado)) - nik.koval.89@gmail.com (40 коммитов)
   - Архитектура проекта (DDD, feature-first)
   - Основная функциональность приложения
   - Интеграция всех модулей
   - Координация работы команды
+  - Stage 4: Связи между проектом и объектом, навигация, исправления локализации
+  - Рефакторинг: Freezed для состояний, toString для сущностей
+  - Перенос runApp в bootstrap, упрощение локализации
+  - CI/CD настройка и автоматизация сборки APK
+  - Исправления и улучшения кодовой базы
 
 ## 📄 Лицензия
 

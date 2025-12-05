@@ -22,9 +22,11 @@ class AuthInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    // Если получили 401, возможно токен истёк - можно попробовать обновить
+    // Если получили 401, возможно токен истёк
+    // Примечание: В будущем можно реализовать автоматическое обновление токена
+    // через refresh token, если бэкенд будет поддерживать такую функциональность
     if (err.response?.statusCode == 401) {
-      // TODO: Реализовать обновление токена при необходимости
+      // Токен истёк - пользователю нужно будет войти заново
     }
     handler.next(err);
   }

@@ -468,4 +468,13 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get constructionCompletedSuccess => 'Строительство успешно завершено!';
+
+  @override
+  String get networkError => 'Ошибка сети. Проверьте подключение к интернету';
+
+  @override
+  String get serverError => 'Ошибка сервера';
+
+  @override
+  String get cacheError => 'Ошибка сохранения данных';
 }

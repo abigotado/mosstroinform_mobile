@@ -77,8 +77,9 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
         'PaginatedProjectsNotifier.loadFirstPage: запрос с параметрами: $paginationParams',
       );
 
-      // TODO: Обновить репозиторий для поддержки пагинации
-      // Пока используем старый метод, но возвращаем только первую страницу
+      // Примечание: В текущей реализации пагинация выполняется на клиенте.
+      // Когда бэкенд будет поддерживать пагинацию, нужно обновить репозиторий
+      // для использования эндпоинта с параметрами пагинации.
       final allProjects = await repository.getProjects();
       
       final itemsPerPage = paginationParams['limit'] as int;
@@ -151,8 +152,9 @@ class PaginatedProjectsNotifier extends _$PaginatedProjectsNotifier
         'PaginatedProjectsNotifier.loadNextPage: запрос с параметрами: $paginationParams',
       );
 
-      // TODO: Обновить репозиторий для поддержки пагинации
-      // Пока используем старый метод и берем следующую страницу
+      // Примечание: В текущей реализации пагинация выполняется на клиенте.
+      // Когда бэкенд будет поддерживать пагинацию, нужно обновить репозиторий
+      // для использования эндпоинта с параметрами пагинации.
       final allProjects = await repository.getProjects();
       
       final nextPage = currentState.currentPage + 1;

@@ -933,6 +933,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Строительство успешно завершено!'**
   String get constructionCompletedSuccess;
+
+  /// No description provided for @networkError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сети. Проверьте подключение к интернету'**
+  String get networkError;
+
+  /// No description provided for @serverError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сервера'**
+  String get serverError;
+
+  /// No description provided for @cacheError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сохранения данных'**
+  String get cacheError;
 }
 
 class _AppLocalizationsDelegate

@@ -187,5 +187,8 @@
   "enterConstructionAddress": "Введите адрес строительства",
   "constructionStarted": "Строительство начато!",
   "completeConstruction": "Завершить строительство",
-  "constructionCompletedSuccess": "Строительство успешно завершено!"
+  "constructionCompletedSuccess": "Строительство успешно завершено!",
+  "networkError": "Ошибка сети. Проверьте подключение к интернету",
+  "serverError": "Ошибка сервера",
+  "cacheError": "Ошибка сохранения данных"
 }

@@ -345,6 +345,57 @@ https://api.mosstroinform.ru/v1
 }
 ```
 
+## Объекты строительства (CRUD)
+
+### GET /construction-objects
+Получить список всех объектов строительства текущего пользователя.
+
+**Response:**
+```json
+[
+  {
+    "id": "string",
+    "projectId": "string",
+    "name": "string",
+    "address": "string",
+    "description": "string",
+    "area": 0.0,
+    "floors": 0,
+    "bedrooms": 0,
+    "bathrooms": 0,
+    "price": 0,
+    "imageUrl": "string | null",
+    "stages": [
+      {
+        "id": "string",
+        "name": "string",
+        "status": "pending | in_progress | completed"
+      }
+    ],
+    "chatId": "string | null"
+  }
+]
+```
+
+### GET /construction-objects/{objectId}
+Получить информацию о конкретном объекте строительства.
+
+**Path Parameters:**
+- `objectId` (string) - ID объекта строительства
+
+**Response:** (Аналогично элементу из списка `GET /construction-objects`)
+
+### POST /construction-objects/{objectId}/complete
+Завершить строительство объекта (после подписания всех финальных документов).
+
+**Path Parameters:**
+- `objectId` (string) - ID объекта строительства
+
+**Response:**
+```
+204 No Content
+```
+
 ## Чат
 
 ### GET /chats
