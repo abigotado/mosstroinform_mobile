@@ -89,9 +89,12 @@ class ProfileScreen extends ConsumerWidget {
                       subtitle: Text(_getThemeModeText(ref.watch(themeModeProvider))),
                     ),
                     Divider(height: 1),
+                    // ignore: deprecated_member_use
                     RadioListTile<ThemeMode>(
                       value: ThemeMode.light,
+                      // ignore: deprecated_member_use
                       groupValue: ref.watch(themeModeProvider),
+                      // ignore: deprecated_member_use
                       onChanged: (value) {
                         if (value != null) {
                           ref.read(themeModeProvider.notifier).setThemeMode(value);
@@ -100,9 +103,12 @@ class ProfileScreen extends ConsumerWidget {
                       title: Text('Светлая'),
                       secondary: Icon(Icons.light_mode),
                     ),
+                    // ignore: deprecated_member_use
                     RadioListTile<ThemeMode>(
                       value: ThemeMode.dark,
+                      // ignore: deprecated_member_use
                       groupValue: ref.watch(themeModeProvider),
+                      // ignore: deprecated_member_use
                       onChanged: (value) {
                         if (value != null) {
                           ref.read(themeModeProvider.notifier).setThemeMode(value);
@@ -111,9 +117,12 @@ class ProfileScreen extends ConsumerWidget {
                       title: Text('Темная'),
                       secondary: Icon(Icons.dark_mode),
                     ),
+                    // ignore: deprecated_member_use
                     RadioListTile<ThemeMode>(
                       value: ThemeMode.system,
+                      // ignore: deprecated_member_use
                       groupValue: ref.watch(themeModeProvider),
+                      // ignore: deprecated_member_use
                       onChanged: (value) {
                         if (value != null) {
                           ref.read(themeModeProvider.notifier).setThemeMode(value);
