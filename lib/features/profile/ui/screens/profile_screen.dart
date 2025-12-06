@@ -89,47 +89,33 @@ class ProfileScreen extends ConsumerWidget {
                       subtitle: Text(_getThemeModeText(ref.watch(themeModeProvider))),
                     ),
                     Divider(height: 1),
-                    // ignore: deprecated_member_use
-                    RadioListTile<ThemeMode>(
-                      value: ThemeMode.light,
-                      // ignore: deprecated_member_use
-                      groupValue: ref.watch(themeModeProvider),
-                      // ignore: deprecated_member_use
-                      onChanged: (value) {
-                        if (value != null) {
-                          ref.read(themeModeProvider.notifier).setThemeMode(value);
-                        }
-                      },
-                      title: Text('Светлая'),
-                      secondary: Icon(Icons.light_mode),
-                    ),
-                    // ignore: deprecated_member_use
-                    RadioListTile<ThemeMode>(
-                      value: ThemeMode.dark,
-                      // ignore: deprecated_member_use
-                      groupValue: ref.watch(themeModeProvider),
-                      // ignore: deprecated_member_use
-                      onChanged: (value) {
-                        if (value != null) {
-                          ref.read(themeModeProvider.notifier).setThemeMode(value);
-                        }
-                      },
-                      title: Text('Темная'),
-                      secondary: Icon(Icons.dark_mode),
-                    ),
-                    // ignore: deprecated_member_use
-                    RadioListTile<ThemeMode>(
-                      value: ThemeMode.system,
-                      // ignore: deprecated_member_use
-                      groupValue: ref.watch(themeModeProvider),
-                      // ignore: deprecated_member_use
-                      onChanged: (value) {
-                        if (value != null) {
-                          ref.read(themeModeProvider.notifier).setThemeMode(value);
-                        }
-                      },
-                      title: Text('Системная'),
-                      secondary: Icon(Icons.brightness_auto),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      child: SegmentedButton<ThemeMode>(
+                        segments: const [
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.light,
+                            label: Text('Светлая'),
+                            icon: Icon(Icons.light_mode),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.dark,
+                            label: Text('Темная'),
+                            icon: Icon(Icons.dark_mode),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.system,
+                            label: Text('Системная'),
+                            icon: Icon(Icons.brightness_auto),
+                          ),
+                        ],
+                        selected: {ref.watch(themeModeProvider)},
+                        onSelectionChanged: (Set<ThemeMode> newSelection) {
+                          if (newSelection.isNotEmpty) {
+                            ref.read(themeModeProvider.notifier).setThemeMode(newSelection.first);
+                          }
+                        },
+                      ),
                     ),
                   ],
                 ),
