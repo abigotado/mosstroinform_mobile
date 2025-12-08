@@ -27,36 +27,42 @@ class AuthChangeNotifier extends ChangeNotifier {
   AuthChangeNotifier(this.ref) {
     // Слушаем изменения authProvider и уведомляем роутер
     ref.listen<AsyncValue<AuthState>>(authProvider, (previous, next) {
+      _currentState = next;
       notifyListeners();
     });
+    // Инициализируем текущее состояние
+    _currentState = ref.read(authProvider);
   }
 
   final Ref ref;
+  AsyncValue<AuthState> _currentState = const AsyncValue.loading();
+
+  AsyncValue<AuthState> get currentState => _currentState;
 }
 
 /// Провайдер роутера с защитой роутов
-/// Использует ref.watch для отслеживания изменений авторизации
+/// Использует refreshListenable для обновления redirect логики без пересоздания роутера
 @riverpod
 GoRouter router(Ref ref) {
-  // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
-  final authState = ref.watch(authProvider);
-
   // Создаем ChangeNotifier для refreshListenable
   final authChangeNotifier = AuthChangeNotifier(ref);
+  
+  // Получаем начальное состояние для initialLocation
+  final initialAuthState = ref.read(authProvider);
 
   AppLogger.log(
     'RouterProvider.build: создание роутера, '
-    'authState.isLoading=${authState.isLoading}, '
-    'authState.hasValue=${authState.hasValue}, '
-    'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
+    'authState.isLoading=${initialAuthState.isLoading}, '
+    'authState.hasValue=${initialAuthState.hasValue}, '
+    'isAuthenticated=${initialAuthState.value?.isAuthenticated ?? false}',
   );
 
   // Определяем начальный роут на основе состояния авторизации
   String initialLocation = '/';
-  if (authState.hasValue) {
-    final isAuthenticated = authState.value?.isAuthenticated ?? false;
+  if (initialAuthState.hasValue) {
+    final isAuthenticated = initialAuthState.value?.isAuthenticated ?? false;
     initialLocation = isAuthenticated ? '/' : '/login';
-  } else if (authState.isLoading) {
+  } else if (initialAuthState.isLoading) {
     // Пока загружается, показываем главную (будет редирект если не авторизован)
     initialLocation = '/';
   } else {
@@ -67,18 +73,21 @@ GoRouter router(Ref ref) {
   AppLogger.log('RouterProvider.build: initialLocation=$initialLocation');
 
   return GoRouter(
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false, // Отключаем debug логи GoRouter
     observers: [AppLogger.routeObserver],
     initialLocation: initialLocation,
     refreshListenable: authChangeNotifier,
     redirect: (context, state) {
+      // Читаем текущее состояние из AuthChangeNotifier
+      final authState = authChangeNotifier.currentState;
+      
       // Если авторизация еще загружается, не делаем редирект
       if (authState.isLoading) {
         AppLogger.log('Router.redirect: авторизация загружается, ожидание...');
         return null;
       }
 
-      // Используем текущее значение из замыкания
+      // Используем текущее значение из AuthChangeNotifier
       final isAuthenticated = authState.value?.isAuthenticated ?? false;
       final isLoginRoute =
           state.matchedLocation == '/login' ||
