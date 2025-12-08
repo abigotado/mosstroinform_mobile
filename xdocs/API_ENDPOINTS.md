@@ -5,7 +5,7 @@
 ## Базовый URL
 
 ```
-https://api.mosstroinform.ru/v1
+https://mosstroiinform.vasmarfas.com/api/v1
 ```
 
 Все запросы требуют авторизации через Bearer токен в заголовке `Authorization`, кроме эндпойнтов `/auth/login` и `/auth/register`.
