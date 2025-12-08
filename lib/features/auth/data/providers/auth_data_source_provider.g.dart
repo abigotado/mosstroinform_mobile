@@ -51,7 +51,7 @@ final class AuthDioProvider extends $FunctionalProvider<Dio, Dio, Dio>
   }
 }
 
-String _$authDioHash() => r'ddbc923ccfb715c9e1a6c232e2ac7bcd9d1621c0';
+String _$authDioHash() => r'0b731d6bb60c8bdf31feed853516ed658625917e';
 
 /// Провайдер для удалённого источника данных авторизации
 

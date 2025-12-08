@@ -9,19 +9,19 @@ part of 'router_provider.dart';
 // GENERATED CODE - DO NOT MODIFY BY HAND
 // ignore_for_file: type=lint, type=warning
 /// Провайдер роутера с защитой роутов
-/// Использует ref.watch для отслеживания изменений авторизации
+/// Использует refreshListenable для обновления redirect логики без пересоздания роутера
 
 @ProviderFor(router)
 const routerProvider = RouterProvider._();
 
 /// Провайдер роутера с защитой роутов
-/// Использует ref.watch для отслеживания изменений авторизации
+/// Использует refreshListenable для обновления redirect логики без пересоздания роутера
 
 final class RouterProvider
     extends $FunctionalProvider<GoRouter, GoRouter, GoRouter>
     with $Provider<GoRouter> {
   /// Провайдер роутера с защитой роутов
-  /// Использует ref.watch для отслеживания изменений авторизации
+  /// Использует refreshListenable для обновления redirect логики без пересоздания роутера
   const RouterProvider._()
     : super(
         from: null,
@@ -55,4 +55,4 @@ final class RouterProvider
   }
 }
 
-String _$routerHash() => r'e8068a83757fcd4eb1e21bd4cbcbb198f66181c1';
+String _$routerHash() => r'86d9e7a60ea1ea6327943fe732a7b7e5e6ed5fb0';

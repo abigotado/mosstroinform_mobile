@@ -44,7 +44,7 @@ final class ThemeModeNotifierProvider
   }
 }
 
-String _$themeModeNotifierHash() => r'30e9c7875815bb542c98b2187ddd8b6dcf558465';
+String _$themeModeNotifierHash() => r'e54c9ee022e787a1bc8d885dfeef493b9493b07d';
 
 /// Провайдер для управления темой приложения
 

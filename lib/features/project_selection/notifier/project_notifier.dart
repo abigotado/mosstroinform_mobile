@@ -23,7 +23,7 @@ abstract class ProjectsState with _$ProjectsState {
 }
 
 /// Notifier для управления состоянием списка проектов
-@riverpod
+@Riverpod(keepAlive: true)
 class ProjectsNotifier extends _$ProjectsNotifier {
   @override
   Future<ProjectsState> build() async {
@@ -36,10 +36,19 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
-    // Проверяем авторизацию перед загрузкой
-    final authState = ref.read(authProvider);
-    if (authState.value?.isAuthenticated != true) {
-      AppLogger.info('ProjectsNotifier.loadProjects: пользователь не авторизован, пропускаем загрузку');
+    // Проверяем авторизацию перед загрузкой (дожидаемся, если провайдер еще грузится)
+    final authAsync = ref.read(authProvider);
+    AuthState? authState;
+    try {
+      authState = authAsync.value ?? await ref.read(authProvider.future);
+    } catch (_) {
+      authState = authAsync.value;
+    }
+
+    if (authState?.isAuthenticated != true) {
+      AppLogger.info(
+        'ProjectsNotifier.loadProjects: пользователь не авторизован, пропускаем загрузку',
+      );
       return;
     }
 
@@ -50,18 +59,24 @@ class ProjectsNotifier extends _$ProjectsNotifier {
       final projects = await repository
           .getProjects(); // Без пагинации - получаем все проекты
 
+      if (!ref.mounted) return;
+
       if (state.hasValue || !state.hasError) {
         state = AsyncValue.data(
           ProjectsState(projects: projects, isLoading: false),
         );
       }
     } on Failure catch (e) {
+      if (!ref.mounted) return;
+
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(isLoading: false, error: e),
       );
     } catch (e, _) {
       // Игнорируем ошибку использования disposed ref, если она возникла
       if (e.toString().contains('disposed')) return;
+
+      if (!ref.mounted) return;
 
       state = AsyncValue.data(
         const ProjectsState(projects: []).copyWith(
@@ -187,8 +202,6 @@ class ProjectNotifier extends _$ProjectNotifier {
       // Инвалидируем провайдеры для обновления UI
       // Инвалидируем провайдер проверки статуса запроса для этого проекта
       ref.invalidate(isProjectRequestedProvider(projectId));
-      // Инвалидируем список проектов для обновления карточек
-      ref.invalidate(projectsProvider);
       // Инвалидируем список запрошенных проектов
       ref.invalidate(requestedProjectsProvider);
       // Инвалидируем пагинированный список проектов
@@ -199,11 +212,11 @@ class ProjectNotifier extends _$ProjectNotifier {
       // Не показываем loading, так как данные уже есть
       await loadProject(projectId, showLoading: false);
       // Перезагружаем список проектов для обновления карточек
-      ref.read(projectsProvider.notifier).loadProjects();
+      await ref.read(projectsProvider.notifier).loadProjects();
       // Перезагружаем список запрошенных проектов
-      ref.read(requestedProjectsProvider.notifier).loadRequestedProjects();
+      await ref.read(requestedProjectsProvider.notifier).loadRequestedProjects();
       // Перезагружаем пагинированный список проектов
-      ref.read(paginatedProjectsProvider.notifier).loadFirstPage();
+      await ref.read(paginatedProjectsProvider.notifier).loadFirstPage();
     } on Failure catch (e) {
       state = AsyncValue.data(
         currentState?.copyWith(
