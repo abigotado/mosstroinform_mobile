@@ -261,11 +261,34 @@ GoRouter router(Ref ref) {
                   return ChatDetailScreen(chatId: chatId);
                 },
               ),
-              GoRoute(
-                path: '/dev-console',
-                builder: (context, state) => const DevConsolePage(),
-              ),
             ],
+          ),
+        ],
+      ),
+      // Dev console вне bottom navigation
+      ShellRoute(
+        pageBuilder: (context, state, child) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 600),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(
+                curve: Curves.easeInOutCirc,
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: Stack(
+            children: [
+              child,
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          ),
+        ),
+        routes: [
+          GoRoute(
+            path: '/dev-console',
+            builder: (context, state) => const DevConsolePage(),
           ),
         ],
       ),
