@@ -14,7 +14,7 @@
 
 ### 2. **prod** - Production
 - Использует реальный API (`useMocks: false`)
-- API URL: `https://api.example.com`
+- API URL: `https://api.mosstroinform.ru/v1`
 - Имя приложения: "Production"
 - **Используется для production окружения с реальными данными**
 
