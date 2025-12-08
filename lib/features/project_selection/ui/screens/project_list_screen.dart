@@ -4,6 +4,7 @@ import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
+import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/project_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
@@ -26,9 +27,12 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
   @override
   void initState() {
     super.initState();
-    // Загружаем проекты при инициализации
+    // Загружаем проекты при инициализации только если пользователь авторизован
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(projectsProvider.notifier).loadProjects();
+      final authState = ref.read(authProvider);
+      if (authState.value?.isAuthenticated == true) {
+        ref.read(projectsProvider.notifier).loadProjects();
+      }
     });
     _scrollController.addListener(_onScroll);
   }

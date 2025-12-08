@@ -58,13 +58,18 @@ GoRouter router(Ref ref) {
   );
 
   // Определяем начальный роут на основе состояния авторизации
-  String initialLocation = '/';
+  // Важно: если не авторизован, сразу устанавливаем /login, чтобы не создавать защищенные экраны
+  String initialLocation = '/login';
   if (initialAuthState.hasValue) {
     final isAuthenticated = initialAuthState.value?.isAuthenticated ?? false;
-    initialLocation = isAuthenticated ? '/' : '/login';
+    if (isAuthenticated) {
+      initialLocation = '/';
+    } else {
+      initialLocation = '/login';
+    }
   } else if (initialAuthState.isLoading) {
-    // Пока загружается, показываем главную (будет редирект если не авторизован)
-    initialLocation = '/';
+    // Пока загружается, показываем логин (будет редирект на / если авторизован)
+    initialLocation = '/login';
   } else {
     // Если ошибка или не авторизован, показываем логин
     initialLocation = '/login';

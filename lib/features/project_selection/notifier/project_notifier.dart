@@ -35,6 +35,13 @@ class ProjectsNotifier extends _$ProjectsNotifier {
 
   /// Загрузить список проектов
   Future<void> loadProjects() async {
+    // Проверяем авторизацию перед загрузкой
+    final authState = ref.read(authProvider);
+    if (authState.value?.isAuthenticated != true) {
+      AppLogger.info('ProjectsNotifier.loadProjects: пользователь не авторизован, пропускаем загрузку');
+      return;
+    }
+
     state = const AsyncValue.loading();
 
     try {
