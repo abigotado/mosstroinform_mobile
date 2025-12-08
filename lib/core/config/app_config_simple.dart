@@ -18,7 +18,7 @@ class AppConfigSimple {
   /// Конфигурация для production окружения (реальные данные)
   factory AppConfigSimple.prod() {
     return const AppConfigSimple(
-      baseUrl: 'https://api.example.com',
+      baseUrl: 'https://mosstroiinform.vasmarfas.com/api/v1',
       useMocks: false,
       requestTimeout: 30,
       environmentName: 'Production',

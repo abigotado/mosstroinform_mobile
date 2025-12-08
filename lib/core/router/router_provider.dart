@@ -27,38 +27,49 @@ class AuthChangeNotifier extends ChangeNotifier {
   AuthChangeNotifier(this.ref) {
     // Слушаем изменения authProvider и уведомляем роутер
     ref.listen<AsyncValue<AuthState>>(authProvider, (previous, next) {
+      _currentState = next;
       notifyListeners();
     });
+    // Инициализируем текущее состояние
+    _currentState = ref.read(authProvider);
   }
 
   final Ref ref;
+  AsyncValue<AuthState> _currentState = const AsyncValue.loading();
+
+  AsyncValue<AuthState> get currentState => _currentState;
 }
 
 /// Провайдер роутера с защитой роутов
-/// Использует ref.watch для отслеживания изменений авторизации
+/// Использует refreshListenable для обновления redirect логики без пересоздания роутера
 @riverpod
 GoRouter router(Ref ref) {
-  // Подписываемся на изменения авторизации, чтобы роутер пересоздавался при изменении
-  final authState = ref.watch(authProvider);
-
   // Создаем ChangeNotifier для refreshListenable
   final authChangeNotifier = AuthChangeNotifier(ref);
 
+  // Получаем начальное состояние для initialLocation
+  final initialAuthState = ref.read(authProvider);
+
   AppLogger.log(
     'RouterProvider.build: создание роутера, '
-    'authState.isLoading=${authState.isLoading}, '
-    'authState.hasValue=${authState.hasValue}, '
-    'isAuthenticated=${authState.value?.isAuthenticated ?? false}',
+    'authState.isLoading=${initialAuthState.isLoading}, '
+    'authState.hasValue=${initialAuthState.hasValue}, '
+    'isAuthenticated=${initialAuthState.value?.isAuthenticated ?? false}',
   );
 
   // Определяем начальный роут на основе состояния авторизации
-  String initialLocation = '/';
-  if (authState.hasValue) {
-    final isAuthenticated = authState.value?.isAuthenticated ?? false;
-    initialLocation = isAuthenticated ? '/' : '/login';
-  } else if (authState.isLoading) {
-    // Пока загружается, показываем главную (будет редирект если не авторизован)
-    initialLocation = '/';
+  // Важно: если не авторизован, сразу устанавливаем /login, чтобы не создавать защищенные экраны
+  String initialLocation = '/login';
+  if (initialAuthState.hasValue) {
+    final isAuthenticated = initialAuthState.value?.isAuthenticated ?? false;
+    if (isAuthenticated) {
+      initialLocation = '/';
+    } else {
+      initialLocation = '/login';
+    }
+  } else if (initialAuthState.isLoading) {
+    // Пока загружается, показываем логин (будет редирект на / если авторизован)
+    initialLocation = '/login';
   } else {
     // Если ошибка или не авторизован, показываем логин
     initialLocation = '/login';
@@ -67,22 +78,26 @@ GoRouter router(Ref ref) {
   AppLogger.log('RouterProvider.build: initialLocation=$initialLocation');
 
   return GoRouter(
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false, // Отключаем debug логи GoRouter
     observers: [AppLogger.routeObserver],
     initialLocation: initialLocation,
     refreshListenable: authChangeNotifier,
     redirect: (context, state) {
+      // Читаем текущее состояние из AuthChangeNotifier
+      final authState = authChangeNotifier.currentState;
+
       // Если авторизация еще загружается, не делаем редирект
       if (authState.isLoading) {
         AppLogger.log('Router.redirect: авторизация загружается, ожидание...');
         return null;
       }
 
-      // Используем текущее значение из замыкания
+      // Используем текущее значение из AuthChangeNotifier
       final isAuthenticated = authState.value?.isAuthenticated ?? false;
       final isLoginRoute =
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
+      final isDevConsoleRoute = state.matchedLocation == '/dev-console';
       final isMainRoute =
           state.matchedLocation == '/' ||
           state.matchedLocation == '/requested' ||
@@ -92,8 +107,15 @@ GoRouter router(Ref ref) {
       AppLogger.log(
         'Router.redirect: matchedLocation=${state.matchedLocation}, '
         'isAuthenticated=$isAuthenticated, isLoginRoute=$isLoginRoute, '
-        'isMainRoute=$isMainRoute, authState.hasValue=${authState.hasValue}',
+        'isDevConsoleRoute=$isDevConsoleRoute, isMainRoute=$isMainRoute, '
+        'authState.hasValue=${authState.hasValue}',
       );
+
+      // Dev console доступна без авторизации
+      if (isDevConsoleRoute) {
+        AppLogger.log('Router.redirect: dev console доступна без авторизации');
+        return null;
+      }
 
       // Если пользователь не авторизован и пытается попасть на защищённый роут
       if (!isAuthenticated && !isLoginRoute) {
@@ -253,11 +275,34 @@ GoRouter router(Ref ref) {
                   return ChatDetailScreen(chatId: chatId);
                 },
               ),
-              GoRoute(
-                path: '/dev-console',
-                builder: (context, state) => const DevConsolePage(),
-              ),
             ],
+          ),
+        ],
+      ),
+      // Dev console вне bottom navigation
+      ShellRoute(
+        pageBuilder: (context, state, child) => CustomTransitionPage(
+          key: state.pageKey,
+          transitionDuration: const Duration(milliseconds: 600),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: CurveTween(
+                curve: Curves.easeInOutCirc,
+              ).animate(animation),
+              child: child,
+            );
+          },
+          child: Stack(
+            children: [
+              child,
+              if (AppLogger.showDebugFeatures) const DebugLoggerOverlay(),
+            ],
+          ),
+        ),
+        routes: [
+          GoRoute(
+            path: '/dev-console',
+            builder: (context, state) => const DevConsolePage(),
           ),
         ],
       ),

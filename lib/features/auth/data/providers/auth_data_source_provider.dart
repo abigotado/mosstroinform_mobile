@@ -15,7 +15,9 @@ Dio authDio(Ref ref) {
   final secureStorage = ref.watch(secureStorageProvider);
 
   // Создаём новый Dio с interceptor для авторизации
+  // Копируем все interceptors из baseDio (включая логгер)
   final dio = Dio(baseDio.options);
+  dio.interceptors.addAll(baseDio.interceptors);
 
   // Создаем временный AuthRemoteDataSource для обновления токена
   // (избегаем циклической зависимости с authRepositoryProvider)

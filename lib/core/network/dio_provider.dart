@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:mosstroinform_mobile/core/constants/app_constants.dart';
+import 'package:logger/logger.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'dio_provider.g.dart';
@@ -8,7 +9,7 @@ part 'dio_provider.g.dart';
 /// Базовая настройка сети для всего приложения
 @riverpod
 Dio dio(Ref ref) {
-  return Dio(
+  final dio = Dio(
     BaseOptions(
       baseUrl: AppConstants.baseUrl,
       connectTimeout: Duration(seconds: AppConstants.requestTimeout),
@@ -19,4 +20,9 @@ Dio dio(Ref ref) {
       },
     ),
   );
+
+  // Добавляем логгер для всех HTTP запросов
+  dio.interceptors.add(AppLogger.dioLogger);
+
+  return dio;
 }

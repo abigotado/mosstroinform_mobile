@@ -48,6 +48,16 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     needs: test
+    strategy:
+      matrix:
+        flavor: [mock, prod]
+        include:
+          - flavor: mock
+            apk_name: app-mock-release.apk
+            artifact_name: app-mock-release-apk
+          - flavor: prod
+            apk_name: app-prod-release.apk
+            artifact_name: app-prod-release-apk
 
     steps:
       - name: Checkout repository
@@ -71,8 +81,8 @@ jobs:
       - name: Generate code
         run: dart run build_runner build -d
 
-      - name: Build APK (mock flavor)
-        run: flutter build apk --release --flavor mock --obfuscate --split-debug-info=build/app/outputs/symbols
+      - name: Build APK (${{ matrix.flavor }} flavor)
+        run: flutter build apk --release --flavor ${{ matrix.flavor }} --dart-define=FLAVOR=${{ matrix.flavor }} --obfuscate --split-debug-info=build/app/outputs/symbols
         continue-on-error: false
 
       - name: List APK files
@@ -85,18 +95,12 @@ jobs:
           echo ""
           echo "=== Contents of build/app/outputs/flutter-apk/ ==="
           ls -la build/app/outputs/flutter-apk/ 2>/dev/null || echo "Directory not found"
-          echo ""
-          echo "=== Contents of build/app/outputs/ ==="
-          ls -la build/app/outputs/ 2>/dev/null || echo "Directory not found"
-          echo ""
-          echo "=== Checking Gradle outputs ==="
-          find build/app/outputs/ -type f -name "*.apk" 2>/dev/null || echo "No APK files in outputs"
 
-      - name: Upload APK artifact
+      - name: Upload APK artifact (${{ matrix.flavor }})
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-apk
-          path: build/app/outputs/flutter-apk/app-mock-release.apk
+          name: ${{ matrix.artifact_name }}
+          path: build/app/outputs/flutter-apk/${{ matrix.apk_name }}
           retention-days: 30
           if-no-files-found: warn
 
@@ -112,15 +116,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Download APK artifact
+      - name: Download APK artifacts
         uses: actions/download-artifact@v4
         with:
-          name: app-release-apk
+          pattern: app-*-release-apk
+          merge-multiple: true
 
       - name: List downloaded APK files
         run: ls -la *.apk || echo "No APK files found"
 
-      - name: Upload APK to release
+      - name: Upload APKs to release
         uses: softprops/action-gh-release@v1
         with:
           files: "*.apk"
@@ -128,9 +133,15 @@ jobs:
           name: Release v${{ github.run_number }}
           body: |
             Автоматическая сборка APK из ветки main
-            - Flavor: mock (с моками)
+            
+            **Включенные сборки:**
+            - Mock flavor (с моками) - `app-mock-release.apk`
+            - Production flavor (реальный API) - `app-prod-release.apk`
+            
+            **Информация:**
             - Commit: ${{ github.sha }}
             - Автор: ${{ github.actor }}
+            - Дата: ${{ github.event.head_commit.timestamp }}
           draft: false
           prerelease: false
         env:
