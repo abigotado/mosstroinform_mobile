@@ -83,6 +83,7 @@ GoRouter router(Ref ref) {
       final isLoginRoute =
           state.matchedLocation == '/login' ||
           state.matchedLocation == '/register';
+      final isDevConsoleRoute = state.matchedLocation == '/dev-console';
       final isMainRoute =
           state.matchedLocation == '/' ||
           state.matchedLocation == '/requested' ||
@@ -92,8 +93,15 @@ GoRouter router(Ref ref) {
       AppLogger.log(
         'Router.redirect: matchedLocation=${state.matchedLocation}, '
         'isAuthenticated=$isAuthenticated, isLoginRoute=$isLoginRoute, '
-        'isMainRoute=$isMainRoute, authState.hasValue=${authState.hasValue}',
+        'isDevConsoleRoute=$isDevConsoleRoute, isMainRoute=$isMainRoute, '
+        'authState.hasValue=${authState.hasValue}',
       );
+
+      // Dev console доступна без авторизации
+      if (isDevConsoleRoute) {
+        AppLogger.log('Router.redirect: dev console доступна без авторизации');
+        return null;
+      }
 
       // Если пользователь не авторизован и пытается попасть на защищённый роут
       if (!isAuthenticated && !isLoginRoute) {
