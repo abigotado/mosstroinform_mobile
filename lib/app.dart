@@ -32,7 +32,7 @@ class MosstroinformApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: const [Locale('ru', ''), Locale('en', '')],
+      supportedLocales: const [Locale('ru', '')],
       routerConfig: router,
     );
   }
