@@ -131,8 +131,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           // Если список пустой и загружается - показываем шиммер
           if (state.projects.isEmpty && state.isLoading) {
             return AppAnimatedSwitcher(
+              key: const ValueKey('shimmer-empty'),
               child: ListView.builder(
-                key: const ValueKey('shimmer'),
+                key: const ValueKey('shimmer-list'),
                 padding: const EdgeInsets.all(16),
                 itemCount: 3, // Фиксированное количество для шиммеров
                 itemBuilder: (context, index) {
@@ -148,8 +149,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           // Если список пустой после загрузки (с ошибкой) - показываем сообщение
           if (state.projects.isEmpty && !state.isLoading) {
             return AppAnimatedSwitcher(
+              key: const ValueKey('empty-state'),
               child: Center(
-                key: const ValueKey('empty'),
+                key: const ValueKey('empty-content'),
                 child: Text(l10n.projectsNotFound),
               ),
             );
@@ -157,8 +159,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
 
           if (state.error != null) {
             return AppAnimatedSwitcher(
+              key: const ValueKey('error-state'),
               child: Center(
-                key: const ValueKey('error'),
+                key: const ValueKey('error-content'),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -191,8 +194,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           final hasMore = paginatedProjects.length < filteredProjects.length;
 
           return AppAnimatedSwitcher(
+            key: ValueKey('list-${paginatedProjects.length}-${state.isLoading}'),
             child: RefreshIndicator(
-              key: ValueKey('list-${paginatedProjects.length}'),
+              key: ValueKey('refresh-${paginatedProjects.length}'),
               onRefresh: () async {
                 setState(() {
                   _currentPage = 0;
@@ -201,6 +205,7 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               },
               child: state.isLoading && paginatedProjects.isEmpty
                   ? ListView.builder(
+                      key: const ValueKey('shimmer-list-inner'),
                       padding: const EdgeInsets.all(16),
                       itemCount: 3, // Фиксированное количество для шиммеров
                       itemBuilder: (context, index) {
@@ -211,8 +216,12 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
                       },
                     )
                   : paginatedProjects.isEmpty
-                  ? Center(child: Text(l10n.projectsNotFound))
+                  ? Center(
+                      key: const ValueKey('empty-inner'),
+                      child: Text(l10n.projectsNotFound),
+                    )
                   : ListView.builder(
+                      key: ValueKey('projects-list-${paginatedProjects.length}'),
                       controller: _scrollController,
                       padding: const EdgeInsets.all(16),
                       itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
@@ -239,8 +248,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
           );
         },
         loading: () => AppAnimatedSwitcher(
+          key: const ValueKey('loading-initial'),
           child: ListView.builder(
-            key: const ValueKey('loading'),
+            key: const ValueKey('loading-list'),
             padding: const EdgeInsets.all(16),
             itemCount: 3, // Фиксированное количество для шиммеров
             itemBuilder: (context, index) {

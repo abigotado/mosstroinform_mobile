@@ -46,7 +46,7 @@ class AuthChangeNotifier extends ChangeNotifier {
 GoRouter router(Ref ref) {
   // Создаем ChangeNotifier для refreshListenable
   final authChangeNotifier = AuthChangeNotifier(ref);
-  
+
   // Получаем начальное состояние для initialLocation
   final initialAuthState = ref.read(authProvider);
 
@@ -80,7 +80,7 @@ GoRouter router(Ref ref) {
     redirect: (context, state) {
       // Читаем текущее состояние из AuthChangeNotifier
       final authState = authChangeNotifier.currentState;
-      
+
       // Если авторизация еще загружается, не делаем редирект
       if (authState.isLoading) {
         AppLogger.log('Router.redirect: авторизация загружается, ожидание...');
