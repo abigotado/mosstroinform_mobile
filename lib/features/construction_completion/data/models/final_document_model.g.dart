@@ -11,15 +11,15 @@ _FinalDocumentModel _$FinalDocumentModelFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       title: json['title'] as String,
       description: json['description'] as String,
-      fileUrl: json['fileUrl'] as String?,
+      fileUrl: json['file_url'] as String?,
       statusString: json['status'] as String? ?? 'pending',
-      submittedAt: json['submittedAt'] == null
+      submittedAt: json['submitted_at'] == null
           ? null
-          : DateTime.parse(json['submittedAt'] as String),
-      signedAt: json['signedAt'] == null
+          : DateTime.parse(json['submitted_at'] as String),
+      signedAt: json['signed_at'] == null
           ? null
-          : DateTime.parse(json['signedAt'] as String),
-      signatureUrl: json['signatureUrl'] as String?,
+          : DateTime.parse(json['signed_at'] as String),
+      signatureUrl: json['signature_url'] as String?,
     );
 
 Map<String, dynamic> _$FinalDocumentModelToJson(_FinalDocumentModel instance) =>
@@ -27,9 +27,9 @@ Map<String, dynamic> _$FinalDocumentModelToJson(_FinalDocumentModel instance) =>
       'id': instance.id,
       'title': instance.title,
       'description': instance.description,
-      'fileUrl': ?instance.fileUrl,
+      'file_url': ?instance.fileUrl,
       'status': instance.statusString,
-      'submittedAt': ?instance.submittedAt?.toIso8601String(),
-      'signedAt': ?instance.signedAt?.toIso8601String(),
-      'signatureUrl': ?instance.signatureUrl,
+      'submitted_at': ?instance.submittedAt?.toIso8601String(),
+      'signed_at': ?instance.signedAt?.toIso8601String(),
+      'signature_url': ?instance.signatureUrl,
     };

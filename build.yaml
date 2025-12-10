@@ -22,6 +22,8 @@ targets:
           explicit_to_json: true
           # Включать проверку на null
           include_if_null: false
+          # Автоматическое преобразование snake_case в camelCase
+          field_rename: snake
 
       # Retrofit для генерации API клиентов
       retrofit_generator:

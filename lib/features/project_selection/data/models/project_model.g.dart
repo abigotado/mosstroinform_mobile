@@ -16,9 +16,9 @@ _ProjectModel _$ProjectModelFromJson(Map<String, dynamic> json) =>
       bedrooms: (json['bedrooms'] as num).toInt(),
       bathrooms: (json['bathrooms'] as num).toInt(),
       price: (json['price'] as num).toInt(),
-      imageUrl: json['imageUrl'] as String?,
+      imageUrl: json['image_url'] as String?,
       status: json['status'] as String?,
-      objectId: json['objectId'] as String?,
+      objectId: json['object_id'] as String?,
     );
 
 Map<String, dynamic> _$ProjectModelToJson(_ProjectModel instance) =>
@@ -31,7 +31,7 @@ Map<String, dynamic> _$ProjectModelToJson(_ProjectModel instance) =>
       'bedrooms': instance.bedrooms,
       'bathrooms': instance.bathrooms,
       'price': instance.price,
-      'imageUrl': ?instance.imageUrl,
+      'image_url': ?instance.imageUrl,
       'status': ?instance.status,
-      'objectId': ?instance.objectId,
+      'object_id': ?instance.objectId,
     };

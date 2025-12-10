@@ -8,10 +8,10 @@ part of 'document_model.dart';
 
 _DocumentModel _$DocumentModelFromJson(Map<String, dynamic> json) =>
     _DocumentModel(
-      id: _stringFromJson(json['id']),
-      projectId: _stringFromJson(json['project_id']),
-      title: _stringFromJson(json['title']),
-      description: _stringFromJson(json['description']),
+      id: json['id'] as String?,
+      projectId: json['project_id'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
       fileUrl: json['file_url'] as String?,
       statusString: json['status'] as String? ?? 'pending',
       submittedAt: json['submitted_at'] == null
@@ -25,10 +25,10 @@ _DocumentModel _$DocumentModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$DocumentModelToJson(_DocumentModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'project_id': instance.projectId,
-      'title': instance.title,
-      'description': instance.description,
+      'id': ?instance.id,
+      'project_id': ?instance.projectId,
+      'title': ?instance.title,
+      'description': ?instance.description,
       'file_url': ?instance.fileUrl,
       'status': instance.statusString,
       'submitted_at': ?instance.submittedAt?.toIso8601String(),

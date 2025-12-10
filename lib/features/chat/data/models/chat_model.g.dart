@@ -8,45 +8,45 @@ part of 'chat_model.dart';
 
 _ChatModel _$ChatModelFromJson(Map<String, dynamic> json) => _ChatModel(
   id: json['id'] as String,
-  projectId: json['projectId'] as String,
-  specialistName: json['specialistName'] as String,
-  specialistAvatarUrl: json['specialistAvatarUrl'] as String?,
-  lastMessage: json['lastMessage'] as String?,
-  lastMessageAt: json['lastMessageAt'] == null
+  projectId: json['project_id'] as String,
+  specialistName: json['specialist_name'] as String,
+  specialistAvatarUrl: json['specialist_avatar_url'] as String?,
+  lastMessage: json['last_message'] as String?,
+  lastMessageAt: json['last_message_at'] == null
       ? null
-      : DateTime.parse(json['lastMessageAt'] as String),
-  unreadCount: (json['unreadCount'] as num?)?.toInt() ?? 0,
-  isActive: json['isActive'] as bool? ?? true,
+      : DateTime.parse(json['last_message_at'] as String),
+  unreadCount: (json['unread_count'] as num?)?.toInt() ?? 0,
+  isActive: json['is_active'] as bool? ?? true,
 );
 
 Map<String, dynamic> _$ChatModelToJson(_ChatModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'projectId': instance.projectId,
-      'specialistName': instance.specialistName,
-      'specialistAvatarUrl': ?instance.specialistAvatarUrl,
-      'lastMessage': ?instance.lastMessage,
-      'lastMessageAt': ?instance.lastMessageAt?.toIso8601String(),
-      'unreadCount': instance.unreadCount,
-      'isActive': instance.isActive,
+      'project_id': instance.projectId,
+      'specialist_name': instance.specialistName,
+      'specialist_avatar_url': ?instance.specialistAvatarUrl,
+      'last_message': ?instance.lastMessage,
+      'last_message_at': ?instance.lastMessageAt?.toIso8601String(),
+      'unread_count': instance.unreadCount,
+      'is_active': instance.isActive,
     };
 
 _MessageModel _$MessageModelFromJson(Map<String, dynamic> json) =>
     _MessageModel(
       id: json['id'] as String,
-      chatId: json['chatId'] as String,
+      chatId: json['chat_id'] as String,
       text: json['text'] as String,
-      sentAt: DateTime.parse(json['sentAt'] as String),
-      isFromSpecialist: json['isFromSpecialist'] as bool? ?? false,
-      isRead: json['isRead'] as bool? ?? false,
+      sentAt: DateTime.parse(json['sent_at'] as String),
+      isFromSpecialist: json['is_from_specialist'] as bool? ?? false,
+      isRead: json['is_read'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$MessageModelToJson(_MessageModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'chatId': instance.chatId,
+      'chat_id': instance.chatId,
       'text': instance.text,
-      'sentAt': instance.sentAt.toIso8601String(),
-      'isFromSpecialist': instance.isFromSpecialist,
-      'isRead': instance.isRead,
+      'sent_at': instance.sentAt.toIso8601String(),
+      'is_from_specialist': instance.isFromSpecialist,
+      'is_read': instance.isRead,
     };

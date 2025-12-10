@@ -8,37 +8,29 @@ part 'document_model.g.dart';
 @freezed
 abstract class DocumentModel with _$DocumentModel {
   const factory DocumentModel({
-    @JsonKey(fromJson: _stringFromJson) required String id,
-    @JsonKey(name: 'project_id', fromJson: _stringFromJson) required String projectId,
-    @JsonKey(fromJson: _stringFromJson) required String title,
-    @JsonKey(fromJson: _stringFromJson) required String description,
-    @JsonKey(name: 'file_url') String? fileUrl,
-    @JsonKey(name: 'status') @Default('pending') String statusString,
-    @JsonKey(name: 'submitted_at') DateTime? submittedAt,
-    @JsonKey(name: 'approved_at') DateTime? approvedAt,
-    @JsonKey(name: 'rejection_reason') String? rejectionReason,
+    String? id,
+    String? projectId,
+    String? title,
+    String? description,
+    String? fileUrl,
+    @Default('pending') String statusString,
+    DateTime? submittedAt,
+    DateTime? approvedAt,
+    String? rejectionReason,
   }) = _DocumentModel;
 
   factory DocumentModel.fromJson(Map<String, dynamic> json) =>
       _$DocumentModelFromJson(json);
 }
 
-/// Вспомогательная функция для безопасного преобразования JSON в String
-String _stringFromJson(dynamic json) {
-  if (json == null) {
-    return '';
-  }
-  return json.toString();
-}
-
 /// Расширение для конвертации модели в сущность
 extension DocumentModelExtension on DocumentModel {
   Document toEntity() {
     return Document(
-      id: id,
-      projectId: projectId,
-      title: title,
-      description: description,
+      id: id ?? '',
+      projectId: projectId ?? '',
+      title: title ?? '',
+      description: description ?? '',
       fileUrl: fileUrl,
       status: _parseStatus(statusString),
       submittedAt: submittedAt,

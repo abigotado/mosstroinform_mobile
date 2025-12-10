@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConstructionObjectModel {
 
-@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(name: 'project_id', fromJson: _stringFromJson) String get projectId;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get address;@JsonKey(fromJson: _stringFromJson) String get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price;@JsonKey(name: 'image_url') String? get imageUrl;@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> get stages;@JsonKey(name: 'chat_id') String? get chatId;@JsonKey(name: 'all_documents_signed') bool get allDocumentsSigned;@JsonKey(name: 'is_completed') bool get isCompleted;
+ String? get id; String? get projectId; String? get name; String? get address; String? get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price; String? get imageUrl; List<ConstructionStageModel> get stages; String? get chatId; bool get allDocumentsSigned; bool get isCompleted;
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ConstructionObjectModelCopyWith<$Res>  {
   factory $ConstructionObjectModelCopyWith(ConstructionObjectModel value, $Res Function(ConstructionObjectModel) _then) = _$ConstructionObjectModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
+ String? id, String? projectId, String? name, String? address, String? description, double area, int floors, int bedrooms, int bathrooms, int price, String? imageUrl, List<ConstructionStageModel> stages, String? chatId, bool allDocumentsSigned, bool isCompleted
 });
 
 
@@ -65,14 +65,14 @@ class _$ConstructionObjectModelCopyWithImpl<$Res>
 
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? projectId = null,Object? name = null,Object? address = null,Object? description = null,Object? area = null,Object? floors = null,Object? bedrooms = null,Object? bathrooms = null,Object? price = null,Object? imageUrl = freezed,Object? stages = null,Object? chatId = freezed,Object? allDocumentsSigned = null,Object? isCompleted = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? projectId = freezed,Object? name = freezed,Object? address = freezed,Object? description = freezed,Object? area = null,Object? floors = null,Object? bedrooms = null,Object? bathrooms = null,Object? price = null,Object? imageUrl = freezed,Object? stages = null,Object? chatId = freezed,Object? allDocumentsSigned = null,Object? isCompleted = null,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,area: null == area ? _self.area : area // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,area: null == area ? _self.area : area // ignore: cast_nullable_to_non_nullable
 as double,floors: null == floors ? _self.floors : floors // ignore: cast_nullable_to_non_nullable
 as int,bedrooms: null == bedrooms ? _self.bedrooms : bedrooms // ignore: cast_nullable_to_non_nullable
 as int,bathrooms: null == bathrooms ? _self.bathrooms : bathrooms // ignore: cast_nullable_to_non_nullable
@@ -167,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? projectId,  String? name,  String? address,  String? description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -188,7 +188,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? projectId,  String? name,  String? address,  String? description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel():
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -208,7 +208,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? projectId,  String? name,  String? address,  String? description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)?  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -223,30 +223,30 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 @JsonSerializable()
 
 class _ConstructionObjectModel implements ConstructionObjectModel {
-  const _ConstructionObjectModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(name: 'project_id', fromJson: _stringFromJson) required this.projectId, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.address, @JsonKey(fromJson: _stringFromJson) required this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, @JsonKey(name: 'image_url') this.imageUrl, @JsonKey(fromJson: _stagesFromJson) required final  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id') this.chatId, @JsonKey(name: 'all_documents_signed') this.allDocumentsSigned = false, @JsonKey(name: 'is_completed') this.isCompleted = false}): _stages = stages;
+  const _ConstructionObjectModel({this.id, this.projectId, this.name, this.address, this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, this.imageUrl, final  List<ConstructionStageModel> stages = const [], this.chatId, this.allDocumentsSigned = false, this.isCompleted = false}): _stages = stages;
   factory _ConstructionObjectModel.fromJson(Map<String, dynamic> json) => _$ConstructionObjectModelFromJson(json);
 
-@override@JsonKey(fromJson: _stringFromJson) final  String id;
-@override@JsonKey(name: 'project_id', fromJson: _stringFromJson) final  String projectId;
-@override@JsonKey(fromJson: _stringFromJson) final  String name;
-@override@JsonKey(fromJson: _stringFromJson) final  String address;
-@override@JsonKey(fromJson: _stringFromJson) final  String description;
+@override final  String? id;
+@override final  String? projectId;
+@override final  String? name;
+@override final  String? address;
+@override final  String? description;
 @override final  double area;
 @override final  int floors;
 @override final  int bedrooms;
 @override final  int bathrooms;
 @override final  int price;
-@override@JsonKey(name: 'image_url') final  String? imageUrl;
+@override final  String? imageUrl;
  final  List<ConstructionStageModel> _stages;
-@override@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> get stages {
+@override@JsonKey() List<ConstructionStageModel> get stages {
   if (_stages is EqualUnmodifiableListView) return _stages;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_stages);
 }
 
-@override@JsonKey(name: 'chat_id') final  String? chatId;
-@override@JsonKey(name: 'all_documents_signed') final  bool allDocumentsSigned;
-@override@JsonKey(name: 'is_completed') final  bool isCompleted;
+@override final  String? chatId;
+@override@JsonKey() final  bool allDocumentsSigned;
+@override@JsonKey() final  bool isCompleted;
 
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
@@ -281,7 +281,7 @@ abstract mixin class _$ConstructionObjectModelCopyWith<$Res> implements $Constru
   factory _$ConstructionObjectModelCopyWith(_ConstructionObjectModel value, $Res Function(_ConstructionObjectModel) _then) = __$ConstructionObjectModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
+ String? id, String? projectId, String? name, String? address, String? description, double area, int floors, int bedrooms, int bathrooms, int price, String? imageUrl, List<ConstructionStageModel> stages, String? chatId, bool allDocumentsSigned, bool isCompleted
 });
 
 
@@ -298,14 +298,14 @@ class __$ConstructionObjectModelCopyWithImpl<$Res>
 
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? projectId = null,Object? name = null,Object? address = null,Object? description = null,Object? area = null,Object? floors = null,Object? bedrooms = null,Object? bathrooms = null,Object? price = null,Object? imageUrl = freezed,Object? stages = null,Object? chatId = freezed,Object? allDocumentsSigned = null,Object? isCompleted = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? projectId = freezed,Object? name = freezed,Object? address = freezed,Object? description = freezed,Object? area = null,Object? floors = null,Object? bedrooms = null,Object? bathrooms = null,Object? price = null,Object? imageUrl = freezed,Object? stages = null,Object? chatId = freezed,Object? allDocumentsSigned = null,Object? isCompleted = null,}) {
   return _then(_ConstructionObjectModel(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,projectId: null == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,address: null == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,area: null == area ? _self.area : area // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,projectId: freezed == projectId ? _self.projectId : projectId // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,address: freezed == address ? _self.address : address // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,area: null == area ? _self.area : area // ignore: cast_nullable_to_non_nullable
 as double,floors: null == floors ? _self.floors : floors // ignore: cast_nullable_to_non_nullable
 as int,bedrooms: null == bedrooms ? _self.bedrooms : bedrooms // ignore: cast_nullable_to_non_nullable
 as int,bathrooms: null == bathrooms ? _self.bathrooms : bathrooms // ignore: cast_nullable_to_non_nullable
@@ -326,7 +326,7 @@ as bool,
 /// @nodoc
 mixin _$ConstructionStageModel {
 
-@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get status;
+ String? get id; String? get name; String? get status;
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -359,7 +359,7 @@ abstract mixin class $ConstructionStageModelCopyWith<$Res>  {
   factory $ConstructionStageModelCopyWith(ConstructionStageModel value, $Res Function(ConstructionStageModel) _then) = _$ConstructionStageModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String status
+ String? id, String? name, String? status
 });
 
 
@@ -376,12 +376,12 @@ class _$ConstructionStageModelCopyWithImpl<$Res>
 
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? name = null,Object? status = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = freezed,Object? status = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -466,7 +466,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? name,  String? status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel() when $default != null:
 return $default(_that.id,_that.name,_that.status);case _:
@@ -487,7 +487,7 @@ return $default(_that.id,_that.name,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? name,  String? status)  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel():
 return $default(_that.id,_that.name,_that.status);case _:
@@ -507,7 +507,7 @@ return $default(_that.id,_that.name,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? name,  String? status)?  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel() when $default != null:
 return $default(_that.id,_that.name,_that.status);case _:
@@ -522,12 +522,12 @@ return $default(_that.id,_that.name,_that.status);case _:
 @JsonSerializable()
 
 class _ConstructionStageModel implements ConstructionStageModel {
-  const _ConstructionStageModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.status});
+  const _ConstructionStageModel({this.id, this.name, this.status});
   factory _ConstructionStageModel.fromJson(Map<String, dynamic> json) => _$ConstructionStageModelFromJson(json);
 
-@override@JsonKey(fromJson: _stringFromJson) final  String id;
-@override@JsonKey(fromJson: _stringFromJson) final  String name;
-@override@JsonKey(fromJson: _stringFromJson) final  String status;
+@override final  String? id;
+@override final  String? name;
+@override final  String? status;
 
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
@@ -562,7 +562,7 @@ abstract mixin class _$ConstructionStageModelCopyWith<$Res> implements $Construc
   factory _$ConstructionStageModelCopyWith(_ConstructionStageModel value, $Res Function(_ConstructionStageModel) _then) = __$ConstructionStageModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String status
+ String? id, String? name, String? status
 });
 
 
@@ -579,12 +579,12 @@ class __$ConstructionStageModelCopyWithImpl<$Res>
 
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? name = null,Object? status = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = freezed,Object? status = freezed,}) {
   return _then(_ConstructionStageModel(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,name: freezed == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
+as String?,status: freezed == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

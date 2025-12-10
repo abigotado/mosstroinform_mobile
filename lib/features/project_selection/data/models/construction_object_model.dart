@@ -8,59 +8,34 @@ part 'construction_object_model.g.dart';
 @freezed
 abstract class ConstructionObjectModel with _$ConstructionObjectModel {
   const factory ConstructionObjectModel({
-    @JsonKey(fromJson: _stringFromJson) required String id,
-    @JsonKey(name: 'project_id', fromJson: _stringFromJson)
-    required String projectId,
-    @JsonKey(fromJson: _stringFromJson) required String name,
-    @JsonKey(fromJson: _stringFromJson) required String address,
-    @JsonKey(fromJson: _stringFromJson) required String description,
+    String? id,
+    String? projectId,
+    String? name,
+    String? address,
+    String? description,
     required double area,
     required int floors,
     required int bedrooms,
     required int bathrooms,
     required int price,
-    @JsonKey(name: 'image_url') String? imageUrl,
-    @JsonKey(fromJson: _stagesFromJson)
-    required List<ConstructionStageModel> stages,
-    @JsonKey(name: 'chat_id') String? chatId,
-    @JsonKey(name: 'all_documents_signed')
-    @Default(false)
-    bool allDocumentsSigned,
-    @JsonKey(name: 'is_completed') @Default(false) bool isCompleted,
+    String? imageUrl,
+    @Default([]) List<ConstructionStageModel> stages,
+    String? chatId,
+    @Default(false) bool allDocumentsSigned,
+    @Default(false) bool isCompleted,
   }) = _ConstructionObjectModel;
 
   factory ConstructionObjectModel.fromJson(Map<String, dynamic> json) =>
       _$ConstructionObjectModelFromJson(json);
 }
 
-/// Вспомогательная функция для безопасного преобразования JSON в String
-String _stringFromJson(dynamic json) {
-  if (json == null) {
-    return '';
-  }
-  return json.toString();
-}
-
-/// Вспомогательная функция для безопасного преобразования JSON в список этапов
-List<ConstructionStageModel> _stagesFromJson(dynamic json) {
-  if (json == null) {
-    return [];
-  }
-  if (json is! List) {
-    return [];
-  }
-  return json
-      .map((e) => ConstructionStageModel.fromJson(e as Map<String, dynamic>))
-      .toList();
-}
-
 /// Модель этапа строительства
 @freezed
 abstract class ConstructionStageModel with _$ConstructionStageModel {
   const factory ConstructionStageModel({
-    @JsonKey(fromJson: _stringFromJson) required String id,
-    @JsonKey(fromJson: _stringFromJson) required String name,
-    @JsonKey(fromJson: _stringFromJson) required String status,
+    String? id,
+    String? name,
+    String? status,
   }) = _ConstructionStageModel;
 
   factory ConstructionStageModel.fromJson(Map<String, dynamic> json) =>
@@ -71,11 +46,11 @@ abstract class ConstructionStageModel with _$ConstructionStageModel {
 extension ConstructionObjectModelX on ConstructionObjectModel {
   ConstructionObject toEntity() {
     return ConstructionObject(
-      id: id,
-      projectId: projectId,
-      name: name,
-      address: address,
-      description: description,
+      id: id ?? '',
+      projectId: projectId ?? '',
+      name: name ?? '',
+      address: address ?? '',
+      description: description ?? '',
       area: area,
       floors: floors,
       bedrooms: bedrooms,
@@ -92,7 +67,11 @@ extension ConstructionObjectModelX on ConstructionObjectModel {
 /// Расширение для конвертации модели этапа в сущность
 extension ConstructionStageModelX on ConstructionStageModel {
   ConstructionStage toEntity() {
-    return ConstructionStage(id: id, name: name, status: _parseStatus(status));
+    return ConstructionStage(
+      id: id ?? '',
+      name: name ?? '',
+      status: _parseStatus(status ?? ''),
+    );
   }
 
   StageStatus _parseStatus(String status) {

@@ -9,18 +9,21 @@ part of 'construction_object_model.dart';
 _ConstructionObjectModel _$ConstructionObjectModelFromJson(
   Map<String, dynamic> json,
 ) => _ConstructionObjectModel(
-  id: _stringFromJson(json['id']),
-  projectId: _stringFromJson(json['project_id']),
-  name: _stringFromJson(json['name']),
-  address: _stringFromJson(json['address']),
-  description: _stringFromJson(json['description']),
+  id: json['id'] as String?,
+  projectId: json['project_id'] as String?,
+  name: json['name'] as String?,
+  address: json['address'] as String?,
+  description: json['description'] as String?,
   area: (json['area'] as num).toDouble(),
   floors: (json['floors'] as num).toInt(),
   bedrooms: (json['bedrooms'] as num).toInt(),
   bathrooms: (json['bathrooms'] as num).toInt(),
   price: (json['price'] as num).toInt(),
   imageUrl: json['image_url'] as String?,
-  stages: _stagesFromJson(json['stages']),
+  stages: (json['stages'] as List<dynamic>?)
+      ?.map((e) => ConstructionStageModel.fromJson(e as Map<String, dynamic>))
+      .toList() ??
+      const [],
   chatId: json['chat_id'] as String?,
   allDocumentsSigned: json['all_documents_signed'] as bool? ?? false,
   isCompleted: json['is_completed'] as bool? ?? false,
@@ -39,9 +42,9 @@ Map<String, dynamic> _$ConstructionObjectModelToJson(
   'bedrooms': instance.bedrooms,
   'bathrooms': instance.bathrooms,
   'price': instance.price,
-  'image_url': ?instance.imageUrl,
+  'image_url': instance.imageUrl,
   'stages': instance.stages.map((e) => e.toJson()).toList(),
-  'chat_id': ?instance.chatId,
+  'chat_id': instance.chatId,
   'all_documents_signed': instance.allDocumentsSigned,
   'is_completed': instance.isCompleted,
 };
@@ -49,9 +52,9 @@ Map<String, dynamic> _$ConstructionObjectModelToJson(
 _ConstructionStageModel _$ConstructionStageModelFromJson(
   Map<String, dynamic> json,
 ) => _ConstructionStageModel(
-  id: _stringFromJson(json['id']),
-  name: _stringFromJson(json['name']),
-  status: _stringFromJson(json['status']),
+  id: json['id'] as String?,
+  name: json['name'] as String?,
+  status: json['status'] as String?,
 );
 
 Map<String, dynamic> _$ConstructionStageModelToJson(
