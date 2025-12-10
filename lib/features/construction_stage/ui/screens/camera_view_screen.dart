@@ -1,7 +1,11 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/config/app_config_provider.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/video_fullscreen_screen.dart';
+import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/webrtc_video_player.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -318,7 +322,29 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final streamUrl = widget.camera.streamUrl.toLowerCase();
+    final isRTSP = streamUrl.startsWith('rtsp://');
 
+    // На вебе для RTSP потоков используем WebRTC виджет
+    if (kIsWeb && isRTSP) {
+      return Consumer(
+        builder: (context, ref, child) {
+          final config = ref.watch(appConfigSimpleProvider);
+          return Scaffold(
+            appBar: AppBar(
+              title: Text(widget.camera.name),
+              leading: BackButton(onPressed: () => Navigator.of(context).pop()),
+            ),
+            body: WebRTCVideoPlayer(
+              streamUrl: widget.camera.streamUrl,
+              signalingServerUrl: config.webrtcSignalingUrl,
+            ),
+          );
+        },
+      );
+    }
+
+    // Для нативных платформ используем стандартную логику
     // Проверяем, является ли ошибка seek или аудио ошибкой для RTSP потока
     // Если да, и видео буферизуется или было инициализировано, не показываем ошибку
     final hasRealError = _hasError || (_controller?.value.hasError ?? false);
@@ -328,8 +354,6 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         errorDescription.contains('audio') ||
         errorDescription.contains('sound') ||
         errorDescription.contains('audio device');
-    final streamUrl = widget.camera.streamUrl.toLowerCase();
-    final isRTSP = streamUrl.startsWith('rtsp://');
     final isBuffering = _controller?.value.buffered.isNotEmpty ?? false;
 
     // Для RTSP потоков с ошибками seek/аудио, но с активной буферизацией или инициализацией, не показываем ошибку

@@ -7,31 +7,39 @@ class AppConfigSimple {
   final bool useMocks;
   final int requestTimeout;
   final String environmentName;
+  final String? webrtcSignalingUrl;
 
   const AppConfigSimple({
     required this.baseUrl,
     required this.useMocks,
     required this.requestTimeout,
     required this.environmentName,
+    this.webrtcSignalingUrl,
   });
 
   /// Конфигурация для production окружения (реальные данные)
   factory AppConfigSimple.prod() {
-    return const AppConfigSimple(
+    return AppConfigSimple(
       baseUrl: 'https://mosstroiinform.vasmarfas.com/api/v1',
       useMocks: false,
       requestTimeout: 30,
       environmentName: 'Production',
+      // TODO: Добавить URL WebRTC signaling сервера для production
+      // webrtcSignalingUrl: 'wss://webrtc-signaling.example.com',
+      webrtcSignalingUrl: null,
     );
   }
 
   /// Конфигурация для mock окружения (моки)
   factory AppConfigSimple.mock() {
-    return const AppConfigSimple(
+    return AppConfigSimple(
       baseUrl: 'https://api-mock.example.com',
       useMocks: true,
       requestTimeout: 30,
       environmentName: 'Mock',
+      // TODO: Добавить URL WebRTC signaling сервера для mock окружения
+      // webrtcSignalingUrl: 'wss://webrtc-signaling-mock.example.com',
+      webrtcSignalingUrl: null,
     );
   }
 
