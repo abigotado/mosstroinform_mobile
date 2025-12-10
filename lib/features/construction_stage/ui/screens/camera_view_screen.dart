@@ -93,6 +93,29 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           }
         }
 
+        // Если это ошибка аудио для RTSP потока, и видео уже было инициализировано,
+        // игнорируем ошибку (RTSP потоки могут работать без аудио)
+        // Не переинициализируем, так как ошибка аудио не критична для видео
+        if (mounted && value.hasError && isAudioError) {
+          final streamUrl = widget.camera.streamUrl.toLowerCase();
+          final isRTSP = streamUrl.startsWith('rtsp://');
+          if (isRTSP && _isInitialized) {
+            AppLogger.debug('Игнорируем ошибку аудио для RTSP потока, видео уже было инициализировано');
+            // Если видео потеряло состояние из-за ошибки аудио, но было инициализировано,
+            // восстанавливаем состояние инициализации
+            if (!value.isInitialized) {
+              AppLogger.debug('Восстанавливаем состояние инициализации после ошибки аудио');
+              setState(() {
+                _isInitialized = true;
+                _hasError = false;
+              });
+            }
+            // Не устанавливаем _hasError = true для ошибок аудио в RTSP потоках
+            // Не переинициализируем, так как ошибка аудио не критична
+            return;
+          }
+        }
+
         // Если это ошибка seek для RTSP потока, но видео буферизуется,
         // игнорируем ошибку (RTSP потоки не поддерживают seek, но работают)
         // Если видео было инициализировано ранее, восстанавливаем состояние
@@ -121,20 +144,24 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           });
         }
 
-        // Если видео потеряло инициализацию из-за ошибки аудио, но размер был правильный,
-        // пытаемся переинициализировать (но не более _maxReinitAttempts раз)
-        // Ошибки seek не требуют переинициализации, так как RTSP потоки не поддерживают seek,
-        // но видео продолжает работать
+        // Для RTSP потоков ошибки аудио не критичны - видео может работать без аудио
+        // Не переинициализируем для ошибок аудио на RTSP потоках, так как это создает бесконечный цикл
+        // на симуляторах, где аудио устройство недоступно
+        final streamUrl = widget.camera.streamUrl.toLowerCase();
+        final isRTSP = streamUrl.startsWith('rtsp://');
+        
+        // Переинициализация только для не-RTSP потоков или если это не ошибка аудио/seek
         if (mounted &&
             !value.isInitialized &&
             _isInitialized &&
-            isAudioError &&
-            !isSeekError &&
+            !isRTSP && // Не переинициализируем RTSP потоки для ошибок аудио
+            !isAudioError && // Не переинициализируем для ошибок аудио
+            !isSeekError && // Не переинициализируем для ошибок seek
             value.size.width == 0 &&
             value.size.height == 0 &&
             _reinitAttempts < _maxReinitAttempts) {
           AppLogger.warning(
-            'Видео потеряло инициализацию из-за ошибки аудио, пытаемся переинициализировать (попытка ${_reinitAttempts + 1}/$_maxReinitAttempts)',
+            'Видео потеряло инициализацию, пытаемся переинициализировать (попытка ${_reinitAttempts + 1}/$_maxReinitAttempts)',
           );
           _reinitAttempts++;
           // Не устанавливаем ошибку, попробуем переинициализировать
@@ -159,12 +186,16 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
             !value.isInitialized &&
             _isInitialized &&
             (isAudioError || isSeekError) &&
-            _reinitAttempts >= _maxReinitAttempts) {
-          AppLogger.warning(
-            'Превышено максимальное количество попыток переинициализации, игнорируем ошибку ${isAudioError ? "аудио" : "seek"}',
+            isRTSP) {
+          // Для RTSP потоков с ошибками аудио/seek просто игнорируем ошибку
+          // и восстанавливаем состояние инициализации, если видео было инициализировано
+          AppLogger.debug(
+            'Игнорируем ошибку ${isAudioError ? "аудио" : "seek"} для RTSP потока, восстанавливаем состояние',
           );
-          // Игнорируем ошибку аудио/seek даже если видео не инициализировано
-          // Пользователь все равно увидит видео, если оно работает
+          setState(() {
+            _isInitialized = true;
+            _hasError = false;
+          });
         }
       }
     };
@@ -307,12 +338,13 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     final streamUrl = widget.camera.streamUrl.toLowerCase();
     final isRTSP = streamUrl.startsWith('rtsp://');
     final isBuffering = _controller?.value.buffered.isNotEmpty ?? false;
-    
+
     // Для RTSP потоков с ошибками seek, но с активной буферизацией, не показываем ошибку
     final shouldShowError = hasRealError && !(isRTSP && isSeekError && isBuffering);
-    
+
     // Для RTSP потоков с ошибками seek, но с активной буферизацией, считаем видео работающим
-    final isVideoWorking = (_isInitialized && _controller != null && _controller!.value.isInitialized) ||
+    final isVideoWorking =
+        (_isInitialized && _controller != null && _controller!.value.isInitialized) ||
         (isRTSP && isSeekError && isBuffering && _controller != null);
 
     return Scaffold(
@@ -323,7 +355,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           IconButton(
             icon: const Icon(Icons.fullscreen),
             onPressed: () {
-              if (_controller != null && 
+              if (_controller != null &&
                   (_controller!.value.isInitialized || (isRTSP && isSeekError && isBuffering))) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
