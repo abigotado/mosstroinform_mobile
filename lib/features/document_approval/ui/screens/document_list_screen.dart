@@ -92,21 +92,26 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
                   await ref.read(documentsProvider.notifier).loadDocuments();
                 }
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: documents.length,
-                itemBuilder: (context, index) {
-                  final document = documents[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: DocumentCard(
-                      document: document,
-                      onTap: () {
-                        context.push('/documents/${document.id}');
-                      },
-                    ),
-                  );
-                },
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 800),
+                  child: ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    itemCount: documents.length,
+                    itemBuilder: (context, index) {
+                      final document = documents[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: DocumentCard(
+                          document: document,
+                          onTap: () {
+                            context.push('/documents/${document.id}');
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             );
           },

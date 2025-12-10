@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -23,22 +24,28 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
   void initState() {
     super.initState();
     // Разрешаем все ориентации в полноэкранном режиме
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-    // Скрываем системную панель навигации и статус-бар
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    // На вебе это не поддерживается, поэтому пропускаем
+    if (!kIsWeb) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+      // Скрываем системную панель навигации и статус-бар
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    }
   }
 
   @override
   void dispose() {
     // Восстанавливаем только вертикальную ориентацию при выходе
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-    // Восстанавливаем системную панель
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    // На вебе это не поддерживается, поэтому пропускаем
+    if (!kIsWeb) {
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+      // Восстанавливаем системную панель
+      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+    }
     super.dispose();
   }
 

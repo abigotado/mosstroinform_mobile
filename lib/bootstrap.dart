@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show kDebugMode;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +12,8 @@ import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
 Future<void> bootstrap() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Получаем flavor из константы компиляции или используем mock по умолчанию
+  // Получаем flavor из константы компиляции или используем prod по умолчанию
+  // Для платформ без поддержки flavors (Linux, Windows, Web) используется prod
   final flavor = AppConfigSimple.getFlavor();
 
   // Инициализируем конфигурацию
@@ -22,7 +23,10 @@ Future<void> bootstrap() async {
   await AppLogger.init(showLogs: kDebugMode || config.useMocks);
 
   // Устанавливаем только вертикальную ориентацию для всего приложения
-  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  // На вебе это не поддерживается, поэтому пропускаем
+  if (!kIsWeb) {
+    await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  }
 
   // В production можно логировать текущее окружение
   AppLogger.log('Запуск приложения с flavor: $flavor');

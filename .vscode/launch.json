@@ -80,6 +80,55 @@
         "--flavor=prod"
       ],
       "flutterMode": "debug"
+    },
+    {
+      "name": "Mock (macOS)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=mock"
+      ],
+      "flutterMode": "debug",
+      "deviceId": "macos"
+    },
+    {
+      "name": "Production (macOS)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [
+        "--dart-define=FLAVOR=prod"
+      ],
+      "flutterMode": "debug",
+      "deviceId": "macos"
+    },
+    {
+      "name": "Production (Linux)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [],
+      "flutterMode": "debug",
+      "deviceId": "linux"
+    },
+    {
+      "name": "Production (Windows)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [],
+      "flutterMode": "debug",
+      "deviceId": "windows"
+    },
+    {
+      "name": "Production (Web)",
+      "request": "launch",
+      "type": "dart",
+      "program": "lib/main.dart",
+      "args": [],
+      "flutterMode": "debug",
+      "deviceId": "chrome"
     }
   ]
 }

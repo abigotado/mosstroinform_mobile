@@ -26,11 +26,17 @@
 
 1. Откройте панель отладки (F5 или Cmd+Shift+D)
 2. Выберите нужную конфигурацию из выпадающего списка:
-   - **Mock (с моками)** - для разработки с моковыми данными
-   - **Mock (Release)** - для release сборки с моками
-   - **Production** - для production окружения
-   - **Production (Release)** - для production release сборки
-   - Также доступны варианты для Android и iOS
+   - **Mock (с моками)** - для разработки с моковыми данными (Android, iOS, macOS)
+   - **Mock (Release)** - для release сборки с моками (Android, iOS, macOS)
+   - **Production** - для production окружения (все платформы)
+   - **Production (Release)** - для production release сборки (все платформы)
+   - Также доступны варианты для конкретных платформ:
+     - Android: Mock и Production
+     - iOS: Mock и Production
+     - macOS: Mock и Production
+     - Linux: только Production
+     - Windows: только Production
+     - Web: только Production
 
 ### Командная строка
 
@@ -62,6 +68,45 @@ flutter run --flavor mock --dart-define=FLAVOR=mock -t lib/main.dart
 flutter run --flavor prod --dart-define=FLAVOR=prod -t lib/main.dart
 ```
 
+#### macOS
+
+```bash
+# Mock flavor (по умолчанию)
+flutter run -d macos --dart-define=FLAVOR=mock
+
+# Production flavor
+flutter run -d macos --dart-define=FLAVOR=prod
+```
+
+**Примечание:** Для macOS не требуется указывать `--flavor`, достаточно `--dart-define`.
+
+#### Linux
+
+**Примечание:** Для Linux используется production flavor по умолчанию. Не требуется передавать `--dart-define=FLAVOR`.
+
+```bash
+# Production flavor (по умолчанию)
+flutter run -d linux
+```
+
+#### Windows
+
+**Примечание:** Для Windows используется production flavor по умолчанию. Не требуется передавать `--dart-define=FLAVOR`.
+
+```bash
+# Production flavor (по умолчанию)
+flutter run -d windows
+```
+
+#### Web
+
+**Примечание:** Для Web используется production flavor по умолчанию. Не требуется передавать `--dart-define=FLAVOR`.
+
+```bash
+# Production flavor (по умолчанию)
+flutter run -d chrome
+```
+
 ### Сборка APK/IPA
 
 ```bash
@@ -76,13 +121,28 @@ flutter build ios --release --dart-define=FLAVOR=mock
 
 # iOS IPA (prod)
 flutter build ios --release --dart-define=FLAVOR=prod
+
+# macOS (mock)
+flutter build macos --release --dart-define=FLAVOR=mock
+
+# macOS (prod)
+flutter build macos --release --dart-define=FLAVOR=prod
+
+# Linux (prod по умолчанию)
+flutter build linux --release
+
+# Windows (prod по умолчанию)
+flutter build windows --release
+
+# Web (prod по умолчанию)
+flutter build web --release
 ```
 
 ## Настройка переменных окружения
 
 ### Использование AppConfigSimple
 
-Текущая реализация использует `AppConfigSimple`, который не требует файлов `.env` и работает сразу из коробки. Flavor определяется через `--dart-define` или по умолчанию используется `mock`.
+Текущая реализация использует `AppConfigSimple`, который не требует файлов `.env` и работает сразу из коробки. Flavor определяется через `--dart-define` или `--flavor` для поддерживающих платформ (Android, iOS, macOS). Для платформ без поддержки flavors (Linux, Windows, Web) по умолчанию используется `prod`.
 
 **Преимущества:**
 - Работает сразу без дополнительной настройки

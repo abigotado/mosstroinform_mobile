@@ -89,16 +89,23 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    // Определяем максимальную ширину формы для десктопа
+    final screenWidth = MediaQuery.of(context).size.width;
+    final formMaxWidth = screenWidth > 600 ? 400.0 : double.infinity;
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.registerTitle)),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: formMaxWidth),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                 // Имя
                 TextFormField(
                   controller: _nameController,
@@ -256,7 +263,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   },
                   child: Text(l10n.hasAccount),
                 ),
-              ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),

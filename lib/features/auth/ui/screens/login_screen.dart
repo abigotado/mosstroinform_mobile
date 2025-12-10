@@ -89,6 +89,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final authState = ref.watch(authProvider);
     final isLoading = authState.isLoading;
 
+    // Определяем максимальную ширину формы для десктопа
+    final screenWidth = MediaQuery.of(context).size.width;
+    final formMaxWidth = screenWidth > 600 ? 400.0 : double.infinity;
+
     return Stack(
       children: [
         Scaffold(
@@ -96,12 +100,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             child: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: formMaxWidth),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
                       // Логотип или заголовок
                       Icon(
                         Icons.home,
@@ -207,6 +213,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Text(l10n.noAccount),
                       ),
                     ],
+                  ),
                   ),
                 ),
               ),

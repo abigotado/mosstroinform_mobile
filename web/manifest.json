@@ -1,11 +1,11 @@
 {
-    "name": "mosstroinform_mobile",
-    "short_name": "mosstroinform_mobile",
+    "name": "МосСтройИнформ",
+    "short_name": "МосСтройИнформ",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#213c72",
+    "background_color": "#E0F2F7",
     "theme_color": "#213c72",
-    "description": "A new Flutter project.",
+    "description": "Мобильное приложение для управления строительством объектов ИЖС",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

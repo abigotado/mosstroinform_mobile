@@ -94,11 +94,14 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
             final project = state.project!;
 
-            return SingleChildScrollView(
-              key: const ValueKey('content'),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 900),
+                child: SingleChildScrollView(
+                  key: const ValueKey('content'),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                   // Изображение проекта
                   if (project.imageUrl != null)
                     AspectRatio(
@@ -197,7 +200,9 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                       ],
                     ),
                   ),
-                ],
+                    ],
+                  ),
+                ),
               ),
             );
           },

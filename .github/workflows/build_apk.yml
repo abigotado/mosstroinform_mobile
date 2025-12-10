@@ -1,4 +1,4 @@
-name: Build APK
+name: Build & Deploy
 
 on:
   push:
@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   test:
@@ -146,3 +148,162 @@ jobs:
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-desktop:
+    name: Build Desktop
+    needs: test
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            artifact_name: linux
+            flavor: prod
+          - os: windows-latest
+            platform: windows
+            artifact_name: windows
+            flavor: prod
+          - os: macos-latest
+            platform: macos
+            artifact_name: macos
+            flavor: mock
+          - os: macos-latest
+            platform: macos
+            artifact_name: macos
+            flavor: prod
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java (Linux/Windows)
+        if: matrix.os != 'macos-latest'
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Install Linux dependencies
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build -d
+
+      - name: Build ${{ matrix.platform }} (${{ matrix.flavor }})
+        run: |
+          if [ "${{ matrix.platform }}" == "macos" ]; then
+            flutter build ${{ matrix.platform }} --release --dart-define=FLAVOR=${{ matrix.flavor }}
+          else
+            # Для Linux и Windows не передаем FLAVOR, используется дефолт prod
+            flutter build ${{ matrix.platform }} --release
+          fi
+        continue-on-error: false
+
+      - name: Determine artifact path
+        id: artifact_path
+        run: |
+          if [ "${{ matrix.platform }}" == "linux" ]; then
+            echo "path=build/linux/x64/release/bundle" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.platform }}" == "windows" ]; then
+            echo "path=build/windows/x64/runner/Release" >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.platform }}" == "macos" ]; then
+            echo "path=build/macos/Build/Products/Release/mosstroinform_mobile.app" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload ${{ matrix.platform }} artifact (${{ matrix.flavor }})
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact_name }}-${{ matrix.flavor }}-release
+          path: ${{ steps.artifact_path.outputs.path }}
+          retention-days: 30
+          if-no-files-found: warn
+
+  build-web:
+    name: Build Web
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Generate code
+        run: dart run build_runner build -d
+
+      - name: Build Web (prod)
+        run: flutter build web --release --base-href /
+        continue-on-error: false
+
+      - name: Upload Web artifact (prod)
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-prod-release
+          path: build/web
+          retention-days: 30
+
+  deploy-web:
+    name: Deploy Web to GitHub Pages
+    needs: build-web
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Download Web artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: web-prod-release
+          path: web-builds
+
+      - name: List downloaded files
+        run: |
+          echo "=== Web build structure ==="
+          find web-builds -type f -name "*.html" | head -5 || echo "No HTML files found"
+          ls -la web-builds/ || echo "web-builds directory not found"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: web-builds/web-prod-release
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2

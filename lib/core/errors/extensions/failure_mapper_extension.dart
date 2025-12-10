@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:mosstroinform_mobile/core/errors/failures.dart';
 
@@ -22,11 +20,9 @@ extension FailureMapper on Object {
         );
       }
 
-      if (this is IOException) {
-        return const NetworkFailure(
-          'Ошибка сети. Проверьте подключение к интернету',
-        );
-      }
+      // DioException уже обрабатывает все сетевые ошибки,
+      // поэтому отдельная проверка IOException не требуется
+      // и позволяет избежать зависимости от dart:io для веб-платформы
 
       return UnknownFailure('Неизвестная ошибка: $this');
     } catch (e, s) {
@@ -65,16 +61,17 @@ extension FailureMapper on Object {
       return NetworkFailure(message);
     }
 
+    // Используем числовые константы вместо HttpStatus для кроссплатформенности
     return switch (statusCode) {
-      HttpStatus.unauthorized => ValidationFailure(
+      401 => ValidationFailure(
         'Требуется авторизация. Войдите в систему',
       ),
-      HttpStatus.forbidden => ValidationFailure('Доступ запрещен'),
-      HttpStatus.notFound => ValidationFailure('Ресурс не найден'),
-      HttpStatus.badRequest => ValidationFailure(message),
-      HttpStatus.unprocessableEntity => ValidationFailure(message),
-      HttpStatus.conflict => ValidationFailure(message),
-      HttpStatus.tooManyRequests => ValidationFailure(
+      403 => ValidationFailure('Доступ запрещен'),
+      404 => ValidationFailure('Ресурс не найден'),
+      400 => ValidationFailure(message),
+      422 => ValidationFailure(message),
+      409 => ValidationFailure(message),
+      429 => ValidationFailure(
         'Слишком много запросов. Попробуйте позже',
       ),
       >= 500 => ServerFailure('Ошибка сервера: $message'),

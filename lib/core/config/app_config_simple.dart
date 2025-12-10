@@ -51,10 +51,12 @@ class AppConfigSimple {
   /// Flutter автоматически передает flavor name при использовании --flavor
   /// Использует appFlavor из package:flutter/services.dart
   /// Если appFlavor не установлен, читает из String.fromEnvironment('FLAVOR')
+  /// По умолчанию используется 'prod' для платформ, которые не поддерживают flavors
   static String getFlavor() {
     // Flutter автоматически передает flavor name через appFlavor при использовании --flavor
     // appFlavor доступен глобально из package:flutter/services.dart
     // Если appFlavor не установлен (например, при использовании --dart-define), читаем из environment
-    return appFlavor ?? String.fromEnvironment('FLAVOR', defaultValue: 'mock');
+    // По умолчанию используем 'prod' для платформ без поддержки flavors (Linux, Windows, Web)
+    return appFlavor ?? String.fromEnvironment('FLAVOR', defaultValue: 'prod');
   }
 }
