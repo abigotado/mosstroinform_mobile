@@ -19,7 +19,7 @@ abstract class ConstructionObjectModel with _$ConstructionObjectModel {
     required int bathrooms,
     required int price,
     @JsonKey(name: 'image_url') String? imageUrl,
-    required List<ConstructionStageModel> stages,
+    @JsonKey(fromJson: _stagesFromJson) required List<ConstructionStageModel> stages,
     @JsonKey(name: 'chat_id') String? chatId,
     @JsonKey(name: 'all_documents_signed') @Default(false) bool allDocumentsSigned,
     @JsonKey(name: 'is_completed') @Default(false) bool isCompleted,
@@ -35,6 +35,19 @@ String _stringFromJson(dynamic json) {
     return '';
   }
   return json.toString();
+}
+
+/// Вспомогательная функция для безопасного преобразования JSON в список этапов
+List<ConstructionStageModel> _stagesFromJson(dynamic json) {
+  if (json == null) {
+    return [];
+  }
+  if (json is! List) {
+    return [];
+  }
+  return json
+      .map((e) => ConstructionStageModel.fromJson(e as Map<String, dynamic>))
+      .toList();
 }
 
 /// Модель этапа строительства

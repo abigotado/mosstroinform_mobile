@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConstructionObjectModel {
 
-@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(name: 'project_id', fromJson: _stringFromJson) String get projectId;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get address;@JsonKey(fromJson: _stringFromJson) String get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price;@JsonKey(name: 'image_url') String? get imageUrl; List<ConstructionStageModel> get stages;@JsonKey(name: 'chat_id') String? get chatId;@JsonKey(name: 'all_documents_signed') bool get allDocumentsSigned;@JsonKey(name: 'is_completed') bool get isCompleted;
+@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(name: 'project_id', fromJson: _stringFromJson) String get projectId;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get address;@JsonKey(fromJson: _stringFromJson) String get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price;@JsonKey(name: 'image_url') String? get imageUrl;@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> get stages;@JsonKey(name: 'chat_id') String? get chatId;@JsonKey(name: 'all_documents_signed') bool get allDocumentsSigned;@JsonKey(name: 'is_completed') bool get isCompleted;
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ConstructionObjectModelCopyWith<$Res>  {
   factory $ConstructionObjectModelCopyWith(ConstructionObjectModel value, $Res Function(ConstructionObjectModel) _then) = _$ConstructionObjectModelCopyWithImpl;
 @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl, List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
 });
 
 
@@ -167,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -188,7 +188,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel():
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -208,7 +208,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl, @JsonKey(fromJson: _stagesFromJson)  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -223,7 +223,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 @JsonSerializable()
 
 class _ConstructionObjectModel implements ConstructionObjectModel {
-  const _ConstructionObjectModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(name: 'project_id', fromJson: _stringFromJson) required this.projectId, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.address, @JsonKey(fromJson: _stringFromJson) required this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, @JsonKey(name: 'image_url') this.imageUrl, required final  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id') this.chatId, @JsonKey(name: 'all_documents_signed') this.allDocumentsSigned = false, @JsonKey(name: 'is_completed') this.isCompleted = false}): _stages = stages;
+  const _ConstructionObjectModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(name: 'project_id', fromJson: _stringFromJson) required this.projectId, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.address, @JsonKey(fromJson: _stringFromJson) required this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, @JsonKey(name: 'image_url') this.imageUrl, @JsonKey(fromJson: _stagesFromJson) required final  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id') this.chatId, @JsonKey(name: 'all_documents_signed') this.allDocumentsSigned = false, @JsonKey(name: 'is_completed') this.isCompleted = false}): _stages = stages;
   factory _ConstructionObjectModel.fromJson(Map<String, dynamic> json) => _$ConstructionObjectModelFromJson(json);
 
 @override@JsonKey(fromJson: _stringFromJson) final  String id;
@@ -238,7 +238,7 @@ class _ConstructionObjectModel implements ConstructionObjectModel {
 @override final  int price;
 @override@JsonKey(name: 'image_url') final  String? imageUrl;
  final  List<ConstructionStageModel> _stages;
-@override List<ConstructionStageModel> get stages {
+@override@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> get stages {
   if (_stages is EqualUnmodifiableListView) return _stages;
   // ignore: implicit_dynamic_type
   return EqualUnmodifiableListView(_stages);
@@ -281,7 +281,7 @@ abstract mixin class _$ConstructionObjectModelCopyWith<$Res> implements $Constru
   factory _$ConstructionObjectModelCopyWith(_ConstructionObjectModel value, $Res Function(_ConstructionObjectModel) _then) = __$ConstructionObjectModelCopyWithImpl;
 @override @useResult
 $Res call({
-@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl, List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl,@JsonKey(fromJson: _stagesFromJson) List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
 });
 
 

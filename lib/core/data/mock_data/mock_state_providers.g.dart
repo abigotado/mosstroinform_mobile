@@ -48,7 +48,7 @@ final class MockDocumentsStateProvider
 }
 
 String _$mockDocumentsStateHash() =>
-    r'5a3491e599471bf9d1cb6e56c4cde27a64994b1e';
+    r'ac83e6b3532bfd52cee091069c8be67854b860bd';
 
 /// Провайдер состояния моковых документов
 /// Состояние хранится в памяти и сбрасывается при перезапуске приложения
