@@ -36,7 +36,8 @@ Future<void> bootstrap() async {
     macOS: true,
     windows: true,
     linux: true,
-    web: true, // media_kit работает на вебе, но RTSP не поддерживается браузерами
+    web:
+        true, // media_kit работает на вебе, но RTSP не поддерживается браузерами
   );
 
   // Устанавливаем только вертикальную ориентацию для всего приложения

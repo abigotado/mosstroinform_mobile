@@ -104,10 +104,10 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
       final streamType = isRTSP
           ? 'RTSP (потоковое)'
           : isHLS
-              ? 'HLS (потоковое)'
-              : 'HTTP (файл)';
+          ? 'HLS (потоковое)'
+          : 'HTTP (файл)';
       AppLogger.debug('Тип потока: $streamType');
-      
+
       // VideoPlayerController.networkUrl автоматически использует media_kit для RTSP
       // благодаря VideoPlayerMediaKit.ensureInitialized() в bootstrap
       // Для HLS и HTTP используется стандартный video_player
