@@ -29,6 +29,7 @@ Future<void> bootstrap() async {
   // VideoPlayerMediaKit автоматически перехватывает RTSP потоки и использует media_kit
   // Примечание: RTSP не поддерживается на вебе из-за ограничений браузеров,
   // но media_kit включен для веба для поддержки других форматов (HLS, HTTP)
+  // Ошибки аудио обрабатываются в camera_view_screen.dart и не останавливают воспроизведение видео
   MediaKit.ensureInitialized();
   VideoPlayerMediaKit.ensureInitialized(
     android: true,

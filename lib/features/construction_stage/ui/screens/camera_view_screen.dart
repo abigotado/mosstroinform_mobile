@@ -20,6 +20,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   bool _isInitialized = false;
   bool _hasError = false;
   VoidCallback? _videoListener;
+  int _reinitAttempts = 0;
+  static const int _maxReinitAttempts = 2;
 
   @override
   void initState() {
@@ -63,13 +65,69 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         if (mounted && value.isInitialized && !_isInitialized) {
           setState(() {
             _isInitialized = true;
+            // Сбрасываем ошибку, если видео инициализировано
+            _hasError = false;
+            // Сбрасываем счетчик попыток переинициализации при успешной инициализации
+            _reinitAttempts = 0;
           });
         }
 
-        if (mounted && value.hasError && !_hasError) {
+        // Игнорируем ошибки аудио, если видео работает
+        // Ошибки типа "Could not open/initialize audio device -> no sound"
+        // не должны останавливать воспроизведение видео
+        final errorDescription = value.errorDescription?.toLowerCase() ?? '';
+        final isAudioError = errorDescription.contains('audio') ||
+            errorDescription.contains('sound') ||
+            errorDescription.contains('audio device');
+        
+        // Если это ошибка аудио, но видео инициализировано и имеет правильный размер,
+        // игнорируем ошибку и продолжаем воспроизведение
+        if (mounted && value.hasError && isAudioError) {
+          if (value.isInitialized && value.size.width > 0 && value.size.height > 0) {
+            AppLogger.debug('Игнорируем ошибку аудио, видео продолжает работать');
+            // Не устанавливаем _hasError = true для ошибок аудио
+            return;
+          }
+        }
+
+        if (mounted && value.hasError && !_hasError && !isAudioError) {
           setState(() {
             _hasError = true;
           });
+        }
+        
+        // Если видео потеряло инициализацию из-за ошибки аудио, но размер был правильный,
+        // пытаемся переинициализировать (но не более _maxReinitAttempts раз)
+        if (mounted && 
+            !value.isInitialized && 
+            _isInitialized && 
+            isAudioError && 
+            value.size.width == 0 && 
+            value.size.height == 0 &&
+            _reinitAttempts < _maxReinitAttempts) {
+          AppLogger.warning('Видео потеряло инициализацию из-за ошибки аудио, пытаемся переинициализировать (попытка ${_reinitAttempts + 1}/$_maxReinitAttempts)');
+          _reinitAttempts++;
+          // Не устанавливаем ошибку, попробуем переинициализировать
+          setState(() {
+            _isInitialized = false;
+            _hasError = false;
+          });
+          // Переинициализируем видео
+          _controller?.dispose();
+          _controller = null;
+          Future.delayed(const Duration(milliseconds: 500), () {
+            if (mounted) {
+              _initializeVideo();
+            }
+          });
+        } else if (mounted && 
+            !value.isInitialized && 
+            _isInitialized && 
+            isAudioError && 
+            _reinitAttempts >= _maxReinitAttempts) {
+          AppLogger.warning('Превышено максимальное количество попыток переинициализации, игнорируем ошибку аудио');
+          // Игнорируем ошибку аудио даже если видео не инициализировано
+          // Пользователь все равно увидит видео, если оно работает
         }
       }
     };
@@ -156,6 +214,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   @override
   void dispose() {
     AppLogger.debug('CameraViewScreen dispose');
+    // Сбрасываем счетчик попыток переинициализации
+    _reinitAttempts = 0;
     // Останавливаем воспроизведение перед освобождением ресурсов
     if (_controller != null) {
       try {
