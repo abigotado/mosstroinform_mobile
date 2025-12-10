@@ -91,7 +91,7 @@
       ],
       "flutterMode": "debug",
       "deviceId": "macos",
-      "flutterAdditionalArgs": [
+      "toolArgs": [
         "--flavor",
         "mock"
       ]
@@ -106,7 +106,7 @@
       ],
       "flutterMode": "debug",
       "deviceId": "macos",
-      "flutterAdditionalArgs": [
+      "toolArgs": [
         "--flavor",
         "prod"
       ]
