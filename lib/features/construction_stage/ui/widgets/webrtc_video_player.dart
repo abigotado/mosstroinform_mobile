@@ -129,18 +129,31 @@ class _WebRTCVideoPlayerState extends State<WebRTCVideoPlayer> {
       await _peerConnection!.setLocalDescription(offer);
 
       // Отправляем offer на signaling сервер
-      // В реальном приложении здесь должен быть HTTP запрос к signaling серверу
+      // В реальном приложении здесь должен быть WebSocket запрос к signaling серверу
       // с передачей RTSP URL и получением answer
       AppLogger.debug('Sending offer to signaling server');
-      AppLogger.warning('Signaling server integration not implemented. '
-          'You need to implement signaling server communication.');
+      
+      // TODO: Реализовать WebSocket соединение с signaling сервером
+      // Пример реализации:
+      // 1. Подключиться к WebSocket: final ws = WebSocket(widget.signalingServerUrl!);
+      // 2. Отправить RTSP URL и offer: ws.send(jsonEncode({'rtspUrl': widget.streamUrl, 'offer': offer.toMap()}));
+      // 3. Получить answer от сервера
+      // 4. Установить remote description: await _peerConnection!.setRemoteDescription(answer);
+      
+      AppLogger.warning('Signaling server integration not fully implemented. '
+          'See WEBRTC_SETUP.md for setup instructions with free hosting options.');
 
       // Для демонстрации: если signaling сервер не реализован,
       // показываем ошибку с инструкцией
       setState(() {
         _hasError = true;
         _errorMessage =
-            'Signaling сервер не настроен. Необходимо реализовать серверную часть для конвертации RTSP в WebRTC.';
+            'Signaling сервер не настроен.\n\n'
+            'Для работы RTSP на вебе необходимо:\n'
+            '1. Развернуть WebRTC сервер (Janus Gateway) на бесплатном хостинге (Railway, Render)\n'
+            '2. Добавить URL в AppConfigSimple.webrtcSignalingUrl\n'
+            '3. Реализовать WebSocket соединение в _connectViaSignalingServer()\n\n'
+            'Подробнее: см. xdocs/WEBRTC_SETUP.md';
       });
     } catch (e, stackTrace) {
       AppLogger.error('Ошибка подключения через signaling сервер: $e', e, stackTrace);

@@ -24,8 +24,15 @@ class AppConfigSimple {
       useMocks: false,
       requestTimeout: 30,
       environmentName: 'Production',
-      // TODO: Добавить URL WebRTC signaling сервера для production
-      // webrtcSignalingUrl: 'wss://webrtc-signaling.example.com',
+      // WebRTC signaling сервер для конвертации RTSP в WebRTC на вебе
+      // Варианты бесплатных решений:
+      // 1. Развернуть Janus Gateway на бесплатном хостинге (Railway, Render, Fly.io)
+      //    Пример: 'wss://your-janus-server.railway.app/janus'
+      // 2. Использовать собственный сервер на Node.js/Python с бесплатным хостингом
+      //    Пример: 'wss://your-webrtc-server.onrender.com'
+      // 3. Использовать Cloudflare Calls (бесплатно до 1000 ГБ/месяц)
+      //    Требует настройки через Cloudflare API
+      // 4. Альтернатива: использовать HLS потоки для веба вместо RTSP
       webrtcSignalingUrl: null,
     );
   }
@@ -37,8 +44,8 @@ class AppConfigSimple {
       useMocks: true,
       requestTimeout: 30,
       environmentName: 'Mock',
-      // TODO: Добавить URL WebRTC signaling сервера для mock окружения
-      // webrtcSignalingUrl: 'wss://webrtc-signaling-mock.example.com',
+      // Для mock окружения можно использовать тот же signaling сервер
+      // или отдельный тестовый сервер
       webrtcSignalingUrl: null,
     );
   }
