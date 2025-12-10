@@ -72,30 +72,49 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           });
         }
 
-        // Игнорируем ошибки аудио, если видео работает
+        // Игнорируем ошибки аудио и seek, если видео работает
         // Ошибки типа "Could not open/initialize audio device -> no sound"
-        // не должны останавливать воспроизведение видео
+        // и "Cannot seek in this stream" не должны останавливать воспроизведение видео
         final errorDescription = value.errorDescription?.toLowerCase() ?? '';
         final isAudioError =
             errorDescription.contains('audio') ||
             errorDescription.contains('sound') ||
             errorDescription.contains('audio device');
+        final isSeekError =
+            errorDescription.contains('cannot seek') ||
+            errorDescription.contains('seek in this stream') ||
+            errorDescription.contains('force-seekable') ||
+            errorDescription.contains('seekable');
 
-        // Если это ошибка аудио, но видео инициализировано и имеет правильный размер,
+        // Если это ошибка аудио или seek, но видео инициализировано и имеет правильный размер,
         // игнорируем ошибку и продолжаем воспроизведение
-        if (mounted && value.hasError && isAudioError) {
+        if (mounted && value.hasError && (isAudioError || isSeekError)) {
           if (value.isInitialized &&
               value.size.width > 0 &&
               value.size.height > 0) {
             AppLogger.debug(
-              'Игнорируем ошибку аудио, видео продолжает работать',
+              'Игнорируем ошибку ${isAudioError ? "аудио" : "seek"}, видео продолжает работать',
             );
-            // Не устанавливаем _hasError = true для ошибок аудио
+            // Не устанавливаем _hasError = true для ошибок аудио и seek
             return;
           }
         }
 
-        if (mounted && value.hasError && !_hasError && !isAudioError) {
+        // Если это ошибка seek для RTSP потока, но видео буферизуется,
+        // игнорируем ошибку (RTSP потоки не поддерживают seek, но работают)
+        if (mounted && value.hasError && isSeekError) {
+          final streamUrl = widget.camera.streamUrl.toLowerCase();
+          final isRTSP = streamUrl.startsWith('rtsp://');
+          if (isRTSP && value.buffered.isNotEmpty) {
+            AppLogger.debug(
+              'Игнорируем ошибку seek для RTSP потока, видео буферизуется',
+            );
+            // Не устанавливаем _hasError = true для ошибок seek в RTSP потоках
+            return;
+          }
+        }
+
+        if (mounted && value.hasError && !_hasError && !isAudioError && !isSeekError) {
           setState(() {
             _hasError = true;
           });
@@ -103,10 +122,13 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
 
         // Если видео потеряло инициализацию из-за ошибки аудио, но размер был правильный,
         // пытаемся переинициализировать (но не более _maxReinitAttempts раз)
+        // Ошибки seek не требуют переинициализации, так как RTSP потоки не поддерживают seek,
+        // но видео продолжает работать
         if (mounted &&
             !value.isInitialized &&
             _isInitialized &&
             isAudioError &&
+            !isSeekError &&
             value.size.width == 0 &&
             value.size.height == 0 &&
             _reinitAttempts < _maxReinitAttempts) {
@@ -135,12 +157,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         } else if (mounted &&
             !value.isInitialized &&
             _isInitialized &&
-            isAudioError &&
+            (isAudioError || isSeekError) &&
             _reinitAttempts >= _maxReinitAttempts) {
           AppLogger.warning(
-            'Превышено максимальное количество попыток переинициализации, игнорируем ошибку аудио',
+            'Превышено максимальное количество попыток переинициализации, игнорируем ошибку ${isAudioError ? "аудио" : "seek"}',
           );
-          // Игнорируем ошибку аудио даже если видео не инициализировано
+          // Игнорируем ошибку аудио/seek даже если видео не инициализировано
           // Пользователь все равно увидит видео, если оно работает
         }
       }
