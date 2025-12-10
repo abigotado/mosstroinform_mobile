@@ -8,34 +8,42 @@ part 'construction_object_model.g.dart';
 @freezed
 abstract class ConstructionObjectModel with _$ConstructionObjectModel {
   const factory ConstructionObjectModel({
-    required String id,
-    required String projectId,
-    required String name,
-    required String address,
-    required String description,
+    @JsonKey(fromJson: _stringFromJson) required String id,
+    @JsonKey(name: 'project_id', fromJson: _stringFromJson) required String projectId,
+    @JsonKey(fromJson: _stringFromJson) required String name,
+    @JsonKey(fromJson: _stringFromJson) required String address,
+    @JsonKey(fromJson: _stringFromJson) required String description,
     required double area,
     required int floors,
     required int bedrooms,
     required int bathrooms,
     required int price,
-    String? imageUrl,
+    @JsonKey(name: 'image_url') String? imageUrl,
     required List<ConstructionStageModel> stages,
-    String? chatId,
-    @Default(false) bool allDocumentsSigned,
-    @Default(false) bool isCompleted,
+    @JsonKey(name: 'chat_id') String? chatId,
+    @JsonKey(name: 'all_documents_signed') @Default(false) bool allDocumentsSigned,
+    @JsonKey(name: 'is_completed') @Default(false) bool isCompleted,
   }) = _ConstructionObjectModel;
 
   factory ConstructionObjectModel.fromJson(Map<String, dynamic> json) =>
       _$ConstructionObjectModelFromJson(json);
 }
 
+/// Вспомогательная функция для безопасного преобразования JSON в String
+String _stringFromJson(dynamic json) {
+  if (json == null) {
+    return '';
+  }
+  return json.toString();
+}
+
 /// Модель этапа строительства
 @freezed
 abstract class ConstructionStageModel with _$ConstructionStageModel {
   const factory ConstructionStageModel({
-    required String id,
-    required String name,
-    required String status,
+    @JsonKey(fromJson: _stringFromJson) required String id,
+    @JsonKey(fromJson: _stringFromJson) required String name,
+    @JsonKey(fromJson: _stringFromJson) required String status,
   }) = _ConstructionStageModel;
 
   factory ConstructionStageModel.fromJson(Map<String, dynamic> json) =>

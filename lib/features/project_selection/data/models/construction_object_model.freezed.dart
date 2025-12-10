@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ConstructionObjectModel {
 
- String get id; String get projectId; String get name; String get address; String get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price; String? get imageUrl; List<ConstructionStageModel> get stages; String? get chatId; bool get allDocumentsSigned; bool get isCompleted;
+@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(name: 'project_id', fromJson: _stringFromJson) String get projectId;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get address;@JsonKey(fromJson: _stringFromJson) String get description; double get area; int get floors; int get bedrooms; int get bathrooms; int get price;@JsonKey(name: 'image_url') String? get imageUrl; List<ConstructionStageModel> get stages;@JsonKey(name: 'chat_id') String? get chatId;@JsonKey(name: 'all_documents_signed') bool get allDocumentsSigned;@JsonKey(name: 'is_completed') bool get isCompleted;
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $ConstructionObjectModelCopyWith<$Res>  {
   factory $ConstructionObjectModelCopyWith(ConstructionObjectModel value, $Res Function(ConstructionObjectModel) _then) = _$ConstructionObjectModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String projectId, String name, String address, String description, double area, int floors, int bedrooms, int bathrooms, int price, String? imageUrl, List<ConstructionStageModel> stages, String? chatId, bool allDocumentsSigned, bool isCompleted
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl, List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
 });
 
 
@@ -167,7 +167,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String projectId,  String name,  String address,  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -188,7 +188,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String projectId,  String name,  String address,  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel():
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -208,7 +208,7 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String projectId,  String name,  String address,  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price,  String? imageUrl,  List<ConstructionStageModel> stages,  String? chatId,  bool allDocumentsSigned,  bool isCompleted)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String address, @JsonKey(fromJson: _stringFromJson)  String description,  double area,  int floors,  int bedrooms,  int bathrooms,  int price, @JsonKey(name: 'image_url')  String? imageUrl,  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id')  String? chatId, @JsonKey(name: 'all_documents_signed')  bool allDocumentsSigned, @JsonKey(name: 'is_completed')  bool isCompleted)?  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionObjectModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.name,_that.address,_that.description,_that.area,_that.floors,_that.bedrooms,_that.bathrooms,_that.price,_that.imageUrl,_that.stages,_that.chatId,_that.allDocumentsSigned,_that.isCompleted);case _:
@@ -223,20 +223,20 @@ return $default(_that.id,_that.projectId,_that.name,_that.address,_that.descript
 @JsonSerializable()
 
 class _ConstructionObjectModel implements ConstructionObjectModel {
-  const _ConstructionObjectModel({required this.id, required this.projectId, required this.name, required this.address, required this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, this.imageUrl, required final  List<ConstructionStageModel> stages, this.chatId, this.allDocumentsSigned = false, this.isCompleted = false}): _stages = stages;
+  const _ConstructionObjectModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(name: 'project_id', fromJson: _stringFromJson) required this.projectId, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.address, @JsonKey(fromJson: _stringFromJson) required this.description, required this.area, required this.floors, required this.bedrooms, required this.bathrooms, required this.price, @JsonKey(name: 'image_url') this.imageUrl, required final  List<ConstructionStageModel> stages, @JsonKey(name: 'chat_id') this.chatId, @JsonKey(name: 'all_documents_signed') this.allDocumentsSigned = false, @JsonKey(name: 'is_completed') this.isCompleted = false}): _stages = stages;
   factory _ConstructionObjectModel.fromJson(Map<String, dynamic> json) => _$ConstructionObjectModelFromJson(json);
 
-@override final  String id;
-@override final  String projectId;
-@override final  String name;
-@override final  String address;
-@override final  String description;
+@override@JsonKey(fromJson: _stringFromJson) final  String id;
+@override@JsonKey(name: 'project_id', fromJson: _stringFromJson) final  String projectId;
+@override@JsonKey(fromJson: _stringFromJson) final  String name;
+@override@JsonKey(fromJson: _stringFromJson) final  String address;
+@override@JsonKey(fromJson: _stringFromJson) final  String description;
 @override final  double area;
 @override final  int floors;
 @override final  int bedrooms;
 @override final  int bathrooms;
 @override final  int price;
-@override final  String? imageUrl;
+@override@JsonKey(name: 'image_url') final  String? imageUrl;
  final  List<ConstructionStageModel> _stages;
 @override List<ConstructionStageModel> get stages {
   if (_stages is EqualUnmodifiableListView) return _stages;
@@ -244,9 +244,9 @@ class _ConstructionObjectModel implements ConstructionObjectModel {
   return EqualUnmodifiableListView(_stages);
 }
 
-@override final  String? chatId;
-@override@JsonKey() final  bool allDocumentsSigned;
-@override@JsonKey() final  bool isCompleted;
+@override@JsonKey(name: 'chat_id') final  String? chatId;
+@override@JsonKey(name: 'all_documents_signed') final  bool allDocumentsSigned;
+@override@JsonKey(name: 'is_completed') final  bool isCompleted;
 
 /// Create a copy of ConstructionObjectModel
 /// with the given fields replaced by the non-null parameter values.
@@ -281,7 +281,7 @@ abstract mixin class _$ConstructionObjectModelCopyWith<$Res> implements $Constru
   factory _$ConstructionObjectModelCopyWith(_ConstructionObjectModel value, $Res Function(_ConstructionObjectModel) _then) = __$ConstructionObjectModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String projectId, String name, String address, String description, double area, int floors, int bedrooms, int bathrooms, int price, String? imageUrl, List<ConstructionStageModel> stages, String? chatId, bool allDocumentsSigned, bool isCompleted
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String address,@JsonKey(fromJson: _stringFromJson) String description, double area, int floors, int bedrooms, int bathrooms, int price,@JsonKey(name: 'image_url') String? imageUrl, List<ConstructionStageModel> stages,@JsonKey(name: 'chat_id') String? chatId,@JsonKey(name: 'all_documents_signed') bool allDocumentsSigned,@JsonKey(name: 'is_completed') bool isCompleted
 });
 
 
@@ -326,7 +326,7 @@ as bool,
 /// @nodoc
 mixin _$ConstructionStageModel {
 
- String get id; String get name; String get status;
+@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(fromJson: _stringFromJson) String get name;@JsonKey(fromJson: _stringFromJson) String get status;
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -359,7 +359,7 @@ abstract mixin class $ConstructionStageModelCopyWith<$Res>  {
   factory $ConstructionStageModelCopyWith(ConstructionStageModel value, $Res Function(ConstructionStageModel) _then) = _$ConstructionStageModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String name, String status
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String status
 });
 
 
@@ -466,7 +466,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String name,  String status)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel() when $default != null:
 return $default(_that.id,_that.name,_that.status);case _:
@@ -487,7 +487,7 @@ return $default(_that.id,_that.name,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String name,  String status)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel():
 return $default(_that.id,_that.name,_that.status);case _:
@@ -507,7 +507,7 @@ return $default(_that.id,_that.name,_that.status);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String name,  String status)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(fromJson: _stringFromJson)  String name, @JsonKey(fromJson: _stringFromJson)  String status)?  $default,) {final _that = this;
 switch (_that) {
 case _ConstructionStageModel() when $default != null:
 return $default(_that.id,_that.name,_that.status);case _:
@@ -522,12 +522,12 @@ return $default(_that.id,_that.name,_that.status);case _:
 @JsonSerializable()
 
 class _ConstructionStageModel implements ConstructionStageModel {
-  const _ConstructionStageModel({required this.id, required this.name, required this.status});
+  const _ConstructionStageModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(fromJson: _stringFromJson) required this.name, @JsonKey(fromJson: _stringFromJson) required this.status});
   factory _ConstructionStageModel.fromJson(Map<String, dynamic> json) => _$ConstructionStageModelFromJson(json);
 
-@override final  String id;
-@override final  String name;
-@override final  String status;
+@override@JsonKey(fromJson: _stringFromJson) final  String id;
+@override@JsonKey(fromJson: _stringFromJson) final  String name;
+@override@JsonKey(fromJson: _stringFromJson) final  String status;
 
 /// Create a copy of ConstructionStageModel
 /// with the given fields replaced by the non-null parameter values.
@@ -562,7 +562,7 @@ abstract mixin class _$ConstructionStageModelCopyWith<$Res> implements $Construc
   factory _$ConstructionStageModelCopyWith(_ConstructionStageModel value, $Res Function(_ConstructionStageModel) _then) = __$ConstructionStageModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String name, String status
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(fromJson: _stringFromJson) String name,@JsonKey(fromJson: _stringFromJson) String status
 });
 
 

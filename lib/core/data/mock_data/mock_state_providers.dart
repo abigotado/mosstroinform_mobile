@@ -22,56 +22,56 @@ class MockDocumentsState extends _$MockDocumentsState {
     final mockData = [
       {
         'id': '1',
-        'projectId': '1',
+        'project_id': '1',
         'title': 'Проектная документация',
         'description':
             'Полный комплект проектной документации для строительства',
-        'fileUrl': 'https://example.com/docs/project-docs.pdf',
+        'file_url': 'https://example.com/docs/project-docs.pdf',
         'status': 'under_review',
-        'submittedAt': DateTime.now()
+        'submitted_at': DateTime.now()
             .subtract(const Duration(days: 2))
             .toIso8601String(),
-        'approvedAt': null,
-        'rejectionReason': null,
+        'approved_at': null,
+        'rejection_reason': null,
       },
       {
         'id': '2',
-        'projectId': '1',
+        'project_id': '1',
         'title': 'Разрешение на строительство',
         'description': 'Официальное разрешение на начало строительных работ',
-        'fileUrl': 'https://example.com/docs/building-permit.pdf',
+        'file_url': 'https://example.com/docs/building-permit.pdf',
         'status': 'approved',
-        'submittedAt': DateTime.now()
+        'submitted_at': DateTime.now()
             .subtract(const Duration(days: 5))
             .toIso8601String(),
-        'approvedAt': DateTime.now()
+        'approved_at': DateTime.now()
             .subtract(const Duration(days: 1))
             .toIso8601String(),
-        'rejectionReason': null,
+        'rejection_reason': null,
       },
       {
         'id': '3',
-        'projectId': '1',
+        'project_id': '1',
         'title': 'Договор подряда',
         'description': 'Договор на выполнение строительных работ',
-        'fileUrl': 'https://example.com/docs/contract.pdf',
+        'file_url': 'https://example.com/docs/contract.pdf',
         'status': 'pending',
-        'submittedAt': null,
-        'approvedAt': null,
-        'rejectionReason': null,
+        'submitted_at': null,
+        'approved_at': null,
+        'rejection_reason': null,
       },
       {
         'id': '4',
-        'projectId': '1',
+        'project_id': '1',
         'title': 'Смета на материалы',
         'description': 'Детальная смета расходов на строительные материалы',
-        'fileUrl': 'https://example.com/docs/estimate.pdf',
+        'file_url': 'https://example.com/docs/estimate.pdf',
         'status': 'rejected',
-        'submittedAt': DateTime.now()
+        'submitted_at': DateTime.now()
             .subtract(const Duration(days: 7))
             .toIso8601String(),
-        'approvedAt': null,
-        'rejectionReason': 'Требуется уточнение цен на материалы',
+        'approved_at': null,
+        'rejection_reason': 'Требуется уточнение цен на материалы',
       },
     ];
 
