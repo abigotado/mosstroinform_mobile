@@ -345,23 +345,6 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
       appBar: AppBar(
         title: Text(widget.camera.name),
         leading: BackButton(onPressed: () => Navigator.of(context).pop()),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.fullscreen),
-            onPressed: () {
-              if (_controller != null &&
-                  (_controller!.value.isInitialized ||
-                      (isRTSP && (isSeekError || isAudioError) && (isBuffering || _isInitialized)))) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        VideoFullscreenScreen(controller: _controller!, cameraName: widget.camera.name),
-                  ),
-                );
-              }
-            },
-          ),
-        ],
       ),
       body: shouldShowError
           ? _VideoErrorWidget(
