@@ -100,17 +100,14 @@ class ProfileScreen extends ConsumerWidget {
                         segments: const [
                           ButtonSegment<ThemeMode>(
                             value: ThemeMode.light,
-                            label: Text('Светлая'),
                             icon: Icon(Icons.light_mode),
                           ),
                           ButtonSegment<ThemeMode>(
                             value: ThemeMode.dark,
-                            label: Text('Темная'),
                             icon: Icon(Icons.dark_mode),
                           ),
                           ButtonSegment<ThemeMode>(
                             value: ThemeMode.system,
-                            label: Text('Системная'),
                             icon: Icon(Icons.brightness_auto),
                           ),
                         ],

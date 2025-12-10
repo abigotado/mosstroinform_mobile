@@ -25,6 +25,43 @@ class HiveService {
   /// Проверка, инициализирован ли Hive
   static bool get isInitialized => _projectsBox != null;
 
+  /// Инициализация только settings box для хранения настроек приложения
+  /// Используется в любом режиме (mock и production) для сохранения темы и других настроек
+  /// Идемпотентный метод - можно вызывать несколько раз без ошибок
+  static Future<void> initializeSettings() async {
+    try {
+      // Если settings box уже открыт, ничего не делаем
+      if (Hive.isBoxOpen('settings')) {
+        AppLogger.info('HiveService.initializeSettings: settings box уже открыт');
+        return;
+      }
+
+      // Пытаемся открыть settings box
+      // Если Hive не инициализирован, это вызовет ошибку, которую мы обработаем
+      try {
+        await Hive.openBox('settings');
+        AppLogger.info('HiveService.initializeSettings: settings box открыт');
+        return;
+      } catch (_) {
+        // Если не удалось открыть, значит Hive не инициализирован
+      }
+
+      // Инициализируем Hive
+      await Hive.initFlutter();
+      AppLogger.info('HiveService.initializeSettings: Hive инициализирован');
+
+      // Открываем settings box
+      await Hive.openBox('settings');
+      AppLogger.info('HiveService.initializeSettings: settings box открыт');
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        'HiveService.initializeSettings: ошибка инициализации: $e',
+        stackTrace,
+      );
+      // Не пробрасываем ошибку, чтобы приложение могло работать без сохранения настроек
+    }
+  }
+
   /// Инициализация Hive и загрузка начальных данных
   /// Идемпотентный метод - можно вызывать несколько раз без ошибок
   static Future<void> initialize() async {

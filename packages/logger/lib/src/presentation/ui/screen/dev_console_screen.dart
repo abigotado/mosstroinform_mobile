@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:talker_flutter/talker_flutter.dart';
-import 'package:logger/src/app_logger.dart';
-import 'package:logger/src/presentation/notifier/dev_console_notifier.dart';
 import 'package:logger/l10n/generated/l10n.dart';
+import 'package:logger/src/app_logger.dart';
 import 'package:logger/src/domain/domain.dart';
+import 'package:logger/src/presentation/notifier/dev_console_notifier.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class DevConsoleScreen extends ConsumerWidget {
   const DevConsoleScreen({super.key});
@@ -83,6 +83,10 @@ class DevConsoleScreen extends ConsumerWidget {
           data: (state) => TalkerScreen(
             appBarTitle: s.devConsoleTitle,
             talker: AppLogger.talker,
+            appBarLeading: IconButton(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.arrow_back_ios_new_rounded),
+            ),
             customSettings: [
               CustomSettingsGroup(
                 title: s.devConsoleLogsFullMode,

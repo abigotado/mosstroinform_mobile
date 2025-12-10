@@ -44,6 +44,12 @@ class ThemeModeNotifier extends _$ThemeModeNotifier {
       if (Hive.isBoxOpen('settings')) {
         settingsBox = Hive.box('settings');
       } else {
+        // Если Hive не инициализирован, пытаемся инициализировать
+        try {
+          await Hive.initFlutter();
+        } catch (_) {
+          // Если уже инициализирован, игнорируем ошибку
+        }
         settingsBox = await Hive.openBox('settings');
       }
 
