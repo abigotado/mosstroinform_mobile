@@ -9,11 +9,7 @@ class VideoFullscreenScreen extends StatefulWidget {
   final VideoPlayerController controller;
   final String cameraName;
 
-  const VideoFullscreenScreen({
-    super.key,
-    required this.controller,
-    required this.cameraName,
-  });
+  const VideoFullscreenScreen({super.key, required this.controller, required this.cameraName});
 
   @override
   State<VideoFullscreenScreen> createState() => _VideoFullscreenScreenState();
@@ -49,12 +45,21 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
     super.dispose();
   }
 
+  void _handleBackButton() {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return WillPopScope(
+      onWillPop: () async {
+        _handleBackButton();
+        return false; // Предотвращаем стандартное поведение, так как мы уже вызвали pop
+      },
+      child: Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
@@ -78,32 +83,20 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
             top: MediaQuery.of(context).padding.top + 16,
             left: 16,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 12,
-                vertical: 6,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(16),
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(16)),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
                     width: 8,
                     height: 8,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                    ),
+                    decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     'LIVE',
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: theme.textTheme.labelSmall?.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -120,15 +113,8 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
                 borderRadius: BorderRadius.circular(8),
                 child: Container(
                   padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: const Icon(
-                    Icons.fullscreen_exit,
-                    color: Colors.white,
-                    size: 24,
-                  ),
+                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
+                  child: const Icon(Icons.fullscreen_exit, color: Colors.white, size: 24),
                 ),
               ),
             ),
@@ -141,14 +127,8 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
               right: 0,
               child: Center(
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -157,24 +137,18 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        l10n.buffering,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                      Text(l10n.buffering, style: theme.textTheme.labelSmall?.copyWith(color: Colors.white)),
                     ],
                   ),
                 ),
               ),
             ),
         ],
+      ),
       ),
     );
   }
