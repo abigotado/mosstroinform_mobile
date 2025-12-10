@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DocumentModel {
 
- String get id; String get projectId; String get title; String get description; String? get fileUrl;@JsonKey(name: 'status') String get statusString; DateTime? get submittedAt; DateTime? get approvedAt; String? get rejectionReason;
+@JsonKey(fromJson: _stringFromJson) String get id;@JsonKey(name: 'project_id', fromJson: _stringFromJson) String get projectId;@JsonKey(fromJson: _stringFromJson) String get title;@JsonKey(fromJson: _stringFromJson) String get description;@JsonKey(name: 'file_url') String? get fileUrl;@JsonKey(name: 'status') String get statusString;@JsonKey(name: 'submitted_at') DateTime? get submittedAt;@JsonKey(name: 'approved_at') DateTime? get approvedAt;@JsonKey(name: 'rejection_reason') String? get rejectionReason;
 /// Create a copy of DocumentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $DocumentModelCopyWith<$Res>  {
   factory $DocumentModelCopyWith(DocumentModel value, $Res Function(DocumentModel) _then) = _$DocumentModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String projectId, String title, String description, String? fileUrl,@JsonKey(name: 'status') String statusString, DateTime? submittedAt, DateTime? approvedAt, String? rejectionReason
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String title,@JsonKey(fromJson: _stringFromJson) String description,@JsonKey(name: 'file_url') String? fileUrl,@JsonKey(name: 'status') String statusString,@JsonKey(name: 'submitted_at') DateTime? submittedAt,@JsonKey(name: 'approved_at') DateTime? approvedAt,@JsonKey(name: 'rejection_reason') String? rejectionReason
 });
 
 
@@ -161,7 +161,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String projectId,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? approvedAt,  String? rejectionReason)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String title, @JsonKey(fromJson: _stringFromJson)  String description, @JsonKey(name: 'file_url')  String? fileUrl, @JsonKey(name: 'status')  String statusString, @JsonKey(name: 'submitted_at')  DateTime? submittedAt, @JsonKey(name: 'approved_at')  DateTime? approvedAt, @JsonKey(name: 'rejection_reason')  String? rejectionReason)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DocumentModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.approvedAt,_that.rejectionReason);case _:
@@ -182,7 +182,7 @@ return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fil
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String projectId,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? approvedAt,  String? rejectionReason)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String title, @JsonKey(fromJson: _stringFromJson)  String description, @JsonKey(name: 'file_url')  String? fileUrl, @JsonKey(name: 'status')  String statusString, @JsonKey(name: 'submitted_at')  DateTime? submittedAt, @JsonKey(name: 'approved_at')  DateTime? approvedAt, @JsonKey(name: 'rejection_reason')  String? rejectionReason)  $default,) {final _that = this;
 switch (_that) {
 case _DocumentModel():
 return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.approvedAt,_that.rejectionReason);case _:
@@ -202,7 +202,7 @@ return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fil
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String projectId,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? approvedAt,  String? rejectionReason)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function(@JsonKey(fromJson: _stringFromJson)  String id, @JsonKey(name: 'project_id', fromJson: _stringFromJson)  String projectId, @JsonKey(fromJson: _stringFromJson)  String title, @JsonKey(fromJson: _stringFromJson)  String description, @JsonKey(name: 'file_url')  String? fileUrl, @JsonKey(name: 'status')  String statusString, @JsonKey(name: 'submitted_at')  DateTime? submittedAt, @JsonKey(name: 'approved_at')  DateTime? approvedAt, @JsonKey(name: 'rejection_reason')  String? rejectionReason)?  $default,) {final _that = this;
 switch (_that) {
 case _DocumentModel() when $default != null:
 return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.approvedAt,_that.rejectionReason);case _:
@@ -217,18 +217,18 @@ return $default(_that.id,_that.projectId,_that.title,_that.description,_that.fil
 @JsonSerializable()
 
 class _DocumentModel implements DocumentModel {
-  const _DocumentModel({required this.id, required this.projectId, required this.title, required this.description, this.fileUrl, @JsonKey(name: 'status') this.statusString = 'pending', this.submittedAt, this.approvedAt, this.rejectionReason});
+  const _DocumentModel({@JsonKey(fromJson: _stringFromJson) required this.id, @JsonKey(name: 'project_id', fromJson: _stringFromJson) required this.projectId, @JsonKey(fromJson: _stringFromJson) required this.title, @JsonKey(fromJson: _stringFromJson) required this.description, @JsonKey(name: 'file_url') this.fileUrl, @JsonKey(name: 'status') this.statusString = 'pending', @JsonKey(name: 'submitted_at') this.submittedAt, @JsonKey(name: 'approved_at') this.approvedAt, @JsonKey(name: 'rejection_reason') this.rejectionReason});
   factory _DocumentModel.fromJson(Map<String, dynamic> json) => _$DocumentModelFromJson(json);
 
-@override final  String id;
-@override final  String projectId;
-@override final  String title;
-@override final  String description;
-@override final  String? fileUrl;
+@override@JsonKey(fromJson: _stringFromJson) final  String id;
+@override@JsonKey(name: 'project_id', fromJson: _stringFromJson) final  String projectId;
+@override@JsonKey(fromJson: _stringFromJson) final  String title;
+@override@JsonKey(fromJson: _stringFromJson) final  String description;
+@override@JsonKey(name: 'file_url') final  String? fileUrl;
 @override@JsonKey(name: 'status') final  String statusString;
-@override final  DateTime? submittedAt;
-@override final  DateTime? approvedAt;
-@override final  String? rejectionReason;
+@override@JsonKey(name: 'submitted_at') final  DateTime? submittedAt;
+@override@JsonKey(name: 'approved_at') final  DateTime? approvedAt;
+@override@JsonKey(name: 'rejection_reason') final  String? rejectionReason;
 
 /// Create a copy of DocumentModel
 /// with the given fields replaced by the non-null parameter values.
@@ -263,7 +263,7 @@ abstract mixin class _$DocumentModelCopyWith<$Res> implements $DocumentModelCopy
   factory _$DocumentModelCopyWith(_DocumentModel value, $Res Function(_DocumentModel) _then) = __$DocumentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String projectId, String title, String description, String? fileUrl,@JsonKey(name: 'status') String statusString, DateTime? submittedAt, DateTime? approvedAt, String? rejectionReason
+@JsonKey(fromJson: _stringFromJson) String id,@JsonKey(name: 'project_id', fromJson: _stringFromJson) String projectId,@JsonKey(fromJson: _stringFromJson) String title,@JsonKey(fromJson: _stringFromJson) String description,@JsonKey(name: 'file_url') String? fileUrl,@JsonKey(name: 'status') String statusString,@JsonKey(name: 'submitted_at') DateTime? submittedAt,@JsonKey(name: 'approved_at') DateTime? approvedAt,@JsonKey(name: 'rejection_reason') String? rejectionReason
 });
 
 

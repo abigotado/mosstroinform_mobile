@@ -8,30 +8,30 @@ part of 'document_model.dart';
 
 _DocumentModel _$DocumentModelFromJson(Map<String, dynamic> json) =>
     _DocumentModel(
-      id: json['id'] as String,
-      projectId: json['projectId'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      fileUrl: json['fileUrl'] as String?,
+      id: _stringFromJson(json['id']),
+      projectId: _stringFromJson(json['project_id']),
+      title: _stringFromJson(json['title']),
+      description: _stringFromJson(json['description']),
+      fileUrl: json['file_url'] as String?,
       statusString: json['status'] as String? ?? 'pending',
-      submittedAt: json['submittedAt'] == null
+      submittedAt: json['submitted_at'] == null
           ? null
-          : DateTime.parse(json['submittedAt'] as String),
-      approvedAt: json['approvedAt'] == null
+          : DateTime.parse(json['submitted_at'] as String),
+      approvedAt: json['approved_at'] == null
           ? null
-          : DateTime.parse(json['approvedAt'] as String),
-      rejectionReason: json['rejectionReason'] as String?,
+          : DateTime.parse(json['approved_at'] as String),
+      rejectionReason: json['rejection_reason'] as String?,
     );
 
 Map<String, dynamic> _$DocumentModelToJson(_DocumentModel instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'projectId': instance.projectId,
+      'project_id': instance.projectId,
       'title': instance.title,
       'description': instance.description,
-      'fileUrl': ?instance.fileUrl,
+      'file_url': ?instance.fileUrl,
       'status': instance.statusString,
-      'submittedAt': ?instance.submittedAt?.toIso8601String(),
-      'approvedAt': ?instance.approvedAt?.toIso8601String(),
-      'rejectionReason': ?instance.rejectionReason,
+      'submitted_at': ?instance.submittedAt?.toIso8601String(),
+      'approved_at': ?instance.approvedAt?.toIso8601String(),
+      'rejection_reason': ?instance.rejectionReason,
     };

@@ -36,7 +36,7 @@ final class DocumentsNotifierProvider
   DocumentsNotifier create() => DocumentsNotifier();
 }
 
-String _$documentsNotifierHash() => r'199670653d5ccbcb866095a0239f9391d65e7f67';
+String _$documentsNotifierHash() => r'91f0a4576873f363c1ec23a700f076eb86d6eeac';
 
 /// Notifier для управления состоянием списка документов
 
