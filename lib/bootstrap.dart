@@ -27,6 +27,8 @@ Future<void> bootstrap() async {
   // Инициализируем video_player_media_kit для поддержки RTSP потоков
   // Это необходимо для воспроизведения RTSP потоков на всех платформах
   // VideoPlayerMediaKit автоматически перехватывает RTSP потоки и использует media_kit
+  // Примечание: RTSP не поддерживается на вебе из-за ограничений браузеров,
+  // но media_kit включен для веба для поддержки других форматов (HLS, HTTP)
   MediaKit.ensureInitialized();
   VideoPlayerMediaKit.ensureInitialized(
     android: true,
@@ -34,7 +36,7 @@ Future<void> bootstrap() async {
     macOS: true,
     windows: true,
     linux: true,
-    web: false, // Web не поддерживает RTSP
+    web: true, // media_kit работает на вебе, но RTSP не поддерживается браузерами
   );
 
   // Устанавливаем только вертикальную ориентацию для всего приложения

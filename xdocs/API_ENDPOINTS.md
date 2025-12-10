@@ -205,14 +205,14 @@ https://mosstroiinform.vasmarfas.com/api/v1
 [
   {
     "id": "string",
-    "projectId": "string",
+    "project_id": "string",
     "title": "string",
     "description": "string",
-    "fileUrl": "string | null",
+    "file_url": "string | null",
     "status": "pending | under_review | approved | rejected",
-    "submittedAt": "ISO 8601 datetime | null",
-    "approvedAt": "ISO 8601 datetime | null",
-    "rejectionReason": "string | null"
+    "submitted_at": "ISO 8601 datetime | null",
+    "approved_at": "ISO 8601 datetime | null",
+    "rejection_reason": "string | null"
   }
 ]
 ```
@@ -227,14 +227,14 @@ https://mosstroiinform.vasmarfas.com/api/v1
 ```json
 {
   "id": "string",
-  "projectId": "string",
+  "project_id": "string",
   "title": "string",
   "description": "string",
-  "fileUrl": "string | null",
+  "file_url": "string | null",
   "status": "pending | under_review | approved | rejected",
-  "submittedAt": "ISO 8601 datetime | null",
-  "approvedAt": "ISO 8601 datetime | null",
-  "rejectionReason": "string | null"
+  "submitted_at": "ISO 8601 datetime | null",
+  "approved_at": "ISO 8601 datetime | null",
+  "rejection_reason": "string | null"
 }
 ```
 
@@ -359,7 +359,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
 [
   {
     "id": "string",
-    "projectId": "string",
+    "project_id": "string",
     "name": "string",
     "address": "string",
     "description": "string",
@@ -368,7 +368,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
     "bedrooms": 0,
     "bathrooms": 0,
     "price": 0,
-    "imageUrl": "string | null",
+    "image_url": "string | null",
     "stages": [
       {
         "id": "string",
@@ -376,9 +376,9 @@ https://mosstroiinform.vasmarfas.com/api/v1
         "status": "pending | in_progress | completed"
       }
     ],
-    "chatId": "string | null",
-    "allDocumentsSigned": false,
-    "isCompleted": false
+    "chat_id": "string | null",
+    "all_documents_signed": false,
+    "is_completed": false
   }
 ]
 ```
@@ -398,7 +398,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
 - `objectId` (string) - ID объекта строительства
 
 **Требования:**
-- Все финальные документы должны быть подписаны (`allDocumentsSigned = true`)
+- Все финальные документы должны быть подписаны (`all_documents_signed = true`)
 - Прогресс строительства должен быть 100% (`progress = 1.0`)
 
 **Response:**
@@ -407,7 +407,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
 ```
 
 **Примечание:** После завершения строительства:
-- `isCompleted` устанавливается в `true`
+- `is_completed` устанавливается в `true`
 - Документы становятся доступными только для просмотра
 - Чат и камеры скрываются
 - Объект отображается как завершенный
@@ -421,7 +421,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
 **Request Body:**
 ```json
 {
-  "allDocumentsSigned": true
+  "all_documents_signed": true
 }
 ```
 
@@ -540,21 +540,21 @@ https://mosstroiinform.vasmarfas.com/api/v1
 **Response:**
 ```json
 {
-  "projectId": "string",
-  "isCompleted": false,
-  "completionDate": "ISO 8601 datetime | null",
+  "project_id": "string",
+  "is_completed": false,
+  "completion_date": "ISO 8601 datetime | null",
   "progress": 1.0,
-  "allDocumentsSigned": false,
+  "all_documents_signed": false,
   "documents": [
     {
       "id": "string",
       "title": "string",
       "description": "string",
-      "fileUrl": "string | null",
+      "file_url": "string | null",
       "status": "pending | signed | rejected",
-      "submittedAt": "ISO 8601 datetime | null",
-      "signedAt": "ISO 8601 datetime | null",
-      "signatureUrl": "string | null"
+      "submitted_at": "ISO 8601 datetime | null",
+      "signed_at": "ISO 8601 datetime | null",
+      "signature_url": "string | null"
     }
   ]
 }
@@ -562,8 +562,8 @@ https://mosstroiinform.vasmarfas.com/api/v1
 
 **Примечание:** 
 - `progress` - значение от 0.0 до 1.0 (0% - 100%), приходит с бэкенда
-- `isCompleted` - становится `true` только после вызова `POST /construction-objects/{objectId}/complete` (нажатие кнопки "Завершить строительство")
-- `allDocumentsSigned` - отдельный параметр, который показывает, что все финальные документы подписаны. Когда `allDocumentsSigned = true`, появляется кнопка "Завершить строительство"
+- `is_completed` - становится `true` только после вызова `POST /construction-objects/{objectId}/complete` (нажатие кнопки "Завершить строительство")
+- `all_documents_signed` - отдельный параметр, который показывает, что все финальные документы подписаны. Когда `all_documents_signed = true`, появляется кнопка "Завершить строительство"
 
 ### GET /projects/{projectId}/final-documents
 Получить список финальных документов для подписания.
@@ -578,11 +578,11 @@ https://mosstroiinform.vasmarfas.com/api/v1
     "id": "string",
     "title": "string",
     "description": "string",
-    "fileUrl": "string | null",
+    "file_url": "string | null",
     "status": "pending | signed | rejected",
-    "submittedAt": "ISO 8601 datetime | null",
-    "signedAt": "ISO 8601 datetime | null",
-    "signatureUrl": "string | null"
+    "submitted_at": "ISO 8601 datetime | null",
+    "signed_at": "ISO 8601 datetime | null",
+    "signature_url": "string | null"
   }
 ]
 ```
@@ -600,11 +600,11 @@ https://mosstroiinform.vasmarfas.com/api/v1
   "id": "string",
   "title": "string",
   "description": "string",
-  "fileUrl": "string | null",
+  "file_url": "string | null",
   "status": "pending | signed | rejected",
-  "submittedAt": "ISO 8601 datetime | null",
-  "signedAt": "ISO 8601 datetime | null",
-  "signatureUrl": "string | null"
+  "submitted_at": "ISO 8601 datetime | null",
+  "signed_at": "ISO 8601 datetime | null",
+  "signature_url": "string | null"
 }
 ```
 
@@ -675,5 +675,7 @@ https://mosstroiinform.vasmarfas.com/api/v1
    - Автоматически создается чат для объекта
    - `objectId` и `chatId` возвращаются в ответе или доступны через соответствующие эндпойнты
 
-7. `streamUrl` для камер должен поддерживать HLS формат (`.m3u8`) для потокового видео.
+7. `streamUrl` для камер поддерживает:
+   - **HLS формат** (`.m3u8`) - для потокового видео через HTTP
+   - **RTSP протокол** (`rtsp://`) - для потокового видео через RTSP (поддерживается через media_kit на всех платформах, кроме Web)
 
