@@ -13,7 +13,7 @@ _DocumentModel _$DocumentModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       description: json['description'] as String?,
       fileUrl: json['file_url'] as String?,
-      statusString: json['status'] as String? ?? 'pending',
+      statusString: json['status_string'] as String? ?? 'pending',
       submittedAt: json['submitted_at'] == null
           ? null
           : DateTime.parse(json['submitted_at'] as String),
@@ -30,7 +30,7 @@ Map<String, dynamic> _$DocumentModelToJson(_DocumentModel instance) =>
       'title': ?instance.title,
       'description': ?instance.description,
       'file_url': ?instance.fileUrl,
-      'status': instance.statusString,
+      'status_string': instance.statusString,
       'submitted_at': ?instance.submittedAt?.toIso8601String(),
       'approved_at': ?instance.approvedAt?.toIso8601String(),
       'rejection_reason': ?instance.rejectionReason,

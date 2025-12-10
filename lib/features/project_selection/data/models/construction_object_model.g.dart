@@ -35,19 +35,19 @@ _ConstructionObjectModel _$ConstructionObjectModelFromJson(
 Map<String, dynamic> _$ConstructionObjectModelToJson(
   _ConstructionObjectModel instance,
 ) => <String, dynamic>{
-  'id': instance.id,
-  'project_id': instance.projectId,
-  'name': instance.name,
-  'address': instance.address,
-  'description': instance.description,
+  'id': ?instance.id,
+  'project_id': ?instance.projectId,
+  'name': ?instance.name,
+  'address': ?instance.address,
+  'description': ?instance.description,
   'area': instance.area,
   'floors': instance.floors,
   'bedrooms': instance.bedrooms,
   'bathrooms': instance.bathrooms,
   'price': instance.price,
-  'image_url': instance.imageUrl,
+  'image_url': ?instance.imageUrl,
   'stages': instance.stages.map((e) => e.toJson()).toList(),
-  'chat_id': instance.chatId,
+  'chat_id': ?instance.chatId,
   'all_documents_signed': instance.allDocumentsSigned,
   'is_completed': instance.isCompleted,
 };
@@ -63,7 +63,7 @@ _ConstructionStageModel _$ConstructionStageModelFromJson(
 Map<String, dynamic> _$ConstructionStageModelToJson(
   _ConstructionStageModel instance,
 ) => <String, dynamic>{
-  'id': instance.id,
-  'name': instance.name,
-  'status': instance.status,
+  'id': ?instance.id,
+  'name': ?instance.name,
+  'status': ?instance.status,
 };

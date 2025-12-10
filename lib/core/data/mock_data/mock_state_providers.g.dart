@@ -111,7 +111,7 @@ final class MockProjectsStateProvider
   }
 }
 
-String _$mockProjectsStateHash() => r'6ad6f218a4505b96a28ae47b8d534616fd8b7aa9';
+String _$mockProjectsStateHash() => r'e54587040d4032d41757457d231724e2bea2fc80';
 
 /// Провайдер состояния моковых проектов
 /// Состояние хранится в памяти и сбрасывается при перезапуске приложения

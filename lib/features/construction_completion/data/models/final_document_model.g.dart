@@ -12,7 +12,7 @@ _FinalDocumentModel _$FinalDocumentModelFromJson(Map<String, dynamic> json) =>
       title: json['title'] as String?,
       description: json['description'] as String?,
       fileUrl: json['file_url'] as String?,
-      statusString: json['status'] as String? ?? 'pending',
+      statusString: json['status_string'] as String? ?? 'pending',
       submittedAt: json['submitted_at'] == null
           ? null
           : DateTime.parse(json['submitted_at'] as String),

@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:mosstroinform_mobile/app.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
 import 'package:mosstroinform_mobile/core/database/hive_service.dart';
 import 'package:mosstroinform_mobile/features/auth/notifier/auth_notifier.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 
 /// Функция инициализации и запуска приложения
 Future<void> bootstrap() async {
