@@ -55,11 +55,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         // Определяем тип потока
         final isLiveStream =
             value.duration == Duration.zero ||
-            value.duration.inHours >
-                1000; // Live потоки обычно имеют очень большую или нулевую длительность
-        AppLogger.debug(
-          'Тип потока: ${isLiveStream ? "LIVE (реальное время)" : "VOD (потоковое видео)"}',
-        );
+            value.duration.inHours > 1000; // Live потоки обычно имеют очень большую или нулевую длительность
+        AppLogger.debug('Тип потока: ${isLiveStream ? "LIVE (реальное время)" : "VOD (потоковое видео)"}');
 
         // Обновляем состояние при изменении
         if (mounted && value.isInitialized && !_isInitialized) {
@@ -89,12 +86,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         // Если это ошибка аудио или seek, но видео инициализировано и имеет правильный размер,
         // игнорируем ошибку и продолжаем воспроизведение
         if (mounted && value.hasError && (isAudioError || isSeekError)) {
-          if (value.isInitialized &&
-              value.size.width > 0 &&
-              value.size.height > 0) {
-            AppLogger.debug(
-              'Игнорируем ошибку ${isAudioError ? "аудио" : "seek"}, видео продолжает работать',
-            );
+          if (value.isInitialized && value.size.width > 0 && value.size.height > 0) {
+            AppLogger.debug('Игнорируем ошибку ${isAudioError ? "аудио" : "seek"}, видео продолжает работать');
             // Не устанавливаем _hasError = true для ошибок аудио и seek
             return;
           }
@@ -102,13 +95,21 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
 
         // Если это ошибка seek для RTSP потока, но видео буферизуется,
         // игнорируем ошибку (RTSP потоки не поддерживают seek, но работают)
+        // Если видео было инициализировано ранее, восстанавливаем состояние
         if (mounted && value.hasError && isSeekError) {
           final streamUrl = widget.camera.streamUrl.toLowerCase();
           final isRTSP = streamUrl.startsWith('rtsp://');
           if (isRTSP && value.buffered.isNotEmpty) {
-            AppLogger.debug(
-              'Игнорируем ошибку seek для RTSP потока, видео буферизуется',
-            );
+            AppLogger.debug('Игнорируем ошибку seek для RTSP потока, видео буферизуется');
+            // Если видео было инициализировано ранее, но потеряло состояние из-за ошибки seek,
+            // восстанавливаем состояние инициализации
+            if (_isInitialized && !value.isInitialized) {
+              AppLogger.debug('Восстанавливаем состояние инициализации после ошибки seek');
+              setState(() {
+                _isInitialized = true;
+                _hasError = false;
+              });
+            }
             // Не устанавливаем _hasError = true для ошибок seek в RTSP потоках
             return;
           }
@@ -207,9 +208,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
       // Для HLS и HTTP используется стандартный video_player
       // Примечание: RTSP не работает на вебе из-за ограничений браузеров
       // На вебе RTSP потоки не будут воспроизводиться, показывается ошибка
-      _controller = VideoPlayerController.networkUrl(
-        Uri.parse(widget.camera.streamUrl),
-      );
+      _controller = VideoPlayerController.networkUrl(Uri.parse(widget.camera.streamUrl));
 
       // Добавляем слушатель изменений состояния
       _addVideoListener();
@@ -249,9 +248,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
             AppLogger.debug('isPlaying: ${_controller!.value.isPlaying}');
           }
         } else {
-          AppLogger.warning(
-            'Контроллер стал null перед запуском воспроизведения',
-          );
+          AppLogger.warning('Контроллер стал null перед запуском воспроизведения');
         }
       } else {
         AppLogger.debug('Widget не mounted, пропускаем обновление');
@@ -313,10 +310,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
               if (_controller != null && _controller!.value.isInitialized) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => VideoFullscreenScreen(
-                      controller: _controller!,
-                      cameraName: widget.camera.name,
-                    ),
+                    builder: (context) =>
+                        VideoFullscreenScreen(controller: _controller!, cameraName: widget.camera.name),
                   ),
                 );
               }
@@ -328,13 +323,9 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           ? _VideoErrorWidget(
               camera: widget.camera,
               l10n: l10n,
-              errorDescription: _controller?.value.hasError == true
-                  ? _controller?.value.errorDescription
-                  : null,
+              errorDescription: _controller?.value.hasError == true ? _controller?.value.errorDescription : null,
             )
-          : _isInitialized &&
-                _controller != null &&
-                _controller!.value.isInitialized
+          : _isInitialized && _controller != null && _controller!.value.isInitialized
           ? _VideoPlayerWidget(controller: _controller!, camera: widget.camera)
           : const _VideoLoadingWidget(),
     );
@@ -354,9 +345,7 @@ class _VideoPlayerWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final l10n = AppLocalizations.of(context)!;
     // Используем aspectRatio из контроллера, если он доступен, иначе 16/9 по умолчанию
-    final aspectRatio = controller.value.aspectRatio > 0
-        ? controller.value.aspectRatio
-        : 16 / 9;
+    final aspectRatio = controller.value.aspectRatio > 0 ? controller.value.aspectRatio : 16 / 9;
 
     return Center(
       child: AspectRatio(
@@ -370,24 +359,15 @@ class _VideoPlayerWidget extends StatelessWidget {
               top: 16,
               left: 16,
               child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(16),
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(16)),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
                       width: 8,
                       height: 8,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
+                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
                     ),
                     const SizedBox(width: 6),
                     Text(
@@ -406,14 +386,8 @@ class _VideoPlayerWidget extends StatelessWidget {
               Positioned(
                 bottom: 16,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black54,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -422,18 +396,11 @@ class _VideoPlayerWidget extends StatelessWidget {
                         height: 16,
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                            Colors.white,
-                          ),
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text(
-                        l10n.buffering,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                      Text(l10n.buffering, style: theme.textTheme.labelSmall?.copyWith(color: Colors.white)),
                     ],
                   ),
                 ),
@@ -448,25 +415,16 @@ class _VideoPlayerWidget extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (context) => VideoFullscreenScreen(
-                          controller: controller,
-                          cameraName: camera.name,
-                        ),
+                        builder: (context) =>
+                            VideoFullscreenScreen(controller: controller, cameraName: camera.name),
                       ),
                     );
                   },
                   borderRadius: BorderRadius.circular(8),
                   child: Container(
                     padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Icon(
-                      Icons.fullscreen,
-                      color: Colors.white,
-                      size: 24,
-                    ),
+                    decoration: BoxDecoration(color: Colors.black54, borderRadius: BorderRadius.circular(8)),
+                    child: const Icon(Icons.fullscreen, color: Colors.white, size: 24),
                   ),
                 ),
               ),
@@ -505,11 +463,7 @@ class _VideoErrorWidget extends StatelessWidget {
   final AppLocalizations l10n;
   final String? errorDescription;
 
-  const _VideoErrorWidget({
-    required this.camera,
-    required this.l10n,
-    this.errorDescription,
-  });
+  const _VideoErrorWidget({required this.camera, required this.l10n, this.errorDescription});
 
   @override
   Widget build(BuildContext context) {
@@ -521,9 +475,7 @@ class _VideoErrorWidget extends StatelessWidget {
           const Icon(Icons.error_outline, size: 64, color: Colors.red),
           const SizedBox(height: 16),
           Text(
-            camera.isActive
-                ? l10n.errorLoadingVideoStream
-                : l10n.cameraNotActive,
+            camera.isActive ? l10n.errorLoadingVideoStream : l10n.cameraNotActive,
             style: theme.textTheme.titleMedium,
             textAlign: TextAlign.center,
           ),
@@ -533,9 +485,7 @@ class _VideoErrorWidget extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 32),
               child: Text(
                 camera.description,
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
-                ),
+                style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                 textAlign: TextAlign.center,
               ),
             ),
