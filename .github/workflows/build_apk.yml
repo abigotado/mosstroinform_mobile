@@ -206,7 +206,7 @@ jobs:
       - name: Build ${{ matrix.platform }} (${{ matrix.flavor }})
         run: |
           if [ "${{ matrix.platform }}" == "macos" ]; then
-            flutter build ${{ matrix.platform }} --release --dart-define=FLAVOR=${{ matrix.flavor }}
+            flutter build ${{ matrix.platform }} --release --flavor ${{ matrix.flavor }} --dart-define=FLAVOR=${{ matrix.flavor }}
           else
             # Для Linux и Windows не передаем FLAVOR, используется дефолт prod
             flutter build ${{ matrix.platform }} --release
