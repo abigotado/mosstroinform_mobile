@@ -1,0 +1,30 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <!-- Фон -->
+  <rect width="1024" height="1024" rx="200" fill="#2196F3"/>
+  
+  <!-- Дом/здание -->
+  <g transform="translate(200, 200)">
+    <!-- Основная часть здания -->
+    <rect x="112" y="200" width="200" height="300" fill="white" rx="8"/>
+    
+    <!-- Крыша -->
+    <path d="M 12 200 L 212 100 L 412 200 Z" fill="white"/>
+    
+    <!-- Окна -->
+    <rect x="142" y="250" width="50" height="50" fill="#2196F3" rx="4"/>
+    <rect x="232" y="250" width="50" height="50" fill="#2196F3" rx="4"/>
+    <rect x="142" y="330" width="50" height="50" fill="#2196F3" rx="4"/>
+    <rect x="232" y="330" width="50" height="50" fill="#2196F3" rx="4"/>
+    
+    <!-- Дверь -->
+    <rect x="177" y="400" width="60" height="100" fill="#2196F3" rx="4"/>
+    <circle cx="220" cy="450" r="3" fill="white"/>
+    
+    <!-- Галочка контроля (checkmark) -->
+    <g transform="translate(350, 100)">
+      <circle cx="100" cy="100" r="80" fill="white"/>
+      <path d="M 60 100 L 90 130 L 140 60" stroke="#2196F3" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    </g>
+  </g>
+</svg>
+

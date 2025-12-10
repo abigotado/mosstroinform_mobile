@@ -67,6 +67,10 @@ dev_dependencies:
   hive_ce_generator: ^1.1.0
   # envied_generator: ^0.5.0+1
 
+  # Icons and Splash Screen
+  flutter_launcher_icons: ^0.14.1
+  flutter_native_splash: ^2.4.2
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
