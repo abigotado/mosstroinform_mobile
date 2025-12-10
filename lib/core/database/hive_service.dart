@@ -32,7 +32,9 @@ class HiveService {
     try {
       // Если settings box уже открыт, ничего не делаем
       if (Hive.isBoxOpen('settings')) {
-        AppLogger.info('HiveService.initializeSettings: settings box уже открыт');
+        AppLogger.info(
+          'HiveService.initializeSettings: settings box уже открыт',
+        );
         return;
       }
 

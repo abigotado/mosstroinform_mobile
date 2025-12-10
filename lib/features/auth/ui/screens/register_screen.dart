@@ -106,163 +106,165 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                // Имя
-                TextFormField(
-                  controller: _nameController,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    labelText: l10n.nameLabel,
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.enterName;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Email
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    labelText: l10n.emailLabel,
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.enterEmail;
-                    }
-                    if (!value.contains('@')) {
-                      return l10n.enterValidEmail;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Телефон (опционально)
-                TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    labelText: l10n.phoneLabel,
-                    prefixIcon: const Icon(Icons.phone),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-
-                // Пароль
-                TextFormField(
-                  controller: _passwordController,
-                  obscureText: _obscurePassword,
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    labelText: l10n.passwordLabel,
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscurePassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                    // Имя
+                    TextFormField(
+                      controller: _nameController,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: l10n.nameLabel,
+                        prefixIcon: const Icon(Icons.person),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() => _obscurePassword = !_obscurePassword);
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.enterName;
+                        }
+                        return null;
                       },
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.enterPassword;
-                    }
-                    if (value.length < 6) {
-                      return l10n.passwordMinLength;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                // Подтверждение пароля
-                TextFormField(
-                  controller: _confirmPasswordController,
-                  obscureText: _obscureConfirmPassword,
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) => _handleRegister(),
-                  decoration: InputDecoration(
-                    labelText: l10n.confirmPasswordLabel,
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _obscureConfirmPassword
-                            ? Icons.visibility
-                            : Icons.visibility_off,
+                    // Email
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: l10n.emailLabel,
+                        prefixIcon: const Icon(Icons.email),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                      onPressed: () {
-                        setState(
-                          () => _obscureConfirmPassword =
-                              !_obscureConfirmPassword,
-                        );
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.enterEmail;
+                        }
+                        if (!value.contains('@')) {
+                          return l10n.enterValidEmail;
+                        }
+                        return null;
                       },
                     ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.confirmPassword;
-                    }
-                    if (value != _passwordController.text) {
-                      return l10n.passwordsDoNotMatch;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
+                    const SizedBox(height: 16),
 
-                // Кнопка регистрации
-                ElevatedButton(
-                  onPressed: _isLoading ? null : _handleRegister,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                    // Телефон (опционально)
+                    TextFormField(
+                      controller: _phoneController,
+                      keyboardType: TextInputType.phone,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: l10n.phoneLabel,
+                        prefixIcon: const Icon(Icons.phone),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
                     ),
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(l10n.registerButton),
-                ),
-                const SizedBox(height: 16),
+                    const SizedBox(height: 16),
 
-                // Ссылка на вход
-                TextButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  child: Text(l10n.hasAccount),
-                ),
+                    // Пароль
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      textInputAction: TextInputAction.next,
+                      decoration: InputDecoration(
+                        labelText: l10n.passwordLabel,
+                        prefixIcon: const Icon(Icons.lock),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(
+                              () => _obscurePassword = !_obscurePassword,
+                            );
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.enterPassword;
+                        }
+                        if (value.length < 6) {
+                          return l10n.passwordMinLength;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Подтверждение пароля
+                    TextFormField(
+                      controller: _confirmPasswordController,
+                      obscureText: _obscureConfirmPassword,
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (_) => _handleRegister(),
+                      decoration: InputDecoration(
+                        labelText: l10n.confirmPasswordLabel,
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscureConfirmPassword
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                          onPressed: () {
+                            setState(
+                              () => _obscureConfirmPassword =
+                                  !_obscureConfirmPassword,
+                            );
+                          },
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return l10n.confirmPassword;
+                        }
+                        if (value != _passwordController.text) {
+                          return l10n.passwordsDoNotMatch;
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 24),
+
+                    // Кнопка регистрации
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : _handleRegister,
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(strokeWidth: 2),
+                            )
+                          : Text(l10n.registerButton),
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Ссылка на вход
+                    TextButton(
+                      onPressed: () {
+                        context.pop();
+                      },
+                      child: Text(l10n.hasAccount),
+                    ),
                   ],
                 ),
               ),

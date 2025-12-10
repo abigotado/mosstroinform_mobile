@@ -26,10 +26,10 @@ class DocumentsNotifier extends _$DocumentsNotifier {
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocuments();
-      
+
       // Проверяем, что провайдер еще активен перед обновлением состояния
       if (!ref.mounted) return;
-      
+
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
       if (!ref.mounted) return;
@@ -58,10 +58,10 @@ class DocumentsNotifier extends _$DocumentsNotifier {
     try {
       final repository = ref.read(documentRepositoryProvider);
       final documents = await repository.getDocumentsByProjectId(projectId);
-      
+
       // Проверяем, что провайдер еще активен перед обновлением состояния
       if (!ref.mounted) return;
-      
+
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
       if (!ref.mounted) return;

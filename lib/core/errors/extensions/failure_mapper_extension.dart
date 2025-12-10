@@ -63,17 +63,13 @@ extension FailureMapper on Object {
 
     // Используем числовые константы вместо HttpStatus для кроссплатформенности
     return switch (statusCode) {
-      401 => ValidationFailure(
-        'Требуется авторизация. Войдите в систему',
-      ),
+      401 => ValidationFailure('Требуется авторизация. Войдите в систему'),
       403 => ValidationFailure('Доступ запрещен'),
       404 => ValidationFailure('Ресурс не найден'),
       400 => ValidationFailure(message),
       422 => ValidationFailure(message),
       409 => ValidationFailure(message),
-      429 => ValidationFailure(
-        'Слишком много запросов. Попробуйте позже',
-      ),
+      429 => ValidationFailure('Слишком много запросов. Попробуйте позже'),
       >= 500 => ServerFailure('Ошибка сервера: $message'),
       >= 400 => ValidationFailure(message),
       _ => NetworkFailure(message),

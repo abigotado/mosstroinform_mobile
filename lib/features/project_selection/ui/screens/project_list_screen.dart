@@ -205,7 +205,9 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               : 1; // Для мобильных используем 1 колонку
 
           return AppAnimatedSwitcher(
-            key: ValueKey('list-${paginatedProjects.length}-${state.isLoading}'),
+            key: ValueKey(
+              'list-${paginatedProjects.length}-${state.isLoading}',
+            ),
             child: RefreshIndicator(
               key: ValueKey('refresh-${paginatedProjects.length}'),
               onRefresh: () async {
@@ -216,100 +218,112 @@ class _ProjectListScreenState extends ConsumerState<ProjectListScreen> {
               },
               child: state.isLoading && paginatedProjects.isEmpty
                   ? isDesktop
-                      ? GridView.builder(
-                          key: const ValueKey('shimmer-grid-inner'),
-                          padding: const EdgeInsets.all(16),
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            crossAxisSpacing: 16,
-                            mainAxisSpacing: 16,
-                            childAspectRatio: 0.75,
-                          ),
-                          itemCount: 6, // Фиксированное количество для шиммеров
-                          itemBuilder: (context, index) {
-                            return const ProjectCardShimmer();
-                          },
-                        )
-                      : ListView.builder(
-                          key: const ValueKey('shimmer-list-inner'),
-                          padding: const EdgeInsets.all(16),
-                          itemCount: 3, // Фиксированное количество для шиммеров
-                          itemBuilder: (context, index) {
-                            return const Padding(
-                              padding: EdgeInsets.only(bottom: 16),
-                              child: ProjectCardShimmer(),
-                            );
-                          },
-                        )
+                        ? GridView.builder(
+                            key: const ValueKey('shimmer-grid-inner'),
+                            padding: const EdgeInsets.all(16),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: crossAxisCount,
+                                  crossAxisSpacing: 16,
+                                  mainAxisSpacing: 16,
+                                  childAspectRatio: 0.75,
+                                ),
+                            itemCount:
+                                6, // Фиксированное количество для шиммеров
+                            itemBuilder: (context, index) {
+                              return const ProjectCardShimmer();
+                            },
+                          )
+                        : ListView.builder(
+                            key: const ValueKey('shimmer-list-inner'),
+                            padding: const EdgeInsets.all(16),
+                            itemCount:
+                                3, // Фиксированное количество для шиммеров
+                            itemBuilder: (context, index) {
+                              return const Padding(
+                                padding: EdgeInsets.only(bottom: 16),
+                                child: ProjectCardShimmer(),
+                              );
+                            },
+                          )
                   : paginatedProjects.isEmpty
                   ? Center(
                       key: const ValueKey('empty-inner'),
                       child: Text(l10n.projectsNotFound),
                     )
                   : isDesktop
-                      ? Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 1200),
-                            child: GridView.builder(
-                              key: ValueKey('projects-grid-${paginatedProjects.length}'),
-                              controller: _scrollController,
-                              padding: const EdgeInsets.all(16),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  ? Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1200),
+                        child: GridView.builder(
+                          key: ValueKey(
+                            'projects-grid-${paginatedProjects.length}',
+                          ),
+                          controller: _scrollController,
+                          padding: const EdgeInsets.all(16),
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: crossAxisCount,
                                 crossAxisSpacing: 16,
                                 mainAxisSpacing: 16,
                                 childAspectRatio: 0.75,
                               ),
-                              itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
-                              itemBuilder: (context, index) {
-                                if (index == paginatedProjects.length) {
-                                  return const Center(
-                                    child: Padding(
-                                      padding: EdgeInsets.all(16.0),
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  );
-                                }
-                                final project = paginatedProjects[index];
-                                return ProjectCard(
-                                  project: project,
-                                  onTap: () {
-                                    context.push('/projects/${project.id}');
-                                  },
-                                );
+                          itemCount:
+                              paginatedProjects.length + (hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == paginatedProjects.length) {
+                              return const Center(
+                                child: Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                            final project = paginatedProjects[index];
+                            return ProjectCard(
+                              project: project,
+                              onTap: () {
+                                context.push('/projects/${project.id}');
                               },
-                            ),
-                          ),
-                        )
-                      : Center(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 600),
-                            child: ListView.builder(
-                              key: ValueKey('projects-list-${paginatedProjects.length}'),
-                              controller: _scrollController,
-                              padding: const EdgeInsets.all(16),
-                              itemCount: paginatedProjects.length + (hasMore ? 1 : 0),
-                              itemBuilder: (context, index) {
-                                if (index == paginatedProjects.length) {
-                                  return const Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Center(child: CircularProgressIndicator()),
-                                  );
-                                }
-                                final project = paginatedProjects[index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(bottom: 16),
-                                  child: ProjectCard(
-                                    project: project,
-                                    onTap: () {
-                                      context.push('/projects/${project.id}');
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                            );
+                          },
                         ),
+                      ),
+                    )
+                  : Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 600),
+                        child: ListView.builder(
+                          key: ValueKey(
+                            'projects-list-${paginatedProjects.length}',
+                          ),
+                          controller: _scrollController,
+                          padding: const EdgeInsets.all(16),
+                          itemCount:
+                              paginatedProjects.length + (hasMore ? 1 : 0),
+                          itemBuilder: (context, index) {
+                            if (index == paginatedProjects.length) {
+                              return const Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
+                              );
+                            }
+                            final project = paginatedProjects[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: ProjectCard(
+                                project: project,
+                                onTap: () {
+                                  context.push('/projects/${project.id}');
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
             ),
           );
         },

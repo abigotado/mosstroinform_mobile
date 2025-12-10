@@ -71,9 +71,7 @@ Future<void> bootstrap() async {
 
   // Создаем контейнер для предзагрузки авторизации
   // Этот контейнер будет использоваться на протяжении всего жизненного цикла приложения
-  final container = ProviderContainer(
-    observers: [AppLogger.riverpodObserver],
-  );
+  final container = ProviderContainer(observers: [AppLogger.riverpodObserver]);
 
   // Предзагружаем состояние авторизации до запуска приложения
   // Это позволяет роутеру сразу определить правильный initialLocation

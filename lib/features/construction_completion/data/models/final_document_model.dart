@@ -44,9 +44,14 @@ class ConstructionCompletionStatusModel {
     return ConstructionCompletionStatusModel(
       // Проверяем оба варианта: camelCase и snake_case
       projectId: json['project_id'] as String? ?? json['projectId'] as String?,
-      isCompleted: json['is_completed'] as bool? ?? json['isCompleted'] as bool? ?? false,
+      isCompleted:
+          json['is_completed'] as bool? ??
+          json['isCompleted'] as bool? ??
+          false,
       completionDate: () {
-        final dateStr = json['completion_date'] as String? ?? json['completionDate'] as String?;
+        final dateStr =
+            json['completion_date'] as String? ??
+            json['completionDate'] as String?;
         return dateStr != null ? DateTime.parse(dateStr) : null;
       }(),
       progress: (json['progress'] as num?)?.toDouble() ?? 0.0,

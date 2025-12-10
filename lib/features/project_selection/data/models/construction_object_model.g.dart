@@ -20,9 +20,12 @@ _ConstructionObjectModel _$ConstructionObjectModelFromJson(
   bathrooms: (json['bathrooms'] as num).toInt(),
   price: (json['price'] as num).toInt(),
   imageUrl: json['image_url'] as String?,
-  stages: (json['stages'] as List<dynamic>?)
-      ?.map((e) => ConstructionStageModel.fromJson(e as Map<String, dynamic>))
-      .toList() ??
+  stages:
+      (json['stages'] as List<dynamic>?)
+          ?.map(
+            (e) => ConstructionStageModel.fromJson(e as Map<String, dynamic>),
+          )
+          .toList() ??
       const [],
   chatId: json['chat_id'] as String?,
   allDocumentsSigned: json['all_documents_signed'] as bool? ?? false,

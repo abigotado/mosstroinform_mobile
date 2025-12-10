@@ -102,104 +102,116 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                  // Изображение проекта
-                  if (project.imageUrl != null)
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Image.network(
-                        project.imageUrl!,
-                        fit: BoxFit.cover,
-                        loadingBuilder: (context, child, loadingProgress) {
-                          if (loadingProgress == null) {
-                            return child;
-                          }
-                          return Container(
-                            color: theme.colorScheme.surfaceContainerHighest,
-                            child: Center(
-                              child: CircularProgressIndicator(
-                                value:
-                                    loadingProgress.expectedTotalBytes != null
-                                    ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes!
-                                    : null,
-                              ),
-                            ),
-                          );
-                        },
-                        errorBuilder: (context, error, stackTrace) {
-                          debugPrint('Ошибка загрузки изображения: $error');
-                          debugPrint('URL: ${project.imageUrl}');
-                          return Container(
+                      // Изображение проекта
+                      if (project.imageUrl != null)
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Image.network(
+                            project.imageUrl!,
+                            fit: BoxFit.cover,
+                            loadingBuilder: (context, child, loadingProgress) {
+                              if (loadingProgress == null) {
+                                return child;
+                              }
+                              return Container(
+                                color:
+                                    theme.colorScheme.surfaceContainerHighest,
+                                child: Center(
+                                  child: CircularProgressIndicator(
+                                    value:
+                                        loadingProgress.expectedTotalBytes !=
+                                            null
+                                        ? loadingProgress
+                                                  .cumulativeBytesLoaded /
+                                              loadingProgress
+                                                  .expectedTotalBytes!
+                                        : null,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorBuilder: (context, error, stackTrace) {
+                              debugPrint('Ошибка загрузки изображения: $error');
+                              debugPrint('URL: ${project.imageUrl}');
+                              return Container(
+                                color:
+                                    theme.colorScheme.surfaceContainerHighest,
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.image_not_supported,
+                                    size: 64,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      else
+                        AspectRatio(
+                          aspectRatio: 16 / 9,
+                          child: Container(
                             color: theme.colorScheme.surfaceContainerHighest,
                             child: const Center(
-                              child: Icon(Icons.image_not_supported, size: 64),
+                              child: Icon(Icons.home, size: 64),
                             ),
-                          );
-                        },
-                      ),
-                    )
-                  else
-                    AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: Container(
-                        color: theme.colorScheme.surfaceContainerHighest,
-                        child: const Center(child: Icon(Icons.home, size: 64)),
-                      ),
-                    ),
-
-                  // Информация о проекте
-                  Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Название
-                        Text(
-                          project.name,
-                          style: theme.textTheme.headlineMedium,
-                        ),
-                        const SizedBox(height: 8),
-
-                        const SizedBox(height: 16),
-
-                        // Описание
-                        Text(
-                          project.description,
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                        const SizedBox(height: 24),
-
-                        // Характеристики
-                        _CharacteristicsSection(project: project),
-                        const SizedBox(height: 24),
-
-                        // Цена
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: theme.colorScheme.primaryContainer,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                l10n.price,
-                                style: theme.textTheme.titleLarge,
-                              ),
-                              Text(
-                                _formatPrice(project.price, l10n),
-                                style: theme.textTheme.headlineMedium?.copyWith(
-                                  color: theme.colorScheme.primary,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+
+                      // Информация о проекте
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Название
+                            Text(
+                              project.name,
+                              style: theme.textTheme.headlineMedium,
+                            ),
+                            const SizedBox(height: 8),
+
+                            const SizedBox(height: 16),
+
+                            // Описание
+                            Text(
+                              project.description,
+                              style: theme.textTheme.bodyLarge,
+                            ),
+                            const SizedBox(height: 24),
+
+                            // Характеристики
+                            _CharacteristicsSection(project: project),
+                            const SizedBox(height: 24),
+
+                            // Цена
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: theme.colorScheme.primaryContainer,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    l10n.price,
+                                    style: theme.textTheme.titleLarge,
+                                  ),
+                                  Text(
+                                    _formatPrice(project.price, l10n),
+                                    style: theme.textTheme.headlineMedium
+                                        ?.copyWith(
+                                          color: theme.colorScheme.primary,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),

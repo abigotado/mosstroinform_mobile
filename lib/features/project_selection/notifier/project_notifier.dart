@@ -214,7 +214,9 @@ class ProjectNotifier extends _$ProjectNotifier {
       // Перезагружаем список проектов для обновления карточек
       await ref.read(projectsProvider.notifier).loadProjects();
       // Перезагружаем список запрошенных проектов
-      await ref.read(requestedProjectsProvider.notifier).loadRequestedProjects();
+      await ref
+          .read(requestedProjectsProvider.notifier)
+          .loadRequestedProjects();
       // Перезагружаем пагинированный список проектов
       await ref.read(paginatedProjectsProvider.notifier).loadFirstPage();
     } on Failure catch (e) {

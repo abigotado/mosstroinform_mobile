@@ -22,22 +22,15 @@ class AdaptiveScaffold extends StatelessWidget {
 
     // Если экран меньше максимальной ширины, используем всю ширину
     if (screenWidth < effectiveMaxWidth) {
-      return Padding(
-        padding: padding ?? EdgeInsets.zero,
-        child: child,
-      );
+      return Padding(padding: padding ?? EdgeInsets.zero, child: child);
     }
 
     // На больших экранах центрируем контент
     return Center(
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: effectiveMaxWidth),
-        child: Padding(
-          padding: padding ?? EdgeInsets.zero,
-          child: child,
-        ),
+        child: Padding(padding: padding ?? EdgeInsets.zero, child: child),
       ),
     );
   }
 }
-
