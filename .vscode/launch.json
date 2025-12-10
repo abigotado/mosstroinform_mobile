@@ -86,26 +86,30 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "toolArgs": [
-        "--flavor",
-        "mock",
+      "args": [
         "--dart-define=FLAVOR=mock"
       ],
       "flutterMode": "debug",
-      "deviceId": "macos"
+      "deviceId": "macos",
+      "flutterAdditionalArgs": [
+        "--flavor",
+        "mock"
+      ]
     },
     {
       "name": "Production (macOS)",
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "toolArgs": [
-        "--flavor",
-        "prod",
+      "args": [
         "--dart-define=FLAVOR=prod"
       ],
       "flutterMode": "debug",
-      "deviceId": "macos"
+      "deviceId": "macos",
+      "flutterAdditionalArgs": [
+        "--flavor",
+        "prod"
+      ]
     },
     {
       "name": "Production (Linux)",
