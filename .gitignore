@@ -52,3 +52,7 @@ app.*.map.json
 
 # Working documentation (internal use only)
 xtemp/
+
+# Scripts for generating assets (temporary)
+.scripts/
+scripts/temp/

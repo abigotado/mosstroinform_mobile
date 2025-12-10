@@ -111,6 +111,9 @@ flutter_native_splash:
   # Цвет фона splash screen
   color: "#2196F3"
   
+  # Изображение логотипа для splash screen
+  image: assets/icons/app_logo.png
+  
   # Настройки для Android
   android: true
   android_gravity: center
