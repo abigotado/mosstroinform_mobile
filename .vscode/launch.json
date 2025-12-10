@@ -86,7 +86,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": [
+      "toolArgs": [
         "--flavor",
         "mock",
         "--dart-define=FLAVOR=mock"
@@ -99,7 +99,7 @@
       "request": "launch",
       "type": "dart",
       "program": "lib/main.dart",
-      "args": [
+      "toolArgs": [
         "--flavor",
         "prod",
         "--dart-define=FLAVOR=prod"
