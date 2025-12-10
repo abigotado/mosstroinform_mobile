@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:logger/logger.dart';
 import 'package:media_kit/media_kit.dart';
+import 'package:video_player_media_kit/video_player_media_kit.dart';
 import 'package:mosstroinform_mobile/app.dart';
 import 'package:mosstroinform_mobile/core/config/app_config_simple.dart';
 import 'package:mosstroinform_mobile/core/database/hive_service.dart';
@@ -23,9 +24,18 @@ Future<void> bootstrap() async {
   // Инициализируем логгер перед использованием
   await AppLogger.init(showLogs: kDebugMode || config.useMocks);
 
-  // Инициализируем media_kit для поддержки RTSP потоков
+  // Инициализируем video_player_media_kit для поддержки RTSP потоков
   // Это необходимо для воспроизведения RTSP потоков на всех платформах
+  // VideoPlayerMediaKit автоматически перехватывает RTSP потоки и использует media_kit
   MediaKit.ensureInitialized();
+  VideoPlayerMediaKit.ensureInitialized(
+    android: true,
+    iOS: true,
+    macOS: true,
+    windows: true,
+    linux: true,
+    web: false, // Web не поддерживает RTSP
+  );
 
   // Устанавливаем только вертикальную ориентацию для всего приложения
   // На вебе это не поддерживается, поэтому пропускаем

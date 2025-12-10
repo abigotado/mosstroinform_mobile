@@ -4,7 +4,6 @@ import 'package:mosstroinform_mobile/features/construction_stage/domain/entities
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/video_fullscreen_screen.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_player_media_kit/video_player_media_kit.dart';
 
 /// Экран просмотра видеопотока камеры
 class CameraViewScreen extends StatefulWidget {
@@ -109,19 +108,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
               : 'HTTP (файл)';
       AppLogger.debug('Тип потока: $streamType');
       
-      // Для RTSP потоков используем MediaKitVideoPlayerController
-      // Для остальных - стандартный VideoPlayerController
-      if (isRTSP) {
-        AppLogger.debug('Используем MediaKitVideoPlayerController для RTSP');
-        _controller = MediaKitVideoPlayerController(
-          Media(widget.camera.streamUrl),
-        );
-      } else {
-        AppLogger.debug('Используем стандартный VideoPlayerController');
-        _controller = VideoPlayerController.networkUrl(
-          Uri.parse(widget.camera.streamUrl),
-        );
-      }
+      // VideoPlayerController.networkUrl автоматически использует media_kit для RTSP
+      // благодаря VideoPlayerMediaKit.ensureInitialized() в bootstrap
+      // Для HLS и HTTP используется стандартный video_player
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(widget.camera.streamUrl),
+      );
 
       // Добавляем слушатель изменений состояния
       _addVideoListener();
