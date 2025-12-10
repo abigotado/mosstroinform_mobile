@@ -299,6 +299,22 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
 
+    // Проверяем, является ли ошибка seek ошибкой для RTSP потока
+    // Если да, и видео буферизуется, не показываем ошибку
+    final hasRealError = _hasError || (_controller?.value.hasError ?? false);
+    final errorDescription = _controller?.value.errorDescription?.toLowerCase() ?? '';
+    final isSeekError = errorDescription.contains('seek') || errorDescription.contains('force-seekable');
+    final streamUrl = widget.camera.streamUrl.toLowerCase();
+    final isRTSP = streamUrl.startsWith('rtsp://');
+    final isBuffering = _controller?.value.buffered.isNotEmpty ?? false;
+    
+    // Для RTSP потоков с ошибками seek, но с активной буферизацией, не показываем ошибку
+    final shouldShowError = hasRealError && !(isRTSP && isSeekError && isBuffering);
+    
+    // Для RTSP потоков с ошибками seek, но с активной буферизацией, считаем видео работающим
+    final isVideoWorking = (_isInitialized && _controller != null && _controller!.value.isInitialized) ||
+        (isRTSP && isSeekError && isBuffering && _controller != null);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.camera.name),
@@ -307,7 +323,8 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           IconButton(
             icon: const Icon(Icons.fullscreen),
             onPressed: () {
-              if (_controller != null && _controller!.value.isInitialized) {
+              if (_controller != null && 
+                  (_controller!.value.isInitialized || (isRTSP && isSeekError && isBuffering))) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) =>
@@ -319,13 +336,13 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
           ),
         ],
       ),
-      body: _hasError || (_controller?.value.hasError ?? false)
+      body: shouldShowError
           ? _VideoErrorWidget(
               camera: widget.camera,
               l10n: l10n,
               errorDescription: _controller?.value.hasError == true ? _controller?.value.errorDescription : null,
             )
-          : _isInitialized && _controller != null && _controller!.value.isInitialized
+          : isVideoWorking
           ? _VideoPlayerWidget(controller: _controller!, camera: widget.camera)
           : const _VideoLoadingWidget(),
     );
