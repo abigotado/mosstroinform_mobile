@@ -204,6 +204,7 @@ jobs:
         run: dart run build_runner build -d
 
       - name: Build ${{ matrix.platform }} (${{ matrix.flavor }})
+        shell: bash
         run: |
           if [ "${{ matrix.platform }}" == "macos" ]; then
             # Для macOS используем только --dart-define, так как macOS не поддерживает --flavor напрямую
@@ -217,6 +218,7 @@ jobs:
 
       - name: Determine artifact path
         id: artifact_path
+        shell: bash
         run: |
           if [ "${{ matrix.platform }}" == "linux" ]; then
             echo "path=build/linux/x64/release/bundle" >> $GITHUB_OUTPUT
@@ -228,6 +230,7 @@ jobs:
           fi
           
       - name: Verify artifact exists
+        shell: bash
         run: |
           if [ "${{ matrix.platform }}" == "linux" ]; then
             if [ ! -d "build/linux/x64/release/bundle" ]; then
@@ -235,18 +238,22 @@ jobs:
               ls -la build/linux/x64/release/ || echo "Release directory not found"
               exit 1
             fi
+            echo "Linux bundle verified: build/linux/x64/release/bundle"
           elif [ "${{ matrix.platform }}" == "windows" ]; then
+            # Для Windows используем PowerShell-совместимую проверку
             if [ ! -d "build/windows/x64/runner/Release" ]; then
               echo "Error: Windows Release directory not found"
-              ls -la build/windows/x64/runner/ || echo "Runner directory not found"
+              ls -la build/windows/x64/runner/ 2>/dev/null || echo "Runner directory not found"
               exit 1
             fi
+            echo "Windows Release verified: build/windows/x64/runner/Release"
           elif [ "${{ matrix.platform }}" == "macos" ]; then
             if [ ! -d "build/macos/Build/Products/Release/mosstroinform_mobile.app" ]; then
               echo "Error: macOS app not found"
-              ls -la build/macos/Build/Products/Release/ || echo "Release directory not found"
+              ls -la build/macos/Build/Products/Release/ 2>/dev/null || echo "Release directory not found"
               exit 1
             fi
+            echo "macOS app verified: build/macos/Build/Products/Release/mosstroinform_mobile.app"
           fi
 
       - name: Upload ${{ matrix.platform }} artifact (${{ matrix.flavor }})
