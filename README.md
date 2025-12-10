@@ -253,7 +253,7 @@ flutter run -d chrome
 - Linux (Ubuntu 18.04 или выше, или другой дистрибутив с поддержкой GTK3)
 - Системные зависимости:
   ```bash
-  sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libsecret-1-dev
+  sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libsecret-1-dev libcurl4-openssl-dev libmpv-dev
   ```
 
 ### Для разработки под Windows

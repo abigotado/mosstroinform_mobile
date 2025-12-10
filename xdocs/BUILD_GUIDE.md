@@ -249,7 +249,9 @@ flutter build ios --release
     pkg-config \
     libgtk-3-dev \
     liblzma-dev \
-    libsecret-1-dev
+    libsecret-1-dev \
+    libcurl4-openssl-dev \
+    libmpv-dev
   ```
 
 ### Debug сборка
@@ -573,6 +575,15 @@ sudo apt-get update
 sudo apt-get install -y libgtk-3-dev
 ```
 
+#### Ошибка: "Target 'media_kit_video_plugin' links to 'PkgConfig::mpv' but the target was not found"
+
+Установите библиотеку mpv (требуется для media_kit_video):
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libmpv-dev
+```
+
 #### Ошибка: "CMake Error"
 
 Убедитесь, что установлены все необходимые зависимости:
@@ -586,7 +597,9 @@ sudo apt-get install -y \
   pkg-config \
   libgtk-3-dev \
   liblzma-dev \
-  libsecret-1-dev
+  libsecret-1-dev \
+  libcurl4-openssl-dev \
+  libmpv-dev
 ```
 
 #### Приложение не запускается
