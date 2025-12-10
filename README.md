@@ -304,7 +304,7 @@ flutter build ios --release
 
 Тесты организованы по той же структуре, что и основной код:
 
-```
+```log
 test/
 ├── features/
 │   ├── project_selection/
@@ -575,7 +575,7 @@ void main() {
 
 ### Структура проекта
 
-```
+```log
 lib/
 ├── core/                    # Общие компоненты
 │   ├── theme/              # Темизация
