@@ -97,11 +97,16 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
       //   Используется для live streaming и адаптивного потокового видео
       // - DASH потоки
       // - Обычные видеофайлы через HTTP
-      // Примечание: Для RTSP потоков может потребоваться дополнительный пакет
-      // (например, flutter_vlc_player или media_kit)
-      AppLogger.debug(
-        'Тип потока: ${widget.camera.streamUrl.endsWith('.m3u8') ? 'HLS (потоковое)' : 'HTTP (файл)'}',
-      );
+      // - RTSP потоки - поддерживаются через video_player_media_kit (media_kit)
+      final streamUrl = widget.camera.streamUrl.toLowerCase();
+      final isRTSP = streamUrl.startsWith('rtsp://');
+      final isHLS = streamUrl.endsWith('.m3u8');
+      final streamType = isRTSP
+          ? 'RTSP (потоковое)'
+          : isHLS
+              ? 'HLS (потоковое)'
+              : 'HTTP (файл)';
+      AppLogger.debug('Тип потока: $streamType');
       _controller = VideoPlayerController.networkUrl(
         Uri.parse(widget.camera.streamUrl),
       );

@@ -50,6 +50,10 @@ dependencies:
   # Logger
   logger:
     path: packages/logger
+  video_player_media_kit: ^2.0.0
+  media_kit: ^1.2.3
+  media_kit_video: ^2.0.1
+  media_kit_libs_video: ^1.0.7
 
 dev_dependencies:
   flutter_test:
