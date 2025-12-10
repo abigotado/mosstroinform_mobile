@@ -76,15 +76,20 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         // Ошибки типа "Could not open/initialize audio device -> no sound"
         // не должны останавливать воспроизведение видео
         final errorDescription = value.errorDescription?.toLowerCase() ?? '';
-        final isAudioError = errorDescription.contains('audio') ||
+        final isAudioError =
+            errorDescription.contains('audio') ||
             errorDescription.contains('sound') ||
             errorDescription.contains('audio device');
-        
+
         // Если это ошибка аудио, но видео инициализировано и имеет правильный размер,
         // игнорируем ошибку и продолжаем воспроизведение
         if (mounted && value.hasError && isAudioError) {
-          if (value.isInitialized && value.size.width > 0 && value.size.height > 0) {
-            AppLogger.debug('Игнорируем ошибку аудио, видео продолжает работать');
+          if (value.isInitialized &&
+              value.size.width > 0 &&
+              value.size.height > 0) {
+            AppLogger.debug(
+              'Игнорируем ошибку аудио, видео продолжает работать',
+            );
             // Не устанавливаем _hasError = true для ошибок аудио
             return;
           }
@@ -95,17 +100,19 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
             _hasError = true;
           });
         }
-        
+
         // Если видео потеряло инициализацию из-за ошибки аудио, но размер был правильный,
         // пытаемся переинициализировать (но не более _maxReinitAttempts раз)
-        if (mounted && 
-            !value.isInitialized && 
-            _isInitialized && 
-            isAudioError && 
-            value.size.width == 0 && 
+        if (mounted &&
+            !value.isInitialized &&
+            _isInitialized &&
+            isAudioError &&
+            value.size.width == 0 &&
             value.size.height == 0 &&
             _reinitAttempts < _maxReinitAttempts) {
-          AppLogger.warning('Видео потеряло инициализацию из-за ошибки аудио, пытаемся переинициализировать (попытка ${_reinitAttempts + 1}/$_maxReinitAttempts)');
+          AppLogger.warning(
+            'Видео потеряло инициализацию из-за ошибки аудио, пытаемся переинициализировать (попытка ${_reinitAttempts + 1}/$_maxReinitAttempts)',
+          );
           _reinitAttempts++;
           // Не устанавливаем ошибку, попробуем переинициализировать
           setState(() {
@@ -113,19 +120,26 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
             _hasError = false;
           });
           // Переинициализируем видео
+          // Удаляем слушатель перед dispose
+          if (_controller != null && _videoListener != null) {
+            _controller!.removeListener(_videoListener!);
+          }
           _controller?.dispose();
           _controller = null;
+          _videoListener = null;
           Future.delayed(const Duration(milliseconds: 500), () {
             if (mounted) {
               _initializeVideo();
             }
           });
-        } else if (mounted && 
-            !value.isInitialized && 
-            _isInitialized && 
-            isAudioError && 
+        } else if (mounted &&
+            !value.isInitialized &&
+            _isInitialized &&
+            isAudioError &&
             _reinitAttempts >= _maxReinitAttempts) {
-          AppLogger.warning('Превышено максимальное количество попыток переинициализации, игнорируем ошибку аудио');
+          AppLogger.warning(
+            'Превышено максимальное количество попыток переинициализации, игнорируем ошибку аудио',
+          );
           // Игнорируем ошибку аудио даже если видео не инициализировано
           // Пользователь все равно увидит видео, если оно работает
         }
@@ -182,6 +196,17 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
       await _controller!.initialize();
       AppLogger.debug('Контроллер инициализирован');
 
+      // Проверяем, что контроллер все еще существует после инициализации
+      if (_controller == null) {
+        AppLogger.warning('Контроллер стал null после инициализации');
+        if (mounted) {
+          setState(() {
+            _hasError = true;
+          });
+        }
+        return;
+      }
+
       AppLogger.debug('Длительность: ${_controller!.value.duration}');
       AppLogger.debug('Разрешение: ${_controller!.value.size}');
       AppLogger.debug('AspectRatio: ${_controller!.value.aspectRatio}');
@@ -194,9 +219,18 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         });
         // Автоматически запускаем воспроизведение
         AppLogger.debug('Запуск воспроизведения');
-        await _controller!.play();
-        AppLogger.debug('Воспроизведение запущено');
-        AppLogger.debug('isPlaying: ${_controller!.value.isPlaying}');
+        // Проверяем контроллер еще раз перед использованием
+        if (_controller != null) {
+          await _controller!.play();
+          AppLogger.debug('Воспроизведение запущено');
+          if (_controller != null) {
+            AppLogger.debug('isPlaying: ${_controller!.value.isPlaying}');
+          }
+        } else {
+          AppLogger.warning(
+            'Контроллер стал null перед запуском воспроизведения',
+          );
+        }
       } else {
         AppLogger.debug('Widget не mounted, пропускаем обновление');
       }
