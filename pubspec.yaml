@@ -93,11 +93,12 @@ flutter_launcher_icons:
   ios: true
   image_path: "assets/icons/app_logo.png"
   min_sdk_android: 21 # Android min sdk min:16, default 21
+  remove_alpha_ios: true # Убираем альфа-канал для App Store
   web:
     generate: true
     image_path: "assets/icons/app_logo.png"
-    background_color: "#2196F3"
-    theme_color: "#2196F3"
+    background_color: "#213c72"
+    theme_color: "#213c72"
   windows:
     generate: true
     image_path: "assets/icons/app_logo.png"
@@ -108,8 +109,8 @@ flutter_launcher_icons:
 
 # Конфигурация для splash screen
 flutter_native_splash:
-  # Цвет фона splash screen
-  color: "#2196F3"
+  # Цвет фона splash screen (темно-синий из логотипа)
+  color: "#213c72"
   
   # Изображение логотипа для splash screen
   image: assets/icons/app_logo.png
