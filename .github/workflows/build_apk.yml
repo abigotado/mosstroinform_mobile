@@ -206,7 +206,9 @@ jobs:
       - name: Build ${{ matrix.platform }} (${{ matrix.flavor }})
         run: |
           if [ "${{ matrix.platform }}" == "macos" ]; then
-            flutter build ${{ matrix.platform }} --release --flavor ${{ matrix.flavor }} --dart-define=FLAVOR=${{ matrix.flavor }}
+            # Для macOS используем только --dart-define, так как macOS не поддерживает --flavor напрямую
+            # Flavor определяется через схемы Xcode или через --dart-define
+            flutter build ${{ matrix.platform }} --release --dart-define=FLAVOR=${{ matrix.flavor }}
           else
             # Для Linux и Windows не передаем FLAVOR, используется дефолт prod
             flutter build ${{ matrix.platform }} --release
@@ -221,7 +223,30 @@ jobs:
           elif [ "${{ matrix.platform }}" == "windows" ]; then
             echo "path=build/windows/x64/runner/Release" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.platform }}" == "macos" ]; then
+            # Для macOS путь одинаковый для всех flavors
             echo "path=build/macos/Build/Products/Release/mosstroinform_mobile.app" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Verify artifact exists
+        run: |
+          if [ "${{ matrix.platform }}" == "linux" ]; then
+            if [ ! -d "build/linux/x64/release/bundle" ]; then
+              echo "Error: Linux bundle not found"
+              ls -la build/linux/x64/release/ || echo "Release directory not found"
+              exit 1
+            fi
+          elif [ "${{ matrix.platform }}" == "windows" ]; then
+            if [ ! -d "build/windows/x64/runner/Release" ]; then
+              echo "Error: Windows Release directory not found"
+              ls -la build/windows/x64/runner/ || echo "Runner directory not found"
+              exit 1
+            fi
+          elif [ "${{ matrix.platform }}" == "macos" ]; then
+            if [ ! -d "build/macos/Build/Products/Release/mosstroinform_mobile.app" ]; then
+              echo "Error: macOS app not found"
+              ls -la build/macos/Build/Products/Release/ || echo "Release directory not found"
+              exit 1
+            fi
           fi
 
       - name: Upload ${{ matrix.platform }} artifact (${{ matrix.flavor }})
