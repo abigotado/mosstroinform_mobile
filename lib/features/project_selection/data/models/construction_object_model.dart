@@ -9,7 +9,8 @@ part 'construction_object_model.g.dart';
 abstract class ConstructionObjectModel with _$ConstructionObjectModel {
   const factory ConstructionObjectModel({
     @JsonKey(fromJson: _stringFromJson) required String id,
-    @JsonKey(name: 'project_id', fromJson: _stringFromJson) required String projectId,
+    @JsonKey(name: 'project_id', fromJson: _stringFromJson)
+    required String projectId,
     @JsonKey(fromJson: _stringFromJson) required String name,
     @JsonKey(fromJson: _stringFromJson) required String address,
     @JsonKey(fromJson: _stringFromJson) required String description,
@@ -19,9 +20,12 @@ abstract class ConstructionObjectModel with _$ConstructionObjectModel {
     required int bathrooms,
     required int price,
     @JsonKey(name: 'image_url') String? imageUrl,
-    @JsonKey(fromJson: _stagesFromJson) required List<ConstructionStageModel> stages,
+    @JsonKey(fromJson: _stagesFromJson)
+    required List<ConstructionStageModel> stages,
     @JsonKey(name: 'chat_id') String? chatId,
-    @JsonKey(name: 'all_documents_signed') @Default(false) bool allDocumentsSigned,
+    @JsonKey(name: 'all_documents_signed')
+    @Default(false)
+    bool allDocumentsSigned,
     @JsonKey(name: 'is_completed') @Default(false) bool isCompleted,
   }) = _ConstructionObjectModel;
 
