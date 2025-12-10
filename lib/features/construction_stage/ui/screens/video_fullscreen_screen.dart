@@ -57,7 +57,7 @@ class _VideoFullscreenScreenState extends State<VideoFullscreenScreen> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        if (didPop) {
+        if (!didPop) {
           _handleBackButton();
         }
       },
