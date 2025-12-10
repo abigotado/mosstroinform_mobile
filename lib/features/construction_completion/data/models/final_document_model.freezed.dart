@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$FinalDocumentModel {
 
- String get id; String get title; String get description; String? get fileUrl;@JsonKey(name: 'status') String get statusString; DateTime? get submittedAt; DateTime? get signedAt; String? get signatureUrl;
+ String? get id; String? get title; String? get description; String? get fileUrl; String get statusString; DateTime? get submittedAt; DateTime? get signedAt; String? get signatureUrl;
 /// Create a copy of FinalDocumentModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $FinalDocumentModelCopyWith<$Res>  {
   factory $FinalDocumentModelCopyWith(FinalDocumentModel value, $Res Function(FinalDocumentModel) _then) = _$FinalDocumentModelCopyWithImpl;
 @useResult
 $Res call({
- String id, String title, String description, String? fileUrl,@JsonKey(name: 'status') String statusString, DateTime? submittedAt, DateTime? signedAt, String? signatureUrl
+ String? id, String? title, String? description, String? fileUrl, String statusString, DateTime? submittedAt, DateTime? signedAt, String? signatureUrl
 });
 
 
@@ -65,12 +65,12 @@ class _$FinalDocumentModelCopyWithImpl<$Res>
 
 /// Create a copy of FinalDocumentModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? title = null,Object? description = null,Object? fileUrl = freezed,Object? statusString = null,Object? submittedAt = freezed,Object? signedAt = freezed,Object? signatureUrl = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? title = freezed,Object? description = freezed,Object? fileUrl = freezed,Object? statusString = null,Object? submittedAt = freezed,Object? signedAt = freezed,Object? signatureUrl = freezed,}) {
   return _then(_self.copyWith(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,fileUrl: freezed == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,fileUrl: freezed == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
 as String?,statusString: null == statusString ? _self.statusString : statusString // ignore: cast_nullable_to_non_nullable
 as String,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,signedAt: freezed == signedAt ? _self.signedAt : signedAt // ignore: cast_nullable_to_non_nullable
@@ -160,7 +160,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String? id,  String? title,  String? description,  String? fileUrl,  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _FinalDocumentModel() when $default != null:
 return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.signedAt,_that.signatureUrl);case _:
@@ -181,7 +181,7 @@ return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String? id,  String? title,  String? description,  String? fileUrl,  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)  $default,) {final _that = this;
 switch (_that) {
 case _FinalDocumentModel():
 return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.signedAt,_that.signatureUrl);case _:
@@ -201,7 +201,7 @@ return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statu
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String title,  String description,  String? fileUrl, @JsonKey(name: 'status')  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String? id,  String? title,  String? description,  String? fileUrl,  String statusString,  DateTime? submittedAt,  DateTime? signedAt,  String? signatureUrl)?  $default,) {final _that = this;
 switch (_that) {
 case _FinalDocumentModel() when $default != null:
 return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statusString,_that.submittedAt,_that.signedAt,_that.signatureUrl);case _:
@@ -216,14 +216,14 @@ return $default(_that.id,_that.title,_that.description,_that.fileUrl,_that.statu
 @JsonSerializable()
 
 class _FinalDocumentModel implements FinalDocumentModel {
-  const _FinalDocumentModel({required this.id, required this.title, required this.description, this.fileUrl, @JsonKey(name: 'status') this.statusString = 'pending', this.submittedAt, this.signedAt, this.signatureUrl});
+  const _FinalDocumentModel({this.id, this.title, this.description, this.fileUrl, this.statusString = 'pending', this.submittedAt, this.signedAt, this.signatureUrl});
   factory _FinalDocumentModel.fromJson(Map<String, dynamic> json) => _$FinalDocumentModelFromJson(json);
 
-@override final  String id;
-@override final  String title;
-@override final  String description;
+@override final  String? id;
+@override final  String? title;
+@override final  String? description;
 @override final  String? fileUrl;
-@override@JsonKey(name: 'status') final  String statusString;
+@override@JsonKey() final  String statusString;
 @override final  DateTime? submittedAt;
 @override final  DateTime? signedAt;
 @override final  String? signatureUrl;
@@ -261,7 +261,7 @@ abstract mixin class _$FinalDocumentModelCopyWith<$Res> implements $FinalDocumen
   factory _$FinalDocumentModelCopyWith(_FinalDocumentModel value, $Res Function(_FinalDocumentModel) _then) = __$FinalDocumentModelCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String title, String description, String? fileUrl,@JsonKey(name: 'status') String statusString, DateTime? submittedAt, DateTime? signedAt, String? signatureUrl
+ String? id, String? title, String? description, String? fileUrl, String statusString, DateTime? submittedAt, DateTime? signedAt, String? signatureUrl
 });
 
 
@@ -278,12 +278,12 @@ class __$FinalDocumentModelCopyWithImpl<$Res>
 
 /// Create a copy of FinalDocumentModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? title = null,Object? description = null,Object? fileUrl = freezed,Object? statusString = null,Object? submittedAt = freezed,Object? signedAt = freezed,Object? signatureUrl = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? title = freezed,Object? description = freezed,Object? fileUrl = freezed,Object? statusString = null,Object? submittedAt = freezed,Object? signedAt = freezed,Object? signatureUrl = freezed,}) {
   return _then(_FinalDocumentModel(
-id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
-as String,title: null == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
-as String,description: null == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
-as String,fileUrl: freezed == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
+id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
+as String?,title: freezed == title ? _self.title : title // ignore: cast_nullable_to_non_nullable
+as String?,description: freezed == description ? _self.description : description // ignore: cast_nullable_to_non_nullable
+as String?,fileUrl: freezed == fileUrl ? _self.fileUrl : fileUrl // ignore: cast_nullable_to_non_nullable
 as String?,statusString: null == statusString ? _self.statusString : statusString // ignore: cast_nullable_to_non_nullable
 as String,submittedAt: freezed == submittedAt ? _self.submittedAt : submittedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,signedAt: freezed == signedAt ? _self.signedAt : signedAt // ignore: cast_nullable_to_non_nullable

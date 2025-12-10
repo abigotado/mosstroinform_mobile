@@ -8,9 +8,9 @@ part of 'final_document_model.dart';
 
 _FinalDocumentModel _$FinalDocumentModelFromJson(Map<String, dynamic> json) =>
     _FinalDocumentModel(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
+      id: json['id'] as String?,
+      title: json['title'] as String?,
+      description: json['description'] as String?,
       fileUrl: json['file_url'] as String?,
       statusString: json['status'] as String? ?? 'pending',
       submittedAt: json['submitted_at'] == null
@@ -24,11 +24,11 @@ _FinalDocumentModel _$FinalDocumentModelFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$FinalDocumentModelToJson(_FinalDocumentModel instance) =>
     <String, dynamic>{
-      'id': instance.id,
-      'title': instance.title,
-      'description': instance.description,
+      'id': ?instance.id,
+      'title': ?instance.title,
+      'description': ?instance.description,
       'file_url': ?instance.fileUrl,
-      'status': instance.statusString,
+      'status_string': instance.statusString,
       'submitted_at': ?instance.submittedAt?.toIso8601String(),
       'signed_at': ?instance.signedAt?.toIso8601String(),
       'signature_url': ?instance.signatureUrl,

@@ -8,11 +8,11 @@ part 'final_document_model.g.dart';
 @freezed
 abstract class FinalDocumentModel with _$FinalDocumentModel {
   const factory FinalDocumentModel({
-    required String id,
-    required String title,
-    required String description,
+    String? id,
+    String? title,
+    String? description,
     String? fileUrl,
-    @JsonKey(name: 'status') @Default('pending') String statusString,
+    @Default('pending') String statusString,
     DateTime? submittedAt,
     DateTime? signedAt,
     String? signatureUrl,
@@ -24,14 +24,14 @@ abstract class FinalDocumentModel with _$FinalDocumentModel {
 
 /// Модель статуса завершения строительства для работы с API
 class ConstructionCompletionStatusModel {
-  final String projectId;
+  final String? projectId;
   final bool isCompleted;
   final DateTime? completionDate;
   final double progress;
   final List<FinalDocumentModel> documents;
 
   const ConstructionCompletionStatusModel({
-    required this.projectId,
+    this.projectId,
     required this.isCompleted,
     this.completionDate,
     required this.progress,
@@ -42,12 +42,14 @@ class ConstructionCompletionStatusModel {
     Map<String, dynamic> json,
   ) {
     return ConstructionCompletionStatusModel(
-      projectId: json['projectId'] as String,
-      isCompleted: json['isCompleted'] as bool,
-      completionDate: json['completionDate'] == null
-          ? null
-          : DateTime.parse(json['completionDate'] as String),
-      progress: (json['progress'] as num).toDouble(),
+      // Проверяем оба варианта: camelCase и snake_case
+      projectId: json['project_id'] as String? ?? json['projectId'] as String?,
+      isCompleted: json['is_completed'] as bool? ?? json['isCompleted'] as bool? ?? false,
+      completionDate: () {
+        final dateStr = json['completion_date'] as String? ?? json['completionDate'] as String?;
+        return dateStr != null ? DateTime.parse(dateStr) : null;
+      }(),
+      progress: (json['progress'] as num?)?.toDouble() ?? 0.0,
       documents:
           (json['documents'] as List<dynamic>?)
               ?.map(
@@ -63,9 +65,9 @@ class ConstructionCompletionStatusModel {
 extension FinalDocumentModelExtension on FinalDocumentModel {
   FinalDocument toEntity() {
     return FinalDocument(
-      id: id,
-      title: title,
-      description: description,
+      id: id ?? '',
+      title: title ?? '',
+      description: description ?? '',
       fileUrl: fileUrl,
       status: _parseStatus(statusString),
       submittedAt: submittedAt,
@@ -94,7 +96,7 @@ extension ConstructionCompletionStatusModelExtension
   ConstructionCompletionStatus toEntity() {
     final allSigned = documents.every((doc) => doc.statusString == 'signed');
     return ConstructionCompletionStatus(
-      projectId: projectId,
+      projectId: projectId ?? '',
       isCompleted: isCompleted,
       completionDate: completionDate,
       progress: progress,
