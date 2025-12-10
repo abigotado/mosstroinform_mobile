@@ -90,11 +90,7 @@
         "--dart-define=FLAVOR=mock"
       ],
       "flutterMode": "debug",
-      "deviceId": "macos",
-      "toolArgs": [
-        "--flavor",
-        "mock"
-      ]
+      "deviceId": "macos"
     },
     {
       "name": "Production (macOS)",
@@ -105,11 +101,7 @@
         "--dart-define=FLAVOR=prod"
       ],
       "flutterMode": "debug",
-      "deviceId": "macos",
-      "toolArgs": [
-        "--flavor",
-        "prod"
-      ]
+      "deviceId": "macos"
     },
     {
       "name": "Production (Linux)",
