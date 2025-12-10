@@ -7,6 +7,9 @@
 - [Подготовка к сборке](#подготовка-к-сборке)
 - [Android](#android)
 - [iOS](#ios)
+- [Linux](#linux)
+- [Windows](#windows)
+- [macOS](#macos)
 - [Веб (Web)](#веб-web)
 - [Устранение проблем](#устранение-проблем)
 
@@ -231,6 +234,211 @@ flutter build ios --release
 - `NSAppTransportSecurity` - разрешения для сетевых запросов
 - Разрешения для работы с камерой (если потребуется)
 
+## 🐧 Linux
+
+### Требования
+
+- **Linux** (Ubuntu 18.04 или выше, или другой дистрибутив с поддержкой GTK3)
+- **Системные зависимости:**
+  ```bash
+  sudo apt-get update
+  sudo apt-get install -y \
+    clang \
+    cmake \
+    ninja-build \
+    pkg-config \
+    libgtk-3-dev \
+    liblzma-dev \
+    libsecret-1-dev
+  ```
+
+### Debug сборка
+
+```bash
+flutter build linux --debug
+```
+
+**Результат:** `build/linux/x64/debug/bundle/`
+
+**Запуск:**
+```bash
+cd build/linux/x64/debug/bundle
+./mosstroinform_mobile
+```
+
+### Release сборка
+
+```bash
+flutter build linux --release
+```
+
+**Результат:** `build/linux/x64/release/bundle/`
+
+**Распространение:**
+- Скопируйте всю папку `bundle/` на целевой компьютер
+- Убедитесь, что все зависимости установлены
+- Запустите `./mosstroinform_mobile`
+
+### Особенности
+
+- **Flavor:** По умолчанию используется `prod` flavor. Для изменения используйте `--dart-define=FLAVOR=mock` (но это может не работать на Linux).
+- **Архитектура:** По умолчанию собирается для x64. Для других архитектур используйте `--target-platform`.
+- **RTSP видео:** Поддерживается через `media_kit` для воспроизведения видеопотоков.
+
+### Создание AppImage (опционально)
+
+Для создания портативного AppImage можно использовать инструменты вроде `linuxdeploy`:
+
+```bash
+# Установка linuxdeploy
+wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+chmod +x linuxdeploy-x86_64.AppImage
+
+# Создание AppImage
+./linuxdeploy-x86_64.AppImage --appdir AppDir --executable build/linux/x64/release/bundle/mosstroinform_mobile --desktop-file linux/com.example.mosstroinform_mobile.desktop --icon-file assets/icons/app_logo.png --output appimage
+```
+
+## 🪟 Windows
+
+### Требования
+
+- **Windows 10** или выше
+- **Visual Studio 2022** или выше с компонентами:
+  - Desktop development with C++
+  - Windows 10/11 SDK
+- **CMake** (обычно устанавливается с Visual Studio)
+
+### Настройка окружения
+
+1. Установите Visual Studio 2022 Community (бесплатно)
+2. При установке выберите:
+   - "Desktop development with C++"
+   - "Windows 10 SDK" или "Windows 11 SDK"
+3. Убедитесь, что CMake доступен в PATH
+
+### Debug сборка
+
+```bash
+flutter build windows --debug
+```
+
+**Результат:** `build/windows/x64/runner/Debug/`
+
+**Запуск:**
+```bash
+cd build/windows/x64/runner/Debug
+mosstroinform_mobile.exe
+```
+
+### Release сборка
+
+```bash
+flutter build windows --release
+```
+
+**Результат:** `build/windows/x64/runner/Release/`
+
+**Распространение:**
+- Скопируйте всю папку `Release/` на целевой компьютер
+- Запустите `mosstroinform_mobile.exe`
+
+### Особенности
+
+- **Flavor:** По умолчанию используется `prod` flavor.
+- **Архитектура:** По умолчанию собирается для x64.
+- **RTSP видео:** Поддерживается через `media_kit` для воспроизведения видеопотоков.
+
+### Создание установщика (опционально)
+
+Для создания установщика можно использовать инструменты вроде Inno Setup или WiX Toolset.
+
+## 🍎 macOS
+
+### Требования
+
+- **macOS 10.14** или выше
+- **Xcode 14.0** или выше
+- **CocoaPods** (устанавливается автоматически)
+
+### Настройка проекта
+
+#### 1. Установка CocoaPods зависимостей
+
+```bash
+cd macos
+pod install
+cd ..
+```
+
+#### 2. Настройка подписи в Xcode
+
+1. Откройте `macos/Runner.xcworkspace` в Xcode
+2. Выберите проект "Runner" в навигаторе
+3. Перейдите в раздел "Signing & Capabilities"
+4. Выберите вашу команду разработчика (Team)
+5. Xcode автоматически создаст provisioning profile
+
+### Debug сборка
+
+```bash
+flutter build macos --debug --dart-define=FLAVOR=mock
+# или
+flutter build macos --debug --dart-define=FLAVOR=prod
+```
+
+**Результат:** `build/macos/Build/Products/Debug/mosstroinform_mobile.app`
+
+**Запуск:**
+```bash
+open build/macos/Build/Products/Debug/mosstroinform_mobile.app
+```
+
+### Release сборка
+
+```bash
+flutter build macos --release --dart-define=FLAVOR=mock
+# или
+flutter build macos --release --dart-define=FLAVOR=prod
+```
+
+**Результат:** `build/macos/Build/Products/Release/mosstroinform_mobile.app`
+
+### Создание DMG (опционально)
+
+Для создания установочного DMG можно использовать `create-dmg`:
+
+```bash
+# Установка create-dmg
+brew install create-dmg
+
+# Создание DMG
+create-dmg \
+  --volname "МосСтройИнформ" \
+  --window-pos 200 120 \
+  --window-size 800 400 \
+  --icon-size 100 \
+  --icon "mosstroinform_mobile.app" 200 190 \
+  --hide-extension "mosstroinform_mobile.app" \
+  --app-drop-link 600 185 \
+  "МосСтройИнформ.dmg" \
+  "build/macos/Build/Products/Release/"
+```
+
+### Особенности
+
+- **Flavor:** Поддерживаются `mock` и `prod` flavors через `--dart-define=FLAVOR=...`
+- **RTSP видео:** Поддерживается через `media_kit` для воспроизведения видеопотоков.
+- **Подпись:** Для распространения вне App Store рекомендуется подписать приложение.
+
+### Публикация в Mac App Store
+
+1. Соберите release версию: `flutter build macos --release --dart-define=FLAVOR=prod`
+2. Откройте `macos/Runner.xcworkspace` в Xcode
+3. Product → Archive
+4. Дождитесь завершения архивации
+5. В окне Organizer нажмите "Distribute App"
+6. Следуйте инструкциям для загрузки в App Store Connect
+
 ## 🌐 Веб (Web)
 
 ### Требования
@@ -344,6 +552,109 @@ cd ..
 flutter clean
 flutter pub get
 ```
+
+### Проблемы с Linux сборкой
+
+#### Ошибка: "libsecret-1>=0.18.4 not found"
+
+Установите необходимые зависимости:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libsecret-1-dev
+```
+
+#### Ошибка: "libgtk-3-dev not found"
+
+Установите GTK3 development библиотеки:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libgtk-3-dev
+```
+
+#### Ошибка: "CMake Error"
+
+Убедитесь, что установлены все необходимые зависимости:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  clang \
+  cmake \
+  ninja-build \
+  pkg-config \
+  libgtk-3-dev \
+  liblzma-dev \
+  libsecret-1-dev
+```
+
+#### Приложение не запускается
+
+1. Проверьте права на выполнение:
+   ```bash
+   chmod +x build/linux/x64/release/bundle/mosstroinform_mobile
+   ```
+
+2. Проверьте зависимости:
+   ```bash
+   ldd build/linux/x64/release/bundle/mosstroinform_mobile
+   ```
+
+### Проблемы с Windows сборкой
+
+#### Ошибка: "Visual Studio not found"
+
+1. Установите Visual Studio 2022 Community
+2. При установке выберите "Desktop development with C++"
+3. Убедитесь, что Windows SDK установлен
+
+#### Ошибка: "CMake Error"
+
+1. Убедитесь, что CMake установлен и доступен в PATH
+2. Перезапустите терминал после установки Visual Studio
+3. Проверьте установку: `cmake --version`
+
+#### Ошибка: "MSBuild failed"
+
+1. Убедитесь, что Visual Studio установлен правильно
+2. Попробуйте запустить из Developer Command Prompt для Visual Studio
+3. Проверьте, что выбран правильный SDK в Visual Studio Installer
+
+### Проблемы с macOS сборкой
+
+#### Ошибка: "CocoaPods not installed"
+
+```bash
+sudo gem install cocoapods
+cd macos
+pod install
+cd ..
+```
+
+#### Ошибка: "No valid code signing certificates"
+
+1. Откройте Xcode
+2. Xcode → Settings → Accounts
+3. Добавьте ваш Apple ID
+4. Выберите команду разработчика
+
+#### Ошибка: "Command PhaseScriptExecution failed"
+
+```bash
+cd macos
+rm -rf Pods Podfile.lock
+pod install
+cd ..
+flutter clean
+flutter pub get
+```
+
+#### Ошибка: "App can't be opened because it is from an unidentified developer"
+
+1. Откройте System Preferences → Security & Privacy
+2. Нажмите "Open Anyway" рядом с предупреждением
+3. Или подпишите приложение в Xcode
 
 ### Проблемы с размером APK
 
