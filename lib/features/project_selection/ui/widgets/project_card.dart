@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mosstroinform_mobile/core/utils/stream_url.dart';
 import 'package:mosstroinform_mobile/core/widgets/app_animated_switcher.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/project.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -31,7 +32,7 @@ class ProjectCard extends ConsumerWidget {
                   AspectRatio(
                     aspectRatio: 16 / 9,
                     child: Image.network(
-                      project.imageUrl!,
+                      StreamUrl.toSecureUrl(project.imageUrl!),
                       fit: BoxFit.cover,
                       loadingBuilder: (context, child, loadingProgress) {
                         if (loadingProgress == null) {

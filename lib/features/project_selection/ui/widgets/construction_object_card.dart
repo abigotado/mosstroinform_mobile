@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosstroinform_mobile/core/utils/stream_url.dart';
 import 'package:mosstroinform_mobile/features/project_selection/domain/entities/construction_object.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 
@@ -32,7 +33,7 @@ class ConstructionObjectCard extends StatelessWidget {
               AspectRatio(
                 aspectRatio: 16 / 9,
                 child: Image.network(
-                  object.imageUrl!,
+                  StreamUrl.toSecureUrl(object.imageUrl!),
                   fit: BoxFit.cover,
                   loadingBuilder: (context, child, loadingProgress) {
                     if (loadingProgress == null) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mosstroinform_mobile/core/utils/stream_url.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 
@@ -29,7 +30,7 @@ class CameraGridItem extends StatelessWidget {
                 children: [
                   if (camera.thumbnailUrl != null)
                     Image.network(
-                      camera.thumbnailUrl!,
+                      StreamUrl.toSecureUrl(camera.thumbnailUrl!),
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) {
                         return Container(

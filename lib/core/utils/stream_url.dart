@@ -1,4 +1,6 @@
-/// Хелперы для работы с URL видеопотоков.
+import 'package:flutter/foundation.dart' show kIsWeb;
+
+/// Хелперы для работы с URL видеопотоков и изображений.
 class StreamUrl {
   /// Проверка на RTSP.
   static bool isRtsp(String url) => url.toLowerCase().startsWith('rtsp://');
@@ -19,5 +21,20 @@ class StreamUrl {
   static String toMediaMtxIframeUrl(String rtspUrl) {
     final httpUrl = toHttpWebUrl(rtspUrl);
     return '$httpUrl?autoplay=true&muted=true&controls=false&playsinline=true';
+  }
+
+  /// Конвертирует HTTP URL в HTTPS для веба, чтобы избежать Mixed Content.
+  /// На нативных платформах возвращает исходный URL без изменений.
+  static String toSecureUrl(String url) {
+    if (!kIsWeb) {
+      return url;
+    }
+    
+    // Конвертируем http:// в https:// для веба
+    if (url.toLowerCase().startsWith('http://')) {
+      return url.replaceFirst('http://', 'https://');
+    }
+    
+    return url;
   }
 }
