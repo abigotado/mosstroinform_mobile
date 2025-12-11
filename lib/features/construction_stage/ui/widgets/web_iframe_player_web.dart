@@ -1,8 +1,8 @@
-// ignore: avoid_web_libraries_in_flutter
-import 'dart:html' as html;
-import 'dart:ui' as ui;
+// platformViewRegistry доступен в dart:ui_web на вебе
+import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/widgets.dart';
+import 'package:web/web.dart' as web;
 
 class WebIframePlayer extends StatefulWidget {
   final String url;
@@ -24,8 +24,8 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
     // Игнорируем повторную регистрацию через try/catch
     try {
       // ignore: undefined_prefixed_name
-      ui.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
-        final iframe = html.IFrameElement()
+      ui_web.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
+        final iframe = web.HTMLIFrameElement()
           ..src = widget.url
           ..style.border = 'none'
           ..allow = 'autoplay; fullscreen; picture-in-picture'
@@ -44,4 +44,3 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
     return HtmlElementView(viewType: _viewType);
   }
 }
-
