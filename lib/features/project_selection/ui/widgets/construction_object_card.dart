@@ -7,11 +7,7 @@ class ConstructionObjectCard extends StatelessWidget {
   final ConstructionObject object;
   final VoidCallback onTap;
 
-  const ConstructionObjectCard({
-    super.key,
-    required this.object,
-    required this.onTap,
-  });
+  const ConstructionObjectCard({super.key, required this.object, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +16,7 @@ class ConstructionObjectCard extends StatelessWidget {
     final l10n = AppLocalizations.of(context)!;
 
     // Подсчитываем прогресс строительства
-    final completedStages = object.stages
-        .where((s) => s.status == StageStatus.completed)
-        .length;
+    final completedStages = object.stages.where((s) => s.status == StageStatus.completed).length;
     final totalStages = object.stages.length;
     final progress = totalStages > 0 ? completedStages / totalStages : 0.0;
 
@@ -49,8 +43,7 @@ class ConstructionObjectCard extends StatelessWidget {
                       child: Center(
                         child: CircularProgressIndicator(
                           value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                                    loadingProgress.expectedTotalBytes!
+                              ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
                               : null,
                         ),
                       ),
@@ -59,10 +52,7 @@ class ConstructionObjectCard extends StatelessWidget {
                   errorBuilder: (context, error, stackTrace) {
                     return Container(
                       color: colorScheme.surfaceContainerHighest,
-                      child: Icon(
-                        Icons.image_not_supported,
-                        color: colorScheme.onSurface.withValues(alpha: 0.5),
-                      ),
+                      child: Icon(Icons.image_not_supported, color: colorScheme.onSurface.withValues(alpha: 0.5)),
                     );
                   },
                 ),
@@ -82,11 +72,7 @@ class ConstructionObjectCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Icon(
-                        Icons.location_on,
-                        size: 16,
-                        color: colorScheme.onSurface.withValues(alpha: 0.6),
-                      ),
+                      Icon(Icons.location_on, size: 16, color: colorScheme.onSurface.withValues(alpha: 0.6)),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -111,17 +97,13 @@ class ConstructionObjectCard extends StatelessWidget {
                           Text(
                             l10n.constructionProgress,
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.6,
-                              ),
+                              color: colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
                           Text(
                             '${(progress * 100).toInt()}%',
                             style: theme.textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurface.withValues(
-                                alpha: 0.6,
-                              ),
+                              color: colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
                         ],

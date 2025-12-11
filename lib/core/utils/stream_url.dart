@@ -20,4 +20,3 @@ class StreamUrl {
     return '$httpUrl?autoplay=true&muted=true&controls=false&playsinline=true';
   }
 }
-
