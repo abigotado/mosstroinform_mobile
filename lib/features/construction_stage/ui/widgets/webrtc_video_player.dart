@@ -128,20 +128,8 @@ class _WebRTCVideoPlayerState extends State<WebRTCVideoPlayer> {
       final offer = await _peerConnection!.createOffer();
       await _peerConnection!.setLocalDescription(offer);
 
-      // Отправляем offer на signaling сервер
-      // В реальном приложении здесь должен быть WebSocket запрос к signaling серверу
-      // с передачей RTSP URL и получением answer
-      AppLogger.debug('Sending offer to signaling server');
-      
-      // TODO: Реализовать WebSocket соединение с signaling сервером
-      // Пример реализации:
-      // 1. Подключиться к WebSocket: final ws = WebSocket(widget.signalingServerUrl!);
-      // 2. Отправить RTSP URL и offer: ws.send(jsonEncode({'rtspUrl': widget.streamUrl, 'offer': offer.toMap()}));
-      // 3. Получить answer от сервера
-      // 4. Установить remote description: await _peerConnection!.setRemoteDescription(answer);
-      
-      AppLogger.warning('Signaling server integration not fully implemented. '
-          'See WEBRTC_SETUP.md for setup instructions with free hosting options.');
+      // Отправляем offer на signaling сервер (реализация отсутствует в этой версии)
+      AppLogger.warning('Signaling server integration is skipped in this build.');
 
       // Для демонстрации: если signaling сервер не реализован,
       // показываем ошибку с инструкцией
