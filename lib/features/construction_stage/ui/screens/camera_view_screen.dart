@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
+import 'package:mosstroinform_mobile/core/utils/stream_url.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/video_fullscreen_screen.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/web_iframe_player_stub.dart'
@@ -34,7 +35,7 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     AppLogger.debug('ID: ${widget.camera.id}');
     AppLogger.debug('isActive: ${widget.camera.isActive}');
     AppLogger.debug('URL: ${widget.camera.streamUrl}');
-    final isRTSP = widget.camera.streamUrl.toLowerCase().startsWith('rtsp://');
+    final isRTSP = StreamUrl.isRtsp(widget.camera.streamUrl);
     if (kIsWeb && isRTSP) {
       // Для веба показываем iframe с WebRTC/HLS страницей MediaMTX, не инициализируем VideoPlayer
       AppLogger.debug('Веб + RTSP: пропускаем инициализацию VideoPlayer, используем iframe');
@@ -349,19 +350,11 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final streamUrl = widget.camera.streamUrl.toLowerCase();
-    final isRTSP = streamUrl.startsWith('rtsp://');
+    final isRTSP = StreamUrl.isRtsp(streamUrl);
 
     // На вебе для RTSP показываем встроенный iframe с HTML-плеером MediaMTX (WHEP)
     if (kIsWeb && isRTSP) {
-      // Формируем URL: заменяем протокол/порт и добавляем trailing slash + автоплей/мьют
-      var httpUrl = widget.camera.streamUrl
-          .replaceAll('rtsp://', 'http://')
-          .replaceAll(':8554/', ':8889/')
-          .replaceAll(':8554', ':8889');
-      if (!httpUrl.endsWith('/')) {
-        httpUrl = '$httpUrl/';
-      }
-      final iframeUrl = '$httpUrl?autoplay=true&muted=true&controls=false&playsinline=true';
+      final iframeUrl = StreamUrl.toMediaMtxIframeUrl(widget.camera.streamUrl);
 
       return Scaffold(
         appBar: AppBar(
