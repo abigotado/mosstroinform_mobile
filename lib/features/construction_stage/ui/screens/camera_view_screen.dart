@@ -239,7 +239,13 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         AppLogger.info('  Исходный: ${widget.camera.streamUrl}');
         AppLogger.info('  Новый: $urlToUse');
       }
-      _controller = VideoPlayerController.networkUrl(Uri.parse(urlToUse));
+      _controller = VideoPlayerController.networkUrl(
+        Uri.parse(urlToUse),
+        videoPlayerOptions: VideoPlayerOptions(
+          mixWithOthers: true, // не блокируем звук других источников
+          allowBackgroundPlayback: false,
+        ),
+      );
 
       // Добавляем слушатель изменений состояния
       _addVideoListener();
@@ -273,6 +279,11 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
         AppLogger.debug('Запуск воспроизведения');
         // Проверяем контроллер еще раз перед использованием
         if (_controller != null) {
+          // На вебе Chrome/Firefox блокируют автостарт без жеста, если звук включен.
+          // Глушим звук перед autoplay, чтобы разрешить автозапуск потока.
+          if (kIsWeb) {
+            await _controller!.setVolume(0);
+          }
           await _controller!.play();
           AppLogger.debug('Воспроизведение запущено');
           if (_controller != null) {
