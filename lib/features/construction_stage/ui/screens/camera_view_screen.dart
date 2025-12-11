@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/domain/entities/construction_site.dart';
 import 'package:mosstroinform_mobile/features/construction_stage/ui/screens/video_fullscreen_screen.dart';
+import 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/web_iframe_player_stub.dart'
+    if (dart.library.html) 'package:mosstroinform_mobile/features/construction_stage/ui/widgets/web_iframe_player_web.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
 import 'package:video_player/video_player.dart';
 
@@ -32,6 +34,12 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     AppLogger.debug('ID: ${widget.camera.id}');
     AppLogger.debug('isActive: ${widget.camera.isActive}');
     AppLogger.debug('URL: ${widget.camera.streamUrl}');
+    final isRTSP = widget.camera.streamUrl.toLowerCase().startsWith('rtsp://');
+    if (kIsWeb && isRTSP) {
+      // Для веба показываем iframe с WebRTC/HLS страницей MediaMTX, не инициализируем VideoPlayer
+      AppLogger.debug('Веб + RTSP: пропускаем инициализацию VideoPlayer, используем iframe');
+      return;
+    }
     _initializeVideo();
   }
 
@@ -343,8 +351,26 @@ class _CameraViewScreenState extends State<CameraViewScreen> {
     final streamUrl = widget.camera.streamUrl.toLowerCase();
     final isRTSP = streamUrl.startsWith('rtsp://');
 
-    // На вебе RTSP URL преобразуется в HTTP URL в _initializeVideo()
-    // Используем стандартный VideoPlayerWidget для всех платформ
+    // На вебе для RTSP показываем встроенный iframe с HTML-плеером MediaMTX (WHEP)
+    if (kIsWeb && isRTSP) {
+      // Формируем URL: заменяем протокол/порт и добавляем trailing slash + автоплей/мьют
+      var httpUrl = widget.camera.streamUrl
+          .replaceAll('rtsp://', 'http://')
+          .replaceAll(':8554/', ':8889/')
+          .replaceAll(':8554', ':8889');
+      if (!httpUrl.endsWith('/')) {
+        httpUrl = '$httpUrl/';
+      }
+      final iframeUrl = '$httpUrl?autoplay=true&muted=true&controls=false&playsinline=true';
+
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.camera.name),
+          leading: BackButton(onPressed: () => Navigator.of(context).pop()),
+        ),
+        body: WebIframePlayer(url: iframeUrl),
+      );
+    }
 
     // Для нативных платформ используем стандартную логику
     // Проверяем, является ли ошибка seek или аудио ошибкой для RTSP потока
