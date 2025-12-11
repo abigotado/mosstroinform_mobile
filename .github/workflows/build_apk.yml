@@ -142,10 +142,17 @@ jobs:
           ls -la
           echo ""
           echo "=== Looking for desktop artifact directories ==="
-          find . -maxdepth 2 -type d -name "linux-*" -o -name "windows-*" -o -name "macos-*" | head -20
+          find . -maxdepth 2 -type d \( -name "linux-*" -o -name "windows-*" -o -name "macos-*" \) | head -20
           echo ""
           echo "=== All directories ==="
           ls -d */ 2>/dev/null || echo "No subdirectories found"
+          echo ""
+          echo "=== Checking if artifacts were downloaded ==="
+          if [ -d "linux-prod-release" ] || [ -d "windows-prod-release" ] || [ -d "macos-prod-release" ] || [ -d "macos-mock-release" ]; then
+            echo "✅ Some desktop artifacts found"
+          else
+            echo "⚠️ No desktop artifacts found - this may indicate build-desktop job didn't upload artifacts"
+          fi
 
       - name: Install zip utility
         run: sudo apt-get update && sudo apt-get install -y zip
@@ -153,41 +160,61 @@ jobs:
       - name: Package Linux artifacts
         shell: bash
         run: |
-          for dir in $(find . -maxdepth 1 -type d -name "linux-*-release" 2>/dev/null); do
+          FOUND_ANY=false
+          for dir in $(find . -maxdepth 1 -type d -name "linux-*-release" 2>/dev/null | sort); do
             if [ -d "$dir" ]; then
+              FOUND_ANY=true
               flavor=$(echo "$dir" | sed 's/.*linux-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging Linux $flavor from $dir"
-              tar -czf "mosstroinform_mobile-linux-$flavor.tar.gz" -C "$dir" .
-              echo "Created: mosstroinform_mobile-linux-$flavor.tar.gz"
+              if [ -f "$dir/mosstroinform_mobile" ] || [ -f "$dir/run.sh" ] || [ -n "$(find "$dir" -maxdepth 1 -type f 2>/dev/null | head -1)" ]; then
+                tar -czf "mosstroinform_mobile-linux-$flavor.tar.gz" -C "$dir" .
+                echo "✅ Created: mosstroinform_mobile-linux-$flavor.tar.gz"
+              else
+                echo "⚠️ Warning: No files found in $dir"
+                ls -la "$dir" || true
+              fi
             fi
           done
+          if [ "$FOUND_ANY" = "false" ]; then
+            echo "⚠️ No Linux artifact directories found"
+          fi
           ls -lh *.tar.gz 2>/dev/null || echo "No Linux archives created"
 
       - name: Package Windows artifacts
         shell: bash
         run: |
-          for dir in $(find . -maxdepth 1 -type d -name "windows-*-release" 2>/dev/null); do
+          FOUND_ANY=false
+          for dir in $(find . -maxdepth 1 -type d -name "windows-*-release" 2>/dev/null | sort); do
             if [ -d "$dir" ]; then
+              FOUND_ANY=true
               flavor=$(echo "$dir" | sed 's/.*windows-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging Windows $flavor from $dir"
               if find "$dir" -name "*.exe" | head -1 | grep -q .; then
                 cd "$dir"
                 zip -r "../mosstroinform_mobile-windows-$flavor.zip" .
                 cd ..
-                echo "Created: mosstroinform_mobile-windows-$flavor.zip"
+                echo "✅ Created: mosstroinform_mobile-windows-$flavor.zip"
               else
-                echo "No .exe found in $dir"
+                echo "⚠️ Warning: No .exe found in $dir"
+                echo "Directory contents:"
+                ls -la "$dir" || true
+                find "$dir" -type f | head -5 || true
               fi
             fi
           done
+          if [ "$FOUND_ANY" = "false" ]; then
+            echo "⚠️ No Windows artifact directories found"
+          fi
           ls -lh *.zip 2>/dev/null | grep windows || echo "No Windows archives created"
 
       - name: Package macOS artifacts
         shell: bash
         run: |
           ORIGINAL_DIR=$(pwd)
-          for dir in $(find . -maxdepth 1 -type d -name "macos-*-release" 2>/dev/null); do
+          FOUND_ANY=false
+          for dir in $(find . -maxdepth 1 -type d -name "macos-*-release" 2>/dev/null | sort); do
             if [ -d "$dir" ]; then
+              FOUND_ANY=true
               flavor=$(echo "$dir" | sed 's/.*macos-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging macOS $flavor from $dir"
               APP_PATH=$(find "$dir" -name "*.app" -type d | head -1)
@@ -197,15 +224,19 @@ jobs:
                 cd "$APP_DIR"
                 zip -r "$ORIGINAL_DIR/mosstroinform_mobile-macos-$flavor.zip" "$APP_NAME"
                 cd "$ORIGINAL_DIR"
-                echo "Created: mosstroinform_mobile-macos-$flavor.zip"
+                echo "✅ Created: mosstroinform_mobile-macos-$flavor.zip"
               else
-                echo "No .app found in $dir"
+                echo "⚠️ Warning: No .app found in $dir"
                 echo "Directory contents:"
                 ls -la "$dir" || true
-                find "$dir" -name "*.app" -type d || true
+                echo "Searching for .app files:"
+                find "$dir" -name "*.app" -type d || echo "No .app files found"
               fi
             fi
           done
+          if [ "$FOUND_ANY" = "false" ]; then
+            echo "⚠️ No macOS artifact directories found"
+          fi
           ls -lh *.zip 2>/dev/null | grep macos || echo "No macOS archives created"
 
       - name: List all release files
