@@ -136,15 +136,26 @@ jobs:
       - name: List downloaded APK files
         run: ls -la *.apk 2>/dev/null || echo "No APK files found"
 
+      - name: Debug downloaded artifacts
+        run: |
+          echo "=== Current directory structure ==="
+          ls -la
+          echo ""
+          echo "=== Looking for desktop artifact directories ==="
+          find . -maxdepth 2 -type d -name "linux-*" -o -name "windows-*" -o -name "macos-*" | head -20
+          echo ""
+          echo "=== All directories ==="
+          ls -d */ 2>/dev/null || echo "No subdirectories found"
+
       - name: Install zip utility
         run: sudo apt-get update && sudo apt-get install -y zip
 
       - name: Package Linux artifacts
         shell: bash
         run: |
-          for dir in linux-*-release; do
+          for dir in $(find . -maxdepth 1 -type d -name "linux-*-release" 2>/dev/null); do
             if [ -d "$dir" ]; then
-              flavor=$(echo "$dir" | sed 's/linux-\(.*\)-release/\1/')
+              flavor=$(echo "$dir" | sed 's/.*linux-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging Linux $flavor from $dir"
               tar -czf "mosstroinform_mobile-linux-$flavor.tar.gz" -C "$dir" .
               echo "Created: mosstroinform_mobile-linux-$flavor.tar.gz"
@@ -155,9 +166,9 @@ jobs:
       - name: Package Windows artifacts
         shell: bash
         run: |
-          for dir in windows-*-release; do
+          for dir in $(find . -maxdepth 1 -type d -name "windows-*-release" 2>/dev/null); do
             if [ -d "$dir" ]; then
-              flavor=$(echo "$dir" | sed 's/windows-\(.*\)-release/\1/')
+              flavor=$(echo "$dir" | sed 's/.*windows-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging Windows $flavor from $dir"
               if find "$dir" -name "*.exe" | head -1 | grep -q .; then
                 cd "$dir"
@@ -175,9 +186,9 @@ jobs:
         shell: bash
         run: |
           ORIGINAL_DIR=$(pwd)
-          for dir in macos-*-release; do
+          for dir in $(find . -maxdepth 1 -type d -name "macos-*-release" 2>/dev/null); do
             if [ -d "$dir" ]; then
-              flavor=$(echo "$dir" | sed 's/macos-\(.*\)-release/\1/')
+              flavor=$(echo "$dir" | sed 's/.*macos-\(.*\)-release/\1/' | sed 's|^\./||')
               echo "Packaging macOS $flavor from $dir"
               APP_PATH=$(find "$dir" -name "*.app" -type d | head -1)
               if [ -n "$APP_PATH" ]; then
@@ -189,6 +200,8 @@ jobs:
                 echo "Created: mosstroinform_mobile-macos-$flavor.zip"
               else
                 echo "No .app found in $dir"
+                echo "Directory contents:"
+                ls -la "$dir" || true
                 find "$dir" -name "*.app" -type d || true
               fi
             fi

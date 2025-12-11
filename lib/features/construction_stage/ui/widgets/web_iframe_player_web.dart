@@ -28,6 +28,8 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
         final iframe = web.HTMLIFrameElement()
           ..src = widget.url
           ..style.border = 'none'
+          ..style.width = '100%'
+          ..style.height = '100%'
           ..allow = 'autoplay; fullscreen; picture-in-picture'
           ..allowFullscreen = true;
         // Глушим звук по умолчанию для автозапуска
