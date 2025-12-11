@@ -135,6 +135,25 @@ jobs:
           merge-multiple: false
           path: .
 
+      - name: Check if artifacts were downloaded as zip files
+        run: |
+          echo "=== Checking for zip files ==="
+          if ls *.zip 2>/dev/null | grep -q "release"; then
+            echo "⚠️ Found zip files instead of directories, extracting..."
+            for zip_file in *-*-release.zip; do
+              if [ -f "$zip_file" ]; then
+                dir_name=$(echo "$zip_file" | sed 's/\.zip$//')
+                echo "Extracting $zip_file to $dir_name"
+                mkdir -p "$dir_name"
+                unzip -q "$zip_file" -d "$dir_name"
+                rm "$zip_file"
+                echo "✅ Extracted $zip_file"
+              fi
+            done
+          else
+            echo "✅ No zip files found, artifacts should be in directories"
+          fi
+
       - name: List downloaded APK files
         run: ls -la *.apk 2>/dev/null || echo "No APK files found"
 
