@@ -1,6 +1,7 @@
 // platformViewRegistry доступен в dart:ui_web на вебе
 import 'dart:ui_web' as ui_web;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:web/web.dart' as web;
 
@@ -15,18 +16,29 @@ class WebIframePlayer extends StatefulWidget {
 
 class _WebIframePlayerState extends State<WebIframePlayer> {
   late final String _viewType;
+  late final String _secureUrl;
 
   @override
   void initState() {
     super.initState();
-    _viewType = 'web-iframe-player-${widget.url.hashCode}';
+    // Убеждаемся, что URL использует HTTPS для избежания Mixed Content
+    _secureUrl = widget.url.toLowerCase().startsWith('http://')
+        ? widget.url.replaceFirst('http://', 'https://')
+        : widget.url;
+    
+    if (kDebugMode) {
+      debugPrint('WebIframePlayer: Original URL: ${widget.url}');
+      debugPrint('WebIframePlayer: Secure URL: $_secureUrl');
+    }
+    
+    _viewType = 'web-iframe-player-${_secureUrl.hashCode}';
     // Регистрируем фабрику для iframe
     // Игнорируем повторную регистрацию через try/catch
     try {
       // ignore: undefined_prefixed_name
       ui_web.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
         final iframe = web.HTMLIFrameElement()
-          ..src = widget.url
+          ..src = _secureUrl
           ..style.border = 'none'
           ..style.width = '100%'
           ..style.height = '100%'
@@ -34,10 +46,27 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
           ..allowFullscreen = true;
         // Глушим звук по умолчанию для автозапуска
         iframe.setAttribute('muted', 'true');
+        
+        // Добавляем обработчики ошибок для отладки
+        iframe.onError.listen((event) {
+          if (kDebugMode) {
+            debugPrint('WebIframePlayer: Error loading iframe: $event');
+          }
+        });
+        
+        iframe.onLoad.listen((event) {
+          if (kDebugMode) {
+            debugPrint('WebIframePlayer: Iframe loaded successfully');
+          }
+        });
+        
         return iframe;
       });
-    } catch (_) {
-      // viewType уже зарегистрирован
+    } catch (e) {
+      if (kDebugMode) {
+        debugPrint('WebIframePlayer: Error registering view factory: $e');
+      }
+      // viewType уже зарегистрирован или произошла ошибка
     }
   }
 

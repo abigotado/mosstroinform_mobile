@@ -18,8 +18,13 @@ class StreamUrl {
   }
 
   /// Формируем URL для iframe MediaMTX (WHEP) с автозапуском и mute.
+  /// Гарантирует HTTPS на вебе для избежания Mixed Content.
   static String toMediaMtxIframeUrl(String rtspUrl) {
-    final httpUrl = toHttpWebUrl(rtspUrl);
+    var httpUrl = toHttpWebUrl(rtspUrl);
+    // Дополнительная проверка: если URL всё ещё HTTP на вебе, конвертируем в HTTPS
+    if (kIsWeb && httpUrl.toLowerCase().startsWith('http://')) {
+      httpUrl = httpUrl.replaceFirst('http://', 'https://');
+    }
     return '$httpUrl?autoplay=true&muted=true&controls=false&playsinline=true';
   }
 
