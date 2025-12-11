@@ -2,7 +2,7 @@
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:web/web.dart' as web;
 
 class WebIframePlayer extends StatefulWidget {
@@ -17,6 +17,7 @@ class WebIframePlayer extends StatefulWidget {
 class _WebIframePlayerState extends State<WebIframePlayer> {
   late final String _viewType;
   late final String _secureUrl;
+  bool _hasError = false;
 
   @override
   void initState() {
@@ -52,6 +53,11 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
           if (kDebugMode) {
             debugPrint('WebIframePlayer: Error loading iframe: $event');
           }
+          if (mounted) {
+            setState(() {
+              _hasError = true;
+            });
+          }
         });
         
         iframe.onLoad.listen((event) {
@@ -67,11 +73,46 @@ class _WebIframePlayerState extends State<WebIframePlayer> {
         debugPrint('WebIframePlayer: Error registering view factory: $e');
       }
       // viewType уже зарегистрирован или произошла ошибка
+      _hasError = true;
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (_hasError) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text(
+                'Не удалось загрузить видео',
+                style: Theme.of(context).textTheme.titleLarge,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Сервер не поддерживает HTTPS или недоступен.\nПроверьте настройки сервера MediaMTX.',
+                style: Theme.of(context).textTheme.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              if (kDebugMode) ...[
+                const SizedBox(height: 16),
+                Text(
+                  'URL: $_secureUrl',
+                  style: Theme.of(context).textTheme.bodySmall,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ],
+          ),
+        ),
+      );
+    }
+    
     return HtmlElementView(viewType: _viewType);
   }
 }
