@@ -148,10 +148,24 @@ jobs:
           ls -d */ 2>/dev/null || echo "No subdirectories found"
           echo ""
           echo "=== Checking if artifacts were downloaded ==="
-          if [ -d "linux-prod-release" ] || [ -d "windows-prod-release" ] || [ -d "macos-prod-release" ] || [ -d "macos-mock-release" ]; then
-            echo "✅ Some desktop artifacts found"
-          else
+          ARTIFACTS_FOUND=0
+          for artifact_dir in linux-prod-release windows-prod-release macos-prod-release macos-mock-release; do
+            if [ -d "$artifact_dir" ]; then
+              echo "✅ Found: $artifact_dir"
+              echo "   Contents:"
+              ls -la "$artifact_dir" | head -5 || true
+              ARTIFACTS_FOUND=$((ARTIFACTS_FOUND + 1))
+            else
+              echo "❌ Not found: $artifact_dir"
+            fi
+          done
+          echo ""
+          if [ $ARTIFACTS_FOUND -eq 0 ]; then
             echo "⚠️ No desktop artifacts found - this may indicate build-desktop job didn't upload artifacts"
+            echo "Checking if artifacts were downloaded with different names:"
+            find . -maxdepth 1 -type d -name "*release*" 2>/dev/null || echo "No release directories found"
+          else
+            echo "✅ Found $ARTIFACTS_FOUND desktop artifact(s)"
           fi
 
       - name: Install zip utility
