@@ -12,4 +12,3 @@ class WebIframePlayer extends StatelessWidget {
     return const SizedBox.shrink();
   }
 }
-
