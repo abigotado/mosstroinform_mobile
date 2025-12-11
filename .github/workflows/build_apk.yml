@@ -126,12 +126,14 @@ jobs:
 
       - name: Download Desktop artifacts
         uses: actions/download-artifact@v4
+        continue-on-error: true
         with:
           pattern: |
             linux-*-release
             windows-*-release
             macos-*-release
           merge-multiple: false
+          path: .
 
       - name: List downloaded APK files
         run: ls -la *.apk 2>/dev/null || echo "No APK files found"
@@ -139,10 +141,14 @@ jobs:
       - name: Debug downloaded artifacts
         run: |
           echo "=== Current directory structure ==="
+          pwd
           ls -la
           echo ""
-          echo "=== Looking for desktop artifact directories ==="
-          find . -maxdepth 2 -type d \( -name "linux-*" -o -name "windows-*" -o -name "macos-*" \) | head -20
+          echo "=== Looking for desktop artifact directories (maxdepth 1) ==="
+          find . -maxdepth 1 -type d \( -name "linux-*" -o -name "windows-*" -o -name "macos-*" \) 2>/dev/null | sort
+          echo ""
+          echo "=== Looking for desktop artifact directories (maxdepth 2) ==="
+          find . -maxdepth 2 -type d \( -name "linux-*" -o -name "windows-*" -o -name "macos-*" \) 2>/dev/null | sort
           echo ""
           echo "=== All directories ==="
           ls -d */ 2>/dev/null || echo "No subdirectories found"
@@ -153,7 +159,7 @@ jobs:
             if [ -d "$artifact_dir" ]; then
               echo "✅ Found: $artifact_dir"
               echo "   Contents:"
-              ls -la "$artifact_dir" | head -5 || true
+              ls -la "$artifact_dir" | head -10 || true
               ARTIFACTS_FOUND=$((ARTIFACTS_FOUND + 1))
             else
               echo "❌ Not found: $artifact_dir"
@@ -162,8 +168,15 @@ jobs:
           echo ""
           if [ $ARTIFACTS_FOUND -eq 0 ]; then
             echo "⚠️ No desktop artifacts found - this may indicate build-desktop job didn't upload artifacts"
-            echo "Checking if artifacts were downloaded with different names:"
-            find . -maxdepth 1 -type d -name "*release*" 2>/dev/null || echo "No release directories found"
+            echo ""
+            echo "=== Checking for any release directories ==="
+            find . -maxdepth 1 -type d -name "*release*" 2>/dev/null | sort || echo "No release directories found"
+            echo ""
+            echo "=== Checking for any directories with 'linux', 'windows', or 'macos' in name ==="
+            find . -maxdepth 1 -type d \( -name "*linux*" -o -name "*windows*" -o -name "*macos*" \) 2>/dev/null | sort || echo "No matching directories found"
+            echo ""
+            echo "=== Listing all files and directories recursively (first 50) ==="
+            find . -type f -o -type d | head -50 || true
           else
             echo "✅ Found $ARTIFACTS_FOUND desktop artifact(s)"
           fi
