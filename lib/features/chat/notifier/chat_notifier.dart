@@ -5,6 +5,7 @@ import 'package:mosstroinform_mobile/core/utils/logger.dart';
 import 'package:mosstroinform_mobile/features/chat/data/providers/chat_websocket_provider.dart';
 import 'package:mosstroinform_mobile/features/chat/domain/datasources/chat_websocket_data_source.dart';
 import 'package:mosstroinform_mobile/features/chat/domain/entities/chat.dart';
+import 'package:mosstroinform_mobile/features/chat/domain/entities/chat_action.dart';
 import 'package:mosstroinform_mobile/features/chat/domain/providers/chat_repository_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -194,24 +195,39 @@ class MessagesNotifier extends _$MessagesNotifier {
     state = AsyncValue.data(currentState.copyWith(isSending: true));
 
     try {
-      final repository = ref.read(chatRepositoryProvider);
-      await repository.sendMessage(chatId, text.trim());
-
-      // Перезагружаем сообщения вместо добавления вручную,
-      // чтобы избежать дублирования (репозиторий уже добавил сообщение)
-      // Не показываем loading, так как данные уже есть
-      await loadMessages(showLoading: false);
-
-      // Обновляем состояние, убирая флаг отправки
-      final updatedState = state.value;
-      if (updatedState != null) {
-        state = AsyncValue.data(updatedState.copyWith(isSending: false));
+      // Отправляем сообщение только через WebSocket
+      if (_websocket == null || !_websocket!.isConnected) {
+        AppLogger.error('[MessagesNotifier] sendMessage: WebSocket не подключен');
+        state = AsyncValue.data(
+          currentState.copyWith(
+            isSending: false,
+            error: UnknownFailure('WebSocket не подключен. Не удалось отправить сообщение.'),
+          ),
+        );
+        return;
       }
-    } on Failure catch (e) {
-      state = AsyncValue.data(currentState.copyWith(isSending: false, error: e));
-    } catch (e) {
+
+      AppLogger.info('[MessagesNotifier] sendMessage: отправка CREATE action через WebSocket');
+      final createAction = CreateMessageAction(
+        text: text.trim(),
+        fromSpecialist: false, // В мобильном приложении пользователь не является специалистом
+      );
+      await _websocket!.sendAction(createAction);
+      AppLogger.info('[MessagesNotifier] sendMessage: CREATE action успешно отправлен через WebSocket');
+
+      // Сообщение будет добавлено в состояние через WebSocket callback, когда придет ответ от сервера
+      // Обновляем состояние, убирая флаг отправки
+      final finalState = state.value;
+      if (finalState != null) {
+        state = AsyncValue.data(finalState.copyWith(isSending: false));
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error(
+        '[MessagesNotifier] sendMessage: ошибка отправки CREATE action через WebSocket: $e',
+        stackTrace,
+      );
       state = AsyncValue.data(
-        currentState.copyWith(isSending: false, error: UnknownFailure('Неизвестная ошибка: $e')),
+        currentState.copyWith(isSending: false, error: UnknownFailure('Ошибка отправки сообщения: $e')),
       );
     }
   }
