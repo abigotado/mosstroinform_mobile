@@ -125,23 +125,55 @@ jobs:
           pattern: app-*-release-apk
           merge-multiple: true
 
-      - name: Download Desktop artifacts
+      - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         continue-on-error: true
         with:
-          pattern: |
-            linux-*-release
-            windows-*-release
-            macos-*-release
+          pattern: 'linux-*-release'
+          merge-multiple: true
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: 'linux-*-release'
+          merge-multiple: true
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: 'windows-*-release'
+          merge-multiple: true
+
+      - name: Download macOS artifacts
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: 'macos-*-release'
           merge-multiple: true
 
       - name: Download iOS artifacts
         uses: actions/download-artifact@v4
         continue-on-error: true
         with:
-          pattern: |
-            ios-*-release
+          pattern: 'ios-*-release'
           merge-multiple: true
+
+      - name: List all available artifacts (debug)
+        run: |
+          echo "=== Checking what artifacts were actually downloaded ==="
+          echo "Current directory:"
+          pwd
+          echo ""
+          echo "All files and directories:"
+          ls -la
+          echo ""
+          echo "Looking for artifact directories:"
+          find . -maxdepth 1 -type d \( -name "linux-*" -o -name "windows-*" -o -name "macos-*" -o -name "ios-*" \) 2>/dev/null | sort || echo "No artifact directories found"
+          echo ""
+          echo "Looking for APK files:"
+          find . -name "*.apk" -type f 2>/dev/null | head -10 || echo "No APK files found"
 
       - name: Verify downloaded artifacts structure
         run: |

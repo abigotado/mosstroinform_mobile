@@ -658,7 +658,7 @@ void main() {
 - Java 21 (требуется для текущей версии Flutter)
 - Автоматический запуск при push и pull request в `master`
 
-**Workflow файл:** `.github/workflows/build_apk.yml`
+**Workflow файл:** `.github/workflows/build_and_release.yml`
 
 При каждом push в `master`:
 
