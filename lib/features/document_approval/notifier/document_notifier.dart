@@ -9,6 +9,8 @@ part 'document_notifier.g.dart';
 /// Notifier для управления состоянием списка документов
 @riverpod
 class DocumentsNotifier extends _$DocumentsNotifier {
+  bool _hasLoaded = false;
+
   @override
   Future<List<Document>> build() async {
     return [];
@@ -16,8 +18,8 @@ class DocumentsNotifier extends _$DocumentsNotifier {
 
   /// Загрузить список документов
   Future<void> loadDocuments() async {
-    // Если список пустой, ставим loading, иначе обновляем в фоне
-    if (state.value == null || state.value!.isEmpty) {
+    // Если еще не загружали, ставим loading
+    if (!_hasLoaded) {
       if (ref.mounted) {
         state = const AsyncValue.loading();
       }
@@ -30,23 +32,26 @@ class DocumentsNotifier extends _$DocumentsNotifier {
       // Проверяем, что провайдер еще активен перед обновлением состояния
       if (!ref.mounted) return;
 
+      _hasLoaded = true;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
       if (!ref.mounted) return;
+      _hasLoaded = true;
       // Если были данные, оставляем их и показываем ошибку (можно через доп поле в стейте, но тут AsyncValue)
       // В Riverpod 2 AsyncValue.error может содержать previousValue, но state = ... затирает.
       // Используем guard или ручную обработку.
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
+      _hasLoaded = true;
       state = AsyncValue.error(UnknownFailure('Ошибка при загрузке документов: $e'), stackTrace);
     }
   }
 
   /// Загрузить документы для проекта
   Future<void> loadDocumentsForProject(String projectId) async {
-    // Если список пустой, ставим loading
-    if (state.value == null || state.value!.isEmpty) {
+    // Если еще не загружали, ставим loading
+    if (!_hasLoaded) {
       if (ref.mounted) {
         state = const AsyncValue.loading();
       }
@@ -59,12 +64,15 @@ class DocumentsNotifier extends _$DocumentsNotifier {
       // Проверяем, что провайдер еще активен перед обновлением состояния
       if (!ref.mounted) return;
 
+      _hasLoaded = true;
       state = AsyncValue.data(documents);
     } on Failure catch (failure, stackTrace) {
       if (!ref.mounted) return;
+      _hasLoaded = true;
       state = AsyncValue.error(failure, stackTrace);
     } catch (e, stackTrace) {
       if (!ref.mounted) return;
+      _hasLoaded = true;
       state = AsyncValue.error(UnknownFailure('Ошибка при загрузке документов проекта: $e'), stackTrace);
     }
   }

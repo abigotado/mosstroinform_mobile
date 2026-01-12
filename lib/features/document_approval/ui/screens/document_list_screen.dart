@@ -65,19 +65,25 @@ class _DocumentListScreenState extends ConsumerState<DocumentListScreen> {
         duration: const Duration(milliseconds: 300),
         child: documentsAsync.when(
           data: (documents) {
-            // Если список пустой - это начальное состояние, показываем шиммер
-            // (начальное состояние возвращается как data с пустым списком)
+            // Если список пустой после загрузки - показываем пустое состояние
             if (documents.isEmpty) {
-              return ListView.builder(
-                key: const ValueKey('shimmer'),
-                padding: const EdgeInsets.all(16),
-                itemCount: 4,
-                itemBuilder: (context, index) {
-                  return const Padding(
-                    padding: EdgeInsets.only(bottom: 12),
-                    child: DocumentCardShimmer(),
-                  );
-                },
+              return Center(
+                key: const ValueKey('empty'),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.description_outlined,
+                      size: 64,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.noDocumentsToApprove,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                  ],
+                ),
               );
             }
 
