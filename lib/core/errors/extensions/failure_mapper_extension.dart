@@ -15,9 +15,7 @@ extension FailureMapper on Object {
       }
 
       if (this is FormatException) {
-        return UnknownFailure(
-          'Ошибка формата данных: ${(this as FormatException).message}',
-        );
+        return UnknownFailure('Ошибка формата данных: ${(this as FormatException).message}');
       }
 
       // DioException уже обрабатывает все сетевые ошибки,
@@ -26,19 +24,28 @@ extension FailureMapper on Object {
 
       return UnknownFailure('Неизвестная ошибка: $this');
     } catch (e, s) {
-      return UnknownFailure(
-        'Ошибка при обработке исключения: $e\nStackTrace: $s',
-      );
+      return UnknownFailure('Ошибка при обработке исключения: $e\nStackTrace: $s');
     }
   }
 
   /// Преобразует DioException в соответствующий тип Failure
   Failure _mapDioException(DioException exception) {
     final statusCode = exception.response?.statusCode;
-    final message =
-        exception.response?.data?['message'] as String? ??
-        exception.message ??
-        'Ошибка сети';
+    final responseData = exception.response?.data;
+
+    // Извлекаем сообщение из различных возможных структур ответа
+    String? message;
+    if (responseData is Map<String, dynamic>) {
+      // Проверяем вложенную структуру error.message
+      if (responseData['error'] is Map<String, dynamic>) {
+        message = responseData['error']?['message'] as String?;
+      }
+      // Проверяем прямое поле message
+      message ??= responseData['message'] as String?;
+    }
+
+    // Если сообщение не найдено, используем дефолтное
+    message ??= exception.message ?? 'Ошибка сети';
 
     return switch (exception.type) {
       DioExceptionType.cancel => NetworkFailure('Запрос отменен'),
@@ -48,9 +55,7 @@ extension FailureMapper on Object {
       DioExceptionType.badCertificate => NetworkFailure(
         'Ошибка подключения к серверу. Проверьте подключение к интернету',
       ),
-      DioExceptionType.connectionError => const NetworkFailure(
-        'Ошибка сети. Проверьте подключение к интернету',
-      ),
+      DioExceptionType.connectionError => const NetworkFailure('Ошибка сети. Проверьте подключение к интернету'),
       _ => _mapHttpStatusToFailure(statusCode, message),
     };
   }
@@ -70,7 +75,7 @@ extension FailureMapper on Object {
       422 => ValidationFailure(message),
       409 => ValidationFailure(message),
       429 => ValidationFailure('Слишком много запросов. Попробуйте позже'),
-      >= 500 => ServerFailure('Ошибка сервера: $message'),
+      >= 500 => ServerFailure(message),
       >= 400 => ValidationFailure(message),
       _ => NetworkFailure(message),
     };
