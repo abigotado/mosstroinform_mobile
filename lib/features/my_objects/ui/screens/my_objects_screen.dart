@@ -29,6 +29,13 @@ class MyObjectsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final objectsAsync = ref.watch(myObjectsProvider);
 
+    // Определяем, использовать ли GridView для больших экранов
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 900;
+    final crossAxisCount = isDesktop
+        ? (screenWidth / 500).floor().clamp(2, 3)
+        : 1; // Для мобильных используем 1 колонку
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.myObjectsTitle)),
       body: AppAnimatedSwitcher(
@@ -41,17 +48,9 @@ class MyObjectsScreen extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(
-                      Icons.home_outlined,
-                      size: 64,
-                      color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                    ),
+                    Icon(Icons.home_outlined, size: 64, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                     const SizedBox(height: 16),
-                    Text(
-                      l10n.noMyObjects,
-                      style: theme.textTheme.bodyLarge,
-                      textAlign: TextAlign.center,
-                    ),
+                    Text(l10n.noMyObjects, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
                   ],
                 ),
               );
@@ -62,36 +61,84 @@ class MyObjectsScreen extends ConsumerWidget {
               onRefresh: () async {
                 ref.invalidate(myObjectsProvider);
               },
-              child: ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: objects.length,
-                itemBuilder: (context, index) {
-                  final object = objects[index];
-                  return Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: ConstructionObjectCard(
-                      object: object,
-                      onTap: () {
-                        // Переход на страницу объекта (строительной площадки) по objectId
-                        context.push('/construction/${object.id}');
-                      },
+              child: isDesktop
+                  ? Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 1200),
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(16),
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16,
+                            childAspectRatio: 0.85, // Учитываем высоту карточки с изображением
+                          ),
+                          itemCount: objects.length,
+                          itemBuilder: (context, index) {
+                            final object = objects[index];
+                            return ConstructionObjectCard(
+                              object: object,
+                              onTap: () {
+                                // Переход на страницу объекта (строительной площадки) по objectId
+                                context.push('/construction/${object.id}');
+                              },
+                            );
+                          },
+                        ),
+                      ),
+                    )
+                  : Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 600),
+                        child: ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: objects.length,
+                          itemBuilder: (context, index) {
+                            final object = objects[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: ConstructionObjectCard(
+                                object: object,
+                                onTap: () {
+                                  // Переход на страницу объекта (строительной площадки) по objectId
+                                  context.push('/construction/${object.id}');
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
-                  );
-                },
-              ),
             );
           },
-          loading: () => ListView.builder(
-            key: const ValueKey('loading'),
-            padding: const EdgeInsets.all(16),
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return const Padding(
-                padding: EdgeInsets.only(bottom: 16),
-                child: ProjectCardShimmer(),
-              );
-            },
-          ),
+          loading: () => isDesktop
+              ? Center(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1200),
+                    child: GridView.builder(
+                      key: const ValueKey('loading'),
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.85,
+                      ),
+                      itemCount: 6,
+                      itemBuilder: (context, index) {
+                        return const ProjectCardShimmer();
+                      },
+                    ),
+                  ),
+                )
+              : ListView.builder(
+                  key: const ValueKey('loading'),
+                  padding: const EdgeInsets.all(16),
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return const Padding(padding: EdgeInsets.only(bottom: 16), child: ProjectCardShimmer());
+                  },
+                ),
           error: (error, stackTrace) => Center(
             key: const ValueKey('error'),
             child: Column(

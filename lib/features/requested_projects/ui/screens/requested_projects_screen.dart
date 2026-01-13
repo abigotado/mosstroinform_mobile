@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mosstroinform_mobile/core/widgets/shimmer_widgets.dart';
 import 'package:mosstroinform_mobile/features/project_selection/notifier/requested_projects_notifier.dart';
 import 'package:mosstroinform_mobile/features/project_selection/ui/widgets/project_card.dart';
 import 'package:mosstroinform_mobile/l10n/app_localizations.dart';
@@ -15,6 +16,13 @@ class RequestedProjectsScreen extends ConsumerWidget {
     final theme = Theme.of(context);
     final requestedProjectsAsync = ref.watch(requestedProjectsProvider);
 
+    // Определяем, использовать ли GridView для больших экранов
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isDesktop = screenWidth > 900;
+    final crossAxisCount = isDesktop
+        ? (screenWidth / 400).floor().clamp(2, 4)
+        : 1; // Для мобильных используем 1 колонку
+
     return Scaffold(
       appBar: AppBar(title: Text(l10n.requestedProjectsTitle)),
       body: requestedProjectsAsync.when(
@@ -24,68 +32,96 @@ class RequestedProjectsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
-                    Icons.pending_actions,
-                    size: 64,
-                    color: theme.colorScheme.onSurface.withValues(alpha: 0.5),
-                  ),
+                  Icon(Icons.pending_actions, size: 64, color: theme.colorScheme.onSurface.withValues(alpha: 0.5)),
                   const SizedBox(height: 16),
-                  Text(
-                    l10n.noRequestedProjects,
-                    style: theme.textTheme.bodyLarge,
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(l10n.noRequestedProjects, style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
                 ],
               ),
             );
           }
           return RefreshIndicator(
             onRefresh: () async {
-              await ref
-                  .read(requestedProjectsProvider.notifier)
-                  .loadRequestedProjects();
+              await ref.read(requestedProjectsProvider.notifier).loadRequestedProjects();
             },
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: requestedProjects.length,
-              itemBuilder: (context, index) {
-                final project = requestedProjects[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: ProjectCard(
-                    project: project,
-                    onTap: () {
-                      context.push('/projects/${project.id}');
-                    },
+            child: isDesktop
+                ? Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 1200),
+                      child: GridView.builder(
+                        padding: const EdgeInsets.all(16),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.75,
+                        ),
+                        itemCount: requestedProjects.length,
+                        itemBuilder: (context, index) {
+                          final project = requestedProjects[index];
+                          return ProjectCard(
+                            project: project,
+                            onTap: () {
+                              context.push('/projects/${project.id}');
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: requestedProjects.length,
+                        itemBuilder: (context, index) {
+                          final project = requestedProjects[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: ProjectCard(
+                              project: project,
+                              onTap: () {
+                                context.push('/projects/${project.id}');
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
                   ),
-                );
-              },
-            ),
           );
         },
-        loading: () =>
-            const Center(child: CircularProgressIndicator.adaptive()),
+        loading: () => isDesktop
+            ? Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1200),
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(16),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemCount: 6,
+                    itemBuilder: (context, index) {
+                      return const ProjectCardShimmer();
+                    },
+                  ),
+                ),
+              )
+            : const Center(child: CircularProgressIndicator.adaptive()),
         error: (error, stackTrace) => Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.error_outline,
-                size: 64,
-                color: theme.colorScheme.error,
-              ),
+              Icon(Icons.error_outline, size: 64, color: theme.colorScheme.error),
               const SizedBox(height: 16),
-              Text(
-                '${l10n.error}: $error',
-                style: theme.textTheme.bodyLarge,
-                textAlign: TextAlign.center,
-              ),
+              Text('${l10n.error}: $error', style: theme.textTheme.bodyLarge, textAlign: TextAlign.center),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
-                  ref
-                      .read(requestedProjectsProvider.notifier)
-                      .loadRequestedProjects();
+                  ref.read(requestedProjectsProvider.notifier).loadRequestedProjects();
                 },
                 child: Text(l10n.retry),
               ),
