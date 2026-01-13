@@ -19,8 +19,7 @@ class ProjectDetailScreen extends ConsumerStatefulWidget {
   const ProjectDetailScreen({super.key, required this.projectId});
 
   @override
-  ConsumerState<ProjectDetailScreen> createState() =>
-      _ProjectDetailScreenState();
+  ConsumerState<ProjectDetailScreen> createState() => _ProjectDetailScreenState();
 }
 
 class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
@@ -31,9 +30,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(projectProvider.notifier).loadProject(widget.projectId);
       // Загружаем документы для проверки статуса одобрения
-      ref
-          .read(documentsProvider.notifier)
-          .loadDocumentsForProject(widget.projectId);
+      ref.read(documentsProvider.notifier).loadDocumentsForProject(widget.projectId);
     });
   }
 
@@ -50,16 +47,12 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
           Builder(
             builder: (context) {
               // Проверяем статус проекта и документов
-              final projectState = projectAsync.maybeWhen(
-                data: (state) => state.project,
-                orElse: () => null,
-              );
+              final projectState = projectAsync.maybeWhen(data: (state) => state.project, orElse: () => null);
 
               if (projectState == null) return const SizedBox.shrink();
 
               // Показываем кнопку перехода к объекту, если проект в статусе строительства и есть objectId
-              if (projectState.status == ProjectStatus.construction &&
-                  projectState.objectId != null) {
+              if (projectState.status == ProjectStatus.construction && projectState.objectId != null) {
                 return IconButton(
                   icon: const Icon(Icons.construction),
                   tooltip: l10n.toConstruction,
@@ -86,10 +79,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
             // Если проект не найден и есть ошибка - показываем ошибку
             if (state.project == null) {
-              return Center(
-                key: const ValueKey('error'),
-                child: Text(l10n.projectNotFound),
-              );
+              return Center(key: const ValueKey('error'), child: Text(l10n.projectNotFound));
             }
 
             final project = state.project!;
@@ -114,17 +104,12 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                 return child;
                               }
                               return Container(
-                                color:
-                                    theme.colorScheme.surfaceContainerHighest,
+                                color: theme.colorScheme.surfaceContainerHighest,
                                 child: Center(
                                   child: CircularProgressIndicator(
-                                    value:
-                                        loadingProgress.expectedTotalBytes !=
-                                            null
-                                        ? loadingProgress
-                                                  .cumulativeBytesLoaded /
-                                              loadingProgress
-                                                  .expectedTotalBytes!
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded /
+                                              loadingProgress.expectedTotalBytes!
                                         : null,
                                   ),
                                 ),
@@ -134,14 +119,8 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                               debugPrint('Ошибка загрузки изображения: $error');
                               debugPrint('URL: ${project.imageUrl}');
                               return Container(
-                                color:
-                                    theme.colorScheme.surfaceContainerHighest,
-                                child: const Center(
-                                  child: Icon(
-                                    Icons.image_not_supported,
-                                    size: 64,
-                                  ),
-                                ),
+                                color: theme.colorScheme.surfaceContainerHighest,
+                                child: const Center(child: Icon(Icons.image_not_supported, size: 64)),
                               );
                             },
                           ),
@@ -151,9 +130,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                           aspectRatio: 16 / 9,
                           child: Container(
                             color: theme.colorScheme.surfaceContainerHighest,
-                            child: const Center(
-                              child: Icon(Icons.home, size: 64),
-                            ),
+                            child: const Center(child: Icon(Icons.home, size: 64)),
                           ),
                         ),
 
@@ -164,19 +141,13 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // Название
-                            Text(
-                              project.name,
-                              style: theme.textTheme.headlineMedium,
-                            ),
+                            Text(project.name, style: theme.textTheme.headlineMedium),
                             const SizedBox(height: 8),
 
                             const SizedBox(height: 16),
 
                             // Описание
-                            Text(
-                              project.description,
-                              style: theme.textTheme.bodyLarge,
-                            ),
+                            Text(project.description, style: theme.textTheme.bodyLarge),
                             const SizedBox(height: 24),
 
                             // Характеристики
@@ -191,20 +162,15 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    l10n.price,
-                                    style: theme.textTheme.titleLarge,
-                                  ),
+                                  Text(l10n.price, style: theme.textTheme.titleLarge),
                                   Text(
                                     _formatPrice(project.price, l10n),
-                                    style: theme.textTheme.headlineMedium
-                                        ?.copyWith(
-                                          color: theme.colorScheme.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                    style: theme.textTheme.headlineMedium?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -235,9 +201,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
-                      ref
-                          .read(projectProvider.notifier)
-                          .loadProject(widget.projectId);
+                      ref.read(projectProvider.notifier).loadProject(widget.projectId);
                     },
                     child: Text(l10n.retry),
                   ),
@@ -253,20 +217,27 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
 
           final project = state.project!;
           final isRequested = project.status == ProjectStatus.requested;
-          final isUnderConstruction =
-              project.status == ProjectStatus.construction;
+          final isUnderConstruction = project.status == ProjectStatus.construction;
           final isRequesting = state.isRequestingConstruction;
 
           // Проверяем, все ли документы одобрены для запрошенных проектов
-          final documentsAsync = isRequested
-              ? ref.watch(documentsProvider)
-              : null;
+          // Всегда загружаем документы для запрошенных проектов, чтобы кнопка "Начать" отображалась корректно
+          final documentsAsync = isRequested ? ref.watch(documentsProvider) : null;
+
+          // Убеждаемся, что документы загружены для текущего проекта
+          // Используем when вместо maybeWhen, чтобы правильно обработать состояние загрузки
           final allDocumentsApproved =
-              documentsAsync?.maybeWhen(
-                data: (docs) =>
-                    docs.isNotEmpty &&
-                    docs.every((doc) => doc.status == DocumentStatus.approved),
-                orElse: () => false,
+              documentsAsync?.when(
+                data: (docs) {
+                  // Проверяем, что документы относятся к текущему проекту
+                  // loadDocumentsForProject загружает документы для конкретного проекта,
+                  // но для безопасности фильтруем по projectId
+                  final projectDocs = docs.where((doc) => doc.projectId == widget.projectId).toList();
+                  return projectDocs.isNotEmpty &&
+                      projectDocs.every((doc) => doc.status == DocumentStatus.approved);
+                },
+                loading: () => false, // Во время загрузки не показываем кнопку
+                error: (_, __) => false, // При ошибке не показываем кнопку
               ) ??
               false;
 
@@ -281,18 +252,11 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                     message: l10n.toDocuments,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        context.push(
-                          '/documents?projectId=${widget.projectId}',
-                        );
+                        context.push('/documents?projectId=${widget.projectId}');
                       },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                      ),
+                      style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
                       icon: const Icon(Icons.description),
-                      label: Text(
-                        l10n.toDocuments,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                      label: Text(l10n.toDocuments, overflow: TextOverflow.ellipsis),
                     ),
                   ),
                 ),
@@ -318,18 +282,11 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                           message: l10n.toDocuments,
                           child: ElevatedButton.icon(
                             onPressed: () {
-                              context.push(
-                                '/documents?projectId=${widget.projectId}',
-                              );
+                              context.push('/documents?projectId=${widget.projectId}');
                             },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
+                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
                             icon: const Icon(Icons.description),
-                            label: Text(
-                              l10n.toDocuments,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            label: Text(l10n.toDocuments, overflow: TextOverflow.ellipsis),
                           ),
                         ),
                       ),
@@ -343,21 +300,12 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             child: ElevatedButton.icon(
                               onPressed: () => _showAddressInputDialog(context),
                               style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 16,
-                                ),
-                                backgroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.secondaryContainer,
-                                foregroundColor: Theme.of(
-                                  context,
-                                ).colorScheme.onSecondaryContainer,
+                                padding: const EdgeInsets.symmetric(vertical: 16),
+                                backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+                                foregroundColor: Theme.of(context).colorScheme.onSecondaryContainer,
                               ),
                               icon: const Icon(Icons.construction),
-                              label: Text(
-                                l10n.startConstruction,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                              label: Text(l10n.startConstruction, overflow: TextOverflow.ellipsis),
                             ),
                           ),
                         ),
@@ -372,60 +320,37 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                             onPressed: isRequesting
                                 ? null
                                 : () async {
-                                    AppLogger.debug(
-                                      'Нажата кнопка "Отправить запрос на строительство"',
-                                    );
-                                    AppLogger.debug(
-                                      'projectId: ${widget.projectId}',
-                                    );
-                                    final messenger = ScaffoldMessenger.of(
-                                      context,
-                                    );
+                                    AppLogger.debug('Нажата кнопка "Отправить запрос на строительство"');
+                                    AppLogger.debug('projectId: ${widget.projectId}');
+                                    final messenger = ScaffoldMessenger.of(context);
 
                                     try {
                                       await ref
                                           .read(projectProvider.notifier)
-                                          .requestConstruction(
-                                            widget.projectId,
-                                          );
-                                      AppLogger.info(
-                                        'Запрос на строительство отправлен успешно',
-                                      );
+                                          .requestConstruction(widget.projectId);
+                                      AppLogger.info('Запрос на строительство отправлен успешно');
 
                                       if (mounted) {
                                         messenger.showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              l10n.constructionRequestSent,
-                                            ),
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
+                                            content: Text(l10n.constructionRequestSent),
+                                            duration: const Duration(seconds: 2),
                                           ),
                                         );
                                       }
                                     } catch (e) {
-                                      AppLogger.error(
-                                        'Ошибка при отправке запроса',
-                                        e,
-                                      );
+                                      AppLogger.error('Ошибка при отправке запроса', e);
                                       if (mounted && context.mounted) {
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              e.toLocalizedMessage(context),
-                                            ),
+                                            content: Text(e.toLocalizedMessage(context)),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
                                       }
                                     }
                                   },
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 16),
-                            ),
+                            style: ElevatedButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
                             child: AppAnimatedSwitcher(
                               duration: const Duration(milliseconds: 200),
                               child: isRequesting
@@ -435,10 +360,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
                                       width: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                              theme.colorScheme.onPrimary,
-                                            ),
+                                        valueColor: AlwaysStoppedAnimation<Color>(theme.colorScheme.onPrimary),
                                       ),
                                     )
                                   : Text(
@@ -472,20 +394,12 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
       isScrollControlled: true,
       builder: (context) {
         return Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
-          ),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, left: 16, right: 16, top: 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                l10n.constructionAddressTitle,
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
+              Text(l10n.constructionAddressTitle, style: Theme.of(context).textTheme.headlineSmall),
               const SizedBox(height: 16),
               TextField(
                 controller: addressController,
@@ -501,10 +415,7 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
               Row(
                 children: [
                   Expanded(
-                    child: OutlinedButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: Text(l10n.cancel),
-                    ),
+                    child: OutlinedButton(onPressed: () => Navigator.of(context).pop(), child: Text(l10n.cancel)),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -532,27 +443,19 @@ class _ProjectDetailScreenState extends ConsumerState<ProjectDetailScreen> {
   /// Начать строительство с указанным адресом
   Future<void> _startConstruction(String address) async {
     try {
-      await ref
-          .read(projectProvider.notifier)
-          .startConstruction(widget.projectId, address);
+      await ref.read(projectProvider.notifier).startConstruction(widget.projectId, address);
 
       if (mounted) {
         final l10n = AppLocalizations.of(context)!;
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.constructionStarted),
-            duration: const Duration(seconds: 2),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.constructionStarted), duration: const Duration(seconds: 2)));
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toLocalizedMessage(context)),
-            backgroundColor: Colors.red,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toLocalizedMessage(context)), backgroundColor: Colors.red));
       }
     }
   }
@@ -581,11 +484,7 @@ class _CharacteristicsSection extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            _CharacteristicRow(
-              label: l10n.area,
-              value: '${project.area.toInt()} м²',
-              icon: Icons.square_foot,
-            ),
+            _CharacteristicRow(label: l10n.area, value: '${project.area.toInt()} м²', icon: Icons.square_foot),
             const Divider(),
             _CharacteristicRow(
               label: l10n.floorsLabel,
@@ -601,8 +500,7 @@ class _CharacteristicsSection extends StatelessWidget {
             const Divider(),
             _CharacteristicRow(
               label: 'Ванные',
-              value:
-                  '${project.bathrooms} ${l10n.bathrooms(project.bathrooms)}',
+              value: '${project.bathrooms} ${l10n.bathrooms(project.bathrooms)}',
               icon: Icons.bathtub,
             ),
           ],
@@ -618,11 +516,7 @@ class _CharacteristicRow extends StatelessWidget {
   final String value;
   final IconData icon;
 
-  const _CharacteristicRow({
-    required this.label,
-    required this.value,
-    required this.icon,
-  });
+  const _CharacteristicRow({required this.label, required this.value, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -633,12 +527,7 @@ class _CharacteristicRow extends StatelessWidget {
         Icon(icon, size: 24, color: theme.colorScheme.primary),
         const SizedBox(width: 16),
         Expanded(child: Text(label, style: theme.textTheme.bodyLarge)),
-        Text(
-          value,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(value, style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
       ],
     );
   }

@@ -20,12 +20,10 @@ class ConstructionSiteScreen extends ConsumerStatefulWidget {
   const ConstructionSiteScreen({super.key, required this.objectId});
 
   @override
-  ConsumerState<ConstructionSiteScreen> createState() =>
-      _ConstructionSiteScreenState();
+  ConsumerState<ConstructionSiteScreen> createState() => _ConstructionSiteScreenState();
 }
 
-class _ConstructionSiteScreenState
-    extends ConsumerState<ConstructionSiteScreen> {
+class _ConstructionSiteScreenState extends ConsumerState<ConstructionSiteScreen> {
   @override
   void initState() {
     super.initState();
@@ -33,9 +31,7 @@ class _ConstructionSiteScreenState
     AppLogger.debug('objectId: ${widget.objectId}');
     WidgetsBinding.instance.addPostFrameCallback((_) {
       AppLogger.debug('ConstructionSiteScreen: загружаем площадку');
-      ref
-          .read(constructionSiteProvider(widget.objectId).notifier)
-          .loadConstructionSite();
+      ref.read(constructionSiteProvider(widget.objectId).notifier).loadConstructionSite();
     });
   }
 
@@ -52,10 +48,7 @@ class _ConstructionSiteScreenState
           // Кнопки навигации (projectId получаем из загруженного объекта)
           Builder(
             builder: (context) {
-              final siteState = siteAsync.maybeWhen(
-                data: (state) => state.site,
-                orElse: () => null,
-              );
+              final siteState = siteAsync.maybeWhen(data: (state) => state.site, orElse: () => null);
               final projectId = siteState?.projectId;
 
               if (projectId == null) {
@@ -84,13 +77,7 @@ class _ConstructionSiteScreenState
                   // Кнопка перехода к чату объекта (только если объект не завершен)
                   if (siteState == null ||
                       siteAsync.hasError ||
-                      (ref
-                              .read(
-                                constructionObjectByProjectProvider(projectId),
-                              )
-                              .value
-                              ?.isCompleted ??
-                          false))
+                      (ref.read(constructionObjectByProjectProvider(projectId)).value?.isCompleted ?? false))
                     const SizedBox.shrink()
                   else
                     IconButton(
@@ -117,17 +104,12 @@ class _ConstructionSiteScreenState
 
             // Если площадка не найдена и есть ошибка - показываем ошибку
             if (state.site == null) {
-              return Center(
-                key: const ValueKey('error'),
-                child: Text(l10n.errorLoadingConstructionSite),
-              );
+              return Center(key: const ValueKey('error'), child: Text(l10n.errorLoadingConstructionSite));
             }
 
             final site = state.site!;
             final projectId = site.projectId;
-            final objectAsync = ref.watch(
-              constructionObjectByProjectProvider(projectId),
-            );
+            final objectAsync = ref.watch(constructionObjectByProjectProvider(projectId));
             final isCompleted = objectAsync.value?.isCompleted ?? false;
 
             return SingleChildScrollView(
@@ -143,25 +125,19 @@ class _ConstructionSiteScreenState
                       children: [
                         Text(
                           site.projectName,
-                          style: theme.textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Text(
                           site.address,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+                          style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                         ),
                         const SizedBox(height: 16),
 
                         // Прогресс строительства
                         Text(
                           l10n.progress,
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
@@ -172,9 +148,7 @@ class _ConstructionSiteScreenState
                         const SizedBox(height: 4),
                         Text(
                           '${(site.progress * 100).toInt()}%',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.onSurfaceVariant,
-                          ),
+                          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                         ),
                         const SizedBox(height: 16),
 
@@ -182,11 +156,7 @@ class _ConstructionSiteScreenState
                         if (site.startDate != null) ...[
                           Row(
                             children: [
-                              Icon(
-                                Icons.calendar_today,
-                                size: 16,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
+                              Icon(Icons.calendar_today, size: 16, color: theme.colorScheme.onSurfaceVariant),
                               const SizedBox(width: 8),
                               Text(
                                 '${l10n.startDate}: ${_formatDate(site.startDate!)}',
@@ -199,11 +169,7 @@ class _ConstructionSiteScreenState
                         if (site.expectedCompletionDate != null) ...[
                           Row(
                             children: [
-                              Icon(
-                                Icons.event,
-                                size: 16,
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
+                              Icon(Icons.event, size: 16, color: theme.colorScheme.onSurfaceVariant),
                               const SizedBox(width: 8),
                               Text(
                                 '${l10n.expectedCompletion}: ${_formatDate(site.expectedCompletionDate!)}',
@@ -220,43 +186,34 @@ class _ConstructionSiteScreenState
                   Builder(
                     builder: (context) {
                       final projectId = site.projectId;
-                      final objectAsync = ref.watch(
-                        constructionObjectByProjectProvider(projectId),
-                      );
+                      final objectAsync = ref.watch(constructionObjectByProjectProvider(projectId));
                       // Следим за статусом финальных документов
-                      final completionStatusAsync = ref.watch(
-                        completionStatusProvider(projectId),
-                      );
+                      final completionStatusAsync = ref.watch(completionStatusProvider(projectId));
 
                       return objectAsync.when(
                         data: (object) {
                           // Проверяем статус подписания финальных документов
                           final areFinalDocumentsSigned =
-                              completionStatusAsync
-                                  .value
-                                  ?.status
-                                  ?.allDocumentsSigned ??
-                              false;
+                              completionStatusAsync.value?.status?.allDocumentsSigned ?? false;
 
                           // Если документы не подписаны, кнопку не показываем
                           if (!areFinalDocumentsSigned) {
                             return const SizedBox.shrink();
                           }
 
+                          // Проверяем, что прогресс достиг 100%
+                          if (site.progress < 1.0) {
+                            return const SizedBox.shrink();
+                          }
+
                           // Проверяем, не завершено ли уже строительство (кнопка нажата)
                           // Получаем статус напрямую из completionStatusAsync, так как object может быть старым
                           final isCompleted =
-                              completionStatusAsync
-                                  .value
-                                  ?.status
-                                  ?.isCompleted ??
-                              object.isCompleted;
+                              completionStatusAsync.value?.status?.isCompleted ?? object.isCompleted;
 
                           if (isCompleted) {
                             return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                              ),
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
                               child: Container(
                                 padding: const EdgeInsets.all(16),
                                 decoration: BoxDecoration(
@@ -265,22 +222,15 @@ class _ConstructionSiteScreenState
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      Icons.check_circle,
-                                      color:
-                                          theme.colorScheme.onTertiaryContainer,
-                                    ),
+                                    Icon(Icons.check_circle, color: theme.colorScheme.onTertiaryContainer),
                                     const SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
                                         l10n.constructionCompleted,
-                                        style: theme.textTheme.titleMedium
-                                            ?.copyWith(
-                                              color: theme
-                                                  .colorScheme
-                                                  .onTertiaryContainer,
-                                              fontWeight: FontWeight.w600,
-                                            ),
+                                        style: theme.textTheme.titleMedium?.copyWith(
+                                          color: theme.colorScheme.onTertiaryContainer,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -294,15 +244,10 @@ class _ConstructionSiteScreenState
                             child: SizedBox(
                               width: double.infinity,
                               child: FilledButton.icon(
-                                onPressed: () =>
-                                    _completeConstruction(context, projectId),
+                                onPressed: () => _completeConstruction(context, projectId),
                                 icon: const Icon(Icons.check_circle),
                                 label: Text(l10n.completeConstruction),
-                                style: FilledButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                ),
+                                style: FilledButton.styleFrom(padding: const EdgeInsets.symmetric(vertical: 16)),
                               ),
                             ),
                           );
@@ -322,9 +267,7 @@ class _ConstructionSiteScreenState
                       padding: const EdgeInsets.all(16),
                       child: Text(
                         l10n.cameras,
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
                       ),
                     ),
                     if (site.cameras.isEmpty)
@@ -333,9 +276,7 @@ class _ConstructionSiteScreenState
                         child: Center(
                           child: Text(
                             l10n.noCameras,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: theme.colorScheme.onSurfaceVariant,
-                            ),
+                            style: theme.textTheme.bodyLarge?.copyWith(color: theme.colorScheme.onSurfaceVariant),
                           ),
                         ),
                       )
@@ -344,25 +285,21 @@ class _ConstructionSiteScreenState
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         padding: const EdgeInsets.all(16),
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 0.8,
-                            ),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 16,
+                          mainAxisSpacing: 16,
+                          childAspectRatio: 0.8,
+                        ),
                         itemCount: site.cameras.length,
                         itemBuilder: (context, index) {
                           final camera = site.cameras[index];
                           return CameraGridItem(
                             camera: camera,
                             onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      CameraViewScreen(camera: camera),
-                                ),
-                              );
+                              Navigator.of(
+                                context,
+                              ).push(MaterialPageRoute(builder: (context) => CameraViewScreen(camera: camera)));
                             },
                           );
                         },
@@ -379,10 +316,7 @@ class _ConstructionSiteScreenState
               children: [
                 const Icon(Icons.error_outline, size: 48, color: Colors.red),
                 const SizedBox(height: 16),
-                Text(
-                  l10n.errorLoadingConstructionSite,
-                  style: theme.textTheme.titleMedium,
-                ),
+                Text(l10n.errorLoadingConstructionSite, style: theme.textTheme.titleMedium),
                 const SizedBox(height: 8),
                 Text(
                   error.toLocalizedMessage(context),
@@ -392,11 +326,7 @@ class _ConstructionSiteScreenState
                 const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
-                    ref
-                        .read(
-                          constructionSiteProvider(widget.objectId).notifier,
-                        )
-                        .loadConstructionSite();
+                    ref.read(constructionSiteProvider(widget.objectId).notifier).loadConstructionSite();
                   },
                   child: Text(l10n.retry),
                 ),
@@ -412,16 +342,11 @@ class _ConstructionSiteScreenState
     return '${date.day}.${date.month}.${date.year}';
   }
 
-  Future<void> _completeConstruction(
-    BuildContext context,
-    String projectId,
-  ) async {
+  Future<void> _completeConstruction(BuildContext context, String projectId) async {
     final l10n = AppLocalizations.of(context)!;
     try {
       // Получаем объект строительства по projectId
-      final object = await ref.read(
-        constructionObjectByProjectProvider(projectId).future,
-      );
+      final object = await ref.read(constructionObjectByProjectProvider(projectId).future);
 
       // Завершаем строительство
       final objectRepository = ref.read(constructionObjectRepositoryProvider);
@@ -433,21 +358,15 @@ class _ConstructionSiteScreenState
       ref.invalidate(constructionObjectByProjectProvider(projectId));
 
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(l10n.constructionCompletedSuccess),
-            backgroundColor: Colors.green,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.constructionCompletedSuccess), backgroundColor: Colors.green));
       }
     } catch (e) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toLocalizedMessage(context)),
-            backgroundColor: Colors.red,
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(e.toLocalizedMessage(context)), backgroundColor: Colors.red));
       }
     }
   }
