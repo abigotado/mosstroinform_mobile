@@ -100,12 +100,12 @@ class ConstructionObjectCard extends StatelessWidget {
                               color: colorScheme.onSurface.withValues(alpha: 0.6),
                             ),
                           ),
-                          Text(
-                            '${(progress * 100).toInt()}%',
-                            style: theme.textTheme.bodySmall?.copyWith(
-                              color: colorScheme.onSurface.withValues(alpha: 0.6),
-                            ),
-                          ),
+                          // Text(
+                          //   '${(progress * 100).toInt()}%',
+                          //   style: theme.textTheme.bodySmall?.copyWith(
+                          //     color: colorScheme.onSurface.withValues(alpha: 0.6),
+                          //   ),
+                          // ),
                         ],
                       ),
                       const SizedBox(height: 4),
