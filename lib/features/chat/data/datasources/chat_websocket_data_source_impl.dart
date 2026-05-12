@@ -22,8 +22,8 @@ class ChatWebSocketDataSourceImpl implements IChatWebSocketDataSource {
 
   /// Получить WebSocket URL для чата
   String _getWebSocketUrl(String baseUrl, String chatId) {
-    // Преобразуем https://mosstroiinform.vasmarfas.com/api/v1
-    // в wss://mosstroiinform.vasmarfas.com/chat/{chatId}
+    // Преобразуем https://api.dev.msitech.ru/api/v1
+    // в wss://api.dev.msitech.ru/chat/{chatId}
     final uri = Uri.parse(baseUrl);
     final wsScheme = uri.scheme == 'https' ? 'wss' : 'ws';
     final host = uri.host;

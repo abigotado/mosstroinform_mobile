@@ -5,7 +5,7 @@
 ## Базовый URL
 
 ```
-https://mosstroiinform.vasmarfas.com/api/v1
+https://api.dev.msitech.ru/api/v1
 ```
 
 Все запросы требуют авторизации через Bearer токен в заголовке `Authorization`, кроме эндпойнтов `/auth/login` и `/auth/register`.
